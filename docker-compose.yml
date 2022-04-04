@@ -17,9 +17,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_NAME=Advansus
-      - POSTGRES_USER=Advansus
-      - POSTGRES_PASSWORD=Advansus
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
   adminer:
