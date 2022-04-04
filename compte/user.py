@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     signature_former = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20)
     Adress = models.CharField(max_length=20)
-    competence = models.CharField(max_length=20)
+    
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
