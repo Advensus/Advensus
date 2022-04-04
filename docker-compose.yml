@@ -6,9 +6,9 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=Advansus
-      - POSTGRES_USER=Advansus
-      - POSTGRES_PASSWORD=Advansus
+      - POSTGRES_DB=advansus
+      - POSTGRES_USER=advansus
+      - POSTGRES_PASSWORD=advansus
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
