@@ -60,6 +60,9 @@ class formation(models.Model):
     admin = models.ManyToManyField(admin)
     dispenser = models.ManyToManyField(formateur)
 
-
+class Presence(models):
+    stagiaire = models.ForeignKey(stagiaire)
+    formateur = models.ForeignKey(formateur)
+    
 
 # Create your models here.
