@@ -1,8 +1,7 @@
 from audioop import maxpp
 from django.db import models
 from .user import User
-from .documents import document
-from .reservations import reservation
+
 class Organisme(models.Model):
     company_name = models.CharField(max_length=100)
     company_adress = models.CharField(max_length=50)
@@ -19,8 +18,7 @@ class formateur(models.Model):
     signature_former = models.ImageField(upload_to="signature_former/")
     cv = models.FileField(upload_to="cv/")
     appartenir = models.ManyToManyField(Organisme)
-    partager = models.ForeignKey(document)
-    proposer = models.ForeignKey(reservation)
+    
     
     
 
@@ -29,8 +27,8 @@ class stagiaire(models.Model):
     trainee_level = models.CharField(max_length=50)
     provenir = models.ManyToManyField(Organisme)
     collaborer = models.ManyToManyField(formateur)
-    emarger = models.ForeignKey(document,on_delete=models.CASCADE)
-    proposer = models.ForeignKey(reservation)
+  
+    
 
 
 class admin(models.Model):
@@ -51,6 +49,7 @@ class souscrir(models.Model):
     training_type = models.CharField(max_length=20)
     statigiaire = models.ForeignKey(stagiaire)
     formation = models.ForeignKey(formation)
+    
 class formation(models.Model):
     edof = models.CharField(max_length=20)
     intitulé = models.CharField(max_length=20)
@@ -61,8 +60,22 @@ class formation(models.Model):
     dispenser = models.ManyToManyField(formateur)
 
 class Presence(models):
-    stagiaire = models.ForeignKey(stagiaire)
-    formateur = models.ForeignKey(formateur)
-    
+    stagiaire = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
+    formateur = models.ForeignKey(formateur,on_delete=models.CASCADE)
+
+class reservation(models.Model):
+    reservation = models.ManyToManyField(responsable_p)
+    status = models.CharField(max_length=30)
+    annuler = models.BooleanField(default=False)
+    proposer = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
+    proposer = models.ForeignKey(formateur,on_delete=models.CASCADE)
+
+class document(models.Model):
+    doc_type = models.FileField(upload_to="doc_type/")
+    doc_content = models.CharField(max_length=50)
+    administrer = models.ManyToManyField(admin)
+    partager = models.ForeignKey(formateur,on_delete=models.CASCADE)
+    emarger = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
+
 
 # Create your models here.
