@@ -1,6 +1,6 @@
 from audioop import maxpp
 from django.db import models
-
+from .user import User
 class Organisme(models.Model):
     company_name = models.CharField(max_length=100)
     company_adress = models.CharField(max_length=50)
@@ -9,8 +9,37 @@ class Organisme(models.Model):
     company_stamp = models.FileField(upload_to="company_stamp/")
     company_logo = models.FileField(upload_to="company_logo/")
 
+
+
+
 class formateur(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     competence = models.CharField(max_length=20)
+    horaire = models.TimeField(auto_now_add=False)
+    signature_former = models.ImageField(upload_to="signature_former/")
+    cv = models.FileField(upload_to="cv/")
+    appartenir = models.ManyToManyField(Organisme)
+    
+
+class stagiaire(models.Model):
+    user = models.OneToOneField(User)
+    trainee_level = models.CharField(max_length=50)
+    provenir = models.ManyToManyField(Organisme)
+    collaborer = models.ManyToManyField(formateur)
+
+
+class admin(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE)
+
+
+class responsable_p(models.Models):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    affecter = models.ManyToManyField(stagiaire)
+
+class super_p(models.Models):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+
 
 
 
