@@ -20,6 +20,7 @@ class formateur(models.Model):
     cv = models.FileField(upload_to="cv/")
     appartenir = models.ManyToManyField(Organisme)
     
+    
 
 class stagiaire(models.Model):
     user = models.OneToOneField(User)
@@ -40,7 +41,18 @@ class responsable_p(models.Models):
 class super_p(models.Models):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
 
-
-
-
+class souscrir(models.Model):
+    training_status = models.CharField(max_length=20)
+    hour_worked = models.CharField(max_length=20)
+    training_type = models.CharField(max_length=20)
+    statigiaire = models.ForeignKey(stagiaire)
+    formation = models.ForeignKey(formation)
+class formation(models.Model):
+    edof = models.CharField(max_length=20)
+    intitulé = models.CharField(max_length=20)
+    duration = models.CharField(max_length=10)
+    start_session = models.DateField(auto_now_add=False)
+    end_session = models.DateField(auto_now_add=False)
+    admin = models.ManyToManyField(admin)
+    dispenser = models.ManyToManyField(formateur)
 # Create your models here.
