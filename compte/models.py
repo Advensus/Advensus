@@ -1,17 +1,11 @@
 from audioop import maxpp
 from django.db import models
 from .user import User
-
-class Organisme(models.Model):
-    company_name = models.CharField(max_length=100)
-    company_adress = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=50)
-    fix_number = models.CharField(max_length=50)
-    company_stamp = models.FileField(upload_to="company_stamp/")
-    company_logo = models.FileField(upload_to="company_logo/")
+from .model import Organisme
 
 
-class formateur(models.Model):
+
+class Formateur(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     competence = models.CharField(max_length=20)
     horaire = models.TimeField(auto_now_add=False)
@@ -21,24 +15,25 @@ class formateur(models.Model):
     
     
     
+    
 
-class stagiaire(models.Model):
+class Stagiaire(models.Model):
     user = models.OneToOneField(User)
     trainee_level = models.CharField(max_length=50)
     provenir = models.ManyToManyField(Organisme)
-    collaborer = models.ManyToManyField(formateur)
+    collaborer = models.ManyToManyField(Formateur)
   
     
 
 
-class admin(models.Model):
+class Admin(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE)
 
 
 class responsable_p(models.Models):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    affecter = models.ManyToManyField(stagiaire)
+    affecter = models.ManyToManyField(Stagiaire)
 
 class super_p(models.Models):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -47,35 +42,37 @@ class souscrir(models.Model):
     training_status = models.CharField(max_length=20)
     hour_worked = models.CharField(max_length=20)
     training_type = models.CharField(max_length=20)
-    statigiaire = models.ForeignKey(stagiaire)
+    statigiaire = models.ForeignKey(Stagiaire)
     formation = models.ForeignKey(formation)
-    
+
 class formation(models.Model):
     edof = models.CharField(max_length=20)
     intitulé = models.CharField(max_length=20)
     duration = models.CharField(max_length=10)
     start_session = models.DateField(auto_now_add=False)
     end_session = models.DateField(auto_now_add=False)
-    admin = models.ManyToManyField(admin)
-    dispenser = models.ManyToManyField(formateur)
+    admin = models.ManyToManyField(Admin)
+    dispenser = models.ManyToManyField(Formateur)
 
 class Presence(models):
-    stagiaire = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
-    formateur = models.ForeignKey(formateur,on_delete=models.CASCADE)
+    stagiaire = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
+    formateur = models.ForeignKey(Formateur,on_delete=models.CASCADE)
 
 class reservation(models.Model):
     reservation = models.ManyToManyField(responsable_p)
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)
-    proposer = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
-    proposer = models.ForeignKey(formateur,on_delete=models.CASCADE)
+    proposer = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
+    proposer = models.ForeignKey(Formateur,on_delete=models.CASCADE)
 
 class document(models.Model):
     doc_type = models.FileField(upload_to="doc_type/")
     doc_content = models.CharField(max_length=50)
-    administrer = models.ManyToManyField(admin)
-    partager = models.ForeignKey(formateur,on_delete=models.CASCADE)
-    emarger = models.ForeignKey(stagiaire,on_delete=models.CASCADE)
+    administrer = models.ManyToManyField(Admin)
+    partager = models.ForeignKey(Formateur,on_delete=models.CASCADE)
+    emarger = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
 
+class Classes(models.Model):
+    superviser = models.ForeignKey(Formateur)
 
 # Create your models here.
