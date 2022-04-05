@@ -57,6 +57,7 @@ class formation(models.Model):
 class Presence(models):
     stagiaire = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
     formateur = models.ForeignKey(Formateur,on_delete=models.CASCADE)
+    
 
 class reservation(models.Model):
     reservation = models.ManyToManyField(responsable_p)
@@ -64,15 +65,26 @@ class reservation(models.Model):
     annuler = models.BooleanField(default=False)
     proposer = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
     proposer = models.ForeignKey(Formateur,on_delete=models.CASCADE)
+    etablir = models.OneToOneField(Presence)
+   
 
-class document(models.Model):
+class Document(models.Model):
     doc_type = models.FileField(upload_to="doc_type/")
-    doc_content = models.CharField(max_length=50)
+    doc_content = models.CharField()
     administrer = models.ManyToManyField(Admin)
     partager = models.ForeignKey(Formateur,on_delete=models.CASCADE)
     emarger = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
 
 class Classes(models.Model):
     superviser = models.ForeignKey(Formateur)
+    assister = models.ManyToManyField(Stagiaire)
+    etablir = models.OneToOneField(Presence)
+    reservation_classe = models.OneToOneField(reservation)
+    lier = models.ForeignKey(formation)
+class Opinion(models.Model):
+    rapporter = models.ForeignKey(Classes)
+    donner = models.ForeignKey(Stagiaire)
+    rate = models.IntegerField(default=0)
+    mind = models.CharField()
 
 # Create your models here.
