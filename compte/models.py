@@ -1,6 +1,8 @@
 from audioop import maxpp
 from django.db import models
 from .user import User
+from .documents import document
+from .reservations import reservation
 class Organisme(models.Model):
     company_name = models.CharField(max_length=100)
     company_adress = models.CharField(max_length=50)
@@ -10,8 +12,6 @@ class Organisme(models.Model):
     company_logo = models.FileField(upload_to="company_logo/")
 
 
-
-
 class formateur(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     competence = models.CharField(max_length=20)
@@ -19,6 +19,8 @@ class formateur(models.Model):
     signature_former = models.ImageField(upload_to="signature_former/")
     cv = models.FileField(upload_to="cv/")
     appartenir = models.ManyToManyField(Organisme)
+    partager = models.ForeignKey(document)
+    proposer = models.ForeignKey(reservation)
     
     
 
@@ -27,6 +29,8 @@ class stagiaire(models.Model):
     trainee_level = models.CharField(max_length=50)
     provenir = models.ManyToManyField(Organisme)
     collaborer = models.ManyToManyField(formateur)
+    emarger = models.ForeignKey(document,on_delete=models.CASCADE)
+    proposer = models.ForeignKey(reservation)
 
 
 class admin(models.Model):
@@ -55,4 +59,7 @@ class formation(models.Model):
     end_session = models.DateField(auto_now_add=False)
     admin = models.ManyToManyField(admin)
     dispenser = models.ManyToManyField(formateur)
+
+
+
 # Create your models here.
