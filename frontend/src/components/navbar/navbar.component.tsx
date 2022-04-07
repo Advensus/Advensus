@@ -24,7 +24,7 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
         if (document.documentElement.scrollTop > 100) {
             (
                 document.getElementById("navbar") as HTMLInputElement
-            ).style.background = "#cd2a2a";
+            ).style.background = "#d7d0d0";
             // (
             //     document.getElementById("navbar") as HTMLInputElement
             // ).style.opacity = "1";
@@ -34,7 +34,7 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
         } else {
             (
                 document.getElementById("navbar") as HTMLInputElement
-            ).style.background = "#de4225";
+            ).style.background = "#cedbe8";
             // (
             //     document.getElementById("navbar") as HTMLInputElement
             // ).style.background = "0";
@@ -64,8 +64,9 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
                 />
                 {isCalloutVisible && (
                     <Callout
-                        // className={styles.callout}
+                        // className="{styles.callout}, calloutclass"
                         className="calloutclass"
+                        // ariaLabel=""
                         ariaLabelledBy={labelId}
                         ariaDescribedBy={descriptionId}
                         gapSpace={0}
@@ -73,29 +74,47 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
                         onDismiss={toggleIsCalloutVisible}
                         setInitialFocus
                     >
-                        <Text
-                            block
-                            variant="xLarge"
-                            className={styles.title}
-                            id={labelId}
-                        >
-                            Callout title here
-                        </Text>
-                        <div>
-                            <Text block variant="small" id={descriptionId}>
-                                Message body is optional. If help documentation
-                                is available, consider adding a link to learn
-                                more at the bottom.
-                            </Text>
-                            <Link
-                                href="http://microsoft.com"
-                                target="_blank"
-                                className={styles.link}
-                            >
-                                Sample link
-                            </Link>
+                        <div className="calloutcontent">
+                            <div className="calloutcontenti">
+                                <Text variant="large">
+                                    Formation à distance
+                                </Text>
+                                <div>
+                                    <p>
+                                        Lorem ipsum dolor sit amet consectetur
+                                        adipisicing elit. Distinctio suscipit in
+                                        labore! Facere doloremque, odio
+                                        distinctio vitae tempora consequuntur,
+                                        voluptatibus qui ratione adipisci
+                                        aspernatur reprehenderit error unde quia
+                                        nesciunt dolores.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="calloutcontenti">
+                                <Text variant="large">Emagement numérique</Text>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Expedita suscipit nulla
+                                    incidunt omnis perspiciatis at doloremque
+                                    hic, fugiat neque obcaecati optio, id ea
+                                    maiores voluptas officiis eveniet quam,
+                                    exercitationem sapiente.
+                                </p>
+                            </div>
+                            <div className="calloutcontenti">
+                                <Text variant="large">
+                                    Gestion administrative
+                                </Text>
+                                <p>
+                                    Lorem ipsum dolor, sit amet consectetur
+                                    adipisicing elit. Pariatur quibusdam optio
+                                    laboriosam itaque sint. Quia sapiente quis,
+                                    iure laborum, explicabo, cupiditate quisquam
+                                    aut in saepe eum animi vel harum placeat!
+                                </p>
+                            </div>
                         </div>
-                        <div>other element</div>
                     </Callout>
                 )}
                 <a href="#" id="link">
@@ -117,12 +136,14 @@ const styles = mergeStyleSets({
     },
     callout: {
         width: "100%",
-        maxWidth: "90%",
-        padding: "20px 24px",
+        maxWidth: "98%",
+        // padding: "20px 24px",
+        // fontSize:
     },
     title: {
         marginBottom: 12,
         fontWeight: FontWeights.semilight,
+        fontSize: "large",
     },
     link: {
         display: "block",

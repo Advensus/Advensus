@@ -2,7 +2,8 @@
     box-sizing: border-box;
 }
 .navbarcomponent {
-    background-color: red;
+    // background-color: red;
+    background-color: #cedbe8;
     height: 90px;
     z-index: 1;
 }
@@ -15,18 +16,37 @@
 }
 
 .calloutclass {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     width: 100%;
     max-width: 98%;
-    padding: 20px 24px;
+    // font-size: x-large;
+    // padding: 30px 25px;
+}
+.calloutclass span {
+    // width: 100%;
+    // max-width: 98%;
+    // font-size: x-large;
+    // color: red;
+}
+.calloutcontent {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    width: 100%;
+}
+.calloutcontenti {
+    background-color: "black";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3em 5em;
 }
 
 #navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #de4225;
+    background-color: #cedbe8;
     position: fixed;
     width: 100%;
     top: 0;
@@ -38,7 +58,7 @@
     padding: 12px;
     border-radius: 4px;
     text-decoration: none;
-    color: #fff;
+    color: #34608c;
 }
 
 #navbar #logo {
@@ -53,15 +73,19 @@
     padding-right: 80px;
 }
 .navbaractionbutton {
-    text-decoration: none;
-    color: #fff;
+    font-size: 18px;
+    color: #34608c;
     :hover {
-        color: white;
+        color: #de4225;
     }
 }
 .navbardefaultbutton {
     border-radius: 15px;
     background-color: transparent;
-    border-color: #fff;
-    color: #fff;
+    border-color: #de4225;
+    color: #de4225;
+    :hover {
+        color: #34608c;
+        border-color: #34608c;
+    }
 }
