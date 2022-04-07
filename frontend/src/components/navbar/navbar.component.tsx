@@ -3,25 +3,26 @@ import {
     ActionButton,
     DefaultButton,
     Callout,
-    Link,
     Text,
     mergeStyleSets,
     FontWeights,
 } from "@fluentui/react";
 import { useBoolean, useId } from "@fluentui/react-hooks";
+import { Link, useNavigate } from "react-router-dom";
 
 export interface INavBarProps {
     default_props?: boolean;
 }
 
 export const NavBarComponent: React.FC<INavBarProps> = () => {
+    let navigate = useNavigate();
     const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] =
         useBoolean(false);
     const buttonId = useId("callout-button");
     const labelId = useId("callout-label");
     const descriptionId = useId("callout-description");
     window.onscroll = () => {
-        if (document.documentElement.scrollTop > 100) {
+        if (document.documentElement.scrollTop > 58) {
             (
                 document.getElementById("navbar") as HTMLInputElement
             ).style.background = "#d7d0d0";
@@ -47,9 +48,12 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
     return (
         <div className="navbarcomponent" id="navbar">
             <div className="navbar-left">
-                <a href="#" id="logo">
+                {/* <a href="#" id="logo">
                     Logo
-                </a>
+                </a> */}
+                <Link to="/" id="logo">
+                    Logo
+                </Link>
                 {/* <div className="navbar-center"></div> */}
             </div>
             <div id="navbar-right">
@@ -117,13 +121,13 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
                         </div>
                     </Callout>
                 )}
-                <a href="#" id="link">
-                    Ressources
-                </a>
-                <a href="#">Contact</a>
+
+                <Link to="#">Ressoureces</Link>
+                <Link to="#">Contact</Link>
                 <DefaultButton
                     text="CONNEXION"
                     className="navbardefaultbutton"
+                    onClick={() => navigate("/auth/login")}
                 />
             </div>
         </div>

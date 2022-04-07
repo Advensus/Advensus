@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.scss";
-import { HomePage } from "./pages";
+import { EntryRoutesPage } from "./pages";
 
 function App() {
-    return <HomePage />;
+    return <EntryRoutesPage />;
 }
 
 export default App;

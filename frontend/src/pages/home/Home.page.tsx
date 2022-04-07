@@ -1,5 +1,6 @@
 import { DefaultButton } from "@fluentui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { NavBarComponent } from "../../components";
 
 export interface IHomePageProps {
@@ -7,6 +8,8 @@ export interface IHomePageProps {
 }
 
 export const HomePage: React.FC<IHomePageProps> = () => {
+    let navigate = useNavigate();
+
     return (
         <div className="homepage">
             <NavBarComponent />
@@ -19,10 +22,10 @@ export const HomePage: React.FC<IHomePageProps> = () => {
                         commerciale + Émargement numérique
                     </h3>
                     <span>Découvrez la vidéo de présentation :</span>
-                    <div>Button de creation de compte</div>
                     <DefaultButton
                         text="Inscription gratuite"
                         className="homedefaultbutton"
+                        onClick={() => navigate("auth/signup")}
                     />
                     <p>Une imgae ici</p>
                 </div>
