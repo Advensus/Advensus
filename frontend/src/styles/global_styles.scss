@@ -1,0 +1,16 @@
+// components
+@import "./components/navbar.component";
+
+// pages
+@import "./pages/Home.page";
+
+html,
+body,
+#root {
+    height: auto;
+    width: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    font-family: "Quantico";
+    // background-color: "black";
+}

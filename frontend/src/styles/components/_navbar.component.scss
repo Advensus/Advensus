@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+}
+.navbarcomponent {
+    background-color: red;
+    height: 90px;
+    z-index: 1;
+}
+
+.navbar-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 80px;
+}
+
+.calloutclass {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    max-width: 98%;
+    padding: 20px 24px;
+}
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #de4225;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    transition: 0.4s;
+}
+
+#navbar a {
+    float: left;
+    padding: 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+}
+
+#navbar #logo {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+#navbar-right {
+    display: flex;
+    align-items: center;
+    float: right;
+    padding-right: 80px;
+}
+.navbaractionbutton {
+    text-decoration: none;
+    color: #fff;
+    :hover {
+        color: white;
+    }
+}
+.navbardefaultbutton {
+    border-radius: 15px;
+    background-color: transparent;
+    border-color: #fff;
+    color: #fff;
+}
