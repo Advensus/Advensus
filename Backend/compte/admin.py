@@ -3,6 +3,7 @@ from .models import Stagiaire,responsable_p,super_p,souscrir,Presence,reservatio
 from .cours import formation
 from .responsable import admin_org
 from .societe import Organisme,Formateur
+from .user import User
 
 
 
@@ -20,8 +21,4 @@ admin.site.register(formation)
 admin.site.register(admin_org)
 admin.site.register(Organisme)
 admin.site.register(Formateur)
-admin.site.register(Stagiaire)
-admin.site.register(Stagiaire)
-admin.site.register(Stagiaire)
-admin.site.register(Stagiaire)
-admin.site.register(Stagiaire)
+admin.site.register(User)
