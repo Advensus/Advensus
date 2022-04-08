@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'Advensus.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_NAME'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'NAME': 'advansus',
+        'USER': 'advansus',
+        'PASSWORD': 'JrmkAV22@97',
         'HOST': 'db',
         'PORT': 5432,
     }
