@@ -1,0 +1,21 @@
+.homebody {
+    margin-top: 90px;
+    // background-color: #de4225;
+    background-color: #cedbe8;
+    padding: 30px 30px 0 30px;
+    position: relative;
+}
+.homebody__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.homedefaultbutton {
+    height: 50px;
+    width: 12em;
+    border-radius: 2em;
+    font-size: 1.5em;
+    margin: 30px 15px;
+    color: #34608c;
+}
