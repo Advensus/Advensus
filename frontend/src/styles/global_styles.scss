@@ -3,6 +3,7 @@
 
 // pages
 @import "./pages/Home.page";
+@import "./pages/Login.page";
 
 html,
 body,
@@ -14,4 +15,12 @@ body,
     font-family: "Quantico";
     // background-color: "black";
     color: #34608c;
+}
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+html {
+    height: -webkit-fill-available;
 }
