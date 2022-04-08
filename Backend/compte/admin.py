@@ -1,0 +1,21 @@
+from django.contrib import admin
+from .models import Stagiaire,responsable_p,super_p,souscrir
+
+admin.site.register(Stagiaire)
+admin.site.register(responsable_p)
+admin.site.register(super_p)
+admin.site.register(souscrir)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
+admin.site.register(Stagiaire)
