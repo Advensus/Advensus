@@ -1,9 +1,12 @@
 // components
 @import "./components/navbar.component";
+@import "./components/sidenav.component";
+@import "./components/header-dashboard";
 
 // pages
 @import "./pages/Home.page";
 @import "./pages/Login.page";
+@import "./pages/Dashboard.shell";
 
 html,
 body,

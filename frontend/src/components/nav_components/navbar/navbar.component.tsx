@@ -26,9 +26,6 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
             (
                 document.getElementById("navbar") as HTMLInputElement
             ).style.background = "#d7d0d0";
-            // (
-            //     document.getElementById("navbar") as HTMLInputElement
-            // ).style.opacity = "1";
             (
                 document.getElementById("logo") as HTMLInputElement
             ).style.fontSize = "25px";
@@ -36,9 +33,6 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
             (
                 document.getElementById("navbar") as HTMLInputElement
             ).style.background = "#cedbe8";
-            // (
-            //     document.getElementById("navbar") as HTMLInputElement
-            // ).style.background = "0";
             (
                 document.getElementById("logo") as HTMLInputElement
             ).style.fontSize = "35px";

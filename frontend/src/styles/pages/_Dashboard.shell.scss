@@ -1,0 +1,23 @@
+.dashboard_shell_container {
+    background-color: rgb(173, 14, 14);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.dashboard_shell_content {
+    display: flex;
+    overflow: hidden;
+}
+#sidenav_panel {
+    overflow-y: auto;
+    width: 250px;
+    max-width: 250px;
+    min-width: 50px;
+    transition: 1s;
+}
+#section {
+    overflow-y: auto;
+}
