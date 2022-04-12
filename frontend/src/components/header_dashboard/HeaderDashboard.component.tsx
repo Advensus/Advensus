@@ -1,11 +1,37 @@
-import { DefaultButton } from "@fluentui/react";
-import React, { useState } from "react";
+import { DefaultButton, IIconProps, SearchBox } from "@fluentui/react";
+import React, { useEffect, useState } from "react";
+import { IconButton } from "@fluentui/react/lib/Button";
 
 export interface IHeaderDashboardProps {
     default_props?: boolean;
 }
 
+const emojiIcon: IIconProps = { iconName: "Emoji2" };
+
 export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
+    // Handle media query
+    const [isMobile, setIsMobile] = useState<Boolean>(false);
+    function mqChange(mq: any) {
+        setIsMobile(mq.matches);
+    }
+    useEffect(() => {
+        const mq = window.matchMedia("screen and (max-width: 748px)");
+        mq.addListener(mqChange);
+        mqChange(mq);
+
+        return () => {
+            mq.removeListener(mqChange);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isMobile) {
+            mobileCloseNav();
+        } else {
+            openNav();
+        }
+    }, [isMobile]);
+
     const openNav = () => {
         (
             document.getElementById("sidenav_panel") as HTMLInputElement
@@ -14,6 +40,22 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
             "the test:",
             (document.getElementById("section") as HTMLInputElement).offsetWidth
         );
+    };
+    const closeNav = () => {
+        (
+            document.getElementById("sidenav_panel") as HTMLInputElement
+        ).style.width = "60px";
+        (
+            document.getElementById("section") as HTMLInputElement
+        ).style.marginLeft = "0";
+    };
+    const mobileCloseNav = () => {
+        (
+            document.getElementById("sidenav_panel") as HTMLInputElement
+        ).style.width = "0";
+        (
+            document.getElementById("section") as HTMLInputElement
+        ).style.marginLeft = "0";
     };
 
     const toggleNav = () => {
@@ -28,22 +70,26 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
         }
     };
 
-    const closeNav = () => {
-        (
-            document.getElementById("sidenav_panel") as HTMLInputElement
-        ).style.width = "60px";
-        (
-            document.getElementById("section") as HTMLInputElement
-        ).style.marginLeft = "0";
-    };
-
     return (
         <div className="header_dashboard_container">
             <div className="header_left">
-                <DefaultButton text="Menu" onClick={toggleNav} />
-                <div>User profil</div>
+                <div className="header_toggle">
+                    <IconButton
+                        iconProps={emojiIcon}
+                        title="Emoji"
+                        className="toggle_button"
+                        onClick={toggleNav}
+                    />
+                </div>
+                <div className="user_action">User profil</div>
             </div>
-            <div className="header_center">Center div</div>
+            <div className="header_center">
+                <SearchBox
+                    placeholder="Search"
+                    onSearch={(newValue) => console.log("value is " + newValue)}
+                    className="header_dashboard_search"
+                />
+            </div>
             <div className="header_right">Right div Logo</div>
         </div>
     );

@@ -5,19 +5,19 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow: hidden;
+    overflow: auto;
 }
 .dashboard_shell_content {
     display: flex;
-    overflow: hidden;
+    overflow: auto;
 }
 #sidenav_panel {
     overflow-y: auto;
     width: 250px;
     max-width: 250px;
-    min-width: 50px;
     transition: 1s;
 }
+
 #section {
     overflow-y: auto;
 }
