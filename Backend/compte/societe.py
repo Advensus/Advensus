@@ -8,8 +8,7 @@ class Organisme(models.Model):
     fix_number = models.CharField(max_length=50)
     company_stamp = models.FileField(upload_to="company_stamp/")
     company_logo = models.FileField(upload_to="company_logo/")
-
-
+    is_organisme = models.BooleanField(default=False)
 class Formateur(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     competence = models.CharField(max_length=20)
