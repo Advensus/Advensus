@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compte',
     'rest_framework',
-    'corsheaders',
+   
     
 ]
 
@@ -144,15 +144,15 @@ CORS_ALLOWED_ORIGINS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",    
-"allauth.account.auth_backends.AuthenticationBackend",)
+# AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",    
+# "allauth.account.auth_backends.AuthenticationBackend",)
 
-SITE_ID = 1 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_UNIQUE_EMAIL = True
+# SITE_ID = 1 
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_SESSION_REMEMBER = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_UNIQUE_EMAIL = True
 
 REST_FRAMEWORK = {    
 'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",    
