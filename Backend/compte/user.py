@@ -16,18 +16,22 @@ from django.utils.translation import gettext_lazy as _
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user(self,email,password=None):
+    def create_user(self,email,username,password=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
-        user=self.model(email=self.normalize_email(email))
+        if username is None:
+            raise TypeError('le nom est obligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email))
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self,email,password=None):
+    def create_superuser(self,username, email,password=None):
         user = self.create_user(
             
             email,
+            username,
             password=password,
         )
         user.is_staff = True
@@ -56,6 +60,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     signature_former = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20)
     Adress = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
     
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
@@ -69,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     session_token = models.CharField(max_length=10, default=0)
 
@@ -89,4 +95,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.email
+    def tokens(self):
+        return ''
 
