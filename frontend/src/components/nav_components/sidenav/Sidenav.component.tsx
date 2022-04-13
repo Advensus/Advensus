@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserRouteHooks } from "../../../hooks";
+import { CurrentUserDetailsComponent } from "../../user/current-user-details/current_user_details.component";
 
 export interface SideNavBaseProps {
     default_props?: boolean;
@@ -21,8 +22,24 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
     }, []);
     const menuRoutes = useUserRouteHooks();
 
+    // Handle media query
+    const [isMobile, setIsMobile] = useState<Boolean>(false);
+    function mqChange(mq: any) {
+        setIsMobile(mq.matches);
+    }
+    useEffect(() => {
+        const mq = window.matchMedia("screen and (max-width: 748px)");
+        mq.addListener(mqChange);
+        mqChange(mq);
+
+        return () => {
+            mq.removeListener(mqChange);
+        };
+    }, []);
+
     return (
         <nav className="sidenav">
+            {isMobile ? <CurrentUserDetailsComponent /> : null}
             {menuRoutes.map((_) => (
                 <NavLink
                     key={_.path}

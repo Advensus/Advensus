@@ -1,6 +1,7 @@
-import { IIconProps, SearchBox } from "@fluentui/react";
+import { FontIcon, IIconProps, SearchBox, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
+import { CurrentUserDetailsComponent } from "../user/current-user-details/current_user_details.component";
 
 export interface IHeaderDashboardProps {
     default_props?: boolean;
@@ -81,7 +82,7 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                         onClick={toggleNav}
                     />
                 </div>
-                <div className="user_action">User profil</div>
+                <CurrentUserDetailsComponent />
             </div>
             <div className="header_center">
                 <SearchBox
