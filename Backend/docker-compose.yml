@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.7"
    
 services:
   db:
@@ -21,7 +21,6 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=JrmkAV22@97#jr098
-      
     depends_on:
       - db
   adminer:
