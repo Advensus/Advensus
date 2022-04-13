@@ -10,9 +10,21 @@ class AddStagiaire(ModelSerializer):
         model = Stagiaire
         fields = ('username','first_name','email','phone_number','Adress','is_client','password')
 
-        def validate(self,attrs):
-            return super().validate(attrs)
+    def validate(self,attrs):
+        email = attrs.get('email','')
+        username = attrs.get('username','')
+        first_name = attrs.get('first_name','')
+        phone_number = attrs.get('phone_number','')
+        Adress = attrs.get('Adress','')
             
+        if username.isalnum():
+            raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+                
+        elif first_name.isalnum():
+            raise serializers.ValidationError('Le prenom ne peut contenir que des caractère alphanumerique')
+        return attrs
+        
+
 class AddRp(ModelSerializer):
     class Meta:
         model = responsable_p
