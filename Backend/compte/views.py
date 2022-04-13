@@ -8,12 +8,12 @@ def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
 
-class RegisterStagiaire(generics.CreateAPIView):
+class RegisterStagiaire(generics.GenericAPIView):
 	serializer_class = AddStagiaire
 	def post(self,request):
 		user = request.data
 		serializer = self.serializer_class(data=user)
-		serializer.is_valid(raiser_exception=True)
+		serializer.is_valid(raise_exception=True)
 		serializer.save()
 		user_data = serializer.data
 
