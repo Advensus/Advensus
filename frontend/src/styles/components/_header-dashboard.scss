@@ -20,8 +20,22 @@
     justify-content: center;
 }
 .toggle_button {
-    background-color: red;
+    // background-color: red;
+    i {
+        font-size: 25px;
+        font-weight: bold;
+    }
+    font-weight: bold;
+    color: rgb(138, 29, 29);
+    padding: 0;
+    :hover {
+        background-color: rgb(167, 177, 146);
+    }
 }
+// i {
+//     font-size: 20px;
+//     font-weight: bold;
+// }
 .user_action {
     background-color: aqua;
     height: 100%;

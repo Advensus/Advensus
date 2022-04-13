@@ -1,4 +1,4 @@
-import { ActionButton, DefaultButton, IIconProps, Text } from "@fluentui/react";
+import { ActionButton, DefaultButton, Text } from "@fluentui/react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import React from "react";
 // import { RouteProps } from "react-router";
@@ -7,9 +7,7 @@ export interface ILoginPageProps {
     default_props?: boolean;
 }
 
-const addIcon = { iconName: "Add" };
-const emailIcon = { iconName: "Mail" };
-const iconProps = { iconName: "Calendar" };
+// const calendarIcon: IIconProps = { iconName: "Calendar" };
 
 export const LoginPage: React.FC<ILoginPageProps> = () => {
     return (
@@ -35,8 +33,12 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                                 // onChange={handleChange}
                                 name="email"
                                 className="login_input"
-                                // iconProps={emailIcon}
-                                iconProps={iconProps}
+                                iconProps={{
+                                    iconName: "NewMail",
+                                    style: {
+                                        color: "black",
+                                    },
+                                }}
                             />
                             <TextField
                                 type="password"
@@ -51,7 +53,8 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                         <DefaultButton
                             text="Login now"
                             className="login_defaultbutton"
-                            iconProps={addIcon}
+                            // iconProps={chevronIcon}
+                            menuIconProps={{ iconName: "DoubleChevronRight8" }}
                         />
                     </form>
                 </div>

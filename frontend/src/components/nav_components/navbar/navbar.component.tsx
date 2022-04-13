@@ -42,16 +42,11 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
     return (
         <div className="navbarcomponent" id="navbar">
             <div className="navbar-left">
-                {/* <a href="#" id="logo">
-                    Logo
-                </a> */}
                 <Link to="/" id="logo">
                     Logo
                 </Link>
-                {/* <div className="navbar-center"></div> */}
             </div>
             <div id="navbar-right">
-                {/* <a href="#">Fonctionnalités</a> */}
                 <ActionButton
                     text="Fonctionnalités"
                     className="navbaractionbutton"
@@ -59,12 +54,14 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
                     onClick={toggleIsCalloutVisible}
                     // text={isCalloutVisible ? "Hide callout" : "Show callout"}
                     // className={styles.button}
+                    menuIconProps={{
+                        iconName: "ChevronDownSmall",
+                        style: { marginTop: 5, color: "inherit" },
+                    }}
                 />
                 {isCalloutVisible && (
                     <Callout
-                        // className="{styles.callout}, calloutclass"
                         className="calloutclass"
-                        // ariaLabel=""
                         ariaLabelledBy={labelId}
                         ariaDescribedBy={descriptionId}
                         gapSpace={0}
@@ -115,9 +112,24 @@ export const NavBarComponent: React.FC<INavBarProps> = () => {
                         </div>
                     </Callout>
                 )}
-
-                <Link to="#">Ressoureces</Link>
-                <Link to="#">Contact</Link>
+                <ActionButton
+                    text="Ressources"
+                    className="navbaractionbutton"
+                    // id={buttonId}
+                    // onClick={toggleIsCalloutVisible}
+                    menuIconProps={{
+                        iconName: "ChevronDownSmall",
+                        style: { marginTop: 5, color: "inherit" },
+                    }}
+                />
+                <ActionButton
+                    text="Others"
+                    className="navbaractionbutton"
+                    // menuIconProps={{
+                    //     iconName: "ChevronDownSmall",
+                    //     style: { marginTop: 5, color: "inherit" },
+                    // }}
+                />
                 <DefaultButton
                     text="CONNEXION"
                     className="navbardefaultbutton"

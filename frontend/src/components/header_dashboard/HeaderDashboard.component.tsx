@@ -1,4 +1,4 @@
-import { DefaultButton, IIconProps, SearchBox } from "@fluentui/react";
+import { IIconProps, SearchBox } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
 
@@ -6,7 +6,7 @@ export interface IHeaderDashboardProps {
     default_props?: boolean;
 }
 
-const emojiIcon: IIconProps = { iconName: "Emoji2" };
+const menuIcon: IIconProps = { iconName: "ResponsesMenu" };
 
 export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
     // Handle media query
@@ -75,8 +75,8 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
             <div className="header_left">
                 <div className="header_toggle">
                     <IconButton
-                        iconProps={emojiIcon}
-                        title="Emoji"
+                        iconProps={menuIcon}
+                        title="Menu"
                         className="toggle_button"
                         onClick={toggleNav}
                     />
