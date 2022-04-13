@@ -2,12 +2,17 @@ from dataclasses import field
 from rest_framework import ModelSerializer
 from .models import Stagiaire,responsable_p,super_p
 from .societe import Organisme,Formateur
+from rest_framework import serializers
 
 class AddStagiaire(ModelSerializer):
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     class Meta:
         model = Stagiaire
         fields = ('username','first_name','email','phone_number','Adress','is_client','password')
 
+        def validate(self,attrs):
+            return super().validate(attrs)
+            
 class AddRp(ModelSerializer):
     class Meta:
         model = responsable_p
