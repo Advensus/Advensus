@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { IRoute } from "../components";
+import { UsersPage } from "../pages";
 
 export function useUserRouteHooks() {
     const [userRoutes, setUserRoutes] = useState<IRoute[]>([]);
@@ -14,7 +15,7 @@ export function useUserRouteHooks() {
         {
             path: `path2`,
             label: "Label2",
-            icon: "icon 2",
+            icon: "la-id-badge",
             component: "component2",
         },
         {
@@ -22,6 +23,12 @@ export function useUserRouteHooks() {
             label: "Label3",
             icon: "icon 3",
             component: "component3",
+        },
+        {
+            path: `usersss`,
+            label: "user_page",
+            icon: "la-id-mail",
+            component: UsersPage,
         },
     ];
 

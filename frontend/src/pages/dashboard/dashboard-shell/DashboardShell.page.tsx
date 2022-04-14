@@ -1,10 +1,12 @@
 import { DefaultButton } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import {
     CurrentUserDetailsComponent,
     HeaderDashboardComponent,
     SideNavComponent,
 } from "../../../components";
+import { useUserRouteHooks } from "../../../hooks";
 // import { RouteProps } from "react-router";
 
 export interface IDashboardShellPageProps {
@@ -12,12 +14,10 @@ export interface IDashboardShellPageProps {
 }
 
 export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
+    const accessRoutes = useUserRouteHooks();
+
     useEffect(() => {
-        console.log(
-            "the test:",
-            (document.getElementById("sidenav_panel") as HTMLInputElement)
-                .offsetWidth
-        );
+        console.log({ accessRoutes });
     }, []);
 
     return (
@@ -28,18 +28,15 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
                     <SideNavComponent />
                 </div>
                 <section id="section">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Sed, neque quo ea aspernatur quisquam reprehenderit harum
-                    amet et mollitia dolor necessitatibus? Molestias
-                    exercitationem ab placeat reiciendis a voluptatem iste
-                    aspernatur! Lorem ipsum dolor sit amet, consectetur
-                    adipisicing elit. Qui officia molestias aspernatur laborum
-                    corrupti sed, magnam quis rem repudiandae praesentium minus!
-                    Maiores eaque aliquid molestiae magnam ducimus eos corporis
-                    numquam. Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Nesciunt distinctio repellendus illum accusamus illo
-                    at ab fugiat, aliquid consequuntur nostrum esse adipisci
-                    vel, ea, quisquam facere deleniti fugit mollitia ipsam?
+                    <Routes>
+                        {accessRoutes.map((route) => (
+                            <Route
+                                key={route.path}
+                                path={route.path}
+                                element={<route.component />}
+                            />
+                        ))}
+                    </Routes>
                 </section>
             </div>
         </main>
