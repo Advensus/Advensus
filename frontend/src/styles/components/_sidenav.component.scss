@@ -2,8 +2,9 @@
     position: relative;
     background-color: rgb(146, 146, 89);
     flex: 0 0 250px;
-    height: 89.4vh;
-    overflow: hidden;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 19px;

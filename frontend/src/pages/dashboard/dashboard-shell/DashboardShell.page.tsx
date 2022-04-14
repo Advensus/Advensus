@@ -27,8 +27,19 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
                 <div id="sidenav_panel">
                     <SideNavComponent />
                 </div>
-                <section className="dashboard_shell_body" id="section">
-                    Routes map here
+                <section id="section">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Sed, neque quo ea aspernatur quisquam reprehenderit harum
+                    amet et mollitia dolor necessitatibus? Molestias
+                    exercitationem ab placeat reiciendis a voluptatem iste
+                    aspernatur! Lorem ipsum dolor sit amet, consectetur
+                    adipisicing elit. Qui officia molestias aspernatur laborum
+                    corrupti sed, magnam quis rem repudiandae praesentium minus!
+                    Maiores eaque aliquid molestiae magnam ducimus eos corporis
+                    numquam. Lorem ipsum dolor sit amet, consectetur adipisicing
+                    elit. Nesciunt distinctio repellendus illum accusamus illo
+                    at ab fugiat, aliquid consequuntur nostrum esse adipisci
+                    vel, ea, quisquam facere deleniti fugit mollitia ipsam?
                 </section>
             </div>
         </main>

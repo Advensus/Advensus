@@ -36,7 +36,7 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
     const openNav = () => {
         (
             document.getElementById("sidenav_panel") as HTMLInputElement
-        ).style.width = "250px";
+        ).style.width = "170px";
         console.log(
             "the test:",
             (document.getElementById("section") as HTMLInputElement).offsetWidth
@@ -64,7 +64,7 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
             "sidenav_panel"
         ) as HTMLInputElement;
 
-        if (sidenavBar.offsetWidth >= 200) {
+        if (sidenavBar.offsetWidth >= 170) {
             closeNav();
         } else {
             openNav();

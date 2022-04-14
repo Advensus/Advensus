@@ -2,22 +2,27 @@
     background-color: rgb(173, 14, 14);
     height: 100vh;
     width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: auto;
+    display: grid;
+    grid-template-rows: 0.6fr 5fr;
+    overflow: hidden;
 }
 .dashboard_shell_content {
-    display: flex;
-    overflow: auto;
+    // display: flex;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
 }
 #sidenav_panel {
-    overflow-y: auto;
-    width: 250px;
-    max-width: 250px;
+    overflow: hidden;
+    // width: 250px;
+    max-width: 170px;
     transition: 1s;
 }
 
 #section {
-    overflow-y: auto;
+    overflow-y: scroll;
+    // background-color: yellow;
+    // width: 90%;
+    background-color: black;
+    padding: 10px;
 }
