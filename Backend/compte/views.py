@@ -8,6 +8,9 @@ from .user import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+import jwt
+from django.conf import settings
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -18,6 +21,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 		user = request.data
 		serializer = self.serializer_class(data=user)
 		serializer.is_valid(raise_exception=True)
+		user.is_active = False
 		serializer.save()
 		user_data = serializer.data
 
@@ -36,5 +40,21 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 
 class VerifyEmail(generics.GenericAPIView):
-	def get(self):
-		pass
+	def get(self,request):
+		token = request.GET.get('token')
+		try:
+			payload = jwt.decode(token,settings.SECRET_KEY)
+			user = User.objects.get(id=payload['user_id'])
+			if not user.is_verified:
+				user.is_active = True
+				user.email_confirmed = True
+				user.save()
+			return Response({'email':'email activé avec succès'},status=status.HTTP_200_OK)
+			
+		except jwt.ExpiredSignatureError as identifier:
+			return Response({'error':'Activé expiré'},status=status.HTTP_400_BAD_REQUEST)
+
+		except jwt.exceptions.DecodeError as identifier:
+			return Response({'error':'token invalide'},status=status.HTTP_400_BAD_REQUEST)
+
+

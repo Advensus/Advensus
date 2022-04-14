@@ -5,7 +5,9 @@ from .responsable import admin_org
 from .societe import Organisme,Formateur
 from .user import User
 
-
+class Affichage(admin.ModelAdmin):
+    list_display = ('username','first_name','email','phone_number','adress','created_at','date_joined','is_active','is_superuser','is_staff','updated_at','is_admin_simple','is_client','is_formateur',' is_planificateur','is_sup_planificateur')
+    search_fields = ['username']
 
 
 admin.site.register(Stagiaire)
@@ -21,4 +23,4 @@ admin.site.register(formation)
 admin.site.register(admin_org)
 admin.site.register(Organisme)
 admin.site.register(Formateur)
-admin.site.register(User)
+admin.site.register(User,Affichage)
