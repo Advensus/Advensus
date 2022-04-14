@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user(self,email,username,password=None):
+    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
     signature_former = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20)
-    Adress = models.CharField(max_length=20)
+    adress = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
