@@ -6,22 +6,22 @@ from .user import User
 
 class AddStagiaire(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=60)
+
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','Adress','is_client','password']
+        fields = ['username','first_name','email','phone_number','adress','is_client','password']
 
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
         first_name = attrs.get('first_name','')
-        phone_number = attrs.get('phone_number','')
-        Adress = attrs.get('Adress','')
+        
             
         if not username.isalnum():
             raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
                 
-        elif not first_name.isalnum():
-            raise serializers.ValidationError('Le prenom ne peut contenir que des caractère alphanumerique')
+        
         return attrs
     def create(self,validated_data):
         return User.objects.create_user(**validated_data)

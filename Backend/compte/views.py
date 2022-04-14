@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from rest_framework import generics
+from rest_framework import generics,status
 from .serializers import AddStagiaire
 from rest_framework.response import Response
 

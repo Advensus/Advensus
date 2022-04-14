@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=advansus
       - POSTGRES_PASSWORD=JrmkAV22@97
      
+     
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000

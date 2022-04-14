@@ -16,23 +16,27 @@ from django.utils.translation import gettext_lazy as _
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user(self,email,username,password=None):
+    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email))
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self,username, email,password=None):
+    def create_superuser(self,username,first_name,email,phone_number,adress,password=None):
         user = self.create_user(
             
             email,
+            first_name,
             username,
+            phone_number,
+            adress,
             password=password,
+
         )
         user.is_staff = True
         user.is_superuser = True
@@ -52,14 +56,14 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(_('username '), max_length=30,unique=True)
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True,null=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
     signature_former = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=20)
-    Adress = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=20,null=True)
+    adress = models.CharField(max_length=100,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
@@ -75,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username','first_name','phone_number','adress']
 
     session_token = models.CharField(max_length=10, default=0)
 
