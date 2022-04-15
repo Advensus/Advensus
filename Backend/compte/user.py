@@ -82,7 +82,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
-    
     is_formateur = models.BooleanField(default=False)
     is_planificateur = models.BooleanField(default=False)
     is_sup_planificateur = models.BooleanField(default=False)
