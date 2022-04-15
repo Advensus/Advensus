@@ -21,7 +21,6 @@ class RegisterStagiaire(generics.GenericAPIView):
 		user = request.data
 		serializer = self.serializer_class(data=user)
 		serializer.is_valid(raise_exception=True)
-		user.is_active = False
 		serializer.save()
 		user_data = serializer.data
 
@@ -51,10 +50,10 @@ class VerifyEmail(generics.GenericAPIView):
 				user.save()
 			return Response({'email':'email activé avec succès'},status=status.HTTP_200_OK)
 			
-		except jwt.ExpiredSignatureError as identifier:
+		except jwt.ExpiredSignatureError:
 			return Response({'error':'Activé expiré'},status=status.HTTP_400_BAD_REQUEST)
 
-		except jwt.exceptions.DecodeError as identifier:
+		except jwt.exceptions.DecodeError:
 			return Response({'error':'token invalide'},status=status.HTTP_400_BAD_REQUEST)
 
 

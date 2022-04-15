@@ -23,18 +23,26 @@ class UserManager(BaseUserManager):
             raise TypeError('le nom est obligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user.is_client = True
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self,username,first_name,email,phone_number,adress,password=None):
-        user = self.create_user(
+    def create_admin(self,email,username,password=None):
+        if email is None:
+            raise TypeError('Le mail est obligatoire')
+        if username is None:
+            raise TypeError('Le nom est obligatoire')
+        user = self.model(username=username,email=self.normalize_email(email))
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self,username,email,password=None):
+        user = self.create_admin(
             
             email,
-            first_name,
             username,
-            phone_number,
-            adress,
             password=password,
 
         )
@@ -80,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username','first_name','phone_number','adress']
+    REQUIRED_FIELDS = ['username','first_name','adress','phone_number']
 
     session_token = models.CharField(max_length=10, default=0)
 

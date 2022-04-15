@@ -10,6 +10,7 @@ class Stagiaire(models.Model):
     trainee_level = models.CharField(max_length=50)
     provenir = models.ManyToManyField(Organisme)
     collaborer = models.ManyToManyField(Formateur)
+    is_client = models.BooleanField(default=True)
   
     
 class responsable_p(models.Model):

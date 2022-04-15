@@ -9,7 +9,8 @@ services:
       - POSTGRES_DB=advansus
       - POSTGRES_USER=advansus
       - POSTGRES_PASSWORD=JrmkAV22@97
-     
+    ports:
+    - "5482:5432" 
      
   web:
     build: .

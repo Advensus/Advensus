@@ -10,7 +10,7 @@ class AddStagiaire(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','is_client','password']
+        fields = ['username','first_name','email','phone_number','adress','password']
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -45,4 +45,3 @@ class AddStagiaire(serializers.ModelSerializer):
 #     class Meta:
 #         model = Formateur
 #         fields = ('username','first_name','email','phone_number','Adress','is_sup_planificateur','password','horaire','competence','cv')
-
