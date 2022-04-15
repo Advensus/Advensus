@@ -1,6 +1,9 @@
 import { IIconProps, SearchBox, Text } from "@fluentui/react";
 import React from "react";
-import { TraineeDisplayComponent } from "../../../components";
+import {
+    TraineeDisplayComponent,
+    UsersDisplayComponent,
+} from "../../../components";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -40,21 +43,31 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     <hr className="hr_solid" />
                 </div>
                 <div className="tab_content">
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
+                    <UsersDisplayComponent />
                 </div>
+                {/* <div>
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                </div> */}
             </div>
         </div>
     );

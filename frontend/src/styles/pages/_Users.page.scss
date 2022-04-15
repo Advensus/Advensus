@@ -56,6 +56,9 @@
     // background-color: aqua;
     overflow: auto;
     padding: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 // #hint {
