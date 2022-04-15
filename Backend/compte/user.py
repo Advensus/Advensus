@@ -28,21 +28,24 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_admin(self,email,username,password=None):
+    def create_admin(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('Le mail est obligatoire')
         if username is None:
             raise TypeError('Le nom est obligatoire')
-        user = self.model(username=username,email=self.normalize_email(email))
+        user = self.model(username=username,email=self.normalize_email(email),first_name=first_name,adress=adress,phone_number=phone_number)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self,username,email,password=None):
+    def create_superuser(self,username,email,first_name,adress,phone_number,password=None):
         user = self.create_admin(
             
             email,
             username,
+            first_name,
+            adress,
+            phone_number,
             password=password,
 
         )

@@ -6,7 +6,7 @@ from .societe import Organisme,Formateur
 from .user import User
 
 class Affichage(admin.ModelAdmin):
-    list_display = ('username','first_name','email','phone_number','adress','date_joined','is_active','is_superuser','is_staff','updated_at','is_admin_simple','is_client','is_formateur','is_planificateur','is_sup_planificateur')
+    list_display = ('username','first_name','email','phone_number','adress','date_joined','is_active','is_superuser','is_staff','updated_at','is_admin_simple','is_client','is_formateur','is_planificateur','is_sup_planificateur','email_confirmed')
     search_fields = ['username']
 
 
