@@ -1,27 +1,60 @@
+import { IIconProps, SearchBox, Text } from "@fluentui/react";
 import React from "react";
+import { TraineeDisplayComponent } from "../../../components";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
     default_props?: boolean;
 }
 
-export const UsersPage: React.FC<IUsersPageProps> = () => {
-    const openNav = () => {
-        (
-            document.getElementById("display_content") as HTMLInputElement
-        ).style.width = "170px";
-    };
-    const closeNav = () => {
-        (
-            document.getElementById("display_content") as HTMLInputElement
-        ).style.width = "0";
-        console.log("closeNav was clicked");
-    };
+const filterIcon: IIconProps = { iconName: "Filter" };
 
+export const UsersPage: React.FC<IUsersPageProps> = () => {
     return (
-        <div className="users_container">
-            <div id="users_content_display" className="users_content_display">
-                Ce qui ne me vient pas en tête..
+        <div id="users_content_display">
+            <div className="display_tab">
+                <div className="tab_header">
+                    <div className="tab_title">
+                        <Text>Onglet title</Text>
+                        <hr className="hr_dashed" />
+                    </div>
+                    <div className="tab_header_content">
+                        <SearchBox
+                            placeholder="Search"
+                            onSearch={(newValue) =>
+                                console.log("value is " + newValue)
+                            }
+                        />
+                        <div className="filter_box">
+                            <SearchBox
+                                placeholder="Filter1"
+                                iconProps={filterIcon}
+                            />
+                            <SearchBox
+                                placeholder="Filter"
+                                iconProps={filterIcon}
+                            />
+                        </div>
+                    </div>
+                    <Text>My "tab name" or allusersnumber()</Text>
+                    <hr className="hr_solid" />
+                </div>
+                <div className="tab_content">
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent />
+                </div>
             </div>
         </div>
     );

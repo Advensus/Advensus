@@ -1,7 +1,7 @@
 import { FontIcon, IIconProps, SearchBox, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
-import { CurrentUserDetailsComponent } from "../user/current-user-details/current_user_details.component";
+import { CurrentUserDetailsComponent } from "../users_components/current-user-details/current_user_details.component";
 
 export interface IHeaderDashboardProps {
     default_props?: boolean;

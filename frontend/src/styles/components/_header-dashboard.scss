@@ -1,5 +1,6 @@
 .header_dashboard_container {
-    background-color: rgb(177, 84, 84);
+    // background-color: rgb(177, 84, 84);
+    background: #ff00a7;
     width: 100vw;
     // height: 90px;
     display: grid;
@@ -7,7 +8,7 @@
 }
 
 .header_left {
-    background-color: green;
+    // background-color: green;
     display: grid;
     grid-template-columns: 60px auto;
     align-items: center;
@@ -34,7 +35,7 @@
 }
 
 .header_center {
-    background-color: red;
+    // background-color: red;
     display: flex;
     align-items: center;
     justify-content: center;

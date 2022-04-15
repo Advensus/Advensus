@@ -2,7 +2,7 @@ import { Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserRouteHooks } from "../../../hooks";
-import { CurrentUserDetailsComponent } from "../../user/current-user-details/current_user_details.component";
+import { CurrentUserDetailsComponent } from "../../users_components/current-user-details/current_user_details.component";
 
 export interface SideNavBaseProps {
     default_props?: boolean;
@@ -112,7 +112,29 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                 }
             );
         }
-        // false;
+    };
+
+    const toggleBlockContent2 = () => {
+        var hint = document.getElementById(
+            "users_content_display"
+        ) as HTMLInputElement;
+
+        var ctr = 1;
+        hint.className = hint.className !== "show" ? "show" : "hide";
+        if (hint.className === "show") {
+            hint.style.display = "block";
+            window.setTimeout(() => {
+                hint.style.opacity = "1";
+                hint.style.transform = "scale(1)";
+            }, 0);
+        }
+        if (hint.className === "hide") {
+            hint.style.opacity = "0";
+            hint.style.transform = "scale(0)";
+            window.setTimeout(function () {
+                hint.style.display = "none";
+            }, 700); // timed to match animation-duration
+        }
     };
 
     return (
@@ -122,7 +144,7 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                 <NavLink
                     key={_.path}
                     to={_.path}
-                    onClick={toggleBlockContent}
+                    onClick={toggleBlockContent2}
                     className={({ isActive }) =>
                         [
                             "sidenav__route",
