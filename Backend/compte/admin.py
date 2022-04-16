@@ -10,7 +10,12 @@ class Affichage(admin.ModelAdmin):
     search_fields = ['username']
 
 
-admin.site.register(Stagiaire)
+class AffichageSt(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ['username']
+
+
+admin.site.register(Stagiaire,AffichageSt)
 admin.site.register(responsable_p)
 admin.site.register(super_p)
 admin.site.register(souscrir)
