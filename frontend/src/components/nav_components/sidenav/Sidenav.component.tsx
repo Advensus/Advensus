@@ -109,7 +109,7 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                     capture: false,
                     once: true,
                     passive: false,
-                } 
+                }
             );
         }
     };

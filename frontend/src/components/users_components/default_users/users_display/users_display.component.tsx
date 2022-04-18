@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export interface IUsersDisplayProps {
     default_props?: boolean;
-    toggleTab: () => void;
+    toggleTab?: () => void;
 }
 
 export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({

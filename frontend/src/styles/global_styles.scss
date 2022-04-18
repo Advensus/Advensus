@@ -1,11 +1,12 @@
 // components
 @import "./components/navbar.component";
 @import "./components/sidenav.component";
-@import "./components/header-dashboard";
-@import "./components//current-user-details";
-@import "./components//trainee-display";
-@import "./components//users-display";
-@import "./components/full-infos-tab";
+@import "./components/header-dashboard.component";
+@import "./components/current-user-details.component";
+@import "./components/trainee-display.component";
+@import "./components/users-display.component";
+@import "./components/full-infos-tab.component";
+@import "./components/user-details.component";
 
 // pages
 @import "./pages/Home.page";
