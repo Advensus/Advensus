@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -64,6 +64,16 @@ class RegisterResponsableP(generics.GenericAPIView):
 	def post(self,request):
 		rp = request.data
 		serializer = self.serializer_class(data=rp)
+		serializer.is_valid(raise_exception=True)
+		serializer.save(request)
+		user_data = serializer.data
+		return Response(user_data,status=status.HTTP_201_CREATED)
+
+class RegisterSupResponsableP(generics.GenericAPIView):
+	serializer_class = AddSrp
+	def post(self,request):
+		srp = request.data
+		serializer = self.serializer_class(data=srp)
 		serializer.is_valid(raise_exception=True)
 		serializer.save(request)
 		user_data = serializer.data

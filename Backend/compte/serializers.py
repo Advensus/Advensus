@@ -85,12 +85,26 @@ class AddRp(serializers.ModelSerializer):
             user = super(AddRp, self).save()
             user.is_planificateur = True
             user.save()
+
+class AddSrp(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=60)
+    class Meta:
+        model = User
+        fields = ['username','first_name','email','phone_number','adress','password']
+    def get_cleaned_data(self):
+        data = super(AddSrp, self).get_cleaned_data()
+        return data
+
+    def save(self, request):
+            user = super(AddSrp, self).save()
+            user.is_sup_planificateur = True
+            user.save()
            
-            
-# class AddSrp(serializers.ModelSerializer):
-#     class Meta:
-#         model = super_p
-#         fields = ('username','first_name','email','phone_number','Adress','is_sup_planificateur','password')
 
 class AddOrg(serializers.ModelSerializer):
     class Meta:
