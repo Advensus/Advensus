@@ -82,7 +82,26 @@ class AddStagiaire(serializers.ModelSerializer):
 #         model = Organisme
 #         fields = ('company_name','company_adress','phone_number','fix_number','is_organisme')
 
-# class AddFormateur(serializers.ModelSerializer):
-#     class Meta:
-#         model = Formateur
-#         fields = ('username','first_name','email','phone_number','Adress','is_sup_planificateur','password','horaire','competence','cv')
+class AddFormateur(serializers.ModelSerializer):
+
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=60)
+    class Meta:
+        model = Formateur
+        fields = ['username','first_name','email','phone_number','Adress','is_sup_planificateur','password','horaire','competence','cv']
+
+        def validate(self,attrs):
+            email = attrs.get('email','')
+            username = attrs.get('username','')
+            first_name = attrs.get('first_name','')
+        
+            
+            if not username.isalnum():
+                raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+            return attrs
+        def create(self,validated_data):
+            return User.objects.create_user(**validated_data)

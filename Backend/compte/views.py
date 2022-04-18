@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status
-from .serializers import AddStagiaire
+from .serializers import AddStagiaire,AddFormateur
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -37,7 +37,16 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
+class AddFormateur(generics.GenericAPIView):
+	serializer_class = AddFormateur
+	def post(self,request):
+		user = request.data
+		serializer = self.serializer_class(data=user)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		user_data = serializer.data
 
+		return Response(user_data,status=status.HTTP_201_CREATED)
 class VerifyEmail(generics.GenericAPIView):
 	def get(self,request):
 		token = request.GET.get('token')
