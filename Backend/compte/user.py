@@ -34,6 +34,7 @@ class UserManager(BaseUserManager):
         if username is None:
             raise TypeError('le nom est obligatoire')
 
+        
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.is_formateur = True
         user.set_password(password)

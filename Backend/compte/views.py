@@ -46,8 +46,18 @@ class RegisterFormateur(generics.GenericAPIView):
 		serializer.save()
 		user_data = serializer.data
 
-		return Response(user_data,status=status.HTTP_201_CREATED)
+		user = User.objects.get(email=user_data['email'])
+		token = RefreshToken.for_user(user).access_token
+
+		current_site = get_current_site(request).domain
+		relativelink= reverse('email-verify')
+		absurl = 'http://'+current_site+relativelink+"?token="+str(token)
+		email_body = 'salut '+user.username+'utilise ce lien pour verifier ton compte\n'+absurl
 		
+		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
+		Util.send_email(data)
+
+		return Response(user_data,status=status.HTTP_201_CREATED)
 class VerifyEmail(generics.GenericAPIView):
 	def get(self,request):
 		token = request.GET.get('token')
