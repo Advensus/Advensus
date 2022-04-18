@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status
-from .serializers import AddStagiaire,AddFormateur
+from .serializers import AddStagiaire,AddFormateur,AddOrg
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -40,24 +40,26 @@ class RegisterStagiaire(generics.GenericAPIView):
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
 	def post(self,request):
-		user = request.data
-		serializer = self.serializer_class(data=user)
+		formateur = request.data
+		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		serializer.save(request)
 		user_data = serializer.data
 
-		user = User.objects.get(email=user_data['email'])
-		token = RefreshToken.for_user(user).access_token
+		# formateur = User.objects.get(email=user_data['email'])
+		# token = RefreshToken.for_user(formateur).access_token
 
-		current_site = get_current_site(request).domain
-		relativelink= reverse('email-verify')
-		absurl = 'http://'+current_site+relativelink+"?token="+str(token)
-		email_body = 'salut '+user.username+'utilise ce lien pour verifier ton compte\n'+absurl
+		# current_site = get_current_site(request).domain
+		# relativelink= reverse('email-verify')
+		# absurl = 'http://'+current_site+relativelink+"?token="+str(token)
+		# email_body = 'salut '+formateur.username+'utilise ce lien pour verifier ton compte\n'+absurl
 		
-		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
-		Util.send_email(data)
+		# data = {'email_body': email_body,'to_email': formateur.email,'email_subject': 'verifier votre adress email'+current_site}
+		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
+
+class 
 class VerifyEmail(generics.GenericAPIView):
 	def get(self,request):
 		token = request.GET.get('token')

@@ -65,7 +65,7 @@ class AddStagiaire(serializers.ModelSerializer):
         
         return attrs
     def create(self,validated_data):
-        return User.objects.create_user(**validated_data)
+        return User.objects.create_user1(**validated_data)
 
 # class AddRp(serializers.ModelSerializer):
 #     class Meta:
@@ -83,28 +83,43 @@ class AddStagiaire(serializers.ModelSerializer):
 #         fields = ('company_name','company_adress','phone_number','fix_number','is_organisme')
 
 class AddFormateur(serializers.ModelSerializer):
-
-    username = serializers.CharField(max_length=60)
-    email = serializers.CharField(max_length=60)
-    adress = serializers.CharField(max_length=60)
-    phone_number = serializers.CharField(max_length=60)
-    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
-    first_name= serializers.CharField(max_length=60)
-    is_formateur = serializers.BooleanField(default=False)
-    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','is_formateur','adress','password','horaire','competence','cv']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv']
+    def get_cleaned_data(self):
+            data = super(AddFormateur, self).get_cleaned_data()
+            return data
 
-        def validate(self,attrs):
-            email = attrs.get('email','')
-            username = attrs.get('username','')
-            first_name = attrs.get('first_name','')
+    def save(self, request):
+            user = super(AddFormateur, self).save()
+            user.is_formateur = True
+            user.save()
+            formateur = User(formateur=user)
+            formateur.save()
+            return formateur
+    # username = serializers.CharField(max_length=60)
+    # email = serializers.CharField(max_length=60)
+    # adress = serializers.CharField(max_length=60)
+    # phone_number = serializers.CharField(max_length=60)
+    # password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    # first_name= serializers.CharField(max_length=60)
+    
+    
+    # class Meta:
+    #     model = User
+    #     fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv']
+
+    #     def validate(self,attrs):
+    #         email = attrs.get('email','')
+    #         username = attrs.get('username','')
+    #         first_name = attrs.get('first_name','')
         
             
-            if not username.isalnum():
-                raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
-            return attrs
-        def create(self,validated_data):
-            self.is_formateur = True
-            return User.objects.create_formateur(**validated_data)
+    #         if not username.isalnum():
+    #             raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+    #         return attrs
+    #     def create(self,validated_data):
+    #         return User.objects.create_user(**validated_data)
+
+
+

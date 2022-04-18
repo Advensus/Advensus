@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+    def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
@@ -28,7 +28,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_formateur(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
