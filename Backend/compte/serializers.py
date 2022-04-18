@@ -4,12 +4,53 @@ from .societe import Organisme,Formateur
 from rest_framework import serializers
 from .user import User
 
+
+
+
+
+
+# class AddStagiaire(serializers.ModelSerializer):
+#     stagiaire = serializers.PrimaryKeyRelatedField(read_only=True,) #by default allow_null = False
+#     username = serializers.CharField(max_length=60)
+#     email = serializers.CharField(max_length=60)
+#     adress = serializers.CharField(max_length=60)
+#     phone_number = serializers.CharField(max_length=60)
+#     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+#     first_name= serializers.CharField(max_length=60)
+
+#     class Meta:
+#         model = Stagiaire
+#         fields = ['username','first_name','email','phone_number','adress','password','stagiaire']
+   
+    
+#     def get_cleaned_data(self):
+#             data = super(AddStagiaire, self).get_cleaned_data()
+#             extra_data = {
+#                 'trainee_level' : self.validated_data.get('trainee_level', ''),
+               
+#             }
+#             data.update(extra_data)
+#             return data
+
+#     def save(self, request):
+#         user = super(AddStagiaire, self).save()
+#         user.is_client = True
+#         user.save()
+#         stagiaire = Stagiaire(stagiaire=user,  trainee_level=self.cleaned_data.get('trainee_level'))
+#         stagiaire.save()
+#         return user
+
 class AddStagiaire(serializers.ModelSerializer):
+
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
 
     class Meta:
-        model = User
+        model = Stagiaire
         fields = ['username','first_name','email','phone_number','adress','password']
 
     def validate(self,attrs):
