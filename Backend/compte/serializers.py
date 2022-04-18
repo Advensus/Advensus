@@ -77,11 +77,19 @@ class AddStagiaire(serializers.ModelSerializer):
 #         model = super_p
 #         fields = ('username','first_name','email','phone_number','Adress','is_sup_planificateur','password')
 
-# class AddOrg(serializers.ModelSerializer):
-#     class Meta:
-#         model = Organisme
-#         fields = ('company_name','company_adress','phone_number','fix_number','is_organisme')
+class AddOrg(serializers.ModelSerializer):
+    class Meta:
+        model = Organisme
+        fields = ['company_name','company_adress','phone_number','fix_number','is_organisme']
+    def get_cleaned_data(self):
+            data = super(AddOrg, self).get_cleaned_data()
+            return data
 
+    def save(self, request):
+            societe = super(AddOrg, self).save()
+            societe.is_organisme = True
+            societe.save()
+        
 class AddFormateur(serializers.ModelSerializer):
     class Meta:
         model = User

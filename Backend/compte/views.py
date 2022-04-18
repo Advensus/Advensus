@@ -59,7 +59,16 @@ class RegisterFormateur(generics.GenericAPIView):
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
-class 
+class CreateOrganisme(generics.GenericAPIView):
+	serializer_class = AddOrg
+	def post(self,request):
+		organisme= request.data
+		serializer = self.serializer_class(data=organisme)
+		serializer.is_valid(raise_exception=True)
+		serializer.save(request)
+		organisme_data = serializer.data
+		return Response(organisme_data,status=status.HTTP_201_CREATED)
+
 class VerifyEmail(generics.GenericAPIView):
 	def get(self,request):
 		token = request.GET.get('token')
