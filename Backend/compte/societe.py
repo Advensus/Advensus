@@ -11,8 +11,5 @@ class Organisme(models.Model):
     is_organisme = models.BooleanField(default=False)
 class Formateur(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    competence = models.CharField(max_length=20)
-    horaire = models.TimeField(auto_now_add=False)
-    signature_former = models.FileField(upload_to="signature_former/")
-    cv = models.FileField(upload_to="cv/")
+    
     appartenir = models.ManyToManyField(Organisme)

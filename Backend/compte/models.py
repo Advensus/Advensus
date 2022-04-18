@@ -28,7 +28,6 @@ class souscrir(models.Model):
     format = models.ForeignKey(formation,on_delete=models.CASCADE)
 
 
-
 class Presence(models.Model):
     stagiaire = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
     formateur = models.ForeignKey(Formateur,on_delete=models.CASCADE)

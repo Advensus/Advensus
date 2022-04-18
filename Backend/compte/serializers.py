@@ -50,7 +50,7 @@ class AddStagiaire(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=60)
 
     class Meta:
-        model = Stagiaire
+        model = User
         fields = ['username','first_name','email','phone_number','adress','password']
 
     def validate(self,attrs):
@@ -90,9 +90,10 @@ class AddFormateur(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    
     class Meta:
-        model = Formateur
-        fields = ['username','first_name','email','phone_number','Adress','is_sup_planificateur','password','horaire','competence','cv']
+        model = User
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv']
 
         def validate(self,attrs):
             email = attrs.get('email','')
@@ -104,4 +105,4 @@ class AddFormateur(serializers.ModelSerializer):
                 raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
             return attrs
         def create(self,validated_data):
-            return User.objects.create_user(**validated_data)
+            return User.objects.create_formateur(**validated_data)

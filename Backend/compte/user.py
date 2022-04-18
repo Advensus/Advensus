@@ -91,6 +91,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     adress = models.CharField(max_length=100,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+   
+    horaire = models.TimeField(auto_now_add=False,null=True)
+    signature_former = models.FileField(upload_to="signature_former/")
+    cv = models.FileField(upload_to="cv/")
+
+    competence = models.CharField(max_length=80)
     
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
