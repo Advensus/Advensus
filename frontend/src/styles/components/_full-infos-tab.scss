@@ -1,0 +1,11 @@
+.full_infos_tab_container {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+.full_infos_tab_header {
+}
+.full_infos_tab_body {
+    background-color: #f4f3f3;
+    margin-top: 5px;
+}
