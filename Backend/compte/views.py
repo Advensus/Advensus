@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status
-from .serializers import AddStagiaire,AddFormateur,AddOrg
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -57,6 +57,16 @@ class RegisterFormateur(generics.GenericAPIView):
 		# data = {'email_body': email_body,'to_email': formateur.email,'email_subject': 'verifier votre adress email'+current_site}
 		# Util.send_email(data)
 
+		return Response(user_data,status=status.HTTP_201_CREATED)
+
+class RegisterResponsableP(generics.GenericAPIView):
+	serializer_class = AddRp
+	def post(self,request):
+		rp = request.data
+		serializer = self.serializer_class(data=rp)
+		serializer.is_valid(raise_exception=True)
+		serializer.save(request)
+		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
 class CreateOrganisme(generics.GenericAPIView):

@@ -67,11 +67,21 @@ class AddStagiaire(serializers.ModelSerializer):
     def create(self,validated_data):
         return User.objects.create_user1(**validated_data)
 
-# class AddRp(serializers.ModelSerializer):
-#     class Meta:
-#         model = responsable_p
-#         fields = ('username','first_name','email','phone_number','Adress',' is_planificateur','password')
+class AddRp(serializers.ModelSerializer):
+    class Meta:
+        model = responsable_p
+        fields = ['username','first_name','email','phone_number','adress','password']
+    def get_cleaned_data(self):
+        data = super(AddRp, self).get_cleaned_data()
+        return data
 
+    def save(self, request):
+            user = super(AddRp, self).save()
+            user.is_planificateur = True
+            user.save()
+            rp = User(Rp=user)
+            rp.save()
+            return rp
 # class AddSrp(serializers.ModelSerializer):
 #     class Meta:
 #         model = super_p
