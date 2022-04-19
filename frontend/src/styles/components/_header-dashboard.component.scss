@@ -1,8 +1,9 @@
 .header_dashboard_container {
     // background-color: rgb(177, 84, 84);
-    background: #ff00a7;
+    // background: #ff00a7;
+    background: #77b5fe;
     width: 100vw;
-    // height: 90px;
+    color: #fff;
     display: grid;
     grid-template-columns: 250px 4fr 1fr;
 }
@@ -45,7 +46,7 @@
     width: 90%;
 }
 .header_right {
-    background-color: yellow;
+    // background-color: yellow;
     display: flex;
     align-items: center;
     justify-content: center;

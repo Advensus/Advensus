@@ -49,7 +49,11 @@ export const CurrentUserDetailsComponent: React.FC<
                     }
                 />
             </div>
-            <Text variant="xSmall" id={isMobile ? "username" : ""}>
+            <Text
+                variant="xSmall"
+                id={isMobile ? "username" : ""}
+                style={{ color: "#fff" }}
+            >
                 User name
             </Text>
         </div>

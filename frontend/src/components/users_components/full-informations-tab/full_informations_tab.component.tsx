@@ -18,7 +18,7 @@ export const FullInformationsTabComponent: React.FC<
             <div className="full_infos_tab_body">
                 <Pivot
                     aria-label="Links of Large Tabs Pivot Example"
-                    linkFormat="tabs"
+                    // linkFormat="tabs"
                     linkSize="large"
                 >
                     <PivotItem
