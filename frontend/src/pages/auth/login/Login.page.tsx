@@ -12,6 +12,7 @@ export interface ILoginPageProps {
 export const LoginPage: React.FC<ILoginPageProps> = () => {
     return (
         <div className="login_container">
+            <div></div>
             <div className="login_form">
                 <div className="login_form_header">
                     <Text>Logo ici</Text>
@@ -58,11 +59,15 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                         />
                     </form>
                 </div>
-                <ActionButton
-                    text="Forget password?"
-                    className="login_form_reset_pwd"
-                />
+                <div className="login_footer">
+                    <ActionButton
+                        text="Forget password?"
+                        className="login_form_reset_pwd"
+                    />
+                    <ActionButton text="Annuler" className="login_cancel" />
+                </div>
             </div>
+            <div></div>
         </div>
     );
 };
