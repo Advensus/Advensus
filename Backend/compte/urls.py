@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg
+from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,loginadmin_org
 from . import views
 
 
@@ -18,7 +18,9 @@ urlpatterns = [
     path('email-verify/', VerifyEmail.as_view(), name="email-verify"), 
    
         
-   
+   #ENTITE LOGIN
+
+   path('login/admin_org/',loginadmin_org.as_view(), name="log_admin_org"),
 ]
 
 

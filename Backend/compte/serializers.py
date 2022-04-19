@@ -214,7 +214,12 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 class Loginadmin_org(serializers.ModelField):
     email = serializers.EmailField(max_length=50)
-    password = serializers.CharField(max_length=20)
+    password = serializers.CharField(max_length=20, write_only=True)
+    username = serializers.CharField(max_length=60, min_length=8,read_only=True)
+    tokens = serializers.CharField(max_length=60,read_only=True)
+    class Meta:
+        model = User
+        fields = ['username','email','password','tokens']
 
     def validate(self,attrs):
         email = attrs.get('email','')
