@@ -1,6 +1,6 @@
 import { Text } from "@fluentui/react";
 import React, { useState } from "react";
-import { UsersDisplayComponent } from "../default_users/users_display/users_display.component";
+import { UsersDisplayComponent, UserInfosComponent } from "../../";
 
 export interface IUserDetailsProps {
     default_props?: boolean;
@@ -13,16 +13,9 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = () => {
                 <UsersDisplayComponent />
             </div>
             <hr />
-            <div>
-                <Text variant="medium" style={{ fontWeight: "bolder" }}>
-                    Ressource ID :
-                </Text>
-                <Text variant="small" style={{ fontWeight: "lighter" }}>
-                    {" "}
-                    Valeur
-                </Text>
-                <hr className="hr_dashed_details" />
-            </div>
+            <UserInfosComponent keyWord="Ressource ID" valueWord="Valeur" />
+            <UserInfosComponent keyWord="Firstname" valueWord="Valeur" />
+            <UserInfosComponent keyWord="Lastname" valueWord="Valeur" />
         </div>
     );
 };

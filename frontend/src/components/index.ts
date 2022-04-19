@@ -8,3 +8,4 @@ export * from "./users_components/trainee_components/trainee-display/trainee_dis
 export * from "./users_components/default_users/users_display/users_display.component";
 export * from "./users_components/full-informations-tab/full_informations_tab.component";
 export * from "./users_components/user-details/user_details.component";
+export * from "./users_components/user_infos/user_infos.component";
