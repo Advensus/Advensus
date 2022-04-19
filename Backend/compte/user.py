@@ -9,8 +9,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 
 from django.utils.translation import gettext_lazy as _ 
 
-
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 # classe de modification de gestion des utilisateur par defaut de django
@@ -134,5 +133,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     def tokens(self):
-        return ''
+        refresh = RefreshToken.for_user(self)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        }
 
