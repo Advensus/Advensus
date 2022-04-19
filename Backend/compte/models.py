@@ -10,6 +10,7 @@ class Stagiaire(models.Model):
     trainee_level = models.CharField(max_length=50)
     provenir = models.ManyToManyField(Organisme)
     collaborer = models.ManyToManyField(Formateur)
+ 
   
     
 class responsable_p(models.Model):
@@ -25,7 +26,6 @@ class souscrir(models.Model):
     training_type = models.CharField(max_length=20)
     statigiaire = models.ForeignKey(Stagiaire,on_delete=models.CASCADE)
     format = models.ForeignKey(formation,on_delete=models.CASCADE)
-
 
 
 class Presence(models.Model):
