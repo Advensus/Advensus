@@ -3,6 +3,8 @@ from dataclasses import field
 from .societe import Organisme
 from rest_framework import serializers
 from .user import User
+from django.contrib import auth
+from rest_framework.exceptions import AuthenticationFailed
 
 
 
@@ -217,4 +219,17 @@ class Loginadmin_org(serializers.ModelField):
     def validate(self,attrs):
         email = attrs.get('email','')
         password = attrs.get('password','')
+        user = auth.authenticate(email=email,password=password)
+
+        if not user:
+            raise AuthenticationFailed('donnée incorrecte...')
+        if not user.is_active:
+            raise AuthenticationFailed('compte non activé...')
+        return {
+            'email':user.email,
+            'username':user.username,
+            'tokens':user.token
+        }
+       
         return super().validate(attrs)
+
