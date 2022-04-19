@@ -10,7 +10,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _ 
 
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from .societe import Organisme
 
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
@@ -97,15 +97,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     cv = models.FileField(upload_to="cv/")
 
     competence = models.CharField(max_length=80)
-    
+    trainee_level = models.CharField(max_length=50)
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
     is_formateur = models.BooleanField(default=False)
     is_planificateur = models.BooleanField(default=False)
     is_sup_planificateur = models.BooleanField(default=False)
-    
 
+
+    organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    appartenir = models.ManyToManyField(Organisme,related_name='appartenir_content_type')
+    provenir = models.ManyToManyField(Organisme,related_name='provenir_content_type')
+ 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

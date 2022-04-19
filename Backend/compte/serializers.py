@@ -1,6 +1,6 @@
 from dataclasses import field
-from .models import Stagiaire,responsable_p,super_p
-from .societe import Organisme,Formateur
+
+from .societe import Organisme
 from rest_framework import serializers
 from .user import User
 
@@ -107,17 +107,60 @@ class AddSrp(serializers.ModelSerializer):
            
 
 class AddOrg(serializers.ModelSerializer):
+   
     class Meta:
         model = Organisme
-        fields = ['company_name','company_adress','phone_number','fix_number','is_organisme']
+        fields = ['company_name','company_adress','phone_number','fix_number']
+        
+    
     def get_cleaned_data(self):
-            data = super(AddOrg, self).get_cleaned_data()
+            data = super(AddOrg).get_cleaned_data()
             return data
 
-    def save(self, request):
+    def save(self):
             societe = super(AddOrg, self).save()
             societe.is_organisme = True
             societe.save()
+
+class AddAdmin(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=60)
+   
+    class Meta:
+        model = User
+        fields =  ['username','first_name','email','phone_number','adress','password','organisme']
+        
+    
+    def get_cleaned_data(self):
+            data = super(AddAdmin).get_cleaned_data()
+            return data
+
+    def save(self):
+            admin_org = super(AddAdmin, self).save()
+            admin_org.is_admin_simple = True
+            admin_org.save()
+
+
+
+    # class Meta:
+    #     model = User
+    #     fields = ['username','first_name','email','adress','password','phone_number']
+    # def get_cleaned_data(self):
+    #         data = super(User).get_cleaned_data()
+    #         return data
+
+    # def __save__(self,request):
+           
+    #         admin_org = super(User, self).__save__(request)
+    #         admin_org.is_admin_simple = True
+    #         admin_org.save()
+
+
+            
         
 class AddFormateur(serializers.ModelSerializer):
     class Meta:
@@ -166,3 +209,12 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['token']
+
+class Loginadmin_org(serializers.ModelField):
+    email = serializers.EmailField(max_length=50)
+    password = serializers.CharField(max_length=20)
+
+    def validate(self,attrs):
+        email = attrs.get('email','')
+        password = attrs.get('password','')
+        return super().validate(attrs)
