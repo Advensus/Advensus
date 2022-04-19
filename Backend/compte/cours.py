@@ -11,3 +11,4 @@ class formation(models.Model):
     admin = models.ManyToManyField(admin_org)
     dispenser = models.ManyToManyField(Formateur)
     organiser = models.ManyToManyField(Organisme)
+    test_oral = models.BooleanField(default=False)

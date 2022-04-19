@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compte',
+    'drf_yasg',
     'rest_framework',
-    'corsheaders',
-    
+    'rest_framework_simplejwt',  
 ]
 
 MIDDLEWARE = [
@@ -144,21 +144,37 @@ CORS_ALLOWED_ORIGINS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",    
-"allauth.account.auth_backends.AuthenticationBackend",)
+# AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",    
+# "allauth.account.auth_backends.AuthenticationBackend",)
 
-SITE_ID = 1 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_UNIQUE_EMAIL = True
+# SITE_ID = 1 
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_SESSION_REMEMBER = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_UNIQUE_EMAIL = True
 
-REST_FRAMEWORK = {    
-'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",    
-'DEFAULT_AUTHENTICATION_CLASSES': [
+# REST_FRAMEWORK = {    
+# 'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",    
+# 'DEFAULT_AUTHENTICATION_CLASSES': [
     
-    'rest_framework.authentication.TokenAuthentication',    
+#     'rest_framework.authentication.TokenAuthentication',    
 
-],
+# ],
+# }
+
+
+REST_FRAMEWORK = {
+    'NON_FIELD_ERRORS_KEY': 'erro',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS =  True
+EMAIL_PORT =  587
+EMAIL_HOST_USER = 'farfanet22@gmail.com'
+EMAIL_HOST_PASSWORD = 'Farafnet007'
+EMAIL_USE_TLS: True
