@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,Loginadmin_org
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginadmin_org_ser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -44,7 +44,7 @@ class RegisterFormateur(generics.GenericAPIView):
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
-		serializer.save(request)
+		serializer.save()
 		user_data = serializer.data
 
 		# formateur = User.objects.get(email=user_data['email'])
@@ -121,7 +121,7 @@ class VerifyEmail(views.APIView):
 
 
 class loginadmin_org(generics.GenericAPIView):
-	serializer_class = Loginadmin_org
+	serializer_class = loginadmin_org_ser
 	def post(self,request):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
