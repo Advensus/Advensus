@@ -143,16 +143,18 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['token']
 
-class loginadmin_org_ser(serializers.ModelSerializer):
+class loginadmin_org_ser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
     user_type = serializers.CharField(max_length=60,read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+    id = serializers.UUIDField(read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens','user_type','is_superuser']
+        fields = ['username','email','password','tokens','user_type','is_superuser','is_active','id']
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -163,13 +165,5 @@ class loginadmin_org_ser(serializers.ModelSerializer):
             raise AuthenticationFailed('donnée incorrecte...')
         if not user.is_active:
             raise AuthenticationFailed('compte non activé...')
-        return {
-            'email':user.email,
-            'username':user.username,
-            'tokens':user.tokens,
-            'user_type':user.user_type,
-            'is_superuser':user.is_superuser
-        }
+        return user
        
-        return super().validate(attrs)
-
