@@ -2,6 +2,7 @@ import { Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserRouteHooks } from "../../../hooks";
+import { IRole } from "../../../lib";
 import { CurrentUserDetailsComponent } from "../../users_components/current-user-details/current_user_details.component";
 
 export interface SideNavBaseProps {
@@ -14,7 +15,7 @@ export interface IRoute {
     label: string;
     action?: () => void;
     component: any;
-    // roles: IRole[];
+    roles: IRole[];
 }
 
 export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
