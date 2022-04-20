@@ -22,7 +22,7 @@ class UserManager(BaseUserManager):
             raise TypeError('Le nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
-        user.is_client = True
+        user.user_type= 'is_client'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
 
         
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv)
-        user.is_formateur = True
+        user.user_type= 'is_formateur'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -47,7 +47,7 @@ class UserManager(BaseUserManager):
             raise TypeError('le nom est obligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
-        user.is_admin_simple = True
+        user.user_type= 'is_admin_simple'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -58,7 +58,7 @@ class UserManager(BaseUserManager):
             raise TypeError('Le nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
-        user.is_sup_planificateur = True
+        user.user_type = 'is_sup_planificateur'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -70,7 +70,7 @@ class UserManager(BaseUserManager):
             raise TypeError('Le nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
-        user.is_planificateur = True
+        user.user_type= 'is_planificateur'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -98,7 +98,7 @@ class UserManager(BaseUserManager):
 
         )
         user.is_staff = True
-        user.is_superuser = True
+        user.is_superuser= True
         user.save(using=self._db)
         return user
     def email_user(self, *args, **kwargs):
@@ -126,19 +126,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     adress = models.CharField(max_length=100,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-   
+    
     horaire = models.TimeField(auto_now_add=False,null=True)
     signature_former = models.FileField(upload_to="signature_former/")
-    cv = models.FileField(upload_to="cv/")
-
+    cv = models.FileField(upload_to="cv/",null=True)
+    user_type =models.CharField(max_length=30,null=False)
     competence = models.CharField(max_length=80)
     trainee_level = models.CharField(max_length=50)
     trainee_level = models.CharField(max_length=40)
-    is_admin_simple = models.BooleanField(default=False)
-    is_client = models.BooleanField(default=False)
-    is_formateur = models.BooleanField(default=False)
-    is_planificateur = models.BooleanField(default=False)
-    is_sup_planificateur = models.BooleanField(default=False)
+    
+    
 
 
     organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE,related_name='org_content_type',null=True)
@@ -155,7 +152,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     active = models.BooleanField(default=True)
     
     is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False) 
+    is_superuser = models.BooleanField(default=False)
 
     # fontction personalisé pour envoie des messages à l'utilisateur
     def email_user(self, *args, **kwargs):
