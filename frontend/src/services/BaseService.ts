@@ -11,10 +11,17 @@ class BaseService {
         if (!isFile) {
             headers.append("Content-Type", "application/json");
         }
+<<<<<<< HEAD
         headers.append("Accept", "application/json");
         headers.append("Access-Control-Allow-Origin", "*");
         headers.append("Origin", "*");
         headers.append("Credentials", "same-origin");
+=======
+        // headers.append("Accept", "application/json");
+        // headers.append("Access-Control-Allow-Origin", "*");
+        // headers.append("Origin", "*");
+        // headers.append("Credentials", "same-origin");
+>>>>>>> Frontend
         return headers;
     };
 
