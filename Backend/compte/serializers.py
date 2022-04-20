@@ -54,10 +54,8 @@ class AddRp(serializers.ModelSerializer):
         data = super(AddRp, self).get_cleaned_data()
         return data
 
-    def save(self, request):
-            user = super(AddRp, self).save()
-            user.is_planificateur = True
-            user.save()
+    def create(self,validate_data):
+        return User.objects.create_user5(**validate_data)
 
 class AddSrp(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
@@ -73,10 +71,9 @@ class AddSrp(serializers.ModelSerializer):
         data = super(AddSrp, self).get_cleaned_data()
         return data
 
-    def save(self, request):
-            user = super(AddSrp, self).save()
-            user.is_sup_planificateur = True
-            user.save()
+    def create(self,validate_data):
+        return User.objects.create_user4(**validate_data)
+
            
 
 class AddOrg(serializers.ModelSerializer):

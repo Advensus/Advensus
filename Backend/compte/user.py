@@ -51,6 +51,29 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+    def create_user4(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+        if email is None:
+            raise TypeError('Le mail est obligatoire')
+        if username is None:
+            raise TypeError('Le nom est bligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user.is_sup_planificateur = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user5(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+        if email is None:
+            raise TypeError('Le mail est obligatoire')
+        if username is None:
+            raise TypeError('Le nom est bligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user.is_planificateur = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
     
 
     def create_admin(self,email,username,first_name=None,adress=None,phone_number=None,password=None):

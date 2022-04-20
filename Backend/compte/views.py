@@ -66,7 +66,7 @@ class RegisterResponsableP(generics.GenericAPIView):
 		rp = request.data
 		serializer = self.serializer_class(data=rp)
 		serializer.is_valid(raise_exception=True)
-		serializer.save(request)
+		serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
@@ -76,7 +76,7 @@ class RegisterSupResponsableP(generics.GenericAPIView):
 		srp = request.data
 		serializer = self.serializer_class(data=srp)
 		serializer.is_valid(raise_exception=True)
-		serializer.save(request)
+		serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 class RegisteradminOrg(generics.GenericAPIView):
