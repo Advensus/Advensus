@@ -1,0 +1,5 @@
+﻿Name,Administrator,Instructor,Learner
+SuperAdmin,yes,yes,yes
+Admin-Type,yes,yes,yes
+Trainer-Type,no,yes,yes
+Learner-Type,no,no,yes

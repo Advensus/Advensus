@@ -10,16 +10,16 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _ 
 
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from .societe import Organisme
 
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
     def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
-            raise TypeError('le mail est obligatoire')
+            raise TypeError('Le mail est obligatoire')
         if username is None:
-            raise TypeError('le nom est obligatoire')
+            raise TypeError('Le nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.is_client = True
@@ -27,15 +27,50 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,competence=None,cv=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
         
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv)
         user.is_formateur = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,organisme=None):
+        if email is None:
+            raise TypeError('le mail est obligatoire')
+        if username is None:
+            raise TypeError('le nom est obligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
+        user.is_admin_simple = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    def create_user4(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+        if email is None:
+            raise TypeError('Le mail est obligatoire')
+        if username is None:
+            raise TypeError('Le nom est bligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user.is_sup_planificateur = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user5(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+        if email is None:
+            raise TypeError('Le mail est obligatoire')
+        if username is None:
+            raise TypeError('Le nom est bligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user.is_planificateur = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -97,15 +132,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     cv = models.FileField(upload_to="cv/")
 
     competence = models.CharField(max_length=80)
-    
+    trainee_level = models.CharField(max_length=50)
     trainee_level = models.CharField(max_length=40)
     is_admin_simple = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
     is_formateur = models.BooleanField(default=False)
     is_planificateur = models.BooleanField(default=False)
     is_sup_planificateur = models.BooleanField(default=False)
-    
 
+
+    organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    appartenir = models.ManyToManyField(Organisme,related_name='appartenir_content_type')
+    provenir = models.ManyToManyField(Organisme,related_name='provenir_content_type')
+ 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
