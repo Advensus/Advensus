@@ -17,9 +17,9 @@ class UserManager(BaseUserManager):
 
     def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
-            raise TypeError('le mail est obligatoire')
+            raise TypeError('Le mail est obligatoire')
         if username is None:
-            raise TypeError('le nom est obligatoire')
+            raise TypeError('Le nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.is_client = True
@@ -27,15 +27,27 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_user(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,competence=None,cv=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
         
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv)
         user.is_formateur = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,organisme=None):
+        if email is None:
+            raise TypeError('le mail est obligatoire')
+        if username is None:
+            raise TypeError('le nom est obligatoire')
+
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
+        user.is_admin_simple = True
         user.set_password(password)
         user.save(using=self._db)
         return user

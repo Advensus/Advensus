@@ -112,10 +112,8 @@ class AddAdmin(serializers.ModelSerializer):
             data = super(AddAdmin).get_cleaned_data()
             return data
 
-    def save(self):
-            admin_org = super(AddAdmin, self).save()
-            admin_org.is_admin_simple = True
-            admin_org.save()
+    def create(self,validate_data):
+        return User.objects.create_user3(**validate_data)
 
 
 
@@ -123,20 +121,21 @@ class AddAdmin(serializers.ModelSerializer):
             
         
 class AddFormateur(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=70)
+  
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv']
-    def get_cleaned_data(self):
-            data = super(AddFormateur, self).get_cleaned_data()
-            return data
 
-    def save(self, request):
-            user = super(AddFormateur, self).save()
-            user.is_formateur = True
-            user.save()
+    def create(self,validate_data):
+        return User.objects.create_user2(**validate_data)
             
-            
-    
+
 
 
 
