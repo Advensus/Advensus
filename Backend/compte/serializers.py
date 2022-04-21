@@ -1,6 +1,6 @@
 from dataclasses import field
 
-from Backend.compte.cours import formation
+from .cours import formation
 
 from .societe import Organisme
 from rest_framework import serializers
@@ -147,7 +147,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
-class loginadmin_org_ser(serializers.ModelSerializer): 
+class login(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
@@ -182,5 +182,5 @@ class crudformation(serializers.ModelSerializer):
 class cruduser(serializers.ModelSerializer):
 
     class Meta:
-        model = formation
+        model = User
         fields = '__all__'
