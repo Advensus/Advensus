@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,CreateReadFormation, UpdateRemoveFormation
+from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login
 from . import views
 
 
@@ -25,9 +25,14 @@ urlpatterns = [
    path('ViewAllUser/', views.viewalluser), 
 
   #CRUD FORMATION
+    path('GetAllFormation/', views.viewallformation),
+	path('DetailFormation/<str:pk>/', views.detailformation),
+	path('CreateFormation/', views.createformation),
 
-  path('CreateAndViewFormation/', CreateReadFormation.as_view()),
-  path('UpdateAndRemoveFormation/<int:id>',UpdateRemoveFormation.as_view()),
+	path('UpdateFormation/<str:pk>/', views.updateformation),
+	path('DeleteFormation/<str:pk>/', views.deleteformation),
+#   path('CreateAndViewFormation/', CreateReadFormation.as_view()),
+#   path('UpdateAndRemoveFormation/<int:id>',UpdateRemoveFormation.as_view()),
 ]
 
 

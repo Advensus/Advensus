@@ -14,6 +14,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from .cours import formation
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -142,25 +143,63 @@ def viewalluser(request):
 	return Response(serializer.data)
 
 
-class CreateReadFormation(ListCreateAPIView):
-	serializer_class =  crudformation
-	queryset = User.objects.all()
-	permissions = (permissions.IsAuthenticated)
 
-	def perform_create(self, serializer,request):
-		return serializer.save(admin = self.request.user_type)
+@api_view(['GET'])
+def viewallformation(request):
+	serializer_class = crudformation
+	donnee = formation.onbjects.all()
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
 
-	def get_queryset(self):
-		return self.queryset.filter(admin = self.request.user)
+@api_view(['GET'])
+def detailformation(request, pk):
+	serializer_class = crudformation
+	donnee = formation.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
 
-class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
-	serializer_class =  crudformation
-	queryset = User.objects.all()
-	permissions = (permissions.IsAuthenticated)
-	lookup_field = "id"
+@api_view(['POST'])
+def createformation(request):
+	donnee = crudformation(data=request.data)
+	if donnee.is_valid():
+		donnee.save()
+	return Response(donnee.data)
+	
 
-	def perform_create(self, serializer,request):
-		return serializer.save(admin = self.request.user)
+@api_view(['POST'])
+def updateformation(request, pk):
+	serializer_class = crudformation
+	donnee = formation.objects.get(id=pk)
+	serializer = serializer_class(instance=donnee, data=request.data)
+	if serializer.is_valid():
+		serializer.save()
 
-	def get_queryset(self):
-		return self.queryset.filter(admin = self.request.user)
+	return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def deleteformation(request, pk):
+	donnee = formation.objects.get(id=pk)
+	donnee.delete()
+# class CreateReadFormation(ListCreateAPIView):
+# 	serializer_class =  crudformation
+# 	queryset = formation.objects.all()
+# 	permissions = (permissions.IsAuthenticated)
+
+# 	def perform_create(self, serializer,request):
+# 		return serializer.save(request)
+
+# 	def get_queryset(self):
+# 		return self.queryset.filter()
+
+# class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
+# 	serializer_class =  crudformation
+# 	queryset = formation.objects.all()
+# 	permissions = (permissions.IsAuthenticated)
+# 	lookup_field = "id"
+
+# 	def perform_create(self, serializer,request):
+# 		return serializer.save(request)
+
+# 	def get_queryset(self):
+# 		return self.queryset.filter()
