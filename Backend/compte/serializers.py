@@ -1,5 +1,7 @@
 from dataclasses import field
 
+from Backend.compte.cours import formation
+
 from .societe import Organisme
 from rest_framework import serializers
 from .user import User
@@ -12,7 +14,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 
-
+# Sign Up Users
 class AddStagiaire(serializers.ModelSerializer):
 
     username = serializers.CharField(max_length=60)
@@ -143,6 +145,8 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['token']
 
+
+# Login Users
 class loginadmin_org_ser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
@@ -167,3 +171,16 @@ class loginadmin_org_ser(serializers.ModelSerializer):
             raise AuthenticationFailed('compte non activé...')
         return user
        
+# CRUD Operations
+
+class crudformation(serializers.ModelSerializer):
+
+    class Meta:
+        model = formation
+        fields = '__all__'
+
+class cruduser(serializers.ModelSerializer):
+
+    class Meta:
+        model = formation
+        fields = '__all__'
