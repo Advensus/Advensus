@@ -145,15 +145,22 @@ def viewalluser(request):
 class CreateReadFormation(ListCreateAPIView):
 	serializer_class =  crudformation
 	queryset = User.objects.all()
-	per = (permissions.IsAuthenticated)
+	permissions = (permissions.IsAuthenticated)
 
-	def perform_create(self, serializer):
-		return serializer.save(admin = self.request.user)
+	def perform_create(self, serializer,request):
+		return serializer.save(admin = self.request.user_type)
 
 	def get_queryset(self):
 		return self.queryset.filter(admin = self.request.user)
 
-class UpdateRemove(RetrieveUpdateDestroyAPIView):
+class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
 	serializer_class =  crudformation
 	queryset = User.objects.all()
-	per = (permissions.IsAuthenticated)
+	permissions = (permissions.IsAuthenticated)
+	lookup_field = "id"
+
+	def perform_create(self, serializer,request):
+		return serializer.save(admin = self.request.user)
+
+	def get_queryset(self):
+		return self.queryset.filter(admin = self.request.user)
