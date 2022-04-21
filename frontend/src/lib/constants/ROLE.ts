@@ -1,4 +1,4 @@
-export const SUPER_USER = "";
+export const SUPER_USER = "is_superuser";
 export const ADMIN_OF = "is_admin";
 export const SUPER_RP = "is_sup_planificateur";
 export const RP = "is_planificateur";

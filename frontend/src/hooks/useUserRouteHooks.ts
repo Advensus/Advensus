@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { IRoute } from "../components";
-import { SUPER_USER, TRAINEE } from "../lib";
+import {
+    AccountComponent,
+    IRoute,
+    SettingsComponent,
+    StatisticsComponent,
+    TrainingOrganizationComponent,
+} from "../components";
+import { ADMIN_OF, RP, SUPER_RP, SUPER_USER, TEACHEAR, TRAINEE } from "../lib";
 import { UsersPage } from "../pages";
 import { useAuthStore } from "../stores";
 
@@ -12,32 +18,53 @@ export function useUserRouteHooks() {
 
     const menuRoutes: IRoute[] = [
         {
-            path: `path1`,
-            label: "Label1",
-            icon: "icon 1",
-            component: "component1",
-            roles: [SUPER_USER, TRAINEE],
+            path: `account`,
+            label: "Account",
+            icon: "la-id-badge",
+            component: AccountComponent,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP, TEACHEAR, TRAINEE],
         },
         {
-            path: `path2`,
-            label: "Label2",
+            path: `stat`,
+            label: "Statistics",
             icon: "la-id-badge",
-            component: "component2",
-            roles: [SUPER_USER],
+            component: StatisticsComponent,
+            roles: [SUPER_USER, ADMIN_OF],
+        },
+        {
+            path: `customer`,
+            label: "Stagiaire",
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP, TEACHEAR],
         },
         {
             path: `path3`,
-            label: "Label3",
-            icon: "icon 3",
-            component: "component3",
-            roles: [SUPER_USER],
+            label: "Ressources",
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER, ADMIN_OF],
         },
         {
-            path: `usersss`,
-            label: "user_page",
-            icon: "la-id-mail",
-            component: UsersPage,
-            roles: [SUPER_USER, TRAINEE],
+            path: `of`,
+            label: "Organismes",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [SUPER_USER, ADMIN_OF],
+        },
+        // {
+        //     path: `path3`,
+        //     label: "Ressources",
+        //     icon: "la-id-badge",
+        //     component: UsersPage,
+        //     roles: [SUPER_USER, ADMIN_OF],
+        // },
+        {
+            path: `settings`,
+            label: "Paramétrer",
+            icon: "la-id-badge",
+            component: SettingsComponent,
+            roles: [SUPER_USER, ADMIN_OF],
         },
     ];
 

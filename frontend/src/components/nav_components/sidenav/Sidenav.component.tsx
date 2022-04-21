@@ -161,7 +161,7 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                     </Text>
                 </NavLink>
             ))}
-            <div className="sidenav_footer">The nav footer</div>
+            {/* <div className="sidenav_footer">The nav footer</div> */}
         </nav>
     );
 };

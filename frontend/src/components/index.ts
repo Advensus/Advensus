@@ -9,3 +9,7 @@ export * from "./users_components/default_users/users_display/users_display.comp
 export * from "./users_components/full-informations-tab/full_informations_tab.component";
 export * from "./users_components/user-details/user_details.component";
 export * from "./users_components/user_infos/user_infos.component";
+export * from "./users_components/account/account.component";
+export * from "./statistics/statistics.component";
+export * from "./settings/settings.component";
+export * from "./training_organization/training_organization.component";
