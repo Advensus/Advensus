@@ -1,7 +1,20 @@
 import { ActionButton, DefaultButton, Text } from "@fluentui/react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import React from "react";
-// import { RouteProps } from "react-router";
+import { useFormik } from "formik";
+import {
+    ADMIN_OF,
+    LoginDtoIn,
+    LoginDtoOut,
+    RP,
+    SUPER_RP,
+    SUPER_USER,
+    TEACHEAR,
+    TRAINEE,
+} from "../../../lib";
+import { AuthService } from "../../../services";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../stores";
 
 export interface ILoginPageProps {
     default_props?: boolean;
@@ -10,6 +23,75 @@ export interface ILoginPageProps {
 // const calendarIcon: IIconProps = { iconName: "Calendar" };
 
 export const LoginPage: React.FC<ILoginPageProps> = () => {
+    const navigate = useNavigate();
+    const { updateToken, updateCurrentUserType } = useAuthStore();
+
+    const onSubmit = async (value: LoginDtoIn) => {
+        console.log("the submited val:", value);
+        AuthService.login(value)
+            .then(async (resp) => {
+                console.log("start resp:", resp.status);
+                if ([200, 201].includes(resp.status)) {
+                    console.log({ resp });
+                    const { is_active, user_type, id, tokens } =
+                        (await resp.json()) as LoginDtoOut;
+                    console.log("le token dans login:", tokens);
+                    if (!is_active) {
+                        //TODO: do nothing
+                        return;
+                    }
+
+                    routeToAppropriatePagePerRole(user_type, id);
+                    updateToken(tokens);
+                    updateCurrentUserType(user_type);
+                } else if ([404, 401].includes(resp.status)) {
+                    const { message } = await resp.json();
+                    console.log("the error:", resp.status);
+                } else if ([500, 504].includes(resp.status)) {
+                    const { message } = await resp.json();
+                    console.log({ message });
+                }
+            })
+            .catch((err) => {
+                console.log({ err });
+            });
+    };
+
+    const routeToAppropriatePagePerRole = (
+        user_type: LoginDtoOut["user_type"],
+        id: LoginDtoOut["id"]
+    ) => {
+        switch (user_type) {
+            case SUPER_USER:
+                // Display dashboard
+                navigate(`/dashboard/path1`);
+                break;
+            case ADMIN_OF:
+                navigate(`/dashboard/${id}`);
+                break;
+            case SUPER_RP:
+                navigate(`/dashboard/${id}`);
+                break;
+            case RP:
+                navigate(`/dashboard/${id}`);
+                break;
+            case TEACHEAR:
+                navigate(`/dashboard/${id}`);
+                break;
+            case TRAINEE:
+                navigate(`/dashboard/${id}`);
+                break;
+        }
+    };
+
+    const { values, handleChange, handleSubmit } = useFormik<LoginDtoIn>({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        onSubmit,
+    });
+
     return (
         <div className="login_container">
             <div></div>
@@ -25,13 +107,13 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                     >
                         Se connecter
                     </Text>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="login_form_content">
                             <TextField
                                 type="email"
                                 label={"Email"}
-                                // value={values.email}
-                                // onChange={handleChange}
+                                value={values.email}
+                                onChange={handleChange}
                                 name="email"
                                 className="login_input"
                                 iconProps={{
@@ -44,8 +126,8 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                             <TextField
                                 type="password"
                                 label="Password"
-                                // value={values.email}
-                                // onChange={handleChange}
+                                value={values.password}
+                                onChange={handleChange}
                                 name="password"
                                 canRevealPassword
                                 revealPasswordAriaLabel="Show password"
@@ -54,6 +136,7 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                         <DefaultButton
                             text="Login now"
                             className="login_defaultbutton"
+                            type="submit"
                             // iconProps={chevronIcon}
                             menuIconProps={{ iconName: "DoubleChevronRight8" }}
                         />

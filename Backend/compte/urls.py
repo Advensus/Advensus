@@ -20,7 +20,7 @@ urlpatterns = [
         
    #ENTITE LOGIN
 
-   path('login/admin_org/',loginadmin_org.as_view(), name="log_admin_org"),
+   path('login/',loginadmin_org.as_view()),
 ]
 
 

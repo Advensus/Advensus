@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import uuid
+
 from django.db import models
 from django.core.mail import send_mail
 
@@ -17,9 +19,9 @@ class UserManager(BaseUserManager):
 
     def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
-            raise TypeError('Le mail est obligatoire')
+            raise TypeError('Mail est obligatoire')
         if username is None:
-            raise TypeError('Le nom est bligatoire')
+            raise TypeError('Nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.user_type= 'is_client'
@@ -47,7 +49,7 @@ class UserManager(BaseUserManager):
             raise TypeError('le nom est obligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
-        user.user_type= 'is_admin_simple'
+        user.user_type= 'is_admin'
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -113,13 +115,14 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(_('username '), max_length=30,unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True,null=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     email_confirmed = models.BooleanField(default=False)
-    is_active = models.BooleanField(_('active'), default=True)
+    is_active = models.BooleanField(_('active'), default=True) 
     avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
     signature_former = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20,null=True)
@@ -170,8 +173,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
     def tokens(self):
         refresh = RefreshToken.for_user(self)
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token)
-        }
+        return  str(refresh),
+        
 
