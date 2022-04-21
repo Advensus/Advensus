@@ -148,9 +148,11 @@ class loginadmin_org_ser(serializers.ModelSerializer):
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
+    user_type = serializers.CharField(max_length=60,read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens']
+        fields = ['username','email','password','tokens','user_type','is_superuser']
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -164,7 +166,9 @@ class loginadmin_org_ser(serializers.ModelSerializer):
         return {
             'email':user.email,
             'username':user.username,
-            'tokens':user.tokens
+            'tokens':user.tokens,
+            'user_type':user.user_type,
+            'is_superuser':user.is_superuser
         }
        
         return super().validate(attrs)

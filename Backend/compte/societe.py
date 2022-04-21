@@ -6,8 +6,7 @@ class Organisme(models.Model):
     company_adress = models.CharField(max_length=50,unique=True)
     phone_number = models.CharField(max_length=50,unique=True)
     fix_number = models.CharField(max_length=50,unique=True)
-    company_stamp = models.FileField(upload_to="company_stamp/")
-    company_logo = models.FileField(upload_to="company_logo/")
+    company_stamp = models.FileField(upload_to="company_stamp/",null=True)
     is_organisme = models.BooleanField(default=False)
 
     

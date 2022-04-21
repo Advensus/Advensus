@@ -1,9 +1,12 @@
 import { DefaultButton } from "@fluentui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import {
+    CurrentUserDetailsComponent,
     HeaderDashboardComponent,
     SideNavComponent,
 } from "../../../components";
+import { useUserRouteHooks } from "../../../hooks";
 // import { RouteProps } from "react-router";
 
 export interface IDashboardShellPageProps {
@@ -11,12 +14,10 @@ export interface IDashboardShellPageProps {
 }
 
 export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
+    const accessRoutes = useUserRouteHooks();
+
     useEffect(() => {
-        console.log(
-            "the test:",
-            (document.getElementById("sidenav_panel") as HTMLInputElement)
-                .offsetWidth
-        );
+        console.log({ accessRoutes });
     }, []);
 
     return (
@@ -26,8 +27,16 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
                 <div id="sidenav_panel">
                     <SideNavComponent />
                 </div>
-                <section className="dashboard_shell_body" id="section">
-                    Routes map here
+                <section id="section">
+                    <Routes>
+                        {accessRoutes.map((route) => (
+                            <Route
+                                key={route.path}
+                                path={route.path}
+                                element={<route.component />}
+                            />
+                        ))}
+                    </Routes>
                 </section>
             </div>
         </main>

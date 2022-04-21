@@ -1,4 +1,4 @@
-import { ActionButton, DefaultButton, IIconProps, Text } from "@fluentui/react";
+import { ActionButton, DefaultButton, Text } from "@fluentui/react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import React from "react";
 // import { RouteProps } from "react-router";
@@ -7,13 +7,12 @@ export interface ILoginPageProps {
     default_props?: boolean;
 }
 
-const addIcon = { iconName: "Add" };
-const emailIcon = { iconName: "Mail" };
-const iconProps = { iconName: "Calendar" };
+// const calendarIcon: IIconProps = { iconName: "Calendar" };
 
 export const LoginPage: React.FC<ILoginPageProps> = () => {
     return (
         <div className="login_container">
+            <div></div>
             <div className="login_form">
                 <div className="login_form_header">
                     <Text>Logo ici</Text>
@@ -35,8 +34,12 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                                 // onChange={handleChange}
                                 name="email"
                                 className="login_input"
-                                // iconProps={emailIcon}
-                                iconProps={iconProps}
+                                iconProps={{
+                                    iconName: "NewMail",
+                                    style: {
+                                        color: "black",
+                                    },
+                                }}
                             />
                             <TextField
                                 type="password"
@@ -51,15 +54,20 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
                         <DefaultButton
                             text="Login now"
                             className="login_defaultbutton"
-                            iconProps={addIcon}
+                            // iconProps={chevronIcon}
+                            menuIconProps={{ iconName: "DoubleChevronRight8" }}
                         />
                     </form>
                 </div>
-                <ActionButton
-                    text="Forget password?"
-                    className="login_form_reset_pwd"
-                />
+                <div className="login_footer">
+                    <ActionButton
+                        text="Forget password?"
+                        className="login_form_reset_pwd"
+                    />
+                    <ActionButton text="Annuler" className="login_cancel" />
+                </div>
             </div>
+            <div></div>
         </div>
     );
 };

@@ -1,9 +1,20 @@
 .homebody {
     margin-top: 90px;
     // background-color: #de4225;
-    background-color: #cedbe8;
+    // background-color: #cedbe8;
     padding: 30px 30px 0 30px;
     position: relative;
+
+    background: url("../../../public//Fond-de-page-Advensus1.png ") no-repeat
+        center center;
+    // background-size: 900px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: #fff;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .homebody__header {
     display: flex;

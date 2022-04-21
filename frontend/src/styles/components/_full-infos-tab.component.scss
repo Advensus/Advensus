@@ -1,0 +1,17 @@
+.full_infos_tab_container {
+    height: 100%;
+    display: grid;
+    width: 100%;
+    grid-template-rows: auto 1fr;
+    // width: 500px;
+}
+.full_infos_tab_header {
+}
+.full_infos_tab_body {
+    background-color: #f4f3f3;
+    margin-top: 5px;
+}
+
+.label_details_tab {
+    padding: 20px 10px;
+}

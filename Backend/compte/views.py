@@ -40,7 +40,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
-	def post(self,request):
+	def post(self,request): 
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)

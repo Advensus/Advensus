@@ -3,7 +3,7 @@
 }
 .navbarcomponent {
     // background-color: red;
-    background-color: #cedbe8;
+    // background-color: #cedbe8;
     height: 90px;
     z-index: 1;
 }
@@ -46,7 +46,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #cedbe8;
+    // background-color: #cedbe8;
+    opacity: 1;
     position: fixed;
     width: 100%;
     top: 0;

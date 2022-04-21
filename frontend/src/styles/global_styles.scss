@@ -1,12 +1,18 @@
 // components
 @import "./components/navbar.component";
 @import "./components/sidenav.component";
-@import "./components/header-dashboard";
+@import "./components/header-dashboard.component";
+@import "./components/current-user-details.component";
+@import "./components/trainee-display.component";
+@import "./components/users-display.component";
+@import "./components/full-infos-tab.component";
+@import "./components/user-details.component";
 
 // pages
 @import "./pages/Home.page";
 @import "./pages/Login.page";
 @import "./pages/Dashboard.shell";
+@import "./pages/Users.page";
 
 html,
 body,
@@ -19,11 +25,11 @@ body,
     // background-color: "black";
     color: #34608c;
 }
-body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-}
+// body {
+//     min-height: 100vh;
+//     min-height: -webkit-fill-available;
+// }
 
-html {
-    height: -webkit-fill-available;
-}
+// html {
+//     height: -webkit-fill-available;
+// }

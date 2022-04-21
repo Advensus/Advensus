@@ -1,9 +1,11 @@
 .sidenav {
     position: relative;
-    background-color: rgb(146, 146, 89);
+    // background-color: rgb(146, 146, 89);
+    background: #873977;
     flex: 0 0 250px;
-    height: 89.4vh;
-    overflow: hidden;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 19px;
@@ -25,10 +27,29 @@
         &:hover,
         &:active &focus,
         &--current {
-            background-color: yellowgreen;
+            background: #6cacdd;
             color: #fff;
         }
     }
+}
+
+/* Designing for scroll-bar */
+::-webkit-scrollbar {
+    width: 2px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: gainsboro;
+    // border-radius: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: black;
+    // border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .sidenav_footer {

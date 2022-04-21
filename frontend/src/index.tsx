@@ -3,7 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { blackAndWhiteTheme } from "./theme";
 import { BrowserRouter } from "react-router-dom";
+import { initializeIcons, loadTheme } from "@fluentui/react";
+
+loadTheme(blackAndWhiteTheme);
+initializeIcons();
 
 ReactDOM.render(
     <React.StrictMode>
