@@ -174,6 +174,9 @@ REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'erro',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated'
     )
 }
 

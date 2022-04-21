@@ -15,7 +15,7 @@ urlpatterns = [
     path('register/admin_org/',RegisteradminOrg.as_view()),
     path('create/organisme/', CreateOrganisme.as_view()),
     
-    path('email-verify/', VerifyEmail.as_view()), 
+    path('email-verify/', VerifyEmail.as_view(),name="email-verify"), 
    
         
    #ENTITE LOGIN

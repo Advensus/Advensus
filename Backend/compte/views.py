@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from rest_framework import generics,status,views
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser
+from rest_framework import generics,status,views,permissions
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -13,6 +13,7 @@ from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -139,3 +140,20 @@ def viewalluser(request):
 	donnee = User.objects.all()
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
+
+
+class CreateReadFormation(ListCreateAPIView):
+	serializer_class =  crudformation
+	queryset = User.objects.all()
+	per = (permissions.IsAuthenticated)
+
+	def perform_create(self, serializer):
+		return serializer.save(admin = self.request.user)
+
+	def get_queryset(self):
+		return self.queryset.filter(admin = self.request.user)
+
+class UpdateRemove(RetrieveUpdateDestroyAPIView):
+	serializer_class =  crudformation
+	queryset = User.objects.all()
+	per = (permissions.IsAuthenticated)
