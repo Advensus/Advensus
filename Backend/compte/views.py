@@ -133,10 +133,9 @@ class login(generics.GenericAPIView):
 
 # CRUD OPERATION
 
-@api_view(['GET'])
-class ViewAllUser(generics.GenericAPIView):
+@api_view(['GET'])	
+def viewalluser(request):
 	serializer_class = cruduser
-	def getdata(self,request):
-		donnee = User.objects.all()
-		serializer = self.serializer_class(donnee, many=True)
-		return Response(serializer.data)
+	donnee = User.objects.all()
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
