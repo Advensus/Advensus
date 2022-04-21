@@ -156,7 +156,10 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                     }
                 >
                     <i className={"las " + _.icon}></i>
-                    <Text variant="tiny" style={{ fontWeight: "bold" }}>
+                    <Text
+                        variant="tiny"
+                        style={{ fontWeight: "bold", color: "#f4f3f3" }}
+                    >
                         {_.label}
                     </Text>
                 </NavLink>

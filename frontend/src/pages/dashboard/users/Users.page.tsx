@@ -1,10 +1,19 @@
-import { IIconProps, SearchBox, Text } from "@fluentui/react";
-import React from "react";
+import {
+    DirectionalHint,
+    IconButton,
+    IIconProps,
+    SearchBox,
+    Text,
+    TooltipHost,
+} from "@fluentui/react";
+import React, { useState } from "react";
 import {
     FullInformationsTabComponent,
     TraineeDisplayComponent,
+    TrainerFormComponent,
     UsersDisplayComponent,
 } from "../../../components";
+import { useId } from "@fluentui/react-hooks";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -12,8 +21,12 @@ export interface IUsersPageProps {
 }
 
 const filterIcon: IIconProps = { iconName: "Filter" };
+const addIcon: IIconProps = { iconName: "Add" };
 
 export const UsersPage: React.FC<IUsersPageProps> = () => {
+    const tooltipId = useId("tooltip");
+    const [showForm, setShowForm] = useState<Boolean>(false);
+
     const toggleFullInfosTab = () => {
         var hint = document.getElementById(
             "display_tab_ii"
@@ -41,52 +54,94 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     };
 
+    const showAddForm = () => {
+        showForm ? setShowForm(!showForm) : setShowForm(!showForm);
+    };
+
     return (
         <div className="user_page_container">
             <div id="users_content_display">
                 <div className="display_tab">
                     <div className="tab_header">
                         <div className="tab_title">
-                            <Text>Onglet title</Text>
-                            <hr className="hr_dashed" />
+                            {!showForm ? (
+                                <Text>Onglet title</Text>
+                            ) : (
+                                <Text> Ajouter Formateur</Text>
+                            )}
+                            <TooltipHost content="Ajouter" id={tooltipId}>
+                                <IconButton
+                                    iconProps={addIcon}
+                                    ariaLabel="add"
+                                    onClick={showAddForm}
+                                />
+                            </TooltipHost>
                         </div>
-                        <div className="tab_header_content">
-                            <SearchBox
-                                placeholder="Search"
-                                onSearch={(newValue) =>
-                                    console.log("value is " + newValue)
-                                }
+                        <hr className="hr_dashed" />
+                        {!showForm ? (
+                            <>
+                                <div className="tab_header_content">
+                                    <SearchBox
+                                        placeholder="Search"
+                                        onSearch={(newValue) =>
+                                            console.log("value is " + newValue)
+                                        }
+                                    />
+                                    <div className="filter_box">
+                                        <SearchBox
+                                            placeholder="Filter1"
+                                            iconProps={filterIcon}
+                                        />
+                                        <SearchBox
+                                            placeholder="Filter"
+                                            iconProps={filterIcon}
+                                        />
+                                    </div>
+                                </div>
+                                <Text>My "tab name" or allusersnumber()</Text>
+                                <hr className="hr_solid" />
+                            </>
+                        ) : null}
+                    </div>
+                    {!showForm ? (
+                        <div className="tab_content">
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
                             />
-                            <div className="filter_box">
-                                <SearchBox
-                                    placeholder="Filter1"
-                                    iconProps={filterIcon}
-                                />
-                                <SearchBox
-                                    placeholder="Filter"
-                                    iconProps={filterIcon}
-                                />
-                            </div>
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
+                            <UsersDisplayComponent
+                                toggleTab={toggleFullInfosTab}
+                            />
                         </div>
-                        <Text>My "tab name" or allusersnumber()</Text>
-                        <hr className="hr_solid" />
-                    </div>
-                    <div className="tab_content">
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                        <UsersDisplayComponent toggleTab={toggleFullInfosTab} />
-                    </div>
+                    ) : (
+                        <TrainerFormComponent />
+                    )}
                     {/* {/* <div>
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />

@@ -13,3 +13,4 @@ export * from "./users_components/account/account.component";
 export * from "./statistics/statistics.component";
 export * from "./settings/settings.component";
 export * from "./training_organization/training_organization.component";
+export * from "./forms/trainer_form/trainerForm.component";

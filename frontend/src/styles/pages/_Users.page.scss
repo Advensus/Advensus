@@ -10,7 +10,7 @@
     min-width: 300px;
     max-width: 600px;
     width: 550px;
-    padding: 20px 10px 0 10px;
+    padding: 20px 10px 10px 10px;
     height: 100%;
     transform: scale(0);
     transition: 1s ease opacity, 0.6s ease transform, 300ms ease-in-out width;
@@ -29,10 +29,15 @@
 .tab_header {
     // background-color: #fff;
 }
+.tab_title {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
 .hr_dashed {
     border-top: 0.1em dashed black;
     border-bottom: 0;
-    margin-top: 5px;
+    margin-top: 0;
 }
 .hr_solid {
     border-top: 0.1em solid black;

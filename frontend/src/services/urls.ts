@@ -9,3 +9,7 @@ export const authUrls = {
     // REQUEST_OTP: (agency_id: string) => `${prefixer}auth/${agency_id}/send/otp`,
     CURRENT_USER: `${prefixer}auth/logged?refresh_token=${true}`,
 };
+
+export const userUls = {
+    GET_ALL_USERS: `${prefixer}`,
+};
