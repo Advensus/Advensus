@@ -22,7 +22,6 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
             "users_content_display"
         ) as HTMLInputElement;
 
-        var ctr = 1;
         hint.className = hint.className !== "show" ? "show" : "hide";
         if (hint.className === "show") {
             hint.style.display = "block";
