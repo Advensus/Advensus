@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
 from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
 from .utils import Util
@@ -12,7 +13,7 @@ import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .cours import formation
 def home(request):
@@ -135,7 +136,8 @@ class login(generics.GenericAPIView):
 
 # CRUD OPERATION VIEW ALL USERS
 
-@api_view(['GET'])	
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -145,6 +147,7 @@ def viewalluser(request):
 
 # CRUD OPERATION FORMATION
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])	
 def viewallformation(request):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
@@ -152,6 +155,7 @@ def viewallformation(request):
 	return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])	
 def detailformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -159,6 +163,7 @@ def detailformation(request, pk):
 	return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])	
 def createformation(request):
 	serializer_class = crudformation
 	queryset = formation.objects.all()
@@ -170,6 +175,7 @@ def createformation(request):
 	
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -181,6 +187,7 @@ def updateformation(request, pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
