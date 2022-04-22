@@ -1,0 +1,65 @@
+.trainer_form_container {
+    color: #000;
+    overflow: auto;
+    // background-color: green;
+    padding: 0 10px 0 0;
+}
+
+.own_trainer_sect {
+    // background: red;
+    display: grid;
+    grid-template-columns: 2fr 6fr;
+    gap: 10px;
+}
+.own_trainer_pict {
+    background: rgb(68, 68, 129);
+    height: 160px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.own_trainer_fields {
+    // background: gray;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    justify-content: space-between;
+}
+.own_trainer_align_fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.addr_trainer {
+    // background: moccasin;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.oth_trainer {
+    // background: mediumvioletred;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.trainer_form_btns {
+    margin: 10px 5px;
+}
+
+// .trainer_form_input {
+//     border-radius: 20px;
+// }
+
+.trainer_hr_solid {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 2px;
+}
+
+.trainer_txt_divide_mov {
+    display: block;
+    margin-top: 15px;
+}

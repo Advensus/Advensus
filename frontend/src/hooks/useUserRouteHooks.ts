@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { IRoute } from "../components";
-import { SUPER_USER, TRAINEE } from "../lib";
+import {
+    AccountComponent,
+    IRoute,
+    SettingsComponent,
+    StatisticsComponent,
+    TrainingOrganizationComponent,
+} from "../components";
+import { ADMIN_OF, RP, SUPER_RP, SUPER_USER, TEACHEAR, TRAINEE } from "../lib";
 import { UsersPage } from "../pages";
 import { useAuthStore } from "../stores";
 
@@ -12,32 +18,144 @@ export function useUserRouteHooks() {
 
     const menuRoutes: IRoute[] = [
         {
-            path: `path1`,
-            label: "Label1",
-            icon: "icon 1",
-            component: "component1",
-            roles: [SUPER_USER, TRAINEE],
+            path: `account`,
+            label: "Account",
+            icon: "la-id-badge",
+            component: AccountComponent,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP, TEACHEAR, TRAINEE],
         },
         {
-            path: `path2`,
-            label: "Label2",
+            path: `stat`,
+            label: "Statistiques",
             icon: "la-id-badge",
-            component: "component2",
+            component: StatisticsComponent,
+            roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
+        },
+        {
+            path: `of`,
+            label: "Organismes",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
             roles: [SUPER_USER],
+        },
+
+        // Super Rp & Rp
+        {
+            path: `customer`,
+            label: "Stagiaire",
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
             path: `path3`,
-            label: "Label3",
-            icon: "icon 3",
-            component: "component3",
-            roles: [SUPER_USER],
+            label: "Ressources",
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
+        },
+
+        // Teacher
+        {
+            path: `planne`,
+            label: "Planning",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [SUPER_USER, TEACHEAR, SUPER_RP, RP],
         },
         {
-            path: `usersss`,
-            label: "user_page",
-            icon: "la-id-mail",
-            component: UsersPage,
-            roles: [SUPER_USER, TRAINEE],
+            path: `visio`,
+            label: "Visio",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [SUPER_USER, TEACHEAR],
+        },
+        {
+            path: `doc`,
+            label: "Documents admin",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [SUPER_USER, TEACHEAR],
+        },
+        {
+            path: `mod_form`,
+            label: "Modules de formation",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [SUPER_USER, TEACHEAR],
+        },
+
+        // Stagiaire
+        {
+            path: `bord`,
+            label: "Tabela de bord",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `planninn`,
+            label: "Programme de formation",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `planninn`,
+            label: "Test de niveau",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `reserv`,
+            label: "Réservation de cours",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `nextcours`,
+            label: "Prochaine cours",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `hist`,
+            label: "Historique",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `nextcours`,
+            label: "Mes documents",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+        {
+            path: `test`,
+            label: "Test vidéoconférence",
+            icon: "la-id-badge",
+            component: TrainingOrganizationComponent,
+            roles: [TRAINEE],
+        },
+
+        // {
+        //     path: `path3`,
+        //     label: "Ressources",
+        //     icon: "la-id-badge",
+        //     component: UsersPage,
+        //     roles: [SUPER_USER, ADMIN_OF],
+        // },
+        {
+            path: `settings`,
+            label: "Paramétrer",
+            icon: "la-id-badge",
+            component: SettingsComponent,
+            roles: [SUPER_USER, ADMIN_OF],
         },
     ];
 
