@@ -140,7 +140,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             />
                         </div>
                     ) : (
-                        <TrainerFormComponent />
+                        <TrainerFormComponent
+                            cancel={() => setShowForm(false)}
+                        />
                     )}
                     {/* {/* <div>
                     <TraineeDisplayComponent />

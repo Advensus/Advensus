@@ -3,9 +3,12 @@ import React, { useState } from "react";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
+    cancel?: () => void;
 }
 
-export const TrainerFormComponent: React.FC<ITrainerFormProps> = () => {
+export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
+    cancel,
+}) => {
     return (
         <div className="trainer_form_container">
             <Text className="trainer_txt_divide_mov">Trainer</Text>
@@ -89,7 +92,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = () => {
                 />
             </div>
             <div className="trainer_form_btns">
-                <DefaultButton text="Annuler" />
+                <DefaultButton text="Annuler" onClick={cancel} />
                 <DefaultButton
                     style={{ marginLeft: "10px" }}
                     text="Sauvegarder"
