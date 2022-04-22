@@ -10,6 +10,10 @@
     flex-direction: column;
     gap: 19px;
 
+    & i {
+        color: #f4f3f3;
+    }
+
     a {
         text-decoration: none;
     }
@@ -27,8 +31,11 @@
         &:hover,
         &:active &focus,
         &--current {
-            background: #6cacdd;
-            color: #fff;
+            // background: #6cacdd;
+            background: #0373c7;
+            i {
+                color: grey;
+            }
         }
     }
 }
