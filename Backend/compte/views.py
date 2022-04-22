@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -16,6 +16,7 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .cours import formation
+from .models import Document
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -143,7 +144,7 @@ def viewalluser(request):
 	donnee = User.objects.all()
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
-
+# FIN CRUD GET ALL USERS
 
 # CRUD OPERATION FORMATION
 @api_view(['GET'])
@@ -184,8 +185,10 @@ def updateformation(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
+# FIN CRUD OPERATION FOR FORMATION
 
-
+# CRUD OPERATION DOCUMENTS
+cruddocuments
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])	
 def deleteformation(request, pk):
@@ -193,25 +196,5 @@ def deleteformation(request, pk):
 	donnee.delete()
 
 
-# class CreateReadFormation(ListCreateAPIView):
-# 	serializer_class =  crudformation
-# 	queryset = formation.objects.all()
-# 	permissions = (permissions.IsAuthenticated)
 
-# 	def perform_create(self, serializer,request):
-# 		return serializer.save(request)
 
-# 	def get_queryset(self):
-# 		return self.queryset.filter()
-
-# class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
-# 	serializer_class =  crudformation
-# 	queryset = formation.objects.all()
-# 	permissions = (permissions.IsAuthenticated)
-# 	lookup_field = "id"
-
-# 	def perform_create(self, serializer,request):
-# 		return serializer.save(request)
-
-# 	def get_queryset(self):
-# 		return self.queryset.filter()

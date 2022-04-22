@@ -7,9 +7,7 @@ from rest_framework import serializers
 from .user import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-
-
-
+from .models import Document
 
 
 
@@ -191,3 +189,8 @@ class cruduser(serializers.ModelSerializer):
                  "active","is_staff","is_superuser","organisme",
                  "groups","user_permissions"
                  ]
+
+class cruddocuments(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ['doc_content','doc_type']
