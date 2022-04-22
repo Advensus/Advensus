@@ -25,7 +25,7 @@ urlpatterns = [
    path('ViewAllUser/', views.viewalluser), 
 
   #CRUD FORMATION
-    path('GetAllFormation/', views.viewallformation),
+  path('GetAllFormation/', views.viewallformation),
 	path('DetailFormation/<str:pk>/', views.detailformation),
 	path('CreateFormation/', views.createformation),
 
