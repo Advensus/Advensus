@@ -144,7 +144,8 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                 <NavLink
                     key={navig.path}
                     to={navig.path}
-                    state={{ testdfsdf: "va laba" }}
+                    // state={{ give: "marche mm" }}
+                    // state={{ navig: navig }}
                     onClick={toggleBlockContent2}
                     className={({ isActive }) =>
                         [
