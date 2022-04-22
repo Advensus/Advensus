@@ -120,7 +120,6 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
             "users_content_display"
         ) as HTMLInputElement;
 
-        var ctr = 1;
         hint.className = hint.className !== "show" ? "show" : "hide";
         if (hint.className === "show") {
             hint.style.display = "block";
@@ -141,10 +140,11 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
     return (
         <nav className="sidenav">
             {isMobile ? <CurrentUserDetailsComponent /> : null}
-            {menuRoutes.map((_) => (
+            {menuRoutes.map((navig) => (
                 <NavLink
-                    key={_.path}
-                    to={_.path}
+                    key={navig.path}
+                    to={navig.path}
+                    state={{ testdfsdf: "va laba" }}
                     onClick={toggleBlockContent2}
                     className={({ isActive }) =>
                         [
@@ -155,12 +155,12 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                             .join(" ")
                     }
                 >
-                    <i className={"las " + _.icon}></i>
+                    <i className={"las " + navig.icon}></i>
                     <Text
                         variant="tiny"
                         style={{ fontWeight: "bold", color: "#f4f3f3" }}
                     >
-                        {_.label}
+                        {navig.label}
                     </Text>
                 </NavLink>
             ))}

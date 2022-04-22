@@ -1,12 +1,11 @@
 import {
-    DirectionalHint,
     IconButton,
     IIconProps,
     SearchBox,
     Text,
     TooltipHost,
 } from "@fluentui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     FullInformationsTabComponent,
     TraineeDisplayComponent,
@@ -14,6 +13,9 @@ import {
     UsersDisplayComponent,
 } from "../../../components";
 import { useId } from "@fluentui/react-hooks";
+import UserService from "../../../services/user.service";
+import { ADMIN_OF, IUser, RP, SUPER_RP, TEACHEAR, TRAINEE } from "../../../lib";
+import { useLocation } from "react-router-dom";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -24,8 +26,21 @@ const filterIcon: IIconProps = { iconName: "Filter" };
 const addIcon: IIconProps = { iconName: "Add" };
 
 export const UsersPage: React.FC<IUsersPageProps> = () => {
+    const location = useLocation();
+
     const tooltipId = useId("tooltip");
     const [showForm, setShowForm] = useState<Boolean>(false);
+    const [trainers, setTrainers] = useState<IUser[]>([]);
+    const [trainees, setTrainees] = useState<IUser[]>([]);
+    const [rps, setTps] = useState<IUser[]>([]);
+    const [srps, setSrps] = useState<IUser[]>([]);
+    const [admins, setAdmins] = useState<IUser[]>([]);
+
+    useEffect(() => {
+        getAllUser();
+
+        console.log("the nav:", location);
+    }, []);
 
     const toggleFullInfosTab = () => {
         var hint = document.getElementById(
@@ -56,6 +71,41 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
 
     const showAddForm = () => {
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
+    };
+
+    const getAllUser = async () => {
+        await UserService.get_all_users()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log(
+                        "Error resp while gettind all users:",
+                        response
+                    );
+                    return [];
+                }
+                return response.json();
+            })
+            .then((usersResp: IUser[]) => {
+                console.log("all the users:", usersResp);
+                const trainer = usersResp.filter(
+                    (user) => user.user_type === TEACHEAR
+                );
+                const trainee = usersResp.filter(
+                    (user) => user.user_type === TRAINEE
+                );
+                const rp = usersResp.filter((user) => user.user_type === RP);
+                const srp = usersResp.filter(
+                    (user) => user.user_type === SUPER_RP
+                );
+                const admin = usersResp.filter(
+                    (user) => user.user_type === ADMIN_OF
+                );
+                setTrainers(trainer);
+                setTrainees(trainee);
+            })
+            .catch((err) => {
+                console.log("error while getting users:", err);
+            });
     };
 
     return (
@@ -105,39 +155,15 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     </div>
                     {!showForm ? (
                         <div className="tab_content">
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
-                            <UsersDisplayComponent
-                                toggleTab={toggleFullInfosTab}
-                            />
+                            {trainers.length > 0
+                                ? trainers.map((_) => (
+                                      <UsersDisplayComponent
+                                          toggleTab={toggleFullInfosTab}
+                                          infosTrainer={_}
+                                          key={_.id}
+                                      />
+                                  ))
+                                : null}
                         </div>
                     ) : (
                         <TrainerFormComponent
@@ -149,7 +175,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
+                    <TraineeDisplayComponent /> 
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />

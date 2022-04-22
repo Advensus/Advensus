@@ -6,7 +6,16 @@ import {
     StatisticsComponent,
     TrainingOrganizationComponent,
 } from "../components";
-import { ADMIN_OF, RP, SUPER_RP, SUPER_USER, TEACHEAR, TRAINEE } from "../lib";
+import {
+    ADMIN_OF,
+    CUSTOMER,
+    RESOURCES,
+    RP,
+    SUPER_RP,
+    SUPER_USER,
+    TEACHEAR,
+    TRAINEE,
+} from "../lib";
 import { UsersPage } from "../pages";
 import { useAuthStore } from "../stores";
 
@@ -40,15 +49,15 @@ export function useUserRouteHooks() {
         },
 
         // Super Rp & Rp
+        // {
+        //     path: `${user_type}/${CUSTOMER}`,
+        //     label: "Stagiaire",
+        //     icon: "la-id-badge",
+        //     component: UsersPage,
+        //     roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
+        // },
         {
-            path: `customer`,
-            label: "Stagiaire",
-            icon: "la-id-badge",
-            component: UsersPage,
-            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
-        },
-        {
-            path: `path3`,
+            path: `${user_type}/${RESOURCES}`,
             label: "Ressources",
             icon: "la-id-badge",
             component: UsersPage,
@@ -142,14 +151,6 @@ export function useUserRouteHooks() {
             component: TrainingOrganizationComponent,
             roles: [TRAINEE],
         },
-
-        // {
-        //     path: `path3`,
-        //     label: "Ressources",
-        //     icon: "la-id-badge",
-        //     component: UsersPage,
-        //     roles: [SUPER_USER, ADMIN_OF],
-        // },
         {
             path: `settings`,
             label: "Paramétrer",
@@ -164,14 +165,11 @@ export function useUserRouteHooks() {
             setUserRoutes([]);
             return;
         }
-        // const role_currentUser = user_type;
         console.log({ user_type });
         const filteredRoutes = menuRoutes.filter((route) => {
             return route.roles.includes(user_type);
         });
         setUserRoutes(filteredRoutes);
-        console.log({ filteredRoutes });
-        // return userRoutes;
     }, [user_type]);
 
     return userRoutes;

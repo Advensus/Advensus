@@ -10,7 +10,7 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = () => {
     return (
         <div className="user_details_container">
             <div className="user_details_header">
-                <UsersDisplayComponent />
+                {/* <UsersDisplayComponent /> */}
             </div>
             <hr />
             <UserInfosComponent keyWord="Ressource ID" valueWord="Valeur" />

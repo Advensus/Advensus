@@ -8,11 +8,12 @@ from .user import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from rest_framework.permissions import IsAuthenticated
 import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .cours import formation
 def home(request):
@@ -135,7 +136,8 @@ class login(generics.GenericAPIView):
 
 # CRUD OPERATION
 
-@api_view(['GET'])	
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()

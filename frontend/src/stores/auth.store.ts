@@ -5,6 +5,11 @@ const USER_KEY = "user";
 const TOKEN_KEY = "access_token";
 const USER_TYPE = "user_type";
 
+// export interface theToken {
+//     refresh: string;
+//     access: string;
+// }
+
 type AuthStore = {
     // user: LoginDtoOut["user"];
     user_type: LoginDtoOut["user_type"];
@@ -21,8 +26,8 @@ export const useAuthStore = create<AuthStore>((set: SetState<AuthStore>) => {
 
     return {
         // user: current_user ? JSON.parse(current_user) : null,
-        user_type: current_user_type ? JSON.parse(current_user_type) : null,
         token: current_token ? JSON.parse(current_token) : null,
+        user_type: current_user_type ? JSON.parse(current_user_type) : null,
 
         // updateCurrentUser: (user): void => {
         //     set({ user });

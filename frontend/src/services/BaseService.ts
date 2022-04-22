@@ -2,6 +2,7 @@
 //require("es6-promise").polyfill();
 
 import { stringify } from "querystring";
+import { LoginDtoOut } from "../lib";
 
 // require('isomorphic-fetch');
 class BaseService {
@@ -11,17 +12,10 @@ class BaseService {
         if (!isFile) {
             headers.append("Content-Type", "application/json");
         }
-<<<<<<< HEAD
-        headers.append("Accept", "application/json");
-        headers.append("Access-Control-Allow-Origin", "*");
-        headers.append("Origin", "*");
-        headers.append("Credentials", "same-origin");
-=======
         // headers.append("Accept", "application/json");
         // headers.append("Access-Control-Allow-Origin", "*");
         // headers.append("Origin", "*");
         // headers.append("Credentials", "same-origin");
->>>>>>> Frontend
         return headers;
     };
 
@@ -34,7 +28,10 @@ class BaseService {
             "nous sommes bien dans le getHeadersAuth",
             `Bearer ${JSON.parse(token)}`
         );
-        headers.append("Authorization", `Bearer ${JSON.parse(token)}`);
+        let convertTok = JSON.parse(token) as LoginDtoOut["tokens"];
+        console.log("the convert tok:", convertTok);
+
+        headers.append("Authorization", `Bearer ${convertTok}`);
         return headers;
     };
 

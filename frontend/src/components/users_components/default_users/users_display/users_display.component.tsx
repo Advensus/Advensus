@@ -1,15 +1,22 @@
 import { Text } from "@fluentui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IUser } from "../../../../lib";
 
 export interface IUsersDisplayProps {
     default_props?: boolean;
+    infosTrainer: IUser;
     toggleTab?: () => void;
 }
 
 export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
     toggleTab,
+    infosTrainer,
 }) => {
+    useEffect(() => {
+        console.log({ infosTrainer });
+    }, []);
+
     return (
         <Link to="#" onClick={toggleTab} className="users_display_container">
             <div className="users_display_item">

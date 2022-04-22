@@ -183,11 +183,8 @@ class cruduser(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id","last_login","email","username",
-                 "first_name","date_joined","email_confirmed","is_active",
-                 "avatar","phone_number","adress","created_at",
-                 "updated_at","horaire","signature_former","cv",
+        fields = ["id","email","username","first_name","is_active",
+                 "avatar","phone_number","adress","horaire","signature_former","cv",
                  "user_type","competence","trainee_level","session_token",
-                 "active","is_staff","is_superuser","organisme",
-                 "groups","user_permissions"
+                "organisme"
                  ]
