@@ -18,22 +18,27 @@ urlpatterns = [
     path('email-verify/', VerifyEmail.as_view(),name="email-verify"), 
    
         
-   #ENTITE LOGIN
+   #LOGIN URLS
 
    path('login/',login.as_view()),
 
+   #VIEW ALL USERS URLS
    path('ViewAllUser/', views.viewalluser), 
 
-  #CRUD FORMATION
+  #CRUD FORMATION URLS
   path('GetAllFormation/', views.viewallformation),
 	path('DetailFormation/<str:pk>/', views.detailformation),
 	path('CreateFormation/', views.createformation,name='CreateFormation'),
-  
-
 	path('UpdateFormation/<str:pk>/', views.updateformation),
 	path('DeleteFormation/<str:pk>/', views.deleteformation),
-  # path('CreateAndViewFormation/', CreateReadFormation.as_view()),
-  # path('UpdateAndRemoveFormation/<int:id>',UpdateRemoveFormation.as_view()),
+
+   #CRUD DOCUMENT URLS
+  path('GetAllDocument/', views.viewalldocument),
+	path('DetailDocument/<str:pk>/', views.detaildocument),
+	path('CreateDocument/', views.createdocument),
+	path('UpdateDocument/<str:pk>/', views.updatedocument),
+	path('DeleteDocument/<str:pk>/', views.deletedocument),
+ 
 ]
 
 

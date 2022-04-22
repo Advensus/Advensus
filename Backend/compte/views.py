@@ -185,16 +185,55 @@ def updateformation(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
-# FIN CRUD OPERATION FOR FORMATION
-
-# CRUD OPERATION DOCUMENTS
-cruddocuments
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
+# FIN CRUD OPERATION FOR FORMATION
+
+# CRUD OPERATION DOCUMENTS
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def viewalldocument(request):
+	serializer_class = cruddocuments
+	donnee = Document.objects.all()
+
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])	
+def detaildocument(request, pk):
+	serializer_class = cruddocuments
+	donnee = Document.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])	
+def createdocument(request):
+	serializer_class = cruddocuments
+	donnee = serializer_class(data=request.data)
+	if donnee.is_valid():
+		donnee.save()
+	return Response(donnee.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])	
+def updatedocument(request, pk):
+	serializer_class = cruddocuments
+	donnee = Document.objects.get(id=pk)
+	serializer = serializer_class(instance=donnee, data=request.data)
+	if serializer.is_valid():
+		serializer.save()
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])	
+def deletedocument(request, pk):
+	donnee = Document.objects.get(id=pk)
+	donnee.delete()
+
+# FIN CRUD OPERATION FOR DOCUMENTS
