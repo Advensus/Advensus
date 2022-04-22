@@ -133,7 +133,7 @@ class login(generics.GenericAPIView):
 		return Response(serializer.data,status=status.HTTP_200_OK)
 
 
-# CRUD OPERATION
+# CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])	
 def viewalluser(request):
@@ -143,11 +143,11 @@ def viewalluser(request):
 	return Response(serializer.data)
 
 
-
+# CRUD OPERATION FORMATION
 @api_view(['GET'])
 def viewallformation(request):
 	serializer_class = crudformation
-	donnee = formation.onbjects.all()
+	donnee = formation.objects.all()
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
 
@@ -160,10 +160,13 @@ def detailformation(request, pk):
 
 @api_view(['POST'])
 def createformation(request):
-	donnee = crudformation(data=request.data)
+	serializer_class = crudformation
+	queryset = formation.objects.all()
+	donnee = serializer_class(data=request.data)
 	if donnee.is_valid():
 		donnee.save()
 	return Response(donnee.data)
+	
 	
 
 @api_view(['POST'])
@@ -181,6 +184,8 @@ def updateformation(request, pk):
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
+
+
 # class CreateReadFormation(ListCreateAPIView):
 # 	serializer_class =  crudformation
 # 	queryset = formation.objects.all()
