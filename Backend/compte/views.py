@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
 from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
 from .utils import Util
@@ -18,6 +18,7 @@ from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIVi
 from .cours import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
+from .permissions import admin_org
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -140,7 +141,8 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+
+@permission_classes([IsAuthenticated,IsAdminUser,admin_org])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -160,7 +162,7 @@ def viewallformation(request):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+@permission_classes([IsAuthenticated,IsAdminUser])	
 def detailformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -169,7 +171,7 @@ def detailformation(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+@permission_classes([IsAuthenticated,IsAdminUser])	
 def createformation(request):
 	serializer_class = crudformation
 	queryset = formation.objects.all()
@@ -182,7 +184,7 @@ def createformation(request):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+@permission_classes([IsAuthenticated,IsAdminUser])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -193,7 +195,7 @@ def updateformation(request, pk):
 	return Response(serializer.data)
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+@permission_classes([IsAuthenticated,IsAdminUser])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
