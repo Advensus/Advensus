@@ -19,9 +19,9 @@ class UserManager(BaseUserManager):
 
     def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
-            raise TypeError('Le mail est obligatoire')
+            raise TypeError('Mail est obligatoire')
         if username is None:
-            raise TypeError('Le nom est bligatoire')
+            raise TypeError('Nom est bligatoire')
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.user_type= 'is_client'

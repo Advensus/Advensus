@@ -1,5 +1,7 @@
 from dataclasses import field
 
+from .cours import formation
+
 from .societe import Organisme
 from rest_framework import serializers
 from .user import User
@@ -12,7 +14,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 
-
+# Sign Up Users
 class AddStagiaire(serializers.ModelSerializer):
 
     username = serializers.CharField(max_length=60)
@@ -143,7 +145,9 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['token']
 
-class loginadmin_org_ser(serializers.ModelSerializer): 
+
+# Login Users
+class login(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
@@ -167,3 +171,23 @@ class loginadmin_org_ser(serializers.ModelSerializer):
             raise AuthenticationFailed('compte non activé...')
         return user
        
+# CRUD Operations
+
+class crudformation(serializers.ModelSerializer):
+
+    class Meta:
+        model = formation
+        fields = ['edof','intitule','duration','start_session','end_session','test_oral']
+
+class cruduser(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["id","last_login","email","username",
+                 "first_name","date_joined","email_confirmed","is_active",
+                 "avatar","phone_number","adress","created_at",
+                 "updated_at","horaire","signature_former","cv",
+                 "user_type","competence","trainee_level","session_token",
+                 "active","is_staff","is_superuser","organisme",
+                 "groups","user_permissions"
+                 ]

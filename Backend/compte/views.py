@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from rest_framework import generics,status,views
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginadmin_org_ser
+from rest_framework import generics,status,views,permissions
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
@@ -12,6 +12,9 @@ import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from .cours import formation
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -120,10 +123,83 @@ class VerifyEmail(views.APIView):
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class loginadmin_org(generics.GenericAPIView):
-	serializer_class = loginadmin_org_ser
+# LOGIN USER
+class login(generics.GenericAPIView):
+	serializer_class = login
 	def post(self,request):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
 		return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+# CRUD OPERATION
+
+@api_view(['GET'])	
+def viewalluser(request):
+	serializer_class = cruduser
+	donnee = User.objects.all()
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def viewallformation(request):
+	serializer_class = crudformation
+	donnee = formation.onbjects.all()
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
+
+@api_view(['GET'])
+def detailformation(request, pk):
+	serializer_class = crudformation
+	donnee = formation.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
+
+@api_view(['POST'])
+def createformation(request):
+	donnee = crudformation(data=request.data)
+	if donnee.is_valid():
+		donnee.save()
+	return Response(donnee.data)
+	
+
+@api_view(['POST'])
+def updateformation(request, pk):
+	serializer_class = crudformation
+	donnee = formation.objects.get(id=pk)
+	serializer = serializer_class(instance=donnee, data=request.data)
+	if serializer.is_valid():
+		serializer.save()
+
+	return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def deleteformation(request, pk):
+	donnee = formation.objects.get(id=pk)
+	donnee.delete()
+# class CreateReadFormation(ListCreateAPIView):
+# 	serializer_class =  crudformation
+# 	queryset = formation.objects.all()
+# 	permissions = (permissions.IsAuthenticated)
+
+# 	def perform_create(self, serializer,request):
+# 		return serializer.save(request)
+
+# 	def get_queryset(self):
+# 		return self.queryset.filter()
+
+# class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
+# 	serializer_class =  crudformation
+# 	queryset = formation.objects.all()
+# 	permissions = (permissions.IsAuthenticated)
+# 	lookup_field = "id"
+
+# 	def perform_create(self, serializer,request):
+# 		return serializer.save(request)
+
+# 	def get_queryset(self):
+# 		return self.queryset.filter()

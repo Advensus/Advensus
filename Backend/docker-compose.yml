@@ -4,11 +4,12 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./base/db:/var/lib/postgresql/base
     environment:
       - POSTGRES_DB=advansus
       - POSTGRES_USER=advansus
       - POSTGRES_PASSWORD=JrmkAV22@97
+      - POSTGRES_PORT=5432
     # ports:
     # - "5482:5432" 
      
@@ -23,6 +24,7 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=JrmkAV22@97#jr098
+      - POSTGRES_PORT=5432
     depends_on:
       - db
   adminer:
