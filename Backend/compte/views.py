@@ -18,7 +18,7 @@ from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIVi
 from .cours import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
-from .permissions import admin_org
+from .permissions import autorisation
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -142,7 +142,7 @@ class login(generics.GenericAPIView):
 @api_view(['GET'])
 @csrf_exempt
 
-@permission_classes([IsAuthenticated,IsAdminUser,admin_org])	
+@permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()

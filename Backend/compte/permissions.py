@@ -1,7 +1,19 @@
 from rest_framework import permissions
 from .user import User
 
-class admin_org(permissions.BasePermission):
+class autorisation(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return bool(
+            request.user and request.user.is_authenticated
+            and request.user.is_autorise 
+        )
+       
 
-    def has_object_permission(self, request, view, obj):
-        return obj.user_type == "is_amin"
+
+#   def has_permission(self, request, view):
+#         is_authenticated = super().has_permission(request, view)
+
+#         if not is_authenticated:
+#             return False
+
+#         return request.user.is_admin_org

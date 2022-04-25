@@ -50,6 +50,7 @@ class UserManager(BaseUserManager):
 
         user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
         user.user_type= 'is_admin'
+        user.is_autorise  = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -101,6 +102,7 @@ class UserManager(BaseUserManager):
         )
         user.is_staff = True
         user.is_superuser= True
+        user.is_autorise  = True
         user.save(using=self._db)
         return user
     def email_user(self, *args, **kwargs):
@@ -156,6 +158,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_autorise = models.BooleanField(default=False)
 
     # fontction personalisé pour envoie des messages à l'utilisateur
     def email_user(self, *args, **kwargs):
