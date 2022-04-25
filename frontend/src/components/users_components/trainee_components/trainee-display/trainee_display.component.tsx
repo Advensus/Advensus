@@ -1,8 +1,11 @@
 import { Text } from "@fluentui/react";
 import React, { useState } from "react";
+import { IUser } from "../../../../lib";
 
 export interface ITraineeDisplayProps {
     default_props?: boolean;
+    detailsInfosTrainee: IUser;
+    toggleTab?: () => void;
 }
 
 export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = () => {

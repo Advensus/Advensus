@@ -146,7 +146,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                             console.log("value is " + newValue)
                                         }
                                     />
-                                    {pathLabel == "Trainees" && (
+                                    {pathLabel === "Trainees" && (
                                         <div className="filter_box">
                                             <SearchBox
                                                 placeholder="Filter1"
@@ -165,8 +165,12 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         ) : null}
                     </div>
                     {!showForm ? (
-                        <div className="tab_content">
-                            {trainers.length > 0 && pathLabel == "Resources"
+                        <div
+                            className={
+                                pathLabel === "Resources" ? "tab_content" : ""
+                            }
+                        >
+                            {trainers.length > 0 && pathLabel === "Resources"
                                 ? trainers.map((_) => (
                                       <UsersDisplayComponent
                                           toggleTab={toggleFullInfosTab}
@@ -175,17 +179,17 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                       />
                                   ))
                                 : null}
-                            {trainees.length > 0 && pathLabel == "Trainees"
+                            {trainees.length > 0 && pathLabel === "Trainees"
                                 ? trainees.map((_) => (
-                                      <UsersDisplayComponent
+                                      <TraineeDisplayComponent
                                           toggleTab={toggleFullInfosTab}
-                                          detailsInfos={_}
+                                          detailsInfosTrainee={_}
                                           key={_.id}
                                       />
                                   ))
                                 : null}
                         </div>
-                    ) : pathLabel == "Resources" ? (
+                    ) : pathLabel === "Resources" ? (
                         <TrainerFormComponent
                             cancel={() => setShowForm(false)}
                         />
@@ -193,11 +197,6 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         <div>Formulaire des clients</div>
                     )}
                     {/* {/* <div>
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent /> 
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />
                     <TraineeDisplayComponent />

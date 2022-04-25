@@ -12,4 +12,5 @@ export const authUrls = {
 
 export const userUls = {
     GET_ALL_USERS: `${prefixer}auth/ViewAllUser/`,
+    NEW_TRAINER: `${prefixer}auth/register/formateur/`,
 };
