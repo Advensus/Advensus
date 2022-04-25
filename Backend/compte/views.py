@@ -159,7 +159,7 @@ def viewallformation(request):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
 	serializer = serializer_class(donnee, many=True)
-	return Response(serializer.data,user_type=self.request.user)
+	return Response(serializer.data)
 
 @api_view(['GET'])
 @csrf_exempt
