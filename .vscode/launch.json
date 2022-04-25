@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "Backend:compte/views.viewalluser (python3.6)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/Backend",
+                "lambdaHandler": "compte/views.viewalluser"
+            },
+            "lambda": {
+                "runtime": "python3.6",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        }
+    ]
+}

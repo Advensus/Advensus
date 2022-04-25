@@ -154,11 +154,11 @@ def viewalluser(request):
 @api_view(['GET'])
 @csrf_exempt
 @permission_classes([IsAuthenticated])	
-def viewallformation(request):
+def viewallformation(request,self):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
 	serializer = serializer_class(donnee, many=True)
-	return Response(serializer.data)
+	return Response(serializer.data,user_type=self.request.user)
 
 @api_view(['GET'])
 @csrf_exempt
