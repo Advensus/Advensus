@@ -196,9 +196,12 @@ class cruddocuments(serializers.ModelSerializer):
         model = Document
         fields = ['doc_content','doc_type']
 
-class LogoutUser(serializers.ModelSerializer):
+class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()
-
+    default_error_message = {
+        'Mauvais token': ('Token expiré ou invalid')
+    }
+    
     def validate(self,attrs):
         self.token=attrs['refresh']
 

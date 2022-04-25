@@ -171,19 +171,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # ],
 # }
 
-
+# s122@22@z
 REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'erro',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # )
+   
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=1),
-    'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1)
+    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
 }
 SWAGGER_SETTINGS ={
     'SECURITY_DEFINITIONS':{
