@@ -48,7 +48,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
-    const [rps, setTps] = useState<IUser[]>([]);
+    const [rps, setRps] = useState<IUser[]>([]);
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
@@ -124,6 +124,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                 );
                 setTrainers(trainer);
                 setTrainees(trainee);
+                setSrps(srp);
+                setRps(rp);
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
@@ -155,7 +157,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             ) : (
                                 <Text> Ajouter Stagiaire</Text>
                             )}
-                            <TooltipHost content="Ajouter" id={tooltipId}>
+                            <TooltipHost
+                                content="Ajouter Formateur"
+                                id={tooltipId}
+                            >
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
@@ -166,7 +171,13 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         <hr className="hr_dashed" />
                         {!showForm ? (
                             <>
-                                <div className="tab_header_content">
+                                <div
+                                    className={
+                                        pathLabel === PATH_LABEL_RESOURCES
+                                            ? "tab_header_contentii"
+                                            : "tab_header_content"
+                                    }
+                                >
                                     <SearchBox
                                         placeholder="Search"
                                         onSearch={(newValue) =>
@@ -186,37 +197,109 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                         </div>
                                     )}
                                 </div>
-                                <Text>My "tab name" or allusersnumber()</Text>
-                                <hr className="hr_solid" />
                             </>
                         ) : null}
                     </div>
                     {!showForm ? (
                         <div
                             className={
-                                pathLabel === "Resources"
+                                pathLabel === PATH_LABEL_RESOURCES
                                     ? "tab_content"
-                                    : "tab_content_trainee"
+                                    : "tab_content_scroll"
                             }
                         >
-                            {trainers.length && pathLabel === "Resources"
-                                ? trainers.map((_) => (
-                                      <UsersDisplayComponent
-                                          toggleTab={toggleFullInfosTab}
-                                          detailsInfos={_}
-                                          key={_.id}
-                                      />
-                                  ))
-                                : null}
-                            {trainees.length && pathLabel === "Trainees"
-                                ? trainees.map((_) => (
-                                      <TraineeDisplayComponent
-                                          toggleTab={toggleFullInfosTab}
-                                          detailsInfosTrainee={_}
-                                          key={_.id}
-                                      />
-                                  ))
-                                : null}
+                            <div>
+                                <Text>My "tab name" or allusersnumber()</Text>
+                                <hr className="hr_solid" />
+                            </div>
+                            <div
+                                className={
+                                    pathLabel === PATH_LABEL_RESOURCES
+                                        ? "tab_content_trainer"
+                                        : "tab_content_trainee"
+                                }
+                            >
+                                {trainers.length && pathLabel === "Resources"
+                                    ? trainers.map((_) => (
+                                          <UsersDisplayComponent
+                                              toggleTab={toggleFullInfosTab}
+                                              detailsInfos={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
+                                {trainees.length && pathLabel === "Trainees"
+                                    ? trainees.map((_) => (
+                                          <TraineeDisplayComponent
+                                              toggleTab={toggleFullInfosTab}
+                                              detailsInfosTrainee={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
+                            </div>
+                            {pathLabel === PATH_LABEL_RESOURCES && (
+                                <div>
+                                    <div className="tab_sections_header">
+                                        <Text>Super R-P</Text>
+                                        <TooltipHost
+                                            content="Ajouter super R-P"
+                                            id={tooltipId}
+                                        >
+                                            <IconButton
+                                                iconProps={addIcon}
+                                                ariaLabel="add"
+                                                onClick={showAddForm}
+                                            />
+                                        </TooltipHost>
+                                    </div>
+                                    <hr className="hr_solid" />
+                                </div>
+                            )}
+                            {pathLabel === PATH_LABEL_RESOURCES && (
+                                <div className="tab_content_rps">
+                                    {srps.length && pathLabel === "Resources"
+                                        ? srps.map((_) => (
+                                              <UsersDisplayComponent
+                                                  toggleTab={toggleFullInfosTab}
+                                                  detailsInfos={_}
+                                                  key={_.id}
+                                              />
+                                          ))
+                                        : null}
+                                </div>
+                            )}
+                            {pathLabel === PATH_LABEL_RESOURCES && (
+                                <div>
+                                    <div className="tab_sections_header">
+                                        <Text>R-P simple</Text>
+                                        <TooltipHost
+                                            content="Ajouter R-P"
+                                            id={tooltipId}
+                                        >
+                                            <IconButton
+                                                iconProps={addIcon}
+                                                ariaLabel="add"
+                                                onClick={showAddForm}
+                                            />
+                                        </TooltipHost>
+                                    </div>
+                                    <hr className="hr_solid" />
+                                </div>
+                            )}
+                            {pathLabel === PATH_LABEL_RESOURCES && (
+                                <div className="tab_content_rps">
+                                    {rps.length && pathLabel === "Resources"
+                                        ? rps.map((_) => (
+                                              <UsersDisplayComponent
+                                                  toggleTab={toggleFullInfosTab}
+                                                  detailsInfos={_}
+                                                  key={_.id}
+                                              />
+                                          ))
+                                        : null}
+                                </div>
+                            )}
                         </div>
                     ) : pathLabel === "Resources" ? (
                         <TrainerFormComponent
