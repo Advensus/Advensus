@@ -1,3 +1,5 @@
+import { IUser } from "../interfaces/User";
+
 export interface NewUserDto {
     username: string;
     first_name: string;
@@ -11,7 +13,7 @@ export interface NewUserDto {
     organisme?: string;
 }
 
-export interface NewUserDtoIn {
+export interface NewUserDtoOut {
     username: string;
     first_name: string;
     email: string;
@@ -21,4 +23,8 @@ export interface NewUserDtoIn {
     competence?: string;
     cv?: File;
     organisme?: string;
+}
+
+export interface NewUserDtoIn {
+    user: IUser;
 }

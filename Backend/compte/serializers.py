@@ -23,10 +23,11 @@ class AddStagiaire(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password']
+        fields = ['username','first_name','email','phone_number','adress','password','id']
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -49,9 +50,11 @@ class AddRp(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    id = serializers.UUIDField(read_only=True)
+
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password']
+        fields = ['username','first_name','email','phone_number','adress','password','id']
     def get_cleaned_data(self):
         data = super(AddRp, self).get_cleaned_data()
         return data
@@ -66,9 +69,11 @@ class AddSrp(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    id = serializers.UUIDField(read_only=True)
+
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password']
+        fields = ['username','first_name','email','phone_number','adress','password','id']
     def get_cleaned_data(self):
         data = super(AddSrp, self).get_cleaned_data()
         return data
@@ -101,10 +106,11 @@ class AddAdmin(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    id = serializers.UUIDField(read_only=True)
    
     class Meta:
         model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','organisme']
+        fields =  ['username','first_name','email','phone_number','adress','password','organisme','id']
         
     
     def get_cleaned_data(self):
@@ -126,10 +132,11 @@ class AddFormateur(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=70)
+    id = serializers.UUIDField(read_only=True)
   
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id']
 
     def create(self,validate_data):
         return User.objects.create_user2(**validate_data)

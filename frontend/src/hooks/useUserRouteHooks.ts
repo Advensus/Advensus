@@ -9,6 +9,8 @@ import {
 import {
     ADMIN_OF,
     CUSTOMER,
+    PATH_LABEL_CUSTOMER,
+    PATH_LABEL_RESOURCES,
     RESOURCES,
     RP,
     SUPER_RP,
@@ -51,14 +53,14 @@ export function useUserRouteHooks() {
         //  Super Rp & Rp
         {
             path: `${user_type}/${CUSTOMER}`,
-            label: "Trainees",
+            label: `${PATH_LABEL_CUSTOMER}`,
             icon: "la-id-badge",
             component: UsersPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
             path: `${user_type}/${RESOURCES}`,
-            label: "Resources",
+            label: `${PATH_LABEL_RESOURCES}`,
             icon: "la-id-badge",
             component: UsersPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],

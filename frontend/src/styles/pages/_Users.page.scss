@@ -69,7 +69,11 @@
     padding: 10px 10px 0 0;
     display: flex;
     // justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
+}
+.tab_content_trainee {
+    overflow: auto;
 }
 
 #display_tab_ii {

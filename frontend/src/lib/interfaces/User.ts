@@ -6,11 +6,11 @@ export interface IUser {
     phone_number: string;
     adress: string;
 
-    is_active: true;
-    avatar: null;
-    signature_former: null;
-    user_type: string;
-    session_token: string;
+    is_active?: true;
+    avatar?: null;
+    signature_former?: null;
+    user_type?: string;
+    session_token?: string;
     horaire?: string;
     cv?: File;
     competence?: string;

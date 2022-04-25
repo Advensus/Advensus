@@ -1,32 +1,31 @@
-import { DefaultButton, Text, TextField } from "@fluentui/react";
+import { DefaultButton, TextField, Text } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { NewUserDto, NewUserDtoIn, NewUserDtoOut } from "../../../lib";
 import UserService from "../../../services/user.service";
 
-export interface ITrainerFormProps {
+export interface ITraineeFormProps {
     default_props?: boolean;
-    cancel?: () => void;
+    cancel: () => void;
     onCreate: (data: NewUserDtoIn) => void;
 }
 
-export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
+export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     cancel,
     onCreate,
 }) => {
     const onSubmit = (value: NewUserDto) => {
-        console.log({ value });
-        UserService.new_trainer(value)
+        UserService.new_trainee(value)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
                 }
                 const data = (await response.json()) as NewUserDtoIn;
-                console.log("the user just added:", data);
+                console.log("the current adding trainee:", data);
                 onCreate(data);
             })
             .catch((err) => {
-                console.log("error while adding new trainer:", err);
+                console.log("error while adding new trainee:", err);
             });
     };
 
@@ -38,21 +37,26 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             phone_number: "",
             adress: "",
             password: "",
-            horaire: "",
-            competence: "",
         },
-        // validationSchema,
         onSubmit,
     });
 
     return (
-        <form onSubmit={handleSubmit} className="trainer_form_container">
-            <Text className="trainer_txt_divide_mov">Formateur</Text>
-            <hr className="trainer_hr_solid" />
-            <div className="own_trainer_sect">
-                <div className="own_trainer_pict">Img part</div>
-                <div className="own_trainer_fields">
-                    <div className="own_trainer_align_fields">
+        <form onSubmit={handleSubmit} className="trainee_form_container">
+            <Text className="trainee_txt_divide_mov">Stagiaire</Text>
+            <hr className="trainee_hr_solid" />
+            <div className="own_trainee_sect">
+                <div className="own_trainee_pict">Img part</div>
+                <div className="own_trainee_fields">
+                    <TextField
+                        type="text"
+                        // label="text"
+                        // value={values.text}
+                        // onChange={handleChange}
+                        placeholder="Company name"
+                        name="text"
+                    />
+                    <div className="own_trainee_align_fields">
                         <TextField
                             type="text"
                             // label="text"
@@ -100,9 +104,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     />
                 </div>
             </div>
-            <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
-            <hr className="trainer_hr_solid" />
-            <div className="addr_trainer">
+            <Text className="trainee_txt_divide_mov">Adress</Text>{" "}
+            <hr className="trainee_hr_solid" />
+            <div className="addr_trainee">
                 <TextField
                     type="text"
                     value={values.adress}
@@ -111,21 +115,21 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     name="adress"
                 />
             </div>
-            <Text className="trainer_txt_divide_mov">Other</Text>{" "}
-            <hr className="trainer_hr_solid" />
-            <div className="oth_trainer">
+            <Text className="trainee_txt_divide_mov">Other</Text>{" "}
+            <hr className="trainee_hr_solid" />
+            <div className="oth_trainee">
                 <TextField
                     type="text"
-                    value={values.competence}
-                    onChange={handleChange}
-                    placeholder="Competence"
+                    // value={values.competence}
+                    // onChange={handleChange}
+                    placeholder="Date de naissance"
                     name="competence"
                 />
                 <TextField
                     type="text"
-                    value={values.horaire}
-                    onChange={handleChange}
-                    placeholder="Horaire"
+                    // value={values.horaire}
+                    // onChange={handleChange}
+                    placeholder="EDOF"
                     name="horaire"
                 />
                 <TextField
@@ -138,7 +142,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     revealPasswordAriaLabel="Show password"
                 />
             </div>
-            <div className="trainer_form_btns">
+            <div className="trainee_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />
                 <DefaultButton
                     style={{ marginLeft: "10px" }}

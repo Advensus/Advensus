@@ -7,6 +7,9 @@ class UserService {
 
     static new_trainer = (info: unknown) =>
         BaseService.postRequest(userUls.NEW_TRAINER, info, false);
+
+    static new_trainee = (info: unknown) =>
+        BaseService.postRequest(userUls.NEW_TRAINEE, info, false);
 }
 
 export default UserService;
