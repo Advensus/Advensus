@@ -1,7 +1,8 @@
+from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -251,3 +252,15 @@ def deletedocument(request, pk):
 	donnee.delete()
 
 # FIN CRUD OPERATION FOR DOCUMENTS
+
+
+class LogoutUser(generics.GenericAPIView):
+	serializer_class = LogoutUser
+	permission_classes = (permissions.IsAuthenticated)
+
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return response(status=status.HTTP_204_NO_CONTENT)
