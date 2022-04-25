@@ -153,7 +153,7 @@ def viewalluser(request):
 # CRUD OPERATION FORMATION
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+@permission_classes([IsAuthenticated,autorisation])	
 def viewallformation(request,self):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
@@ -162,7 +162,7 @@ def viewallformation(request,self):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,IsAdminUser])	
+@permission_classes([IsAuthenticated,autorisation])	
 def detailformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -171,7 +171,7 @@ def detailformation(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,IsAdminUser])	
+@permission_classes([IsAuthenticated,autorisation])	
 def createformation(request):
 	serializer_class = crudformation
 	queryset = formation.objects.all()
@@ -184,7 +184,7 @@ def createformation(request):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,IsAdminUser])	
+@permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -195,7 +195,7 @@ def updateformation(request, pk):
 	return Response(serializer.data)
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,IsAdminUser])	
+@permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
