@@ -5,16 +5,16 @@ import { IUser } from "../../../../lib";
 
 export interface IUsersDisplayProps {
     default_props?: boolean;
-    infosTrainer: IUser;
+    detailsInfos: IUser;
     toggleTab?: () => void;
 }
 
 export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
     toggleTab,
-    infosTrainer,
+    detailsInfos,
 }) => {
     useEffect(() => {
-        console.log({ infosTrainer });
+        console.log({ detailsInfos });
     }, []);
 
     return (

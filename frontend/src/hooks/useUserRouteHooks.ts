@@ -48,17 +48,17 @@ export function useUserRouteHooks() {
             roles: [SUPER_USER],
         },
 
-        // Super Rp & Rp
-        // {
-        //     path: `${user_type}/${CUSTOMER}`,
-        //     label: "Stagiaire",
-        //     icon: "la-id-badge",
-        //     component: UsersPage,
-        //     roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
-        // },
+        //  Super Rp & Rp
+        {
+            path: `${user_type}/${CUSTOMER}`,
+            label: "Trainees",
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
+        },
         {
             path: `${user_type}/${RESOURCES}`,
-            label: "Ressources",
+            label: "Resources",
             icon: "la-id-badge",
             component: UsersPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],

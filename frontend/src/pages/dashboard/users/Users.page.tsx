@@ -22,6 +22,10 @@ export interface IUsersPageProps {
     default_props?: boolean;
 }
 
+interface IPath {
+    label: string;
+}
+
 const filterIcon: IIconProps = { iconName: "Filter" };
 const addIcon: IIconProps = { iconName: "Add" };
 
@@ -35,12 +39,17 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [rps, setTps] = useState<IUser[]>([]);
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
+    const [pathLabel, setPathLabel] = useState<string>("");
 
     useEffect(() => {
         getAllUser();
 
-        console.log("the nav:", location);
-    }, []);
+        if (location.state) {
+            const thePath = location.state as IPath;
+            setPathLabel(thePath.label);
+            console.log("the nav:", thePath.label);
+        }
+    }, [location.pathname]);
 
     const toggleFullInfosTab = () => {
         var hint = document.getElementById(
@@ -137,16 +146,18 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                             console.log("value is " + newValue)
                                         }
                                     />
-                                    <div className="filter_box">
-                                        <SearchBox
-                                            placeholder="Filter1"
-                                            iconProps={filterIcon}
-                                        />
-                                        <SearchBox
-                                            placeholder="Filter"
-                                            iconProps={filterIcon}
-                                        />
-                                    </div>
+                                    {pathLabel == "Trainees" && (
+                                        <div className="filter_box">
+                                            <SearchBox
+                                                placeholder="Filter1"
+                                                iconProps={filterIcon}
+                                            />
+                                            <SearchBox
+                                                placeholder="Filter"
+                                                iconProps={filterIcon}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <Text>My "tab name" or allusersnumber()</Text>
                                 <hr className="hr_solid" />
@@ -155,20 +166,31 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     </div>
                     {!showForm ? (
                         <div className="tab_content">
-                            {trainers.length > 0
+                            {trainers.length > 0 && pathLabel == "Resources"
                                 ? trainers.map((_) => (
                                       <UsersDisplayComponent
                                           toggleTab={toggleFullInfosTab}
-                                          infosTrainer={_}
+                                          detailsInfos={_}
+                                          key={_.id}
+                                      />
+                                  ))
+                                : null}
+                            {trainees.length > 0 && pathLabel == "Trainees"
+                                ? trainees.map((_) => (
+                                      <UsersDisplayComponent
+                                          toggleTab={toggleFullInfosTab}
+                                          detailsInfos={_}
                                           key={_.id}
                                       />
                                   ))
                                 : null}
                         </div>
-                    ) : (
+                    ) : pathLabel == "Resources" ? (
                         <TrainerFormComponent
                             cancel={() => setShowForm(false)}
                         />
+                    ) : (
+                        <div>Formulaire des clients</div>
                     )}
                     {/* {/* <div>
                     <TraineeDisplayComponent />
