@@ -194,3 +194,14 @@ class cruddocuments(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ['doc_content','doc_type']
+
+class LogoutUser(serializers.ModelSerializer):
+    refresh = serializers.CharField()
+
+    def validate(self,attr):
+        self.token=attr['refresh']
+
+        return attr
+
+    def save(self, **kwargs):
+        RefreshToken(self.token).blacklist()
