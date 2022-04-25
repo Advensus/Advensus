@@ -8,15 +8,18 @@ export interface ITraineeDisplayProps {
     toggleTab?: () => void;
 }
 
-export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = () => {
+export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = ({
+    detailsInfosTrainee,
+}) => {
     return (
         <div className="trainee_diplay_container">
             <div className="text_displaying">
                 <Text variant="large" style={{ fontWeight: "bolder" }}>
-                    Full name
+                    {detailsInfosTrainee.first_name}{" "}
+                    {detailsInfosTrainee.username}
                 </Text>
-                <Text variant="tiny">Phonenumber</Text>
-                <Text variant="tiny">Email</Text>
+                <Text variant="tiny">{detailsInfosTrainee.phone_number}</Text>
+                <Text variant="tiny">{detailsInfosTrainee.email}</Text>
             </div>
             <div className="square_displaying">
                 <Text variant="large" style={{ fontWeight: "bold" }}>

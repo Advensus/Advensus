@@ -17,13 +17,16 @@ import { useId } from "@fluentui/react-hooks";
 import UserService from "../../../services/user.service";
 import {
     ADMIN_OF,
+    BASIC_RP_FORM,
     IUser,
     NewUserDto,
     NewUserDtoIn,
     PATH_LABEL_RESOURCES,
     RP,
     SUPER_RP,
+    SUPER_RP_FORM,
     TEACHEAR,
+    TEACHEAR_FORM,
     TRAINEE,
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
@@ -45,6 +48,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
 
     const tooltipId = useId("tooltip");
     const [showForm, setShowForm] = useState<Boolean>(false);
+    const [resourcesType, setResourcesType] = useState<string>("");
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
@@ -90,7 +94,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     };
 
-    const showAddForm = () => {
+    const showAddForm = (resType: string) => {
+        setResourcesType(resType);
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
@@ -164,7 +169,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={showAddForm}
+                                    onClick={() => showAddForm(TEACHEAR_FORM)}
                                 />
                             </TooltipHost>
                         </div>
@@ -249,7 +254,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                             <IconButton
                                                 iconProps={addIcon}
                                                 ariaLabel="add"
-                                                onClick={showAddForm}
+                                                onClick={() =>
+                                                    showAddForm(SUPER_RP_FORM)
+                                                }
                                             />
                                         </TooltipHost>
                                     </div>
@@ -280,7 +287,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                             <IconButton
                                                 iconProps={addIcon}
                                                 ariaLabel="add"
-                                                onClick={showAddForm}
+                                                onClick={() =>
+                                                    showAddForm(BASIC_RP_FORM)
+                                                }
                                             />
                                         </TooltipHost>
                                     </div>
@@ -305,6 +314,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         <TrainerFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
+                            resourcesType={resourcesType}
                         />
                     ) : (
                         <TraineeFormComponent

@@ -1,33 +1,70 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { NewUserDto, NewUserDtoIn, NewUserDtoOut } from "../../../lib";
+import {
+    BASIC_RP_FORM,
+    NewUserDto,
+    NewUserDtoIn,
+    SUPER_RP_FORM,
+    TEACHEAR_FORM,
+} from "../../../lib";
 import UserService from "../../../services/user.service";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
     cancel?: () => void;
     onCreate: (data: NewUserDtoIn) => void;
+    resourcesType?: string;
 }
 
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     cancel,
     onCreate,
+    resourcesType,
 }) => {
     const onSubmit = (value: NewUserDto) => {
         console.log({ value });
-        UserService.new_trainer(value)
-            .then(async (response) => {
-                if (response.status !== 200) {
-                    console.log({ response });
-                }
-                const data = (await response.json()) as NewUserDtoIn;
-                console.log("the user just added:", data);
-                onCreate(data);
-            })
-            .catch((err) => {
-                console.log("error while adding new trainer:", err);
-            });
+        console.log({ BASIC_RP_FORM });
+        if (resourcesType === TEACHEAR_FORM) {
+            UserService.new_trainer(value)
+                .then(async (response) => {
+                    if (response.status !== 200) {
+                        console.log({ response });
+                    }
+                    const data = (await response.json()) as NewUserDtoIn;
+                    console.log("the user just added:", data);
+                    onCreate(data);
+                })
+                .catch((err) => {
+                    console.log("error while adding new trainer:", err);
+                });
+        }
+        if (resourcesType === SUPER_RP_FORM) {
+            UserService.new_super_rp(value)
+                .then(async (response) => {
+                    if (response.status !== 200) {
+                        console.log({ response });
+                    }
+                    const data = (await response.json()) as NewUserDtoIn;
+                    onCreate(data);
+                })
+                .catch((err) => {
+                    console.log("error while adding new super rp:", err);
+                });
+        }
+        if (resourcesType === BASIC_RP_FORM) {
+            UserService.new_basic_rp(value)
+                .then(async (response) => {
+                    if (response.status !== 200) {
+                        console.log({ response });
+                    }
+                    const data = (await response.json()) as NewUserDtoIn;
+                    onCreate(data);
+                })
+                .catch((err) => {
+                    console.log("error while adding new basic rp:", err);
+                });
+        }
     };
 
     const { values, handleChange, handleSubmit } = useFormik<NewUserDto>({
@@ -114,20 +151,24 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <Text className="trainer_txt_divide_mov">Other</Text>{" "}
             <hr className="trainer_hr_solid" />
             <div className="oth_trainer">
-                <TextField
-                    type="text"
-                    value={values.competence}
-                    onChange={handleChange}
-                    placeholder="Competence"
-                    name="competence"
-                />
-                <TextField
-                    type="text"
-                    value={values.horaire}
-                    onChange={handleChange}
-                    placeholder="Horaire"
-                    name="horaire"
-                />
+                {resourcesType === TEACHEAR_FORM && (
+                    <>
+                        <TextField
+                            type="text"
+                            value={values.competence}
+                            onChange={handleChange}
+                            placeholder="Competence"
+                            name="competence"
+                        />
+                        <TextField
+                            type="text"
+                            value={values.horaire}
+                            onChange={handleChange}
+                            placeholder="Horaire"
+                            name="horaire"
+                        />
+                    </>
+                )}
                 <TextField
                     type="password"
                     value={values.password}

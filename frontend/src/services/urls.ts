@@ -14,4 +14,6 @@ export const userUls = {
     GET_ALL_USERS: `${prefixer}auth/ViewAllUser/`,
     NEW_TRAINER: `${prefixer}auth/register/formateur/`,
     NEW_TRAINEE: `${prefixer}auth/register/stagiaire/`,
+    NEW_SUPER_RP: `${prefixer}auth/register/Srp/`,
+    NEW_BASIC_RP: `${prefixer}auth/register/Rp/`,
 };

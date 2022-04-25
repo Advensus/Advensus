@@ -21,11 +21,13 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
         <Link to="#" onClick={toggleTab} className="users_display_container">
             <div className="users_display_item">
                 <div className="action_icon">icon</div>
-                <Text style={{ alignSelf: "center" }}>Abrégé</Text>
+                <Text style={{ alignSelf: "center" }}>
+                    {detailsInfos.username}
+                </Text>
             </div>
             <div className="users_display_text">
                 <Text variant="small" style={{ fontWeight: "bold" }}>
-                    Full name
+                    {detailsInfos.first_name} {detailsInfos.username}
                 </Text>
                 <Text variant="tiny" className="users_status">
                     ONLINE
