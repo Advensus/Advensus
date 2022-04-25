@@ -1,5 +1,6 @@
 from django.urls import path,include
-from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login
+from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser
+
 from . import views
 
 
@@ -14,30 +15,32 @@ urlpatterns = [
     path('register/Srp/', RegisterSupResponsableP.as_view()),
     path('register/admin_org/',RegisteradminOrg.as_view()),
     path('create/organisme/', CreateOrganisme.as_view()),
-    
     path('email-verify/', VerifyEmail.as_view(),name="email-verify"), 
    
         
    #LOGIN URLS
 
-   path('login/',login.as_view()),
+    path('Login/',login.as_view()),
 
    #VIEW ALL USERS URLS
-   path('ViewAllUser/', views.viewalluser), 
+    path('ViewAllUser/', views.viewalluser), 
 
-  #CRUD FORMATION URLS
-  path('GetAllFormation/', views.viewallformation),
-	path('DetailFormation/<str:pk>/', views.detailformation),
-	path('CreateFormation/', views.createformation,name='CreateFormation'),
-	path('UpdateFormation/<str:pk>/', views.updateformation),
-	path('DeleteFormation/<str:pk>/', views.deleteformation),
+   #CRUD FORMATION URLS
+    path('GetAllFormation/', views.viewallformation),
+    path('DetailFormation/<str:pk>/', views.detailformation),
+    path('CreateFormation/', views.createformation,name='CreateFormation'),
+    path('UpdateFormation/<str:pk>/', views.updateformation),
+    path('DeleteFormation/<str:pk>/', views.deleteformation),
 
    #CRUD DOCUMENT URLS
-  path('GetAllDocument/', views.viewalldocument),
-	path('DetailDocument/<str:pk>/', views.detaildocument),
-	path('CreateDocument/', views.createdocument),
-	path('UpdateDocument/<str:pk>/', views.updatedocument),
-	path('DeleteDocument/<str:pk>/', views.deletedocument),
+    path('GetAllDocument/', views.viewalldocument),
+    path('DetailDocument/<str:pk>/', views.detaildocument),
+    path('CreateDocument/', views.createdocument),
+    path('UpdateDocument/<str:pk>/', views.updatedocument),
+    path('DeleteDocument/<str:pk>/', views.deletedocument),
+
+   #LOGOUT URL
+    path('Logout/',LogoutUser.as_view()),
  
 ]
 

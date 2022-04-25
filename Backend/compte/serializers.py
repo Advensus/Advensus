@@ -8,6 +8,7 @@ from .user import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Document
+from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
 
@@ -198,10 +199,13 @@ class cruddocuments(serializers.ModelSerializer):
 class LogoutUser(serializers.ModelSerializer):
     refresh = serializers.CharField()
 
-    def validate(self,attr):
-        self.token=attr['refresh']
+    def validate(self,attrs):
+        self.token=attrs['refresh']
 
-        return attr
+        return attrs
 
     def save(self, **kwargs):
-        RefreshToken(self.token).blacklist()
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            self.fail('Mauvais token')
