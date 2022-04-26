@@ -1,0 +1,14 @@
+.training_container {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    justify-content: space-around;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid gray;
+    }
+}

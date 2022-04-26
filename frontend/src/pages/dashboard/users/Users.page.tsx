@@ -11,6 +11,7 @@ import {
     TraineeDisplayComponent,
     TraineeFormComponent,
     TrainerFormComponent,
+    TrainingComponent,
     UsersDisplayComponent,
 } from "../../../components";
 import { useId } from "@fluentui/react-hooks";
@@ -18,10 +19,12 @@ import UserService from "../../../services/user.service";
 import {
     ADMIN_OF,
     BASIC_RP_FORM,
+    ITraining,
     IUser,
     NewUserDto,
     NewUserDtoIn,
     PATH_LABEL_RESOURCES,
+    PATH_LABEL_SERVICES,
     RP,
     SUPER_RP,
     SUPER_RP_FORM,
@@ -52,6 +55,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
+    const [training, setTraining] = useState<ITraining[]>([]);
     const [rps, setRps] = useState<IUser[]>([]);
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
@@ -242,6 +246,19 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                           />
                                       ))
                                     : null}
+                                {pathLabel === PATH_LABEL_SERVICES ? (
+                                    <>
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                        <TrainingComponent />
+                                    </>
+                                ) : null}
                             </div>
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>
