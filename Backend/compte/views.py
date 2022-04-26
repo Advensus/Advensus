@@ -21,6 +21,10 @@ from .cours import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
+
+
+from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -142,12 +146,8 @@ class login(generics.GenericAPIView):
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
-<<<<<<< HEAD
 @csrf_exempt
 @permission_classes([IsAuthenticated,autorisation])	
-=======
-# @permission_classes([IsAuthenticated])	
->>>>>>> 808e14f8d6384b681dc37933578c339cc5f373b8
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -156,6 +156,19 @@ def viewalluser(request):
 # FIN CRUD GET ALL USERS
 
 # CRUD OPERATION FORMATION
+class CreateFormation(CreateAPIView):
+    serializer_class = crudformation
+    queryset = formation.objects.all()
+    permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
 @api_view(['GET'])
 @csrf_exempt
 @permission_classes([IsAuthenticated,autorisation])	
@@ -174,17 +187,19 @@ def detailformation(request, pk):
 	serializer = serializer_class(donnee, many=False)
 	return Response(serializer.data)
 
-@api_view(['POST'])
-@csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
-def createformation(request):
-	serializer_class = crudformation
-	queryset = formation.objects.all()
-	donnee = serializer_class(data=request.data)
-	if donnee.is_valid():
-		donnee.save()
-	return Response(donnee.data)
-	
+# @api_view(['POST'])
+# @csrf_exempt
+# @permission_classes([IsAuthenticated,autorisation])	
+# def createformation(request):
+# 	serializer_class = crudformation
+# 	queryset = formation.objects.all()
+# 	donnee = serializer_class(data=request.data)
+# 	if donnee.is_valid():
+# 		donnee.save()
+# 	return Response(donnee.data)
+# class CreateAPIView(CreateAPIView):
+#     queryset = formation.objects.all()
+#     serializer_class = crudformation	
 	
 
 @api_view(['POST'])
@@ -207,6 +222,21 @@ def deleteformation(request, pk):
 # FIN CRUD OPERATION FOR FORMATION
 
 # CRUD OPERATION DOCUMENTS
+
+class CreateDocument(CreateAPIView):
+    serializer_class = cruddocuments
+    queryset = Document.objects.all()
+    permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
 @api_view(['GET'])
 @csrf_exempt
 @permission_classes([IsAuthenticated])
@@ -228,15 +258,15 @@ def detaildocument(request, pk):
 	return Response(serializer.data)
 
 
-@api_view(['POST'])
-@csrf_exempt
-@permission_classes([IsAuthenticated])	
-def createdocument(request):
-	serializer_class = cruddocuments
-	donnee = serializer_class(data=request.data)
-	if donnee.is_valid():
-		donnee.save()
-	return Response(donnee.data)
+# @api_view(['POST'])
+# @csrf_exempt
+# @permission_classes([IsAuthenticated])	
+# def createdocument(request):
+# 	serializer_class = cruddocuments
+# 	donnee = serializer_class(data=request.data)
+# 	if donnee.is_valid():
+# 		donnee.save()
+# 	return Response(donnee.data)
 
 @api_view(['POST'])
 @csrf_exempt
