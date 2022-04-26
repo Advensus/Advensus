@@ -142,7 +142,6 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-
 @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
