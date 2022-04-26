@@ -153,6 +153,14 @@ def viewalluser(request):
 	donnee = User.objects.all()
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
+@api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
+def detailuser(request, pk):
+	serializer_class = cruduser
+	donnee = User.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
 # FIN CRUD GET ALL USERS
 
 # CRUD OPERATION FORMATION

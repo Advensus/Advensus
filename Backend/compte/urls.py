@@ -21,16 +21,14 @@ urlpatterns = [
    #LOGIN URLS
 
     path('Login/',login.as_view()),
+    path('DetailUser/<str:pk>/', views.detailuser),
 
    #VIEW ALL USERS URLS
     path('ViewAllUser/', views.viewalluser), 
 
    #CRUD FORMATION URLS
     path('CreateFormation/', views.CreateFormation.as_view(), name="incomes"),
-    # path('GetFormation/', views.ListAPIView.as_view(), name="incomes"),
-    # path('UpdateAndRemove/<int:id>', views.DetailAPIView.as_view(), name="income"),
-    # path('UpdateFormation/<int:id>', views.DetailAPIView.as_view(), name="income"),
-    # path('RemoveFormation/<int:id>', views.DetailAPIView.as_view(), name="income"),
+  
     path('GetAllFormation/', views.viewallformation),
     path('DetailFormation/<str:pk>/', views.detailformation),
     path('UpdateFormation/<str:pk>/', views.updateformation),
