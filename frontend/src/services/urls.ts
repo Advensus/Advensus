@@ -16,4 +16,5 @@ export const userUls = {
     NEW_TRAINEE: `${prefixer}auth/register/stagiaire/`,
     NEW_SUPER_RP: `${prefixer}auth/register/Srp/`,
     NEW_BASIC_RP: `${prefixer}auth/register/Rp/`,
+    GET_USER_BY_ID: (id: string) => `${prefixer}auth/DetailUser/${id}`,
 };

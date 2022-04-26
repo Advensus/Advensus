@@ -20,7 +20,7 @@ urlpatterns = [
         
    #LOGIN URLS
 
-    path('Login/',login.as_view()),
+    path('login/',login.as_view()),
     path('DetailUser/<str:pk>/', views.detailuser),
 
    #VIEW ALL USERS URLS
@@ -43,7 +43,7 @@ urlpatterns = [
     path('DeleteDocument/<str:pk>/', views.deletedocument),
 
    #LOGOUT URL
-    path('Logout/',LogoutUser.as_view()),
+    # path('Logout/',LogoutUser.as_view()),
  
 ]
 
