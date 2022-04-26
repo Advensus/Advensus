@@ -60,6 +60,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
+    const [contentId, setContentId] = useState<string>("");
 
     useEffect(() => {
         getAllUser();
@@ -71,7 +72,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     }, [location.pathname]);
 
-    const toggleFullInfosTab = () => {
+    const toggleFullInfosTab = (id: string) => {
+        // console.log({ id });
+        setContentId(id);
         var hint = document.getElementById(
             "display_tab_ii"
         ) as HTMLInputElement;
@@ -182,7 +185,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             <>
                                 <div
                                     className={
-                                        pathLabel === PATH_LABEL_RESOURCES
+                                        pathLabel === PATH_LABEL_RESOURCES ||
+                                        PATH_LABEL_SERVICES
                                             ? "tab_header_contentii"
                                             : "tab_header_content"
                                     }
@@ -231,7 +235,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 {trainers.length && pathLabel === "Resources"
                                     ? trainers.map((_) => (
                                           <UsersDisplayComponent
-                                              toggleTab={toggleFullInfosTab}
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
                                               detailsInfos={_}
                                               key={_.id}
                                           />
@@ -240,7 +246,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 {trainees.length && pathLabel === "Trainees"
                                     ? trainees.map((_) => (
                                           <TraineeDisplayComponent
-                                              toggleTab={toggleFullInfosTab}
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
                                               detailsInfosTrainee={_}
                                               key={_.id}
                                           />
@@ -347,7 +355,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                 </div>
             </div>
             <div id="display_tab_ii">
-                <FullInformationsTabComponent />
+                <FullInformationsTabComponent contentId={contentId} />
             </div>
         </div>
     );

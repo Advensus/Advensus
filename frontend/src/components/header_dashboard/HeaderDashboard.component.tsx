@@ -37,10 +37,6 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
         (
             document.getElementById("sidenav_panel") as HTMLInputElement
         ).style.width = "170px";
-        console.log(
-            "the test:",
-            (document.getElementById("section") as HTMLInputElement).offsetWidth
-        );
     };
     const closeNav = () => {
         (

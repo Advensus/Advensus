@@ -1,7 +1,3 @@
-// import fetch from "isomorphic-fetch";
-//require("es6-promise").polyfill();
-
-import { stringify } from "querystring";
 import { LoginDtoOut } from "../lib";
 
 // require('isomorphic-fetch');

@@ -19,9 +19,6 @@ export interface IRoute {
 }
 
 export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
-    useEffect(() => {
-        console.log(menuRoutes);
-    }, []);
     const menuRoutes = useUserRouteHooks();
 
     // Handle media query

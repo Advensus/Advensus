@@ -1,14 +1,19 @@
 import { Label, Pivot, PivotItem, Text } from "@fluentui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserDetailsComponent } from "../user-details/user_details.component";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
+    contentId: string;
 }
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = () => {
+> = ({ contentId }) => {
+    useEffect(() => {
+        console.log({ contentId });
+    }, [contentId]);
+
     return (
         <div className="full_infos_tab_container">
             <div className="full_infos_tab_header">
@@ -29,8 +34,8 @@ export const FullInformationsTabComponent: React.FC<
                         {/* <Label>
                         </Label> */}
                     </PivotItem>
-                    <PivotItem headerText="Others">
-                        <Label>Others</Label>
+                    <PivotItem headerText="Services">
+                        <Label>Services</Label>
                     </PivotItem>
                     <PivotItem headerText="Bas">
                         <Label>Pivot #3</Label>
