@@ -185,8 +185,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             <>
                                 <div
                                     className={
-                                        pathLabel === PATH_LABEL_RESOURCES ||
-                                        PATH_LABEL_SERVICES
+                                        pathLabel === PATH_LABEL_RESOURCES
                                             ? "tab_header_contentii"
                                             : "tab_header_content"
                                     }

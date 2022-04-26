@@ -37,8 +37,8 @@ export const FullInformationsTabComponent: React.FC<
                     <PivotItem headerText="Services">
                         <Label>Services</Label>
                     </PivotItem>
-                    <PivotItem headerText="Bas">
-                        <Label>Pivot #3</Label>
+                    <PivotItem headerText="Réservations">
+                        <Label>Réservation</Label>
                     </PivotItem>
                 </Pivot>
             </div>
