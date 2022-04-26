@@ -10,6 +10,7 @@ from .user import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from rest_framework.permissions import IsAuthenticated
 import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
@@ -141,8 +142,12 @@ class login(generics.GenericAPIView):
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
+<<<<<<< HEAD
 @csrf_exempt
 @permission_classes([IsAuthenticated,autorisation])	
+=======
+# @permission_classes([IsAuthenticated])	
+>>>>>>> 808e14f8d6384b681dc37933578c339cc5f373b8
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()

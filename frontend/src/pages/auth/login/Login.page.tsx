@@ -64,7 +64,7 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
         switch (user_type) {
             case SUPER_USER:
                 // Display dashboard
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${id}`, { state: { id } });
                 break;
             case ADMIN_OF:
                 navigate(`/dashboard/${id}`);

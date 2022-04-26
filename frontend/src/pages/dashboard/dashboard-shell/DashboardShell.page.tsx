@@ -1,13 +1,10 @@
-import { DefaultButton } from "@fluentui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import {
-    CurrentUserDetailsComponent,
     HeaderDashboardComponent,
     SideNavComponent,
 } from "../../../components";
 import { useUserRouteHooks } from "../../../hooks";
-// import { RouteProps } from "react-router";
 
 export interface IDashboardShellPageProps {
     default_props?: boolean;
@@ -15,10 +12,6 @@ export interface IDashboardShellPageProps {
 
 export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
     const accessRoutes = useUserRouteHooks();
-
-    useEffect(() => {
-        console.log({ accessRoutes });
-    }, []);
 
     return (
         <main className="dashboard_shell_container">

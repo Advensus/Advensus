@@ -10,7 +10,7 @@
     min-width: 300px;
     max-width: 600px;
     width: 550px;
-    padding: 20px 10px 10px 10px;
+    padding: 20px 10px 0 10px;
     height: 100%;
     transform: scale(0);
     transition: 1s ease opacity, 0.6s ease transform, 300ms ease-in-out width;
@@ -47,29 +47,49 @@
 
 .tab_header_content {
     padding: 12px 0;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: space-between;
     display: grid;
     grid-template-rows: 1fr 1fr;
     gap: 12px;
 }
+.tab_header_contentii {
+    padding-bottom: 10px;
+}
 .filter_box {
-    // display: flex;
-    // flex-direction: row;
-    // justify-content: space-between;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
 .tab_content {
-    // background-color: aqua;
     overflow: auto;
-    padding: 10px 10px 0 0;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+.tab_content_scroll {
+    overflow: auto;
+    padding-right: 10px;
+}
+.tab_content_trainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px 0 40px 0;
+}
+.tab_content_rps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    margin-bottom: 30px;
+}
+.tab_content_trainee {
+    overflow: auto;
+}
+.tab_sections_header {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 #display_tab_ii {
@@ -78,7 +98,6 @@
     transition: 1s ease opacity, 0.6s ease transform;
     padding: 10px;
     color: #000;
-    // max-width: 40px;
 }
 
 // #hint {

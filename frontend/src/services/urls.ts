@@ -3,11 +3,7 @@
 export const prefixer = "http://localhost:8000/";
 
 export const authUrls = {
-<<<<<<< HEAD
-    LOGIN_USER: `${prefixer}login/admin_org`,
-=======
     LOGIN_USER: `${prefixer}auth/login/`,
->>>>>>> Frontend
     REGISTER_USER: `${prefixer}auth/register`,
     // LOGIN_BY_OTP: (agency_id: string) => `${prefixer}auth/${agency_id}/login`,
     // REQUEST_OTP: (agency_id: string) => `${prefixer}auth/${agency_id}/send/otp`,
@@ -15,5 +11,9 @@ export const authUrls = {
 };
 
 export const userUls = {
-    GET_ALL_USERS: `${prefixer}`,
+    GET_ALL_USERS: `${prefixer}auth/ViewAllUser/`,
+    NEW_TRAINER: `${prefixer}auth/register/formateur/`,
+    NEW_TRAINEE: `${prefixer}auth/register/stagiaire/`,
+    NEW_SUPER_RP: `${prefixer}auth/register/Srp/`,
+    NEW_BASIC_RP: `${prefixer}auth/register/Rp/`,
 };
