@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -169,17 +171,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # ],
 # }
 
-
+# s122@22@z
 REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'erro',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # )
+   
 }
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
+}
 SWAGGER_SETTINGS ={
     'SECURITY_DEFINITIONS':{
         'Bearer':{

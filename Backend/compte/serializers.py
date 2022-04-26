@@ -7,9 +7,8 @@ from rest_framework import serializers
 from .user import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-
-
-
+from .models import Document
+from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
 
@@ -192,6 +191,27 @@ class cruduser(serializers.ModelSerializer):
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token",
-                "organisme"
+                 "user_type","competence","trainee_level","session_token","organisme",
                  ]
+
+class cruddocuments(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ['doc_content','doc_type']
+
+class LogoutUse(serializers.Serializer):
+    refresh = serializers.CharField()
+    default_error_message = {
+        'Mauvais token': ('Token expiré ou invalid')
+    }
+    
+    def validate(self,attrs):
+        self.token=attrs['refresh']
+
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            self.fail('Mauvais token')

@@ -1,8 +1,10 @@
+from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation
+from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from .user import User
 from .utils import Util
@@ -16,6 +18,13 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .cours import formation
+from .models import Document
+from django.views.decorators.csrf import csrf_exempt
+from .permissions import autorisation
+
+
+from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -137,16 +146,40 @@ class login(generics.GenericAPIView):
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])	
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
-
+@api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
+def detailuser(request, pk):
+	serializer_class = cruduser
+	donnee = User.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
+# FIN CRUD GET ALL USERS
 
 # CRUD OPERATION FORMATION
+class CreateFormation(CreateAPIView):
+    serializer_class = crudformation
+    queryset = formation.objects.all()
+    permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
 @api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
 def viewallformation(request):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
@@ -154,24 +187,32 @@ def viewallformation(request):
 	return Response(serializer.data)
 
 @api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
 def detailformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
 	serializer = serializer_class(donnee, many=False)
 	return Response(serializer.data)
 
-@api_view(['POST'])
-def createformation(request):
-	serializer_class = crudformation
-	queryset = formation.objects.all()
-	donnee = serializer_class(data=request.data)
-	if donnee.is_valid():
-		donnee.save()
-	return Response(donnee.data)
-	
+# @api_view(['POST'])
+# @csrf_exempt
+# @permission_classes([IsAuthenticated,autorisation])	
+# def createformation(request):
+# 	serializer_class = crudformation
+# 	queryset = formation.objects.all()
+# 	donnee = serializer_class(data=request.data)
+# 	if donnee.is_valid():
+# 		donnee.save()
+# 	return Response(donnee.data)
+# class CreateAPIView(CreateAPIView):
+#     queryset = formation.objects.all()
+#     serializer_class = crudformation	
 	
 
 @api_view(['POST'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -180,33 +221,88 @@ def updateformation(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
-
-
 @api_view(['DELETE'])
+@csrf_exempt
+@permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
+# FIN CRUD OPERATION FOR FORMATION
+
+# CRUD OPERATION DOCUMENTS
+
+class CreateDocument(CreateAPIView):
+    serializer_class = cruddocuments
+    queryset = Document.objects.all()
+    permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+@api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated])
+def viewalldocument(request):
+	serializer_class = cruddocuments
+	donnee = Document.objects.all()
+
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
 
 
-# class CreateReadFormation(ListCreateAPIView):
-# 	serializer_class =  crudformation
-# 	queryset = formation.objects.all()
-# 	permissions = (permissions.IsAuthenticated)
+@api_view(['GET'])
+@csrf_exempt
+@permission_classes([IsAuthenticated])	
+def detaildocument(request, pk):
+	serializer_class = cruddocuments
+	donnee = Document.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
 
-# 	def perform_create(self, serializer,request):
-# 		return serializer.save(request)
 
-# 	def get_queryset(self):
-# 		return self.queryset.filter()
+# @api_view(['POST'])
+# @csrf_exempt
+# @permission_classes([IsAuthenticated])	
+# def createdocument(request):
+# 	serializer_class = cruddocuments
+# 	donnee = serializer_class(data=request.data)
+# 	if donnee.is_valid():
+# 		donnee.save()
+# 	return Response(donnee.data)
 
-# class UpdateRemoveFormation(RetrieveUpdateDestroyAPIView):
-# 	serializer_class =  crudformation
-# 	queryset = formation.objects.all()
-# 	permissions = (permissions.IsAuthenticated)
-# 	lookup_field = "id"
+@api_view(['POST'])
+@csrf_exempt
+@permission_classes([IsAuthenticated])	
+def updatedocument(request, pk):
+	serializer_class = cruddocuments
+	donnee = Document.objects.get(id=pk)
+	serializer = serializer_class(instance=donnee, data=request.data)
+	if serializer.is_valid():
+		serializer.save()
 
-# 	def perform_create(self, serializer,request):
-# 		return serializer.save(request)
+@api_view(['DELETE'])
+@csrf_exempt
+@permission_classes([IsAuthenticated])	
+def deletedocument(request, pk):
+	donnee = Document.objects.get(id=pk)
+	donnee.delete()
 
-# 	def get_queryset(self):
-# 		return self.queryset.filter()
+# FIN CRUD OPERATION FOR DOCUMENTS
+
+
+class LogoutUser(generics.GenericAPIView):
+	serializer_class = LogoutUse
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return Response(status=status.HTTP_204_NO_CONTENT)
