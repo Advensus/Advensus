@@ -27,12 +27,13 @@ urlpatterns = [
   #CRUD FORMATION
   path('GetAllFormation/', views.viewallformation),
 	path('DetailFormation/<str:pk>/', views.detailformation),
-	path('CreateFormation/', views.createformation),
+	path('CreateFormation/', views.createformation,name='CreateFormation'),
+  
 
 	path('UpdateFormation/<str:pk>/', views.updateformation),
 	path('DeleteFormation/<str:pk>/', views.deleteformation),
-#   path('CreateAndViewFormation/', CreateReadFormation.as_view()),
-#   path('UpdateAndRemoveFormation/<int:id>',UpdateRemoveFormation.as_view()),
+  # path('CreateAndViewFormation/', CreateReadFormation.as_view()),
+  # path('UpdateAndRemoveFormation/<int:id>',UpdateRemoveFormation.as_view()),
 ]
 
 
