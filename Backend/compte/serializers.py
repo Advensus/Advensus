@@ -16,7 +16,7 @@ from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 # Sign Up Users
 class AddStagiaire(serializers.ModelSerializer):
-
+    
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
     adress = serializers.CharField(max_length=60)
@@ -181,18 +181,25 @@ class login(serializers.ModelSerializer):
 # CRUD Operations
 
 class crudformation(serializers.ModelSerializer):
-
+    test_oral = serializers.BooleanField()
+    duration = serializers.CharField()
+    id = serializers.UUIDField(read_only=True)
+    
     class Meta:
         model = formation
-        fields = ['edof','intitule','duration','start_session','end_session','test_oral']
+        fields = ['edof','intitule','duration','start_session','end_session','test_oral','id']
+
+        # def validate(self,attrs):
+        #     test_oral = attrs.get('test_oral',)
+        #     duration = attrs.get('duration')
+
+        #     if duration < 4:
+        #         test_oral = True
+        #     else
+
 
 class cruduser(serializers.ModelSerializer):
-    # username = serializers.CharField(max_length=60)
-    # email = serializers.CharField(max_length=60)
-    # adress = serializers.CharField(max_length=60)
-    # phone_number = serializers.CharField(max_length=60)
-    # first_name= serializers.CharField(max_length=60)
-    # id = serializers.UUIDField(read_only=True)
+    
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
@@ -200,35 +207,16 @@ class cruduser(serializers.ModelSerializer):
                  "user_type","competence","trainee_level","session_token","organisme",
                  ]
 
-        # infos = {
-        # 'user':     {
-        #     'id':'id',
-        #     'email':'email',
-        #     "username":'username',
-        #     'first_name':'first_name',
-        #     'is_active':'is_active',
-        #     'avatar':'avatar',
-        #     'phone_number':'phone_number',
-        #     'adress':'adress',
-        #     'horaire':'horaire',
-        #     'signature_former':'signature_former',
-        #     'cv':'cv',
-        #     'user_type':'user_type',
-        #     'competence':'competence',
-        #     'trainee_level':'trainee_level',
-        #     'session_token':'session_token',
-        #     'organisme':'organisme'
-        #     }
-        # }
-        # print(infos['user'])
+        
             
         
 
 
 class cruddocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type']
+        fields = ['doc_content','doc_type','id']
 
 class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()

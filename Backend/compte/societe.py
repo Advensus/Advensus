@@ -1,10 +1,10 @@
 from django.db import models
-
+import uuid
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
 
 class Organisme(models.Model):
-   
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company_name = models.CharField(max_length=100,unique=True)
     company_adress = models.CharField(max_length=50,unique=True)
     phone_number = models.CharField(max_length=50,unique=True)
