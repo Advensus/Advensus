@@ -1,18 +1,24 @@
 import { Text } from "@fluentui/react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { IUser } from "../../../../lib";
 
 export interface ITraineeDisplayProps {
     default_props?: boolean;
     detailsInfosTrainee: IUser;
-    toggleTab?: () => void;
+    toggleTab: (id: string) => void;
 }
 
 export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = ({
     detailsInfosTrainee,
+    toggleTab,
 }) => {
     return (
-        <div className="trainee_diplay_container">
+        <Link
+            to="#"
+            onClick={() => toggleTab(detailsInfosTrainee.id)}
+            className="trainee_diplay_container"
+        >
             <div className="text_displaying">
                 <Text variant="large" style={{ fontWeight: "bolder" }}>
                     {detailsInfosTrainee.first_name}{" "}
@@ -28,6 +34,6 @@ export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = ({
                 <Text variant="tiny">Total</Text>
                 <Text variant="tiny">Réservations</Text>
             </div>
-        </div>
+        </Link>
     );
 };

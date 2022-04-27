@@ -27,8 +27,6 @@ export function useUserRouteHooks() {
     const [userRoutes, setUserRoutes] = useState<IRoute[]>([]);
     const { user_type } = useAuthStore();
 
-    console.log({ user_type });
-
     const menuRoutes: IRoute[] = [
         {
             path: `account`,
@@ -176,7 +174,6 @@ export function useUserRouteHooks() {
             setUserRoutes([]);
             return;
         }
-        console.log({ user_type });
         const filteredRoutes = menuRoutes.filter((route) => {
             return route.roles.includes(user_type);
         });
