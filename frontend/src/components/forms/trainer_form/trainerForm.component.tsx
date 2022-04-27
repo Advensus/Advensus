@@ -1,10 +1,11 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     BASIC_RP_FORM,
     NewUserDto,
     NewUserDtoIn,
+    SERVICES_FORM,
     SUPER_RP_FORM,
     TEACHEAR_FORM,
 } from "../../../lib";
@@ -14,18 +15,22 @@ export interface ITrainerFormProps {
     default_props?: boolean;
     cancel?: () => void;
     onCreate: (data: NewUserDtoIn) => void;
-    resourcesType?: string;
+    formToDisplay?: string;
 }
 
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     cancel,
     onCreate,
-    resourcesType,
+    formToDisplay,
 }) => {
+    useEffect(() => {
+        console.log({ formToDisplay });
+    }, [formToDisplay]);
+
     const onSubmit = (value: NewUserDto) => {
         console.log({ value });
         console.log({ BASIC_RP_FORM });
-        if (resourcesType === TEACHEAR_FORM) {
+        if (formToDisplay === TEACHEAR_FORM) {
             UserService.new_trainer(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -39,7 +44,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     console.log("error while adding new trainer:", err);
                 });
         }
-        if (resourcesType === SUPER_RP_FORM) {
+        if (formToDisplay === SUPER_RP_FORM) {
             UserService.new_super_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -52,7 +57,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     console.log("error while adding new super rp:", err);
                 });
         }
-        if (resourcesType === BASIC_RP_FORM) {
+        if (formToDisplay === BASIC_RP_FORM) {
             UserService.new_basic_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -89,52 +94,95 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <div className="own_trainer_sect">
                 <div className="own_trainer_pict">Img part</div>
                 <div className="own_trainer_fields">
-                    <div className="own_trainer_align_fields">
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Civilité"
-                            name="text"
-                        />
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Titre"
-                            name="text"
-                        />
-                    </div>
-                    <TextField
-                        type="text"
-                        value={values.first_name}
-                        onChange={handleChange}
-                        placeholder="Fist name"
-                        name="first_name"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.username}
-                        onChange={handleChange}
-                        placeholder="last name"
-                        name="username"
-                    />
-                    <TextField
-                        type="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        placeholder="email"
-                        name="email"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.phone_number}
-                        onChange={handleChange}
-                        placeholder="Phonenumber"
-                        name="phone_number"
-                    />
+                    {formToDisplay === TEACHEAR_FORM && (
+                        <>
+                            <div className="own_trainer_align_fields">
+                                <TextField
+                                    type="text"
+                                    // label="text"
+                                    // value={values.text}
+                                    // onChange={handleChange}
+                                    placeholder="Civilité"
+                                    name="text"
+                                />
+                                <TextField
+                                    type="text"
+                                    // label="text"
+                                    // value={values.text}
+                                    // onChange={handleChange}
+                                    placeholder="Titre"
+                                    name="text"
+                                />
+                            </div>
+                            <TextField
+                                type="text"
+                                value={values.first_name}
+                                onChange={handleChange}
+                                placeholder="Fist name"
+                                name="first_name"
+                            />
+                            <TextField
+                                type="text"
+                                value={values.username}
+                                onChange={handleChange}
+                                placeholder="last name"
+                                name="username"
+                            />
+                            <TextField
+                                type="email"
+                                value={values.email}
+                                onChange={handleChange}
+                                placeholder="email"
+                                name="email"
+                            />
+                            <TextField
+                                type="text"
+                                value={values.phone_number}
+                                onChange={handleChange}
+                                placeholder="Phonenumber"
+                                name="phone_number"
+                            />
+                        </>
+                    )}
+                    {/* {formToDisplay === SERVICES_FORM && (
+                        <>
+                            <TextField
+                                type="text"
+                                // value={values.email}
+                                // onChange={handleChange}
+                                placeholder="EDOF"
+                                name="edof"
+                            />
+                            <TextField
+                                type="text"
+                                // value={values.phone_number}
+                                // onChange={handleChange}
+                                placeholder="Intitulé"
+                                name="intitule"
+                            />
+                            <TextField
+                                type="text"
+                                // value={values.phone_number}
+                                // onChange={handleChange}
+                                placeholder="Durée"
+                                name="duration"
+                            />
+                            <TextField
+                                type="text"
+                                // value={values.phone_number}
+                                // onChange={handleChange}
+                                placeholder="Début session"
+                                name="start_session"
+                            />
+                            <TextField
+                                type="text"
+                                // value={values.phone_number}
+                                // onChange={handleChange}
+                                placeholder="Fin session"
+                                name="end_session"
+                            />
+                        </>
+                    )} */}
                 </div>
             </div>
             <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
@@ -151,7 +199,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <Text className="trainer_txt_divide_mov">Other</Text>{" "}
             <hr className="trainer_hr_solid" />
             <div className="oth_trainer">
-                {resourcesType === TEACHEAR_FORM && (
+                {formToDisplay === TEACHEAR_FORM && (
                     <>
                         <TextField
                             type="text"

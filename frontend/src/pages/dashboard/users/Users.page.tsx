@@ -12,6 +12,7 @@ import {
     TraineeFormComponent,
     TrainerFormComponent,
     TrainingComponent,
+    TrainingFormComponent,
     UsersDisplayComponent,
 } from "../../../components";
 import { useId } from "@fluentui/react-hooks";
@@ -23,14 +24,17 @@ import {
     IUser,
     NewUserDto,
     NewUserDtoIn,
+    PATH_LABEL_CUSTOMER,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
     RP,
+    SERVICES_FORM,
     SUPER_RP,
     SUPER_RP_FORM,
     TEACHEAR,
     TEACHEAR_FORM,
     TRAINEE,
+    TRAINEE_FORM,
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
 // import { RouteProps } from "react-router";
@@ -51,7 +55,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
 
     const tooltipId = useId("tooltip");
     const [showForm, setShowForm] = useState<Boolean>(false);
-    const [resourcesType, setResourcesType] = useState<string>("");
+    const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
@@ -101,8 +105,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     };
 
-    const showAddForm = (resType: string) => {
-        setResourcesType(resType);
+    const showAddForm = (displayForm: string) => {
+        console.log("the form to display:", displayForm);
+        setFormToDisplay(displayForm);
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
@@ -159,24 +164,45 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     <div className="tab_header">
                         <div className="tab_title">
                             {!showForm ? (
+                                // LIST TITLE
                                 pathLabel === PATH_LABEL_RESOURCES ? (
                                     <Text>Ressources</Text>
-                                ) : (
+                                ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                     <Text>Stagiaires</Text>
+                                ) : (
+                                    <Text>Formations</Text>
                                 )
-                            ) : pathLabel === PATH_LABEL_RESOURCES ? (
+                            ) : // FORM TITLE
+                            pathLabel === PATH_LABEL_RESOURCES ? (
                                 <Text> Ajouter Ressource</Text>
-                            ) : (
+                            ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                 <Text> Ajouter Stagiaire</Text>
+                            ) : (
+                                <Text> Ajouter Formation</Text>
                             )}
                             <TooltipHost
-                                content="Ajouter Formateur"
+                                content={
+                                    pathLabel === PATH_LABEL_RESOURCES
+                                        ? "Ajouter Formateur"
+                                        : pathLabel === PATH_LABEL_CUSTOMER
+                                        ? "Ajouter Stagiaire"
+                                        : "Ajouter Formation"
+                                }
                                 id={tooltipId}
                             >
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() => showAddForm(TEACHEAR_FORM)}
+                                    onClick={() =>
+                                        showAddForm(
+                                            pathLabel === PATH_LABEL_RESOURCES
+                                                ? TEACHEAR_FORM
+                                                : pathLabel ===
+                                                  PATH_LABEL_CUSTOMER
+                                                ? TRAINEE_FORM
+                                                : SERVICES_FORM
+                                        )
+                                    }
                                 />
                             </TooltipHost>
                         </div>
@@ -334,23 +360,22 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 </div>
                             )}
                         </div>
-                    ) : pathLabel === "Resources" ? (
+                    ) : pathLabel === PATH_LABEL_RESOURCES ? (
                         <TrainerFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
-                            resourcesType={resourcesType}
+                            formToDisplay={formToDisplay}
                         />
-                    ) : (
+                    ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                         <TraineeFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
                         />
+                    ) : (
+                        <TrainingFormComponent
+                            cancel={() => setShowForm(false)}
+                        />
                     )}
-                    {/* {/* <div>
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                </div> */}
                 </div>
             </div>
             <div id="display_tab_ii">

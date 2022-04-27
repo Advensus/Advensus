@@ -17,3 +17,4 @@ export * from "./forms/trainer_form/trainerForm.component";
 export * from "./forms/trainee_form/traineeForm.component";
 export * from "./forms/rp_form/rpForm.component";
 export * from "./training/training.component";
+export * from "./forms/training_form/trainingForm.component";
