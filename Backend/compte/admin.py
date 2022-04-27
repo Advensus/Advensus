@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import souscrir,Presence,reservation,Document,Classes,Opinion
 from .cours import formation
 from .societe import Organisme
-from .user import User
+from .model import User
 
 class Affichage(admin.ModelAdmin):
     list_display = ('username','first_name','email','phone_number','adress','date_joined','is_active','is_superuser','user_type','is_staff','updated_at','email_confirmed','organisme','is_autorise')

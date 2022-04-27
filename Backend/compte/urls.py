@@ -20,14 +20,14 @@ urlpatterns = [
         
    #LOGIN URLS
 
-    path('Login/',login.as_view()),
+    path('login/',login.as_view()),
     path('DetailUser/<str:pk>/', views.detailuser),
 
    #VIEW ALL USERS URLS
     path('ViewAllUser/', views.viewalluser), 
 
    #CRUD FORMATION URLS
-    path('CreateFormation/', views.CreateFormation.as_view(), name="incomes"),
+    path('CreateFormation/', views.CreateFormation.as_view()),
   
     path('GetAllFormation/', views.viewallformation),
     path('DetailFormation/<str:pk>/', views.detailformation),
