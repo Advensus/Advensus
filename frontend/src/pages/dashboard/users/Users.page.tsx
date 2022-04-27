@@ -37,6 +37,7 @@ import {
     TRAINEE_FORM,
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
+import TrainingService from "../../../services/training.service";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -63,16 +64,23 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [rps, setRps] = useState<IUser[]>([]);
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
+    const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
 
     useEffect(() => {
-        getAllUser();
-
         if (location.state) {
             const thePath = location.state as IPath;
             setPathLabel(thePath.label);
             console.log("the nav:", thePath.label);
+            if (
+                thePath.label === PATH_LABEL_RESOURCES ||
+                thePath.label === PATH_LABEL_CUSTOMER
+            ) {
+                getAllUser();
+            } else if (thePath.label === PATH_LABEL_SERVICES) {
+                getAllTraining();
+            }
         }
     }, [location.pathname]);
 
@@ -146,6 +154,24 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
+            });
+    };
+
+    const getAllTraining = async () => {
+        await TrainingService.get_all_trainings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((trainingsResp: ITraining[]) => {
+                console.log("the all trainings", trainingsResp);
+                setTrainings(trainingsResp);
+            })
+            .catch((err) => {
+                console.log("error while gettting all trainings:", err);
             });
     };
 
@@ -279,19 +305,15 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                           />
                                       ))
                                     : null}
-                                {pathLabel === PATH_LABEL_SERVICES ? (
-                                    <>
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                    </>
-                                ) : null}
+                                {trainings.length &&
+                                pathLabel === PATH_LABEL_SERVICES
+                                    ? trainings.map((_) => (
+                                          <TrainingComponent
+                                              trainingDetails={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
                             </div>
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>

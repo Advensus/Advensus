@@ -21,4 +21,5 @@ export const userUls = {
 
 export const trainingUrls = {
     NEW_TRAINING: `${prefixer}auth/CreateFormation/`,
+    GET_ALL_TRAININGS: `${prefixer}auth/GetAllFormation`,
 };
