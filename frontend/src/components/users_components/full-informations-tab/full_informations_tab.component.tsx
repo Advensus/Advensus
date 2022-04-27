@@ -1,28 +1,50 @@
 import { Label, Pivot, PivotItem, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../lib";
+import { TrainingDetailsComponent } from "../..";
+import {
+    ITraining,
+    IUser,
+    PATH_LABEL_CUSTOMER,
+    PATH_LABEL_RESOURCES,
+    PATH_LABEL_SERVICES,
+} from "../../../lib";
+import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
 import { UserDetailsComponent } from "../user-details/user_details.component";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
     contentId: string;
+    currentPath: string;
 }
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId }) => {
+> = ({ contentId, currentPath }) => {
     const [content, setContent] = useState<IUser>();
+    const [training, setTraining] = useState<ITraining>();
 
     useEffect(() => {
-        console.log({ contentId });
+        console.log("Content received:", contentId, currentPath);
         if (contentId) {
+            // if (currentPath === PATH_LABEL_SERVICES) {
+            //     const emptyContent = {} as IUser;
+            //     setContent(emptyContent);
+            // } else {
+            //     const emptyTraining = {} as ITraining;
+            //     setTraining(emptyTraining);
+            // }
             getContentById(contentId);
         }
     }, [contentId]);
 
     const getContentById = (id: string) => {
-        UserService.get_user_by_id(id)
+        const serviceToCall =
+            currentPath === PATH_LABEL_SERVICES
+                ? TrainingService.get_training_by_id(id)
+                : UserService.get_user_by_id(id);
+
+        serviceToCall
             .then((response) => {
                 if (response.status !== 200) {
                     return;
@@ -30,12 +52,19 @@ export const FullInformationsTabComponent: React.FC<
 
                 return response.json();
             })
-            .then((resp: IUser) => {
-                console.log({ resp });
-                setContent(resp);
-            })
+            .then(
+                currentPath === PATH_LABEL_SERVICES
+                    ? (resp: ITraining) => {
+                          console.log({ resp });
+                          setTraining(resp);
+                      }
+                    : (resp: IUser) => {
+                          console.log({ resp });
+                          setContent(resp);
+                      }
+            )
             .catch((err) => {
-                console.log("error while getting user by his id:", err);
+                console.log("error while getting content by his id:", err);
             });
     };
 
@@ -55,16 +84,26 @@ export const FullInformationsTabComponent: React.FC<
                         headerText="Details"
                         className="label_details_tab"
                     >
-                        <UserDetailsComponent contentToDetail={content} />
+                        {currentPath === PATH_LABEL_SERVICES ? (
+                            <TrainingDetailsComponent
+                                detailTraining={training}
+                            />
+                        ) : (
+                            <UserDetailsComponent contentToDetail={content} />
+                        )}
                         {/* <Label>
                         </Label> */}
                     </PivotItem>
-                    <PivotItem headerText="Services">
-                        <Label>Services</Label>
-                    </PivotItem>
-                    <PivotItem headerText="Réservations">
-                        <Label>Réservation</Label>
-                    </PivotItem>
+                    {currentPath === PATH_LABEL_RESOURCES && (
+                        <PivotItem headerText="Services">
+                            <Label>Services</Label>
+                        </PivotItem>
+                    )}
+                    {currentPath === PATH_LABEL_CUSTOMER && (
+                        <PivotItem headerText="Réservations">
+                            <Label>Réservation</Label>
+                        </PivotItem>
+                    )}
                 </Pivot>
             </div>
         </div>

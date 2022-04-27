@@ -1,17 +1,15 @@
 import { Text } from "@fluentui/react";
 import React, { useState } from "react";
-import { UsersDisplayComponent, UserInfosComponent } from "../../";
+import { AttributeDisplayComponent } from "../../";
 import { IUser } from "../../../lib";
 
 export interface IUserDetailsProps {
     default_props?: boolean;
     contentToDetail?: IUser;
-    firstname?: string;
 }
 
 export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
     contentToDetail,
-    firstname,
 }) => {
     return (
         <div className="user_details_container">
@@ -23,15 +21,15 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                 </Text>
             </div>
             <hr />
-            <UserInfosComponent
+            <AttributeDisplayComponent
                 keyWord="Ressource ID"
                 valueWord={contentToDetail?.id}
             />
-            <UserInfosComponent
+            <AttributeDisplayComponent
                 keyWord="Firstname"
                 valueWord={contentToDetail?.first_name}
             />
-            <UserInfosComponent
+            <AttributeDisplayComponent
                 keyWord="Lastname"
                 valueWord={contentToDetail?.username}
             />

@@ -1,17 +1,24 @@
 import { Text } from "@fluentui/react";
 import React, { useState } from "react";
-import { ITraining } from "../../lib";
+import { Link } from "react-router-dom";
+import { ITraining } from "../../../lib";
 
-export interface ITrainingProps {
+export interface ITrainingCardProps {
     default_props?: boolean;
     trainingDetails: ITraining;
+    toggleTab: (id: string) => void;
 }
 
-export const TrainingComponent: React.FC<ITrainingProps> = ({
+export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
     trainingDetails,
+    toggleTab,
 }) => {
     return (
-        <div className="training_container">
+        <Link
+            to="#"
+            onClick={() => toggleTab(trainingDetails.id)}
+            className="training_container"
+        >
             <Text variant="large" style={{ fontWeight: "initial" }}>
                 {trainingDetails.intitule}
             </Text>
@@ -25,6 +32,6 @@ export const TrainingComponent: React.FC<ITrainingProps> = ({
                     {trainingDetails.duration}
                 </Text>
             </div>
-        </div>
+        </Link>
     );
 };

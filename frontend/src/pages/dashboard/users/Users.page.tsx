@@ -11,7 +11,7 @@ import {
     TraineeDisplayComponent,
     TraineeFormComponent,
     TrainerFormComponent,
-    TrainingComponent,
+    TrainingCardComponent,
     TrainingFormComponent,
     UsersDisplayComponent,
 } from "../../../components";
@@ -308,7 +308,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 {trainings.length &&
                                 pathLabel === PATH_LABEL_SERVICES
                                     ? trainings.map((_) => (
-                                          <TrainingComponent
+                                          <TrainingCardComponent
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
                                               trainingDetails={_}
                                               key={_.id}
                                           />
@@ -340,7 +343,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                     {srps.length && pathLabel === "Resources"
                                         ? srps.map((_) => (
                                               <UsersDisplayComponent
-                                                  toggleTab={toggleFullInfosTab}
+                                                  toggleTab={() =>
+                                                      toggleFullInfosTab(_.id)
+                                                  }
                                                   detailsInfos={_}
                                                   key={_.id}
                                               />
@@ -401,7 +406,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                 </div>
             </div>
             <div id="display_tab_ii">
-                <FullInformationsTabComponent contentId={contentId} />
+                <FullInformationsTabComponent
+                    contentId={contentId}
+                    currentPath={pathLabel}
+                />
             </div>
         </div>
     );

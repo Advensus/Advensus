@@ -1,15 +1,15 @@
-.user_details_container {
+.training_details_container {
     // background-color: red;
 }
 
-.user_details_header {
+.training_details_header {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.user_details_init {
+.training_details_init {
     background: #6e8aa7;
     height: 80px;
     width: 80px;
@@ -18,4 +18,10 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 5px;
+}
+
+.hr_dashed_training_details {
+    border-top: 0.1em dashed black;
+    border-bottom: 0;
+    margin-top: 5px;
 }
