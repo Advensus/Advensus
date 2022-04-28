@@ -1,17 +1,88 @@
 .full_infos_tab_container {
+    position: relative;
     height: 100%;
     display: grid;
     width: 100%;
     grid-template-rows: auto 1fr;
     // width: 500px;
+    overflow: hidden;
 }
 .full_infos_tab_header {
 }
 .full_infos_tab_body {
     background-color: #f4f3f3;
     margin-top: 5px;
+    overflow: auto;
 }
 
 .label_details_tab {
     padding: 20px 10px;
+    overflow: auto;
+}
+.full_infos_resources_own {
+    margin-top: 20px;
+    overflow: auto;
+}
+.full_infos_hr_solid {
+    border-bottom: 0;
+    margin-top: 2px;
+}
+
+// SMALL CARD RESOURCES
+
+.resources_own_small_card_container {
+    background: #fff;
+    height: 48px;
+    border: solid 1px grey;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid #000;
+    }
+}
+
+.resources_own_start {
+    display: flex;
+    margin-left: 8px;
+    align-items: center;
+}
+
+.res_cycle {
+    background: rgb(70, 50, 50);
+    height: 35px;
+    width: 35px;
+    border-radius: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+}
+.res_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tag_online {
+    background: green;
+    border-radius: 1em;
+    color: #fff;
+    padding: 0 4px;
+}
+
+.res_action {
+    background: gray;
+    height: 38px;
+    width: 25px;
+    margin-right: 4px;
+    &:hover {
+        background: #0373c7;
+        i {
+            color: #fff;
+        }
+    }
 }

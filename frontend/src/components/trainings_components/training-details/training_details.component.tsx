@@ -13,7 +13,6 @@ export const TrainingDetailsComponent: React.FC<ITrainingDetailsProps> = ({
     return (
         <div className="training_details_container">
             <div className="training_details_header">
-                {/* <UsersDisplayComponent /> */}
                 <div className="training_details_init">ANG</div>
                 <Text variant="large">{detailTraining?.intitule}</Text>
             </div>
