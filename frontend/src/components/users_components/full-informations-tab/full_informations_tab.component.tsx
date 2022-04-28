@@ -23,6 +23,7 @@ export const FullInformationsTabComponent: React.FC<
 > = ({ contentId, currentPath }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
+    const [currentTab, setCurrentTab] = useState<PivotItem>();
 
     useEffect(() => {
         console.log("Content received:", contentId, currentPath);
@@ -36,7 +37,8 @@ export const FullInformationsTabComponent: React.FC<
             }
             getContentById(contentId);
         }
-    }, [contentId]);
+        console.log("the tab current:", currentTab?.props.headerText);
+    }, [contentId, currentTab]);
 
     const getContentById = (id: string) => {
         const serviceToCall =
@@ -85,15 +87,26 @@ export const FullInformationsTabComponent: React.FC<
                 )}
                 <hr className="hr_dashed" />
             </div>
-            <div className="full_infos_tab_body">
+            <div
+                className={
+                    currentTab?.props.headerText === "Services"
+                        ? "full_infos_tab_body_services "
+                        : "full_infos_tab_body"
+                }
+            >
                 <Pivot
                     aria-label="Links of Large Tabs Pivot Example"
                     // linkFormat="tabs"
                     linkSize="large"
+                    onLinkClick={(item) => {
+                        console.log("current item:", item?.props.headerText);
+                        setCurrentTab(item);
+                    }}
                 >
+                    {/* FOR DETAILS TAB */}
                     <PivotItem
                         headerText="Details"
-                        className="label_details_tab"
+                        className="label_details_tab_container"
                     >
                         {currentPath === PATH_LABEL_SERVICES ? (
                             <>
@@ -146,12 +159,48 @@ export const FullInformationsTabComponent: React.FC<
                         ) : (
                             <UserDetailsComponent contentToDetail={content} />
                         )}
+                        {/* FOR SERVICES TAB */}
                     </PivotItem>
                     {currentPath === PATH_LABEL_RESOURCES && (
-                        <PivotItem headerText="Services">
-                            <Label>Services</Label>
+                        <PivotItem
+                            headerText="Services"
+                            className="label_booking_tab_container"
+                        >
+                            {" "}
+                            <Text
+                                variant="mediumPlus"
+                                style={{ fontWeight: "bold" }}
+                            >
+                                Par défaut
+                            </Text>
+                            <hr className="full_infos_hr_solid" />
+                            <div className="display_serv_item">
+                                <Text
+                                    variant="small"
+                                    style={{ fontWeight: "bolder" }}
+                                >
+                                    Service name
+                                </Text>
+                            </div>
+                            <div className="display_serv_item">
+                                <Text
+                                    variant="small"
+                                    style={{ fontWeight: "bolder" }}
+                                >
+                                    Service name
+                                </Text>
+                            </div>
+                            <div className="display_serv_item">
+                                <Text
+                                    variant="small"
+                                    style={{ fontWeight: "bolder" }}
+                                >
+                                    Service name
+                                </Text>
+                            </div>
                         </PivotItem>
                     )}
+                    {/* FOR BOOKING TAB */}
                     {currentPath === PATH_LABEL_CUSTOMER && (
                         <PivotItem headerText="Réservations">
                             <Label>Réservation</Label>
