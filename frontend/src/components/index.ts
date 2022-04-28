@@ -24,3 +24,5 @@ export * from "./trainings_components/training-card/training_card.component";
 export * from "./trainings_components/training-details/training_details.component";
 
 export * from "./helpers_components/attribute-display/attribute_display.component";
+
+export * from "./booking_component/booking-card/booking_card.component";

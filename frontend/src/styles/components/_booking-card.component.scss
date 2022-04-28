@@ -1,0 +1,38 @@
+.booking_card_container {
+    background-color: #fff;
+    height: 65px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid #000;
+    }
+}
+
+.booking_card_avatar {
+    background: #567799;
+    width: 55px;
+    height: 55px;
+    border-radius: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 8px 0 10px;
+}
+.booking_card_infos {
+    // background: yellow;
+    margin-right: 5px;
+}
+
+.booking_card_duration {
+    align-items: center;
+    display: flex;
+    margin: 2px 0;
+}
+.booking_card_creation {
+    align-items: center;
+    display: flex;
+}

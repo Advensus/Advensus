@@ -1,5 +1,11 @@
-import { IconButton, Label, Pivot, PivotItem, Text } from "@fluentui/react";
-import React, { useEffect, useState } from "react";
+import { IconButton, Pivot, PivotItem, Text } from "@fluentui/react";
+import {
+    Dropdown,
+    DropdownMenuItemType,
+    IDropdownOption,
+    IDropdownStyles,
+} from "@fluentui/react/lib/Dropdown";
+import React, { FormEvent, useEffect, useState } from "react";
 import { TrainingDetailsComponent } from "../..";
 import {
     ITraining,
@@ -10,6 +16,7 @@ import {
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
+import { BookingCardComponent } from "../../booking_component/booking-card/booking_card.component";
 import { UserDetailsComponent } from "../user-details/user_details.component";
 
 export interface IFullInformationsTabProps {
@@ -25,6 +32,16 @@ export const FullInformationsTabComponent: React.FC<
     const [training, setTraining] = useState<ITraining>();
     const [currentTab, setCurrentTab] = useState<PivotItem>();
 
+    const [selectedBooking, setSelectedBooking] =
+        React.useState<IDropdownOption>();
+
+    const onChange = (
+        event: FormEvent<HTMLDivElement>,
+        item?: IDropdownOption<any>
+    ): void => {
+        setSelectedBooking(item);
+    };
+
     useEffect(() => {
         console.log("Content received:", contentId, currentPath);
         if (contentId) {
@@ -37,8 +54,11 @@ export const FullInformationsTabComponent: React.FC<
             }
             getContentById(contentId);
         }
-        console.log("the tab current:", currentTab?.props.headerText);
     }, [contentId, currentTab]);
+
+    useEffect(() => {
+        console.log("the tab current:", selectedBooking);
+    }, [selectedBooking]);
 
     const getContentById = (id: string) => {
         const serviceToCall =
@@ -89,7 +109,8 @@ export const FullInformationsTabComponent: React.FC<
             </div>
             <div
                 className={
-                    currentTab?.props.headerText === "Services"
+                    currentTab?.props.headerText === "Services" ||
+                    currentTab?.props.headerText === "Réservations"
                         ? "full_infos_tab_body_services "
                         : "full_infos_tab_body"
                 }
@@ -99,7 +120,6 @@ export const FullInformationsTabComponent: React.FC<
                     // linkFormat="tabs"
                     linkSize="large"
                     onLinkClick={(item) => {
-                        console.log("current item:", item?.props.headerText);
                         setCurrentTab(item);
                     }}
                 >
@@ -164,7 +184,7 @@ export const FullInformationsTabComponent: React.FC<
                     {currentPath === PATH_LABEL_RESOURCES && (
                         <PivotItem
                             headerText="Services"
-                            className="label_booking_tab_container"
+                            className="label_service_tab_container"
                         >
                             {" "}
                             <Text
@@ -202,12 +222,62 @@ export const FullInformationsTabComponent: React.FC<
                     )}
                     {/* FOR BOOKING TAB */}
                     {currentPath === PATH_LABEL_CUSTOMER && (
-                        <PivotItem headerText="Réservations">
-                            <Label>Réservation</Label>
+                        <PivotItem
+                            headerText="Réservations"
+                            className="label_booking_tab_container"
+                        >
+                            <Dropdown
+                                label="Voir toutes les réservations"
+                                selectedKey={
+                                    selectedBooking
+                                        ? selectedBooking.key
+                                        : undefined
+                                }
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={onChange}
+                                placeholder="Select an option"
+                                options={dropdownControlledBookingState}
+                                // styles={dropdownStyles}
+                                className="booking_dropdown_state"
+                            />
+                            <div className="result_display_booking">
+                                {/* <div className="booking_not_found">
+                                    <Text
+                                        variant="medium"
+                                        style={{ color: "grey" }}
+                                    >
+                                        No Booking
+                                    </Text>
+                                </div> */}
+                                <Text
+                                    variant="small"
+                                    style={{ marginTop: 5, fontWeight: "bold" }}
+                                >
+                                    {selectedBooking?.text}
+                                </Text>
+                                <hr className="booking_result_hr_solid" />
+                                <div className="booking_list">
+                                    <BookingCardComponent />
+                                    <BookingCardComponent />
+                                    <BookingCardComponent />
+                                </div>
+                            </div>
                         </PivotItem>
                     )}
                 </Pivot>
             </div>
         </div>
     );
+};
+
+const dropdownControlledBookingState = [
+    { key: "upcoming", text: "Réservation(s) à venir" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+
+    { key: "past", text: "Réservation(s) passée(s)" },
+    { key: "divider_2", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "cancelled", text: "Réservation(s) annulée(s)" },
+];
+const dropdownStyles: Partial<IDropdownStyles> = {
+    dropdown: { borderRadius: "10px" },
 };

@@ -93,8 +93,8 @@
     }
 }
 
-// FOR BOOKING TAB
-.label_booking_tab_container {
+// FOR SERVICE TAB
+.label_service_tab_container {
     position: relative;
     padding: 20px 15px;
     background-color: #f4f3f3;
@@ -112,4 +112,49 @@
         background: #f4f3f3;
         border: 1px solid #000;
     }
+}
+
+// FOR BOOKING
+.label_booking_tab_container {
+    position: relative;
+    padding: 20px 15px;
+    background-color: #f4f3f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking_dropdown_state {
+    // background-color: blue;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.result_display_booking {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.booking_not_found {
+    background: #e1e4e8;
+    height: 40px;
+    width: 100%;
+    border-radius: 3px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.booking_result_hr_solid {
+    border-bottom: 0;
+    margin-top: 3px;
+    margin-bottom: 5px;
+    // border: 1px solid #000;
+    width: 100%;
+}
+.booking_list {
+    // background: yellowgreen;
 }

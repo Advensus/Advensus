@@ -5,7 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { blackAndWhiteTheme } from "./theme";
 import { BrowserRouter } from "react-router-dom";
-import { initializeIcons, loadTheme } from "@fluentui/react";
+import { loadTheme } from "@fluentui/react";
+import { initializeIcons } from "@fluentui/font-icons-mdl2";
 
 loadTheme(blackAndWhiteTheme);
 initializeIcons();
