@@ -1,5 +1,9 @@
 import {
+    Dropdown,
+    DropdownMenuItemType,
     IconButton,
+    IDropdownOption,
+    IDropdownStyles,
     IIconProps,
     SearchBox,
     Text,
@@ -67,6 +71,25 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
+
+    const [selectedSortedItem, setSelectedSortedItem] =
+        React.useState<IDropdownOption>();
+    const [selectedFilteredItem, setSelectedFiltererItem] =
+        React.useState<IDropdownOption>();
+
+    const onChangeSorted = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedSortedItem(item);
+    };
+
+    const onChangeFiltered = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedFiltererItem(item);
+    };
 
     useEffect(() => {
         if (location.state) {
@@ -250,13 +273,31 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                     />
                                     {pathLabel === "Trainees" && (
                                         <div className="filter_box">
-                                            <SearchBox
-                                                placeholder="Filter1"
-                                                iconProps={filterIcon}
+                                            <Dropdown
+                                                selectedKey={
+                                                    selectedSortedItem
+                                                        ? selectedSortedItem.key
+                                                        : undefined
+                                                }
+                                                onChange={onChangeSorted}
+                                                placeholder="Trier par"
+                                                options={
+                                                    dropdownControlledSortBy
+                                                }
+                                                styles={dropdownStyles}
                                             />
-                                            <SearchBox
-                                                placeholder="Filter"
-                                                iconProps={filterIcon}
+                                            <Dropdown
+                                                selectedKey={
+                                                    selectedFilteredItem
+                                                        ? selectedFilteredItem.key
+                                                        : undefined
+                                                }
+                                                onChange={onChangeFiltered}
+                                                placeholder="Filtrer par OF"
+                                                options={
+                                                    dropdownControlledFilterBy
+                                                }
+                                                styles={dropdownStyles}
                                             />
                                         </div>
                                     )}
@@ -414,3 +455,20 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         </div>
     );
 };
+
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: {} };
+
+const dropdownControlledSortBy = [
+    { key: "name", text: "Nom" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "date_added", text: "Date ajoute" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "most_booking", text: "Réservations" },
+];
+const dropdownControlledFilterBy = [
+    { key: "OF1", text: "OF1" },
+    { key: "divid3", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "OF2", text: "OF2" },
+    { key: "divid4", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "OF3", text: "OF3" },
+];
