@@ -6,7 +6,7 @@ from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVeri
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from .model import User
+from .utilisateur import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -58,8 +58,10 @@ class RegisterFormateur(generics.GenericAPIView):
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
+		
 		serializer.save()
 		user_data = serializer.data
+	
 
 		# formateur = User.objects.get(email=user_data['email'])
 		# token = RefreshToken.for_user(formateur).access_token
@@ -73,6 +75,11 @@ class RegisterFormateur(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
+	# def get_cleaned_data(self,request):
+	# 	formateur = request.data
+	# 	serializer = self.serializer_class(data=formateur)
+	# 	self.serializer_class.dispenser = serializer.get_cleaned_data()
+	# 	serializer.save()
 
 class RegisterResponsableP(generics.GenericAPIView):
 	serializer_class = AddRp

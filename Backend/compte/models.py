@@ -1,6 +1,6 @@
 from audioop import maxpp
 from django.db import models
-from .model import User
+from .utilisateur import User
 from .cours import formation
 import uuid
 class souscrir(models.Model):
@@ -50,5 +50,10 @@ class Opinion(models.Model):
     rate = models.IntegerField(default=0)
     mind = models.CharField(max_length=255)
     
+# class relationtable(models.Model):
+#     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     formateur = models.ForeignKey(User,on_delete=models.CASCADE)
+#     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
+
 
 # Create your models here.

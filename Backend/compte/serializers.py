@@ -1,17 +1,21 @@
 from ctypes import addressof, c_void_p
 from dataclasses import field
+from email.policy import default
 
 from .cours import formation
 
 from .societe import Organisme
 from rest_framework import serializers
-from .model import User
+from .utilisateur import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Document
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
+
+
+from django.contrib.auth.hashers import make_password
 
 
 # Sign Up Users
@@ -126,21 +130,33 @@ class AddAdmin(serializers.ModelSerializer):
             
         
 class AddFormateur(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=60)
-    email = serializers.CharField(max_length=60)
-    adress = serializers.CharField(max_length=60)
-    phone_number = serializers.CharField(max_length=60)
+    # username = serializers.CharField(max_length=60)
+    # email = serializers.CharField(max_length=60)
+    # adress = serializers.CharField(max_length=60)
+    # phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
-    first_name= serializers.CharField(max_length=70)
-    id = serializers.UUIDField(read_only=True)
+    # first_name= serializers.CharField(max_length=70)
+    # id = serializers.UUIDField(read_only=True)
   
+    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser']
+        def get_cleaned_data(self):
+            data = super(AddFormateur).get_cleaned_data()
+            return data
 
-    def create(self,validate_data):
-        return User.objects.create_user2(**validate_data)
+        
+        def create(self,validate_data):
+            return User.objects.create_user2(**validate_data)
             
+    # def Create_data(self,**validate_data):
+    #     password = make_password(password)
+    #     data = super(AddFormateur,self).get_cleaned_data()
+    #     data.save()
+    #     user = User.objects.create_user(**validate_data)
+    #     user.save()
+    #     return data
 
 
 
@@ -181,22 +197,17 @@ class login(serializers.ModelSerializer):
 # CRUD Operations
 
 class crudformation(serializers.ModelSerializer):
-    test_oral = serializers.BooleanField()
-    duration = serializers.CharField()
-    id = serializers.UUIDField(read_only=True)
+    # test_oral = serializers.BooleanField()
     
     class Meta:
         model = formation
-        fields = ['edof','intitule','duration','start_session','end_session','test_oral','id']
-
-        # def validate(self,attrs):
-        #     test_oral = attrs.get('test_oral',)
-        #     duration = attrs.get('duration')
-
-        #     if duration < 4:
-        #         test_oral = True
-        #     else
-
+        fields = ['edof','intitule','duration','start_session','end_session','id']
+        def validate(self):
+           limite = 4
+           test = super(crudformation,self).save()
+           if test.duration < limite:
+               test.test_oral = True
+               test.save()
 
 class cruduser(serializers.ModelSerializer):
     

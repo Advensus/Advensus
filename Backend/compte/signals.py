@@ -1,5 +1,5 @@
 from django.db.models.signals import post_save
-from .model import User
+from .utilisateur import User
 from django.dispatch import receiver
 from .models import Stagiaire
 
