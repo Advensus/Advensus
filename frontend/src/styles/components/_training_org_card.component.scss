@@ -1,3 +1,35 @@
 .training_org_card_container {
-    background-color: red;
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 90px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid #000;
+    }
+}
+.training_org_card_stamp {
+    background: gainsboro;
+    width: 120px;
+    min-width: 100px;
+    max-width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.training_org_card_infos {
+    // background: hotpink;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: space-between;
+    // justify-content: center;
+}
+
+.training_org_card_infos_txt {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
 }

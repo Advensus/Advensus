@@ -332,7 +332,11 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 }
                             >
                                 {pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                    <TrainingOrganizationCardComponent />
+                                    <TrainingOrganizationCardComponent
+                                        toggleTab={() =>
+                                            toggleFullInfosTab("jmjqsfqsfm5")
+                                        }
+                                    />
                                 ) : null}
                                 {trainers.length &&
                                 pathLabel === PATH_LABEL_RESOURCES
