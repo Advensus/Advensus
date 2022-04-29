@@ -13,12 +13,14 @@ export * from "./users_components/account/account.component";
 
 export * from "./statistics/statistics.component";
 export * from "./settings/settings.component";
-export * from "./training_organization/training_organization.component";
+
+export * from "./training_org_components/training_org_card/training_org_card.component";
 
 export * from "./forms/trainer_form/trainerForm.component";
 export * from "./forms/trainee_form/traineeForm.component";
 export * from "./forms/rp_form/rpForm.component";
 export * from "./forms/training_form/trainingForm.component";
+export * from "./forms/training_org_form/training_org_form.component";
 
 export * from "./trainings_components/training-card/training_card.component";
 export * from "./trainings_components/training-details/training_details.component";

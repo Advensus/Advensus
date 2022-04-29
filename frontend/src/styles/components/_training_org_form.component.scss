@@ -1,0 +1,60 @@
+.training_org_form_container {
+    color: #000;
+    overflow: auto;
+    // background-color: green;
+    padding: 0 10px 0 0;
+}
+
+.of_training_org_form_sect {
+    // background: red;
+    display: grid;
+    grid-template-columns: 2fr 6fr;
+    gap: 10px;
+}
+.training_org_form_pict {
+    background: rgb(68, 68, 129);
+    height: 160px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.of_training_org_form_fields {
+    // background: gray;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: space-between;
+}
+
+.head_training_org_form {
+    display: grid;
+    grid-template-columns: 6fr 2fr;
+    gap: 10px;
+}
+.head_training_org_form_fields {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.head_training_org_form_align_fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.training_org_form_form_btns {
+    margin: 10px 5px;
+}
+
+.training_org_form_hr_solid {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 2px;
+}
+
+.training_org_form_txt_divide_mov {
+    display: block;
+    margin-top: 15px;
+}

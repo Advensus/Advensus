@@ -17,6 +17,8 @@ import {
     TrainerFormComponent,
     TrainingCardComponent,
     TrainingFormComponent,
+    TrainingOrganizationCardComponent,
+    TrainingOrganizationFormComponent,
     UsersDisplayComponent,
 } from "../../../components";
 import { useId } from "@fluentui/react-hooks";
@@ -29,6 +31,7 @@ import {
     NewUserDto,
     NewUserDtoIn,
     PATH_LABEL_CUSTOMER,
+    PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
     RP,
@@ -218,6 +221,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                     <Text>Ressources</Text>
                                 ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                     <Text>Stagiaires</Text>
+                                ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                    <Text>O-F</Text>
                                 ) : (
                                     <Text>Formations</Text>
                                 )
@@ -226,6 +231,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 <Text> Ajouter Ressource</Text>
                             ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                 <Text> Ajouter Stagiaire</Text>
+                            ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                <Text>Ajouter O-F</Text>
                             ) : (
                                 <Text> Ajouter Formation</Text>
                             )}
@@ -324,7 +331,11 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                         : "tab_content_trainee"
                                 }
                             >
-                                {trainers.length && pathLabel === "Resources"
+                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                    <TrainingOrganizationCardComponent />
+                                ) : null}
+                                {trainers.length &&
+                                pathLabel === PATH_LABEL_RESOURCES
                                     ? trainers.map((_) => (
                                           <UsersDisplayComponent
                                               toggleTab={() =>
@@ -381,7 +392,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {srps.length && pathLabel === "Resources"
+                                    {srps.length
                                         ? srps.map((_) => (
                                               <UsersDisplayComponent
                                                   toggleTab={() =>
@@ -416,7 +427,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {rps.length && pathLabel === "Resources"
+                                    {rps.length
                                         ? rps.map((_) => (
                                               <UsersDisplayComponent
                                                   toggleTab={toggleFullInfosTab}
@@ -437,6 +448,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                         <TraineeFormComponent
                             onCreate={handleOnCreate}
+                            cancel={() => setShowForm(false)}
+                        />
+                    ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                        <TrainingOrganizationFormComponent
                             cancel={() => setShowForm(false)}
                         />
                     ) : (
