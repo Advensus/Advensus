@@ -58,10 +58,8 @@ class RegisterFormateur(generics.GenericAPIView):
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
-		
 		serializer.save()
 		user_data = serializer.data
-	
 
 		# formateur = User.objects.get(email=user_data['email'])
 		# token = RefreshToken.for_user(formateur).access_token
@@ -80,6 +78,9 @@ class RegisterFormateur(generics.GenericAPIView):
 	# 	serializer = self.serializer_class(data=formateur)
 	# 	self.serializer_class.dispenser = serializer.get_cleaned_data()
 	# 	serializer.save()
+		
+    	
+    
 
 class RegisterResponsableP(generics.GenericAPIView):
 	serializer_class = AddRp

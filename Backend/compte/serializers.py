@@ -130,26 +130,33 @@ class AddAdmin(serializers.ModelSerializer):
             
         
 class AddFormateur(serializers.ModelSerializer):
-    # username = serializers.CharField(max_length=60)
-    # email = serializers.CharField(max_length=60)
-    # adress = serializers.CharField(max_length=60)
-    # phone_number = serializers.CharField(max_length=60)
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
-    # first_name= serializers.CharField(max_length=70)
-    # id = serializers.UUIDField(read_only=True)
+    first_name= serializers.CharField(max_length=70)
+    id = serializers.UUIDField(read_only=True)
+   
   
     
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser']
-        def get_cleaned_data(self):
-            data = super(AddFormateur).get_cleaned_data()
-            return data
-
+       
+    def validate(self,attrs):
+        email = attrs.get('email','')
+        username = attrs.get('username','')
+        first_name = attrs.get('first_name','')
         
-        def create(self,validate_data):
-            return User.objects.create_user2(**validate_data)
             
+        if not username.isalnum():
+            raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+                
+        
+        return attrs
+    def create(self,validated_data):
+        return User.objects.create_user2(**validated_data)
     # def Create_data(self,**validate_data):
     #     password = make_password(password)
     #     data = super(AddFormateur,self).get_cleaned_data()
