@@ -110,6 +110,11 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     }, [location.pathname]);
 
+    // useEffect(() => {
+    //     getAllUser();
+    //     getAllTraining();
+    // }, []);
+
     const toggleFullInfosTab = (id: string) => {
         // console.log({ id });
         setContentId(id);

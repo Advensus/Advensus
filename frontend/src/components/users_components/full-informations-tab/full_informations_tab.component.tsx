@@ -11,12 +11,14 @@ import {
     ITraining,
     IUser,
     PATH_LABEL_CUSTOMER,
+    PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
 import { BookingCardComponent } from "../../booking_component/booking-card/booking_card.component";
+import { TrainingOrgTraineesDisplayComponent } from "../../training_org_components/training_org_trainees_display/training_org_trainees_display";
 import { UserDetailsComponent } from "../user-details/user_details.component";
 
 export interface IFullInformationsTabProps {
@@ -104,6 +106,9 @@ export const FullInformationsTabComponent: React.FC<
                 )}
                 {currentPath === PATH_LABEL_SERVICES && (
                     <Text>{training?.intitule}</Text>
+                )}
+                {currentPath === PATH_LABEL_ORGANIZATION && (
+                    <Text>Company name</Text>
                 )}
                 <hr className="hr_dashed" />
             </div>
@@ -262,6 +267,12 @@ export const FullInformationsTabComponent: React.FC<
                                     <BookingCardComponent />
                                 </div>
                             </div>
+                        </PivotItem>
+                    )}
+
+                    {currentPath === PATH_LABEL_ORGANIZATION && (
+                        <PivotItem headerText="Stagiaires">
+                            <TrainingOrgTraineesDisplayComponent />
                         </PivotItem>
                     )}
                 </Pivot>

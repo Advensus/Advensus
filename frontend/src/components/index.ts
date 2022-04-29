@@ -15,6 +15,7 @@ export * from "./statistics/statistics.component";
 export * from "./settings/settings.component";
 
 export * from "./training_org_components/training_org_card/training_org_card.component";
+export * from "./training_org_components/training_org_trainees_display/training_org_trainees_display";
 
 export * from "./forms/trainer_form/trainerForm.component";
 export * from "./forms/trainee_form/traineeForm.component";
