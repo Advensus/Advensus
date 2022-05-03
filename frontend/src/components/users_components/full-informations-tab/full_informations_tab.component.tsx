@@ -1,4 +1,12 @@
-import { IconButton, Pivot, PivotItem, Text } from "@fluentui/react";
+import {
+    IconButton,
+    IIconProps,
+    Pivot,
+    PivotItem,
+    Text,
+    TooltipHost,
+} from "@fluentui/react";
+import { useId } from "@fluentui/react-hooks";
 import {
     Dropdown,
     DropdownMenuItemType,
@@ -27,12 +35,15 @@ export interface IFullInformationsTabProps {
     currentPath: string;
 }
 
+const addIcon: IIconProps = { iconName: "Add" };
+
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
 > = ({ contentId, currentPath }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
     const [currentTab, setCurrentTab] = useState<PivotItem>();
+    const tooltipId = useId("toolt!p");
 
     const [selectedBooking, setSelectedBooking] =
         React.useState<IDropdownOption>();
@@ -95,22 +106,41 @@ export const FullInformationsTabComponent: React.FC<
     return (
         <div className="full_infos_tab_container">
             <div className="full_infos_tab_header">
-                {(currentPath === PATH_LABEL_RESOURCES ||
-                    PATH_LABEL_CUSTOMER) && (
-                    <Text>
-                        {content?.username !== undefined &&
-                            content?.username.toUpperCase()}{" "}
-                        {""}
-                        {content?.first_name}
-                    </Text>
-                )}
-                {currentPath === PATH_LABEL_SERVICES && (
-                    <Text>{training?.intitule}</Text>
-                )}
-                {currentPath === PATH_LABEL_ORGANIZATION && (
-                    <Text>Company name</Text>
-                )}
-                <hr className="hr_dashed" />
+                <div className="full_infos_tab_header_title">
+                    {(currentPath === PATH_LABEL_RESOURCES ||
+                        PATH_LABEL_CUSTOMER) && (
+                        <Text>
+                            {content?.username !== undefined &&
+                                content?.username.toUpperCase()}{" "}
+                            {""}
+                            {content?.first_name}
+                        </Text>
+                    )}
+                    {currentPath === PATH_LABEL_CUSTOMER && (
+                        <TooltipHost content="Planifier" id={tooltipId}>
+                            <IconButton
+                                iconProps={addIcon}
+                                ariaLabel="add"
+                                // onClick={() =>
+                                //     showAddForm(
+                                //         pathLabel === PATH_LABEL_RESOURCES
+                                //             ? TEACHEAR_FORM
+                                //             : pathLabel === PATH_LABEL_CUSTOMER
+                                //             ? TRAINEE_FORM
+                                //             : SERVICES_FORM
+                                //     )
+                                // }
+                            />
+                        </TooltipHost>
+                    )}
+                    {currentPath === PATH_LABEL_SERVICES && (
+                        <Text>{training?.intitule}</Text>
+                    )}
+                    {currentPath === PATH_LABEL_ORGANIZATION && (
+                        <Text>Company name</Text>
+                    )}
+                </div>
+                <hr className="full_infos_tab_hr_dashed" />
             </div>
             <div
                 className={

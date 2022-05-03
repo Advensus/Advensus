@@ -22,7 +22,7 @@ import {
     TEACHEAR,
     TRAINEE,
 } from "../lib";
-import { UsersPage } from "../pages";
+import { SchedulerPage, UsersPage } from "../pages";
 import { useAuthStore } from "../stores";
 
 export function useUserRouteHooks() {
@@ -87,7 +87,7 @@ export function useUserRouteHooks() {
             path: `planne`,
             label: "Planning",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: SchedulerPage,
             roles: [SUPER_USER, TEACHEAR, SUPER_RP, RP],
         },
         {

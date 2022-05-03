@@ -129,21 +129,23 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         ) as HTMLInputElement;
 
         hint.className = hint.className !== "show" ? "show" : "hide";
-        if (hint.className === "show") {
-            hint.style.display = "block";
-            window.setTimeout(() => {
-                hint.style.opacity = "1";
-                hint.style.transform = "scale(1)";
-            }, 0);
-            first_tab.style.width = "150px";
-        }
-        if (hint.className === "hide") {
-            hint.style.opacity = "0";
-            hint.style.transform = "scale(0)";
-            window.setTimeout(function () {
-                hint.style.display = "none";
-            }, 700); // timed to match animation-duration
-            first_tab.style.width = "550px";
+        if (hint) {
+            if (hint.className === "show") {
+                hint.style.display = "block";
+                window.setTimeout(() => {
+                    hint.style.opacity = "1";
+                    hint.style.transform = "scale(1)";
+                }, 0);
+                first_tab.style.width = "150px";
+            }
+            if (hint.className === "hide") {
+                hint.style.opacity = "0";
+                hint.style.transform = "scale(0)";
+                window.setTimeout(function () {
+                    hint.style.display = "none";
+                }, 700); // timed to match animation-duration
+                first_tab.style.width = "550px";
+            }
         }
     };
 
@@ -359,7 +361,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                           />
                                       ))
                                     : null}
-                                {trainees.length && pathLabel === "Trainees"
+                                {trainees.length &&
+                                pathLabel === PATH_LABEL_CUSTOMER
                                     ? trainees.map((_) => (
                                           <TraineeDisplayComponent
                                               toggleTab={() =>
