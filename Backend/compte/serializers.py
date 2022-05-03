@@ -183,7 +183,7 @@ class crudformation(serializers.ModelSerializer):
 
     class Meta:
         model = formation
-        fields = ['edof','intitule','duration','start_session','end_session','test_oral']
+        fields = ['edof','intitule','duration','start_session','end_session','test_oral', 'id']
 
 class cruduser(serializers.ModelSerializer):
 
