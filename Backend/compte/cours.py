@@ -1,7 +1,7 @@
 from django.db import models
 
 from .societe import Organisme
-from .user import User
+from .model import User
 class formation(models.Model):
     edof = models.CharField(max_length=20)
     intitule = models.CharField(max_length=20)

@@ -1,6 +1,6 @@
 from audioop import maxpp
 from django.db import models
-from .user import User
+from .model import User
 from .cours import formation
 
 

@@ -6,7 +6,7 @@ from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVeri
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from .user import User
+from .model import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -21,6 +21,7 @@ from .cours import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
+from django.http import JsonResponse
 
 
 from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
@@ -101,6 +102,7 @@ class RegisteradminOrg(generics.GenericAPIView):
 		serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
+		
 class CreateOrganisme(generics.GenericAPIView):
 	serializer_class = AddOrg
 	def post(self,request):
@@ -152,7 +154,7 @@ def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
 	serializer = serializer_class(donnee, many=True)
-	return Response(serializer.data)
+	return Response({'user':serializer.data})
 @api_view(['GET'])
 @csrf_exempt
 # @permission_classes([IsAuthenticated,autorisation])	

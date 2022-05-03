@@ -1,10 +1,11 @@
+from ctypes import addressof, c_void_p
 from dataclasses import field
 
 from .cours import formation
 
 from .societe import Organisme
 from rest_framework import serializers
-from .user import User
+from .model import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Document
@@ -83,7 +84,7 @@ class AddSrp(serializers.ModelSerializer):
            
 
 class AddOrg(serializers.ModelSerializer):
-   
+  
     class Meta:
         model = Organisme
         fields = ['company_name','company_adress','phone_number','fix_number']
@@ -186,13 +187,43 @@ class crudformation(serializers.ModelSerializer):
         fields = ['edof','intitule','duration','start_session','end_session','test_oral', 'id']
 
 class cruduser(serializers.ModelSerializer):
-
+    # username = serializers.CharField(max_length=60)
+    # email = serializers.CharField(max_length=60)
+    # adress = serializers.CharField(max_length=60)
+    # phone_number = serializers.CharField(max_length=60)
+    # first_name= serializers.CharField(max_length=60)
+    # id = serializers.UUIDField(read_only=True)
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
                  "user_type","competence","trainee_level","session_token","organisme",
                  ]
+
+        # infos = {
+        # 'user':     {
+        #     'id':'id',
+        #     'email':'email',
+        #     "username":'username',
+        #     'first_name':'first_name',
+        #     'is_active':'is_active',
+        #     'avatar':'avatar',
+        #     'phone_number':'phone_number',
+        #     'adress':'adress',
+        #     'horaire':'horaire',
+        #     'signature_former':'signature_former',
+        #     'cv':'cv',
+        #     'user_type':'user_type',
+        #     'competence':'competence',
+        #     'trainee_level':'trainee_level',
+        #     'session_token':'session_token',
+        #     'organisme':'organisme'
+        #     }
+        # }
+        # print(infos['user'])
+            
+        
+
 
 class cruddocuments(serializers.ModelSerializer):
     class Meta:
