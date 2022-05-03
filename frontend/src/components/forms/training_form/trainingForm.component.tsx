@@ -43,14 +43,14 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
             <Text className="training_txt_divide_mov">Formation</Text>
             <hr className="trainer_hr_solid" />
             <div className="training_fields_sect">
-                <TextField
+                {/* <TextField
                     type="text"
                     value={values.edof}
                     onChange={handleChange}
                     placeholder="EDOF"
                     name="edof"
                     className="training_input"
-                />
+                /> */}
                 <TextField
                     type="text"
                     value={values.intitule}
@@ -59,15 +59,15 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
                     name="intitule"
                     className="training_input"
                 />
-                <TextField
+                {/* <TextField
                     type="text"
                     value={values.duration}
                     onChange={handleChange}
                     placeholder="Durée"
                     name="duration"
                     className="training_input"
-                />
-                <TextField
+                /> */}
+                {/* <TextField
                     type="text"
                     value={values.start_session}
                     onChange={handleChange}
@@ -82,7 +82,7 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
                     placeholder="Fin session"
                     name="end_session"
                     className="training_input"
-                />
+                /> */}
             </div>
             <div className="training_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />

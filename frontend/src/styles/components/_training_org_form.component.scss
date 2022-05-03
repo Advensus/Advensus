@@ -19,29 +19,21 @@
     justify-content: center;
     align-items: center;
 }
+.training_org_form_stamp {
+    background: rgb(68, 68, 129);
+    height: 130px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 15px;
+}
 .of_training_org_form_fields {
     // background: gray;
     display: flex;
     flex-direction: column;
-    height: 200px;
+    height: 420px;
     justify-content: space-between;
-}
-
-.head_training_org_form {
-    display: grid;
-    grid-template-columns: 6fr 2fr;
-    gap: 10px;
-}
-.head_training_org_form_fields {
-    height: 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.head_training_org_form_align_fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
 }
 
 .training_org_form_form_btns {

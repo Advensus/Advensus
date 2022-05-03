@@ -1,17 +1,17 @@
-.trainee_form_container {
+.company_form_container {
     color: #000;
     overflow: auto;
     // background-color: green;
     padding: 0 10px 0 0;
 }
 
-.own_trainee_sect {
+.of_company_form_sect {
     // background: red;
     display: grid;
     grid-template-columns: 2fr 6fr;
     gap: 10px;
 }
-.own_trainee_pict {
+.company_form_pict {
     background: rgb(68, 68, 129);
     height: 160px;
     border-radius: 5px;
@@ -19,47 +19,51 @@
     justify-content: center;
     align-items: center;
 }
-.own_trainee_fields {
+.company_form_stamp {
+    background: rgb(68, 68, 129);
+    height: 130px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 15px;
+}
+.of_company_form_fields {
     // background: gray;
     display: flex;
     flex-direction: column;
-    height: 300px;
+    height: 420px;
     justify-content: space-between;
 }
-.own_trainee_align_fields {
+
+.head_company_form {
+    display: grid;
+    grid-template-columns: 6fr 2fr;
+    gap: 10px;
+}
+.head_company_form_fields {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.head_company_form_align_fields {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-.addr_trainee {
-    // background: moccasin;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.oth_trainee {
-    // background: mediumvioletred;
-    height: 360px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-.trainee_form_btns {
+
+.company_form_form_btns {
     margin: 10px 5px;
 }
 
-// .trainee_form_input {
-//     border-radius: 20px;
-// }
-
-.trainee_hr_solid {
+.company_form_hr_solid {
     border-top: 0.1em solid black;
     border-bottom: 0;
     margin-top: 2px;
 }
 
-.trainee_txt_divide_mov {
+.company_form_txt_divide_mov {
     display: block;
     margin-top: 15px;
 }

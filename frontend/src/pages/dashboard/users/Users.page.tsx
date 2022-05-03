@@ -11,6 +11,7 @@ import {
 } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import {
+    CompanyFormComponent,
     FullInformationsTabComponent,
     TraineeDisplayComponent,
     TraineeFormComponent,
@@ -30,6 +31,7 @@ import {
     IUser,
     NewUserDto,
     NewUserDtoIn,
+    PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
@@ -238,6 +240,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 <Text> Ajouter Stagiaire</Text>
                             ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
                                 <Text>Ajouter O-F</Text>
+                            ) : pathLabel === PATH_LABEL_COMPANY ? (
+                                <Text>Ajouter Société</Text>
                             ) : (
                                 <Text> Ajouter Formation</Text>
                             )}
@@ -247,6 +251,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                         ? "Ajouter Formateur"
                                         : pathLabel === PATH_LABEL_CUSTOMER
                                         ? "Ajouter Stagiaire"
+                                        : pathLabel === PATH_LABEL_COMPANY
+                                        ? "Ajouter Société"
                                         : "Ajouter Formation"
                                 }
                                 id={tooltipId}
@@ -463,6 +469,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         <TrainingOrganizationFormComponent
                             cancel={() => setShowForm(false)}
                         />
+                    ) : pathLabel === PATH_LABEL_COMPANY ? (
+                        <CompanyFormComponent />
                     ) : (
                         <TrainingFormComponent
                             cancel={() => setShowForm(false)}

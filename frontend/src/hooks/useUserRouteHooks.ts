@@ -9,6 +9,7 @@ import {
 import {
     ADMIN_OF,
     CUSTOMER,
+    PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
@@ -42,6 +43,13 @@ export function useUserRouteHooks() {
             icon: "la-id-badge",
             component: StatisticsComponent,
             roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
+        },
+        {
+            path: `Company`,
+            label: `${PATH_LABEL_COMPANY}`,
+            icon: "la-id-badge",
+            component: UsersPage,
+            roles: [SUPER_USER],
         },
         {
             path: `of`,

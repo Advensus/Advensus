@@ -29,3 +29,7 @@ export * from "./trainings_components/training-details/training_details.componen
 export * from "./helpers_components/attribute-display/attribute_display.component";
 
 export * from "./booking_component/booking-card/booking_card.component";
+
+export * from "./forms/company_form/company_form.component";
+
+export * from "./custom_dropdown_component/custom_dropdown.component";

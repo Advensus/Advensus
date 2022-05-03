@@ -10,6 +10,7 @@ import {
     TEACHEAR_FORM,
 } from "../../../lib";
 import UserService from "../../../services/user.service";
+import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
@@ -89,100 +90,65 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
 
     return (
         <form onSubmit={handleSubmit} className="trainer_form_container">
-            <Text className="trainer_txt_divide_mov">Formateur</Text>
+            {formToDisplay === TEACHEAR_FORM && (
+                <Text className="trainer_txt_divide_mov">Formateur</Text>
+            )}
+            {formToDisplay === SUPER_RP_FORM && (
+                <Text className="trainer_txt_divide_mov">
+                    Super Responsable Pédagogique
+                </Text>
+            )}
+            {formToDisplay === BASIC_RP_FORM && (
+                <Text className="trainer_txt_divide_mov">
+                    Responsable Pédagogique Normal
+                </Text>
+            )}
             <hr className="trainer_hr_solid" />
             <div className="own_trainer_sect">
                 <div className="own_trainer_pict">Img part</div>
                 <div className="own_trainer_fields">
-                    {formToDisplay === TEACHEAR_FORM && (
-                        <>
-                            <div className="own_trainer_align_fields">
-                                <TextField
-                                    type="text"
-                                    // label="text"
-                                    // value={values.text}
-                                    // onChange={handleChange}
-                                    placeholder="Civilité"
-                                    name="text"
-                                />
-                                <TextField
-                                    type="text"
-                                    // label="text"
-                                    // value={values.text}
-                                    // onChange={handleChange}
-                                    placeholder="Titre"
-                                    name="text"
-                                />
-                            </div>
-                            <TextField
-                                type="text"
-                                value={values.first_name}
-                                onChange={handleChange}
-                                placeholder="Fist name"
-                                name="first_name"
-                            />
-                            <TextField
-                                type="text"
-                                value={values.username}
-                                onChange={handleChange}
-                                placeholder="last name"
-                                name="username"
-                            />
-                            <TextField
-                                type="email"
-                                value={values.email}
-                                onChange={handleChange}
-                                placeholder="email"
-                                name="email"
-                            />
-                            <TextField
-                                type="text"
-                                value={values.phone_number}
-                                onChange={handleChange}
-                                placeholder="Phonenumber"
-                                name="phone_number"
-                            />
-                        </>
-                    )}
-                    {/* {formToDisplay === SERVICES_FORM && (
-                        <>
-                            <TextField
-                                type="text"
-                                // value={values.email}
-                                // onChange={handleChange}
-                                placeholder="EDOF"
-                                name="edof"
-                            />
-                            <TextField
-                                type="text"
-                                // value={values.phone_number}
-                                // onChange={handleChange}
-                                placeholder="Intitulé"
-                                name="intitule"
-                            />
-                            <TextField
-                                type="text"
-                                // value={values.phone_number}
-                                // onChange={handleChange}
-                                placeholder="Durée"
-                                name="duration"
-                            />
-                            <TextField
-                                type="text"
-                                // value={values.phone_number}
-                                // onChange={handleChange}
-                                placeholder="Début session"
-                                name="start_session"
-                            />
-                            <TextField
-                                type="text"
-                                // value={values.phone_number}
-                                // onChange={handleChange}
-                                placeholder="Fin session"
-                                name="end_session"
-                            />
-                        </>
-                    )} */}
+                    <div className="own_trainer_align_fields">
+                        <CustomDropDownComponent
+                            dropdownOptions={Civility}
+                            thePlaceHolder="Civilité"
+                        />
+                        <TextField
+                            type="text"
+                            // label="text"
+                            // value={values.text}
+                            // onChange={handleChange}
+                            placeholder="Titre"
+                            name="text"
+                        />
+                    </div>
+                    <TextField
+                        type="text"
+                        value={values.first_name}
+                        onChange={handleChange}
+                        placeholder="Fist name"
+                        name="first_name"
+                    />
+                    <TextField
+                        type="text"
+                        value={values.username}
+                        onChange={handleChange}
+                        placeholder="last name"
+                        name="username"
+                    />
+                    <TextField
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        placeholder="email"
+                        name="email"
+                    />
+                    <TextField
+                        type="text"
+                        value={values.phone_number}
+                        onChange={handleChange}
+                        placeholder="Phonenumber"
+                        name="phone_number"
+                    />
                 </div>
             </div>
             <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
@@ -215,6 +181,11 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Horaire"
                             name="horaire"
                         />
+
+                        <CustomDropDownComponent
+                            dropdownOptions={Civility}
+                            thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
+                        />
                     </>
                 )}
                 <TextField
@@ -238,3 +209,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         </form>
     );
 };
+
+const Civility = [
+    { key: "Male", text: "Mr" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "Female", text: "Mme" },
+];
