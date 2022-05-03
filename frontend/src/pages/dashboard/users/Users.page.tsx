@@ -44,6 +44,7 @@ import {
     TEACHEAR_FORM,
     TRAINEE,
     TRAINEE_FORM,
+    UserDtoIn,
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
 import TrainingService from "../../../services/training.service";
@@ -162,28 +163,25 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     );
                     return [];
                 }
-                return response.json();
-            })
-            .then((usersResp: IUser[]) => {
-                console.log("all the users:", usersResp);
-                setUsers(usersResp);
-                const trainer = usersResp.filter(
-                    (user) => user.user_type === TEACHEAR
+                const datas = (await response.json()) as UserDtoIn;
+                console.log("the users:", datas.user);
+                setUsers(datas.user);
+                const trainer = datas.user.filter(
+                    (_) => _.user_type === TEACHEAR
                 );
-                const trainee = usersResp.filter(
-                    (user) => user.user_type === TRAINEE
+                const trainee = datas.user.filter(
+                    (_) => _.user_type === TRAINEE
                 );
-                const rp = usersResp.filter((user) => user.user_type === RP);
-                const srp = usersResp.filter(
-                    (user) => user.user_type === SUPER_RP
-                );
-                const admin = usersResp.filter(
-                    (user) => user.user_type === ADMIN_OF
+                const rp = datas.user.filter((_) => _.user_type === RP);
+                const srp = datas.user.filter((_) => _.user_type === SUPER_RP);
+                const admin = datas.user.filter(
+                    (_) => _.user_type === ADMIN_OF
                 );
                 setTrainers(trainer);
                 setTrainees(trainee);
                 setSrps(srp);
                 setRps(rp);
+                return datas;
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
