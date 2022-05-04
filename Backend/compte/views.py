@@ -2,7 +2,7 @@ from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
+from .serializers import AddStagiaire,AddFormateur,AddOrg,tout,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -54,11 +54,12 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
-	def post(self,request): 
+	def post(self,request,*args,**kwargs): 
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
+		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
 		# formateur = User.objects.get(email=user_data['email'])

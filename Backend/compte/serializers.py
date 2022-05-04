@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document
+from .models import Document,souscrir
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -19,8 +19,16 @@ from django.contrib.auth.hashers import make_password
 
 
 # Sign Up Users
+
+class Adddsouscrir(serializers.ModelSerializer):
+    class Meta:
+        models = souscrir
+        fields = ['training_status']
+
+
 class AddStagiaire(serializers.ModelSerializer):
-    
+   
+    # user_profile  = serializers.SerializerMethodField("get_all_champ")
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
     adress = serializers.CharField(max_length=60)
@@ -29,10 +37,17 @@ class AddStagiaire(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
 
+    # def get_user_profile(self, obj):
+    #     try:
+    #         user_profile = souscrir.objects.all()
+    #         return  user_profile
+    #     except Exception as e:
+    #         return {}
+   
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','id']
-
+      
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
@@ -47,6 +62,9 @@ class AddStagiaire(serializers.ModelSerializer):
     def create(self,validated_data):
         return User.objects.create_user1(**validated_data)
 
+class tout(serializers.Serializer):
+    s =  Adddsouscrir(many=True)
+    t = AddStagiaire(many=True)
 class AddRp(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
@@ -55,10 +73,11 @@ class AddRp(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-
     class Meta:
         model = User
+        
         fields = ['username','first_name','email','phone_number','adress','password','id']
+      
     def get_cleaned_data(self):
         data = super(AddRp, self).get_cleaned_data()
         return data
@@ -152,18 +171,20 @@ class AddFormateur(serializers.ModelSerializer):
             
         if not username.isalnum():
             raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
-                
-        
         return attrs
-    def create(self,validated_data):
-        return User.objects.create_user2(**validated_data)
-    # def Create_data(self,**validate_data):
-    #     password = make_password(password)
-    #     data = super(AddFormateur,self).get_cleaned_data()
-    #     data.save()
-    #     user = User.objects.create_user(**validate_data)
-    #     user.save()
-    #     return data
+    # def create(request,validate_data):
+    #     user = User.objects.create_user2(**validate_data)
+    #     user.set(request.user)
+    #     return user
+    def create_data(self,request,validate_data):
+       
+        data = super(AddFormateur,self).get_cleaned_data()
+       
+        user = User.objects.create_user2(**validate_data)
+        user.set(request.user)
+        user.save()
+      
+        return data
 
 
 
