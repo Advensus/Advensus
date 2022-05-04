@@ -1,4 +1,4 @@
-.training_container {
+.training_card_container {
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -11,4 +11,9 @@
         background: #f4f3f3;
         border: 1px solid gray;
     }
+}
+
+.training_card_subtitle {
+    display: flex;
+    align-items: center;
 }

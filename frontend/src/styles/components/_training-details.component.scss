@@ -1,0 +1,28 @@
+.training_details_container {
+    // background-color: red;
+    // overflow: auto;
+}
+
+.training_details_header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.training_details_init {
+    background: #6e8aa7;
+    height: 35px;
+    width: 80px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.hr_dashed_training_details {
+    border-top: 0.1em dashed black;
+    border-bottom: 0;
+    margin-top: 5px;
+}

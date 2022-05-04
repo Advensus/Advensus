@@ -36,7 +36,6 @@ export const useAuthStore = create<AuthStore>((set: SetState<AuthStore>) => {
         updateCurrentUserType: (user_type: any): void => {
             set({ user_type });
             localStorage.setItem(USER_TYPE, JSON.stringify(user_type));
-            console.log("le type du user stocké:", JSON.stringify(user_type));
         },
 
         updateToken: (token): void => {

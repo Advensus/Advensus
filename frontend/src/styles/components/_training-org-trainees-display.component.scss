@@ -1,0 +1,47 @@
+.training_org_trainees_display_container {
+    padding: 10px;
+}
+.training_org_trainees_display_searchbar {
+    margin-bottom: 15px;
+}
+
+.training_org_trainees_display_content {
+    position: relative;
+    padding: 0 15px;
+}
+
+.training_org_trainees_display_card_container {
+    background: #fff;
+    height: 80px;
+    border-radius: 5px;
+    // display: flex;
+    // justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin: 0 0 8px 0;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid gray;
+    }
+}
+.training_org_trainees_display_txt {
+    margin: 10px 0 10px 10px;
+    // background-color: yellow;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.training_org_trainees_display_square {
+    margin: 5px 5px 5px 0;
+    min-width: 70px;
+    max-width: 85;
+    width: 80px;
+    // background-color: burlywood;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid gray;
+}

@@ -1,5 +1,9 @@
 import {
+    Dropdown,
+    DropdownMenuItemType,
     IconButton,
+    IDropdownOption,
+    IDropdownStyles,
     IIconProps,
     SearchBox,
     Text,
@@ -7,11 +11,15 @@ import {
 } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import {
+    CompanyFormComponent,
     FullInformationsTabComponent,
     TraineeDisplayComponent,
     TraineeFormComponent,
     TrainerFormComponent,
-    TrainingComponent,
+    TrainingCardComponent,
+    TrainingFormComponent,
+    TrainingOrganizationCardComponent,
+    TrainingOrganizationFormComponent,
     UsersDisplayComponent,
 } from "../../../components";
 import { useId } from "@fluentui/react-hooks";
@@ -23,16 +31,23 @@ import {
     IUser,
     NewUserDto,
     NewUserDtoIn,
+    PATH_LABEL_COMPANY,
+    PATH_LABEL_CUSTOMER,
+    PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
     RP,
+    SERVICES_FORM,
     SUPER_RP,
     SUPER_RP_FORM,
     TEACHEAR,
     TEACHEAR_FORM,
     TRAINEE,
+    TRAINEE_FORM,
+    UserDtoIn,
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
+import TrainingService from "../../../services/training.service";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -51,7 +66,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
 
     const tooltipId = useId("tooltip");
     const [showForm, setShowForm] = useState<Boolean>(false);
-    const [resourcesType, setResourcesType] = useState<string>("");
+    const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
@@ -59,18 +74,49 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
     const [rps, setRps] = useState<IUser[]>([]);
     const [srps, setSrps] = useState<IUser[]>([]);
     const [admins, setAdmins] = useState<IUser[]>([]);
+    const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
 
-    useEffect(() => {
-        getAllUser();
+    const [selectedSortedItem, setSelectedSortedItem] =
+        React.useState<IDropdownOption>();
+    const [selectedFilteredItem, setSelectedFiltererItem] =
+        React.useState<IDropdownOption>();
 
+    const onChangeSorted = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedSortedItem(item);
+    };
+
+    const onChangeFiltered = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedFiltererItem(item);
+    };
+
+    useEffect(() => {
         if (location.state) {
             const thePath = location.state as IPath;
             setPathLabel(thePath.label);
             console.log("the nav:", thePath.label);
+            if (
+                thePath.label === PATH_LABEL_RESOURCES ||
+                thePath.label === PATH_LABEL_CUSTOMER
+            ) {
+                getAllUser();
+            } else if (thePath.label === PATH_LABEL_SERVICES) {
+                getAllTraining();
+            }
         }
     }, [location.pathname]);
+
+    // useEffect(() => {
+    //     getAllUser();
+    //     getAllTraining();
+    // }, []);
 
     const toggleFullInfosTab = (id: string) => {
         // console.log({ id });
@@ -83,26 +129,29 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         ) as HTMLInputElement;
 
         hint.className = hint.className !== "show" ? "show" : "hide";
-        if (hint.className === "show") {
-            hint.style.display = "block";
-            window.setTimeout(() => {
-                hint.style.opacity = "1";
-                hint.style.transform = "scale(1)";
-            }, 0);
-            first_tab.style.width = "150px";
-        }
-        if (hint.className === "hide") {
-            hint.style.opacity = "0";
-            hint.style.transform = "scale(0)";
-            window.setTimeout(function () {
-                hint.style.display = "none";
-            }, 700); // timed to match animation-duration
-            first_tab.style.width = "550px";
+        if (hint) {
+            if (hint.className === "show") {
+                hint.style.display = "block";
+                window.setTimeout(() => {
+                    hint.style.opacity = "1";
+                    hint.style.transform = "scale(1)";
+                }, 0);
+                first_tab.style.width = "150px";
+            }
+            if (hint.className === "hide") {
+                hint.style.opacity = "0";
+                hint.style.transform = "scale(0)";
+                window.setTimeout(function () {
+                    hint.style.display = "none";
+                }, 700); // timed to match animation-duration
+                first_tab.style.width = "550px";
+            }
         }
     };
 
-    const showAddForm = (resType: string) => {
-        setResourcesType(resType);
+    const showAddForm = (displayForm: string) => {
+        console.log("the form to display:", displayForm);
+        setFormToDisplay(displayForm);
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
@@ -116,31 +165,46 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     );
                     return [];
                 }
-                return response.json();
-            })
-            .then((usersResp: IUser[]) => {
-                console.log("all the users:", usersResp);
-                setUsers(usersResp);
-                const trainer = usersResp.filter(
-                    (user) => user.user_type === TEACHEAR
+                const datas = (await response.json()) as UserDtoIn;
+                console.log("the users:", datas.user);
+                setUsers(datas.user);
+                const trainer = datas.user.filter(
+                    (_) => _.user_type === TEACHEAR
                 );
-                const trainee = usersResp.filter(
-                    (user) => user.user_type === TRAINEE
+                const trainee = datas.user.filter(
+                    (_) => _.user_type === TRAINEE
                 );
-                const rp = usersResp.filter((user) => user.user_type === RP);
-                const srp = usersResp.filter(
-                    (user) => user.user_type === SUPER_RP
-                );
-                const admin = usersResp.filter(
-                    (user) => user.user_type === ADMIN_OF
+                const rp = datas.user.filter((_) => _.user_type === RP);
+                const srp = datas.user.filter((_) => _.user_type === SUPER_RP);
+                const admin = datas.user.filter(
+                    (_) => _.user_type === ADMIN_OF
                 );
                 setTrainers(trainer);
                 setTrainees(trainee);
                 setSrps(srp);
                 setRps(rp);
+                return datas;
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
+            });
+    };
+
+    const getAllTraining = async () => {
+        await TrainingService.get_all_trainings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((trainingsResp: ITraining[]) => {
+                console.log("the all trainings", trainingsResp);
+                setTrainings(trainingsResp);
+            })
+            .catch((err) => {
+                console.log("error while gettting all trainings:", err);
             });
     };
 
@@ -159,24 +223,53 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     <div className="tab_header">
                         <div className="tab_title">
                             {!showForm ? (
+                                // LIST TITLE
                                 pathLabel === PATH_LABEL_RESOURCES ? (
                                     <Text>Ressources</Text>
-                                ) : (
+                                ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                     <Text>Stagiaires</Text>
+                                ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                    <Text>O-F</Text>
+                                ) : (
+                                    <Text>Formations</Text>
                                 )
-                            ) : pathLabel === PATH_LABEL_RESOURCES ? (
+                            ) : // FORM TITLE
+                            pathLabel === PATH_LABEL_RESOURCES ? (
                                 <Text> Ajouter Ressource</Text>
-                            ) : (
+                            ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                                 <Text> Ajouter Stagiaire</Text>
+                            ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                <Text>Ajouter O-F</Text>
+                            ) : pathLabel === PATH_LABEL_COMPANY ? (
+                                <Text>Ajouter Société</Text>
+                            ) : (
+                                <Text> Ajouter Formation</Text>
                             )}
                             <TooltipHost
-                                content="Ajouter Formateur"
+                                content={
+                                    pathLabel === PATH_LABEL_RESOURCES
+                                        ? "Ajouter Formateur"
+                                        : pathLabel === PATH_LABEL_CUSTOMER
+                                        ? "Ajouter Stagiaire"
+                                        : pathLabel === PATH_LABEL_COMPANY
+                                        ? "Ajouter Société"
+                                        : "Ajouter Formation"
+                                }
                                 id={tooltipId}
                             >
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() => showAddForm(TEACHEAR_FORM)}
+                                    onClick={() =>
+                                        showAddForm(
+                                            pathLabel === PATH_LABEL_RESOURCES
+                                                ? TEACHEAR_FORM
+                                                : pathLabel ===
+                                                  PATH_LABEL_CUSTOMER
+                                                ? TRAINEE_FORM
+                                                : SERVICES_FORM
+                                        )
+                                    }
                                 />
                             </TooltipHost>
                         </div>
@@ -198,13 +291,31 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                     />
                                     {pathLabel === "Trainees" && (
                                         <div className="filter_box">
-                                            <SearchBox
-                                                placeholder="Filter1"
-                                                iconProps={filterIcon}
+                                            <Dropdown
+                                                selectedKey={
+                                                    selectedSortedItem
+                                                        ? selectedSortedItem.key
+                                                        : undefined
+                                                }
+                                                onChange={onChangeSorted}
+                                                placeholder="Trier par"
+                                                options={
+                                                    dropdownControlledSortBy
+                                                }
+                                                styles={dropdownStyles}
                                             />
-                                            <SearchBox
-                                                placeholder="Filter"
-                                                iconProps={filterIcon}
+                                            <Dropdown
+                                                selectedKey={
+                                                    selectedFilteredItem
+                                                        ? selectedFilteredItem.key
+                                                        : undefined
+                                                }
+                                                onChange={onChangeFiltered}
+                                                placeholder="Filtrer par OF"
+                                                options={
+                                                    dropdownControlledFilterBy
+                                                }
+                                                styles={dropdownStyles}
                                             />
                                         </div>
                                     )}
@@ -231,7 +342,15 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                         : "tab_content_trainee"
                                 }
                             >
-                                {trainers.length && pathLabel === "Resources"
+                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                    <TrainingOrganizationCardComponent
+                                        toggleTab={() =>
+                                            toggleFullInfosTab("jmjqsfqsfm5")
+                                        }
+                                    />
+                                ) : null}
+                                {trainers.length &&
+                                pathLabel === PATH_LABEL_RESOURCES
                                     ? trainers.map((_) => (
                                           <UsersDisplayComponent
                                               toggleTab={() =>
@@ -242,7 +361,8 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                           />
                                       ))
                                     : null}
-                                {trainees.length && pathLabel === "Trainees"
+                                {trainees.length &&
+                                pathLabel === PATH_LABEL_CUSTOMER
                                     ? trainees.map((_) => (
                                           <TraineeDisplayComponent
                                               toggleTab={() =>
@@ -253,19 +373,18 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                           />
                                       ))
                                     : null}
-                                {pathLabel === PATH_LABEL_SERVICES ? (
-                                    <>
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                        <TrainingComponent />
-                                    </>
-                                ) : null}
+                                {trainings.length &&
+                                pathLabel === PATH_LABEL_SERVICES
+                                    ? trainings.map((_) => (
+                                          <TrainingCardComponent
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
+                                              trainingDetails={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
                             </div>
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>
@@ -289,10 +408,12 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {srps.length && pathLabel === "Resources"
+                                    {srps.length
                                         ? srps.map((_) => (
                                               <UsersDisplayComponent
-                                                  toggleTab={toggleFullInfosTab}
+                                                  toggleTab={() =>
+                                                      toggleFullInfosTab(_.id)
+                                                  }
                                                   detailsInfos={_}
                                                   key={_.id}
                                               />
@@ -322,7 +443,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {rps.length && pathLabel === "Resources"
+                                    {rps.length
                                         ? rps.map((_) => (
                                               <UsersDisplayComponent
                                                   toggleTab={toggleFullInfosTab}
@@ -334,28 +455,53 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 </div>
                             )}
                         </div>
-                    ) : pathLabel === "Resources" ? (
+                    ) : pathLabel === PATH_LABEL_RESOURCES ? (
                         <TrainerFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
-                            resourcesType={resourcesType}
+                            formToDisplay={formToDisplay}
                         />
-                    ) : (
+                    ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                         <TraineeFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
                         />
+                    ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
+                        <TrainingOrganizationFormComponent
+                            cancel={() => setShowForm(false)}
+                        />
+                    ) : pathLabel === PATH_LABEL_COMPANY ? (
+                        <CompanyFormComponent />
+                    ) : (
+                        <TrainingFormComponent
+                            cancel={() => setShowForm(false)}
+                        />
                     )}
-                    {/* {/* <div>
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                    <TraineeDisplayComponent />
-                </div> */}
                 </div>
             </div>
             <div id="display_tab_ii">
-                <FullInformationsTabComponent contentId={contentId} />
+                <FullInformationsTabComponent
+                    contentId={contentId}
+                    currentPath={pathLabel}
+                />
             </div>
         </div>
     );
 };
+
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: {} };
+
+const dropdownControlledSortBy = [
+    { key: "name", text: "Nom" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "date_added", text: "Date ajoute" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "most_booking", text: "Réservations" },
+];
+const dropdownControlledFilterBy = [
+    { key: "OF1", text: "OF1" },
+    { key: "divid3", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "OF2", text: "OF2" },
+    { key: "divid4", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "OF3", text: "OF3" },
+];

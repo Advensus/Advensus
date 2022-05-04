@@ -43,7 +43,7 @@ urlpatterns = [
     path('DeleteDocument/<str:pk>/', views.deletedocument),
 
    #LOGOUT URL
-    path('Logout/',LogoutUser.as_view()),
+    # path('Logout/',LogoutUser.as_view()),
  
 ]
 

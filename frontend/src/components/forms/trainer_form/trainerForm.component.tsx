@@ -1,31 +1,37 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     BASIC_RP_FORM,
     NewUserDto,
     NewUserDtoIn,
+    SERVICES_FORM,
     SUPER_RP_FORM,
     TEACHEAR_FORM,
 } from "../../../lib";
 import UserService from "../../../services/user.service";
+import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
     cancel?: () => void;
     onCreate: (data: NewUserDtoIn) => void;
-    resourcesType?: string;
+    formToDisplay?: string;
 }
 
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     cancel,
     onCreate,
-    resourcesType,
+    formToDisplay,
 }) => {
+    useEffect(() => {
+        console.log({ formToDisplay });
+    }, [formToDisplay]);
+
     const onSubmit = (value: NewUserDto) => {
         console.log({ value });
         console.log({ BASIC_RP_FORM });
-        if (resourcesType === TEACHEAR_FORM) {
+        if (formToDisplay === TEACHEAR_FORM) {
             UserService.new_trainer(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -39,7 +45,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     console.log("error while adding new trainer:", err);
                 });
         }
-        if (resourcesType === SUPER_RP_FORM) {
+        if (formToDisplay === SUPER_RP_FORM) {
             UserService.new_super_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -52,7 +58,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     console.log("error while adding new super rp:", err);
                 });
         }
-        if (resourcesType === BASIC_RP_FORM) {
+        if (formToDisplay === BASIC_RP_FORM) {
             UserService.new_basic_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -84,19 +90,27 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
 
     return (
         <form onSubmit={handleSubmit} className="trainer_form_container">
-            <Text className="trainer_txt_divide_mov">Formateur</Text>
+            {formToDisplay === TEACHEAR_FORM && (
+                <Text className="trainer_txt_divide_mov">Formateur</Text>
+            )}
+            {formToDisplay === SUPER_RP_FORM && (
+                <Text className="trainer_txt_divide_mov">
+                    Super Responsable Pédagogique
+                </Text>
+            )}
+            {formToDisplay === BASIC_RP_FORM && (
+                <Text className="trainer_txt_divide_mov">
+                    Responsable Pédagogique Normal
+                </Text>
+            )}
             <hr className="trainer_hr_solid" />
             <div className="own_trainer_sect">
                 <div className="own_trainer_pict">Img part</div>
                 <div className="own_trainer_fields">
                     <div className="own_trainer_align_fields">
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Civilité"
-                            name="text"
+                        <CustomDropDownComponent
+                            dropdownOptions={Civility}
+                            thePlaceHolder="Civilité"
                         />
                         <TextField
                             type="text"
@@ -151,7 +165,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <Text className="trainer_txt_divide_mov">Other</Text>{" "}
             <hr className="trainer_hr_solid" />
             <div className="oth_trainer">
-                {resourcesType === TEACHEAR_FORM && (
+                {formToDisplay === TEACHEAR_FORM && (
                     <>
                         <TextField
                             type="text"
@@ -166,6 +180,11 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             onChange={handleChange}
                             placeholder="Horaire"
                             name="horaire"
+                        />
+
+                        <CustomDropDownComponent
+                            dropdownOptions={Civility}
+                            thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
                         />
                     </>
                 )}
@@ -190,3 +209,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         </form>
     );
 };
+
+const Civility = [
+    { key: "Male", text: "Mr" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "Female", text: "Mme" },
+];

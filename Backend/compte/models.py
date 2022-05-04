@@ -36,16 +36,15 @@ class Document(models.Model):
     partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type')
     emarger = models.ForeignKey(User,on_delete=models.CASCADE,related_name='emarger_content_type')
 
-class Classes(models.Model):
-    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Courses(models.Model):
     superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser_content_type')
     assister = models.ManyToManyField(User,related_name='assister_content_type')
     etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
-    reservation_classe = models.OneToOneField(reservation,on_delete=models.CASCADE)
+    reservation_cours = models.OneToOneField(reservation,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
+
 class Opinion(models.Model):
-    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    rapporter = models.ForeignKey(Classes,on_delete=models.CASCADE)
+    rapporter = models.ForeignKey(Courses,on_delete=models.CASCADE)
     donner = models.ForeignKey(User,on_delete=models.CASCADE)
     rate = models.IntegerField(default=0)
     mind = models.CharField(max_length=255)

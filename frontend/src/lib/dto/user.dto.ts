@@ -28,3 +28,7 @@ export interface NewUserDtoOut {
 export interface NewUserDtoIn {
     user: IUser;
 }
+
+export interface UserDtoIn {
+    user: IUser[];
+}

@@ -16,6 +16,9 @@ class UserService {
 
     static new_basic_rp = (info: unknown) =>
         BaseService.postRequest(userUls.NEW_BASIC_RP, info, false);
+
+    static get_user_by_id = (id: string) =>
+        BaseService.getRequest(userUls.GET_USER_BY_ID(id), false);
 }
 
 export default UserService;

@@ -1,8 +1,14 @@
-import { DefaultButton, TextField, Text } from "@fluentui/react";
+import {
+    DefaultButton,
+    TextField,
+    Text,
+    DropdownMenuItemType,
+} from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { NewUserDto, NewUserDtoIn, NewUserDtoOut } from "../../../lib";
 import UserService from "../../../services/user.service";
+import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ITraineeFormProps {
     default_props?: boolean;
@@ -48,22 +54,10 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             <div className="own_trainee_sect">
                 <div className="own_trainee_pict">Img part</div>
                 <div className="own_trainee_fields">
-                    <TextField
-                        type="text"
-                        // label="text"
-                        // value={values.text}
-                        // onChange={handleChange}
-                        placeholder="Company name"
-                        name="text"
-                    />
                     <div className="own_trainee_align_fields">
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Civilité"
-                            name="text"
+                        <CustomDropDownComponent
+                            dropdownOptions={Civility}
+                            thePlaceHolder="Civilité"
                         />
                         <TextField
                             type="text"
@@ -102,6 +96,22 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                         placeholder="Phonenumber"
                         name="phone_number"
                     />
+                    <TextField
+                        type="text"
+                        // value={values.competence}
+                        // onChange={handleChange}
+                        placeholder="Date de naissance"
+                        name="competence"
+                    />
+                    <TextField
+                        type="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        placeholder="Password"
+                        name="password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+                    />
                 </div>
             </div>
             <Text className="trainee_txt_divide_mov">Adress</Text>{" "}
@@ -115,16 +125,9 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     name="adress"
                 />
             </div>
-            <Text className="trainee_txt_divide_mov">Other</Text>{" "}
+            <Text className="trainee_txt_divide_mov">Dossier Formation</Text>{" "}
             <hr className="trainee_hr_solid" />
             <div className="oth_trainee">
-                <TextField
-                    type="text"
-                    // value={values.competence}
-                    // onChange={handleChange}
-                    placeholder="Date de naissance"
-                    name="competence"
-                />
                 <TextField
                     type="text"
                     // value={values.horaire}
@@ -132,14 +135,43 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="EDOF"
                     name="horaire"
                 />
+                <CustomDropDownComponent
+                    dropdownOptions={Training}
+                    thePlaceHolder="Formtion(s)"
+                />
                 <TextField
-                    type="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                    name="password"
-                    canRevealPassword
-                    revealPasswordAriaLabel="Show password"
+                    type="text"
+                    // value={values.horaire}
+                    // onChange={handleChange}
+                    placeholder="Durée de la formation"
+                    name="horaire"
+                />
+                <TextField
+                    type="text"
+                    // value={values.horaire}
+                    // onChange={handleChange}
+                    placeholder="Date de début de session"
+                    name="horaire"
+                />
+                <TextField
+                    type="text"
+                    // value={values.horaire}
+                    // onChange={handleChange}
+                    placeholder="Date de fin de session"
+                    name="horaire"
+                />
+
+                <CustomDropDownComponent
+                    dropdownOptions={TrainingFolder}
+                    thePlaceHolder="Status de dossier"
+                />
+                <CustomDropDownComponent
+                    dropdownOptions={OF}
+                    thePlaceHolder="ORGANISME DE FORMATION"
+                />
+                <CustomDropDownComponent
+                    dropdownOptions={OF}
+                    thePlaceHolder="RESPONSABLE PEDAGOGIQUE"
                 />
             </div>
             <div className="trainee_form_btns">
@@ -153,3 +185,31 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         </form>
     );
 };
+
+const OF = [
+    { key: "OF1", text: "OF1" },
+    { key: "OF2", text: "OF2" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "OF3", text: "OF3" },
+    { key: "OF4", text: "OF4" },
+];
+const TrainingFolder = [
+    { key: "State1", text: "En Formation" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "State2", text: "Terminé" },
+    { key: "State3", text: "Annulé" },
+    { key: "State4", text: "A débuté" },
+    { key: "State5", text: "Reporté" },
+    { key: "State6", text: "EXPIRÉ" },
+];
+const Training = [
+    { key: "Training1", text: "Français" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "Training2", text: "Anglais" },
+    { key: "Training3", text: "Web" },
+];
+const Civility = [
+    { key: "Male", text: "Mr" },
+    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "Female", text: "Mme" },
+];

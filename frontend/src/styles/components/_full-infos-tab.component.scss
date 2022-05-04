@@ -1,17 +1,175 @@
 .full_infos_tab_container {
+    position: relative;
     height: 100%;
     display: grid;
     width: 100%;
     grid-template-rows: auto 1fr;
     // width: 500px;
+    overflow: hidden;
 }
 .full_infos_tab_header {
+    display: flex;
+    flex-direction: column;
 }
+.full_infos_tab_header_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.full_infos_tab_hr_dashed {
+    border-top: 0.1em dashed black;
+    border-bottom: 0;
+    margin-top: 0;
+    width: 100%;
+}
+
 .full_infos_tab_body {
     background-color: #f4f3f3;
     margin-top: 5px;
+    overflow: auto;
+}
+.full_infos_tab_body_services {
+    margin-top: 5px;
+    overflow: auto;
 }
 
-.label_details_tab {
+// FOR DETAILS TA
+.label_details_tab_container {
     padding: 20px 10px;
+    overflow: auto;
+}
+.full_infos_resources_own {
+    margin-top: 20px;
+    overflow: auto;
+}
+.full_infos_hr_solid {
+    border-bottom: 0;
+    margin-top: 2px;
+}
+
+// SMALL CARD RESOURCES
+
+.resources_own_small_card_container {
+    background: #fff;
+    height: 48px;
+    border: solid 1px grey;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid #000;
+    }
+}
+
+.resources_own_start {
+    display: flex;
+    margin-left: 8px;
+    align-items: center;
+}
+
+.res_cycle {
+    background: rgb(70, 50, 50);
+    height: 35px;
+    width: 35px;
+    border-radius: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+}
+.res_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tag_online {
+    background: green;
+    border-radius: 1em;
+    color: #fff;
+    padding: 0 4px;
+}
+
+.res_action {
+    position: relative;
+    background: gray;
+    height: 38px;
+    width: 25px;
+    margin-right: 4px;
+    &:hover {
+        background: #0373c7;
+        i {
+            color: #fff;
+        }
+    }
+}
+
+// FOR SERVICE TAB
+.label_service_tab_container {
+    position: relative;
+    padding: 20px 15px;
+    background-color: #f4f3f3;
+}
+.display_serv_item {
+    position: relative;
+    background: #fff;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid #000;
+    }
+}
+
+// FOR BOOKING
+.label_booking_tab_container {
+    position: relative;
+    padding: 20px 15px;
+    background-color: #f4f3f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking_dropdown_state {
+    // background-color: blue;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.result_display_booking {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.booking_not_found {
+    background: #e1e4e8;
+    height: 40px;
+    width: 100%;
+    border-radius: 3px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.booking_result_hr_solid {
+    border-bottom: 0;
+    margin-top: 3px;
+    margin-bottom: 5px;
+    // border: 1px solid #000;
+    width: 100%;
+}
+.booking_list {
+    // background: yellowgreen;
 }

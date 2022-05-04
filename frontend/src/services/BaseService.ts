@@ -20,12 +20,13 @@ class BaseService {
         const token = localStorage.getItem("access_token")
             ? localStorage.getItem("access_token") || ""
             : "";
-        console.log(
-            "nous sommes bien dans le getHeadersAuth",
-            `Bearer ${JSON.parse(token)}`
-        );
+        console.log("voyons voir:", token);
+        // console.log(
+        //     "nous sommes bien dans le getHeadersAuth",
+        //     `Bearer ${JSON.parse(token)}`
+        // );
         let convertTok = JSON.parse(token) as LoginDtoOut["tokens"];
-        console.log("the convert tok:", convertTok);
+        console.log("the convert tok:", convertTok.access);
 
         headers.append("Authorization", `Bearer ${convertTok}`);
         return headers;

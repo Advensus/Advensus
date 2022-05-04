@@ -17,7 +17,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from .cours import formation
+from .training import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
@@ -158,7 +158,7 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -166,7 +166,7 @@ def viewalluser(request):
 	return Response({'user':serializer.data})
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def detailuser(request, pk):
 	serializer_class = cruduser
 	donnee = User.objects.get(id=pk)
@@ -178,7 +178,7 @@ def detailuser(request, pk):
 class CreateFormation(CreateAPIView):
     serializer_class = crudformation
     queryset = formation.objects.all()
-    permission_classes = (permissions.IsAuthenticated,autorisation)
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -190,7 +190,7 @@ class CreateFormation(CreateAPIView):
         return self.queryset.filter()
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def viewallformation(request):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
@@ -199,7 +199,7 @@ def viewallformation(request):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def detailformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
