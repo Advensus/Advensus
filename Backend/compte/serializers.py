@@ -1,14 +1,14 @@
 from ctypes import addressof, c_void_p
 from dataclasses import field
 
-from .cours import formation
+from .training import formation
 
-from .societe import Organisme
+from .company import OrganismeFormation
 from rest_framework import serializers
 from .model import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document
+from .models import Document, souscriptionLiaison
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -86,8 +86,8 @@ class AddSrp(serializers.ModelSerializer):
 class AddOrg(serializers.ModelSerializer):
   
     class Meta:
-        model = Organisme
-        fields = ['company_name','company_adress','phone_number','fix_number']
+        model = OrganismeFormation
+        fields = ['id','company']
         
     
     def get_cleaned_data(self):
@@ -96,7 +96,7 @@ class AddOrg(serializers.ModelSerializer):
 
     def save(self):
             societe = super(AddOrg, self).save()
-            societe.is_organisme = True
+            # societe.is_organisme = True
             societe.save()
 
 class AddAdmin(serializers.ModelSerializer):
@@ -110,7 +110,7 @@ class AddAdmin(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','organisme','id']
+        fields =  ['username','first_name','email','phone_number','adress','password','organisme_formation','id']
         
     
     def get_cleaned_data(self):
@@ -184,7 +184,7 @@ class crudformation(serializers.ModelSerializer):
 
     class Meta:
         model = formation
-        fields = ['edof','intitule','duration','start_session','end_session','test_oral', 'id']
+        fields = ['intitule','id']
 
 class cruduser(serializers.ModelSerializer):
     # username = serializers.CharField(max_length=60)
@@ -197,7 +197,7 @@ class cruduser(serializers.ModelSerializer):
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme",
+                 "user_type","competence","trainee_level","session_token","organisme_formation",
                  ]
 
         # infos = {

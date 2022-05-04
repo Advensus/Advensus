@@ -17,7 +17,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from .cours import formation
+from .training import formation
 from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation

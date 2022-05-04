@@ -1,25 +1,23 @@
 from audioop import maxpp
 from django.db import models
 from .model import User
-from .cours import formation
+from .training import formation
 
-
-
-  
- 
- 
-  
-    
-
-
+class souscriptionLiaison(models.Model):
+    utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
+    formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 
 
 class souscrir(models.Model):
-    training_status = models.CharField(max_length=20)
-    hour_worked = models.CharField(max_length=20)
-    training_type = models.CharField(max_length=20)
-    statigiaire = models.ForeignKey(User,on_delete=models.CASCADE)
-    format = models.ForeignKey(formation,on_delete=models.CASCADE)
+    edof = models.CharField(max_length=50)
+    training_status = models.CharField(max_length=50)
+    hour_worked = models.CharField(max_length=50)
+    duration = models.CharField(max_length=50)
+    start_session = models.DateField(auto_now_add=False)
+    end_session = models.DateField(auto_now_add=False)
+    test_oral = models.BooleanField(default=False)
+    souscriptionliaison = models.ManyToManyField(souscriptionLiaison,related_name='souscription_content_type')
+
 
 
 class Presence(models.Model):
@@ -43,14 +41,15 @@ class Document(models.Model):
     partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type')
     emarger = models.ForeignKey(User,on_delete=models.CASCADE,related_name='emarger_content_type')
 
-class Classes(models.Model):
+class Courses(models.Model):
     superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser_content_type')
     assister = models.ManyToManyField(User,related_name='assister_content_type')
     etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
-    reservation_classe = models.OneToOneField(reservation,on_delete=models.CASCADE)
+    reservation_cours = models.OneToOneField(reservation,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
+
 class Opinion(models.Model):
-    rapporter = models.ForeignKey(Classes,on_delete=models.CASCADE)
+    rapporter = models.ForeignKey(Courses,on_delete=models.CASCADE)
     donner = models.ForeignKey(User,on_delete=models.CASCADE)
     rate = models.IntegerField(default=0)
     mind = models.CharField(max_length=255)

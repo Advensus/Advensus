@@ -12,7 +12,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _ 
 
 from rest_framework_simplejwt.tokens import RefreshToken
-from .societe import Organisme
+from .company import SocieteFormation, OrganismeFormation
 
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
@@ -143,9 +143,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-    organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    appartenir = models.ManyToManyField(Organisme,related_name='appartenir_content_type')
-    provenir = models.ManyToManyField(Organisme,related_name='provenir_content_type')
+    organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    appartenir = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
  
     objects = UserManager()
 
