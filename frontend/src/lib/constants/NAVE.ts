@@ -12,6 +12,8 @@ export const SUPER_RP_FORM = "superRp";
 export const TEACHEAR_FORM = "teacher";
 export const TRAINEE_FORM = "trainee";
 export const SERVICES_FORM = "services";
+export const ORGANIZATION_FORM = "organization";
+export const COMPANY_FORM = "company";
 
 export const NAVES = [RESOURCES, CUSTOMER, SERVICES];
 

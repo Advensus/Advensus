@@ -7,3 +7,9 @@ export * from "./auth/signup/Signup.page";
 export * from "./dashboard/dashboard-shell/DashboardShell.page";
 export * from "./dashboard/users/Users.page";
 export * from "./dashboard/scheduler/scheduler.page";
+
+export * from "./dashboard/users/resources/resources.page";
+export * from "./dashboard/users/trainees/trainees.page";
+export * from "./dashboard/trainings/trainings.page";
+export * from "./dashboard/companies/training_company/TrainingCompany.page";
+export * from "./dashboard/companies/training_orgainization/TrainingOrganisation";

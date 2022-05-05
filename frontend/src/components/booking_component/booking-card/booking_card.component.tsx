@@ -82,6 +82,11 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
                             15:52
                         </Text>
                     </>
+                    <div>
+                        <Text>Annuler</Text>
+                        <Text>Editer</Text>
+                        <Text>Reporter</Text>
+                    </div>
                 </div>
             </div>
         </div>

@@ -27,6 +27,15 @@ export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = ({
                 <Text variant="tiny">{detailsInfosTrainee.phone_number}</Text>
                 <Text variant="tiny">{detailsInfosTrainee.email}</Text>
             </div>
+            <div>
+                <Text>H Réalisé</Text>
+            </div>
+            <div>
+                <Text>H Réservé</Text>
+            </div>
+            <div>
+                <Text>Solde</Text>
+            </div>
             <div className="square_displaying">
                 <Text variant="large" style={{ fontWeight: "bold" }}>
                     0

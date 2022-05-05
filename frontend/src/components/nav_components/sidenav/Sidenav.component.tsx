@@ -112,28 +112,147 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
         }
     };
 
-    const toggleBlockContent2 = () => {
-        var hint = document.getElementById(
-            "users_content_display"
-        ) as HTMLInputElement;
+    // const toggleBlockContent2 = () => {
+    //     var hint = document.getElementById(
+    //         "users_content_display"
+    //     ) as HTMLInputElement;
 
-        hint.className = hint.className !== "show" ? "show" : "hide";
-        if (hint.className === "show") {
-            hint.style.display = "block";
-            window.setTimeout(() => {
-                hint.style.opacity = "1";
-                hint.style.transform = "scale(1)";
-            }, 0);
-        }
-        if (hint.className === "hide") {
-            hint.style.opacity = "0";
-            hint.style.transform = "scale(0)";
-            window.setTimeout(function () {
-                hint.style.display = "none";
-            }, 700); // timed to match animation-duration
-        }
-    };
+    //     hint.className = hint.className !== "show" ? "show" : "hide";
+    //     if (hint.className === "show") {
+    //         hint.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint.style.opacity = "1";
+    //             hint.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint.className === "hide") {
+    //         hint.style.opacity = "0";
+    //         hint.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
 
+    // // users_content_display_companies;
+    // const toggleCompaniesContent = () => {
+    //     var hint_companies = document.getElementById(
+    //         "users_content_display_company"
+    //     ) as HTMLInputElement;
+
+    //     hint_companies.className =
+    //         hint_companies.className !== "show" ? "show" : "hide";
+    //     if (hint_companies.className === "show") {
+    //         hint_companies.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint_companies.style.opacity = "1";
+    //             hint_companies.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint_companies.className === "hide") {
+    //         hint_companies.style.opacity = "0";
+    //         hint_companies.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint_companies.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
+
+    // // users_content_display_organisation;
+    // const toggleOrganizationsContent = () => {
+    //     var hint_organisations = document.getElementById(
+    //         "users_content_display_organization"
+    //     ) as HTMLInputElement;
+
+    //     hint_organisations.className =
+    //         hint_organisations.className !== "show" ? "show" : "hide";
+    //     if (hint_organisations.className === "show") {
+    //         hint_organisations.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint_organisations.style.opacity = "1";
+    //             hint_organisations.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint_organisations.className === "hide") {
+    //         hint_organisations.style.opacity = "0";
+    //         hint_organisations.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint_organisations.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
+
+    // // users_content_display_trainees;
+    // const toggleTraineesContent = () => {
+    //     var hint_trainees = document.getElementById(
+    //         "users_content_display_trainees"
+    //     ) as HTMLInputElement;
+
+    //     hint_trainees.className =
+    //         hint_trainees.className !== "show" ? "show" : "hide";
+    //     if (hint_trainees.className === "show") {
+    //         hint_trainees.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint_trainees.style.opacity = "1";
+    //             hint_trainees.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint_trainees.className === "hide") {
+    //         hint_trainees.style.opacity = "0";
+    //         hint_trainees.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint_trainees.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
+
+    // // users_content_display_resources;
+    // const toggleResourcesContent = () => {
+    //     var hint_resources = document.getElementById(
+    //         "users_content_display_resources"
+    //     ) as HTMLInputElement;
+
+    //     hint_resources.className =
+    //         hint_resources.className !== "show" ? "show" : "hide";
+    //     if (hint_resources.className === "show") {
+    //         hint_resources.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint_resources.style.opacity = "1";
+    //             hint_resources.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint_resources.className === "hide") {
+    //         hint_resources.style.opacity = "0";
+    //         hint_resources.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint_resources.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
+
+    // // users_content_display_trainings;
+    // const toggleTrainingsContent = () => {
+    //     var hint_trainings = document.getElementById(
+    //         "users_content_display_trainings"
+    //     ) as HTMLInputElement;
+
+    //     hint_trainings.className =
+    //         hint_trainings.className !== "show" ? "show" : "hide";
+    //     if (hint_trainings.className === "show") {
+    //         hint_trainings.style.display = "block";
+    //         window.setTimeout(() => {
+    //             hint_trainings.style.opacity = "1";
+    //             hint_trainings.style.transform = "scale(1)";
+    //         }, 0);
+    //     }
+    //     if (hint_trainings.className === "hide") {
+    //         hint_trainings.style.opacity = "0";
+    //         hint_trainings.style.transform = "scale(0)";
+    //         window.setTimeout(function () {
+    //             hint_trainings.style.display = "none";
+    //         }, 700); // timed to match animation-duration
+    //     }
+    // };
     return (
         <nav className="sidenav">
             {isMobile ? <CurrentUserDetailsComponent /> : null}
@@ -142,8 +261,6 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                     key={navig.path}
                     to={navig.path}
                     state={{ label: `${navig.label}` }}
-                    // state={{ navig: navig }}
-                    onClick={toggleBlockContent2}
                     className={({ isActive }) =>
                         [
                             "sidenav__route",

@@ -234,13 +234,12 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Horaire"
                             name="horaire"
                         />
-
-                        <CustomDropDownComponent
-                            dropdownOptions={Civility}
-                            thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
-                        />
                     </>
                 )}
+                <CustomDropDownComponent
+                    dropdownOptions={Civility}
+                    thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
+                />
                 <TextField
                     type="password"
                     value={values.password}
