@@ -218,7 +218,7 @@ export const FullInformationsTabComponent: React.FC<
                     </PivotItem>
                     {currentPath === PATH_LABEL_RESOURCES && (
                         <PivotItem
-                            headerText="Services"
+                            headerText="Formations"
                             className="label_service_tab_container"
                         >
                             {" "}
@@ -256,7 +256,7 @@ export const FullInformationsTabComponent: React.FC<
                         </PivotItem>
                     )}
                     {/* FOR BOOKING TAB */}
-                    {currentPath === PATH_LABEL_CUSTOMER && (
+                    {currentPath !== PATH_LABEL_SERVICES && (
                         <PivotItem
                             headerText="Réservations"
                             className="label_booking_tab_container"
