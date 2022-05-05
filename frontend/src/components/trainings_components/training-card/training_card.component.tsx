@@ -30,7 +30,7 @@ export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
                 </Text>
                 <Icon iconName="HourGlass" styles={trainingCardIconStyles} />
                 <Text variant="tiny" style={{ margin: "0 6px" }}>
-                    {trainingDetails.duration}
+                    4
                 </Text>
             </div>
         </Link>

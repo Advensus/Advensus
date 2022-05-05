@@ -10,6 +10,11 @@ export interface ICustomDropDownProps {
     default_props?: boolean;
     thePlaceHolder: string;
     dropdownOptions: IDropdownOption[];
+    isChange?: (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption<string>
+    ) => void;
+    keySelected?: IDropdownOption<string>;
 }
 
 interface IDropD {
@@ -34,8 +39,10 @@ const dropdownControlledOptions = [
 export const CustomDropDownComponent: React.FC<ICustomDropDownProps> = ({
     thePlaceHolder,
     dropdownOptions,
+    isChange,
+    keySelected,
 }) => {
-    const [selectedItem, setSelectedItem] = React.useState<IDropdownOption>();
+    // const [selectedItem, setSelectedItem] = React.useState<IDropdownOption>();
 
     // const dropdownControlledOptions = dropdownOptions?.map((_) => {
     //     {
@@ -43,19 +50,19 @@ export const CustomDropDownComponent: React.FC<ICustomDropDownProps> = ({
     //     }
     // });
 
-    const onChange = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedItem(item);
-    };
+    // const onChange = (
+    //     event: React.FormEvent<HTMLDivElement>,
+    //     item?: IDropdownOption
+    // ): void => {
+    //     setSelectedItem(item);
+    // };
 
     return (
         <Dropdown
             // label="Controlled example"
-            selectedKey={selectedItem ? selectedItem.key : undefined}
+            // selectedKeys={keySelected}
             // eslint-disable-next-line react/jsx-no-bind
-            onChange={onChange}
+            onChange={isChange}
             placeholder={thePlaceHolder}
             options={dropdownOptions}
             styles={dropdownStyles}

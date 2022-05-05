@@ -113,10 +113,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
         }
     }, [location.pathname]);
 
-    // useEffect(() => {
-    //     getAllUser();
-    //     getAllTraining();
-    // }, []);
+    useEffect(() => {
+        getAllUser();
+        getAllTraining();
+    }, []);
 
     const toggleFullInfosTab = (id: string) => {
         // console.log({ id });
@@ -460,6 +460,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
                             formToDisplay={formToDisplay}
+                            trainings={trainings}
                         />
                     ) : pathLabel === PATH_LABEL_CUSTOMER ? (
                         <TraineeFormComponent
