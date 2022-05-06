@@ -2,7 +2,7 @@ from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,tout,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
+from .serializers import AddStagiaire,AddFormateur,AddCompany,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -22,6 +22,8 @@ from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
+from .forms import formsouscrir
+from .mixin import ReadWriteSerializerMixin
 
 
 from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
@@ -31,14 +33,18 @@ def home(request):
 
 
 class RegisterStagiaire(generics.GenericAPIView):
-	serializer_class = AddStagiaire
+	# serializer_class = AddStagiaire
+	serializer_class = Adddsouscrir
+	
 	def post(self,request):
 		user = request.data
-		serializer = self.serializer_class(data=user)
+		# form = formsouscrir(request.data)
+		serializer =  self.serializer_class(data=user)
 		serializer.is_valid(raise_exception=True)
+		# f = form.save(commit=False)
+		# f.save()
 		serializer.save()
 		user_data = serializer.data
-
 		user = User.objects.get(email=user_data['email'])
 		token = RefreshToken.for_user(user).access_token
 
@@ -46,11 +52,14 @@ class RegisterStagiaire(generics.GenericAPIView):
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 		email_body = 'salut '+user.username+ '\n' +'utilise ce lien pour verifier ton compte\n'+absurl
-		
+			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
+
+	
+
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
@@ -112,8 +121,8 @@ class RegisteradminOrg(generics.GenericAPIView):
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 		
-class CreateOrganisme(generics.GenericAPIView):
-	serializer_class = AddOrg
+class CreateComapny(generics.GenericAPIView):
+	serializer_class = AddCompany
 	def post(self,request):
 		organisme= request.data
 		serializer = self.serializer_class(data=organisme)

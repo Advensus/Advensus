@@ -4,7 +4,7 @@ from email.policy import default
 
 from .training import formation
 
-from .company import OrganismeFormation
+from .company import Company, OrganismeFormation, SocieteFormation
 from rest_framework import serializers
 from .utilisateur import User
 from django.contrib import auth
@@ -22,13 +22,21 @@ from django.contrib.auth.hashers import make_password
 
 class Adddsouscrir(serializers.ModelSerializer):
     class Meta:
-        models = souscrir
-        fields = ['training_status']
+        model = souscrir
+        fields = '__all__'
+        
+    def get_cleaned_data(self):
+            data = super(Adddsouscrir).get_cleaned_data()
+            return data
+
+    def save(self):
+            s = super(Adddsouscrir, self).save()
+            if s.duration > 4:
+                s.test_oral = True
+                s.save()
 
 
 class AddStagiaire(serializers.ModelSerializer):
-   
-    # user_profile  = serializers.SerializerMethodField("get_all_champ")
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
     adress = serializers.CharField(max_length=60)
@@ -46,8 +54,10 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id']
-      
+        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir_detail']
+        extra_kwargs = {
+            'souscrir_detail': {'write_only': True},
+        }
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
@@ -106,21 +116,21 @@ class AddSrp(serializers.ModelSerializer):
 
            
 
-class AddOrg(serializers.ModelSerializer):
+class AddCompany(serializers.ModelSerializer):
   
     class Meta:
-        model = OrganismeFormation
-        fields = ['id','company']
+        model = SocieteFormation
+        fields = ['id','company_name','company_adress','phone_number']
         
     
     def get_cleaned_data(self):
-            data = super(AddOrg).get_cleaned_data()
+            data = super(AddCompany).get_cleaned_data()
             return data
 
     def save(self):
-            societe = super(AddOrg, self).save()
-            # societe.is_organisme = True
-            societe.save()
+            company = super(AddCompany, self).save()
+
+            company.save()
 
 class AddAdmin(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
@@ -161,7 +171,7 @@ class AddFormateur(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id']
        
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -230,12 +240,25 @@ class crudformation(serializers.ModelSerializer):
     class Meta:
         model = formation
         fields = ['intitule','id']
-        def validate(self):
-           limite = 4
-           test = super(crudformation,self).save()
-           if test.duration < limite:
-               test.test_oral = True
-               test.save()
+
+
+                
+    # def get_cleaned_data(self):
+    #         data = super(Adddsouscrir).get_cleaned_data()
+    #         return data
+
+    # def save(self):
+    #         s = super(Adddsouscrir, self).save()
+            # societe.is_organisme = True
+            # s.save()
+
+        # def validate(self):
+        #    limite = 4
+
+        #    test = super(crudformation,self).save()
+        #    if test.duration < limite:
+        #        test.test_oral = True
+        #        test.save()
        
 class cruduser(serializers.ModelSerializer):
     
@@ -273,3 +296,10 @@ class LogoutUse(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('Mauvais token')
+
+
+class crudsociete(serializers.ModelSerializer):
+
+    class Meta:
+        model = SocieteFormation
+        fields = ["comapny"]

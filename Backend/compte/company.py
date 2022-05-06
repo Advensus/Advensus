@@ -15,7 +15,9 @@ class Company(models.Model):
     company_logo = models.FileField(upload_to="company_logo/",null=True)
 
     def __str__(self):
-        return self.company_name 
+        return self.company_name
+    class Meta:
+        abstract = True 
 
 # @receiver(post_save, sender=User)
 # def create_user_profile(sender, instance, created, **kwargs):
@@ -26,18 +28,19 @@ class Company(models.Model):
 # def save_user_profile(sender, instance, **kwargs):
 #     instance.Organisme.save()
 
-class SocieteFormation(models.Model):
+class SocieteFormation(Company):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    company = models.OneToOneField(
-        Company,
-        on_delete=models.CASCADE,
-    )
+    # company_relation = models.OneToOneField(
+    #     Company,
+    #     on_delete=models.CASCADE,
+    # )
+    
 
 
-class OrganismeFormation(models.Model):
+class OrganismeFormation(Company):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    company = models.OneToOneField(
-        Company,
-        on_delete=models.CASCADE,
-    )
+    # company_relation = models.OneToOneField(
+    #     Company,
+    #     on_delete=models.CASCADE,
+    # )
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)

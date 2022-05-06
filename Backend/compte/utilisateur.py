@@ -12,14 +12,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _ 
 
 from rest_framework_simplejwt.tokens import RefreshToken
-<<<<<<< HEAD:Backend/compte/utilisateur.py
-from .societe import Organisme
-from .cours import formation
-
-
-=======
 from .company import SocieteFormation, OrganismeFormation
->>>>>>> 54ab98ecfb3a4bc12c280975278ded81bbfa9c87:Backend/compte/model.py
 
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
@@ -36,14 +29,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,competence=None,cv=None,dispenser=None):
+    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,competence=None,cv=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
         
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv,dispenser=dispenser)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv)
         user.user_type= 'is_formateur'
         user.set_password(password)
         user.save(using=self._db)
@@ -150,19 +143,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-<<<<<<< HEAD:Backend/compte/utilisateur.py
-    organisme = models.ForeignKey(Organisme, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    appartenir = models.ManyToManyField(Organisme,related_name='appartenir_content_type')
-    provenir = models.ManyToManyField(Organisme,related_name='provenir_content_type')
-    admin = models.ManyToManyField(formation,related_name='admin_content_type')
-    dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
-    
-=======
     organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     appartenir = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
  
->>>>>>> 54ab98ecfb3a4bc12c280975278ded81bbfa9c87:Backend/compte/model.py
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
