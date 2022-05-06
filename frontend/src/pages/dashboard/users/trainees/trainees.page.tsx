@@ -238,8 +238,10 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                                                     : undefined
                                             }
                                             onChange={onChangeSorted}
-                                            placeholder="Trier par"
-                                            options={dropdownControlledSortBy}
+                                            placeholder="Trier Statut"
+                                            options={
+                                                dropdownControlledSortByStatut
+                                            }
                                             styles={dropdownStyles}
                                         />
                                         <Dropdown
@@ -311,12 +313,12 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: {} };
 
-const dropdownControlledSortBy = [
-    { key: "name", text: "Nom" },
+const dropdownControlledSortByStatut = [
+    { key: "name", text: "Terminé" },
     { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "date_added", text: "Date ajoute" },
+    { key: "date_added", text: "En Formation" },
     { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "most_booking", text: "Réservations" },
+    { key: "most_booking", text: "Expiré" },
 ];
 const dropdownControlledFilterBy = [
     { key: "OF1", text: "OF1" },

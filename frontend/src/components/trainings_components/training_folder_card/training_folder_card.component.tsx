@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { Text } from "@fluentui/react";
+import { Link } from "react-router-dom";
 
 export interface ITrainingFolderCardProps {
     default_props?: boolean;
+    openPanel: () => void;
 }
 
 export const TrainingFolderCardComponent: React.FC<
     ITrainingFolderCardProps
-> = () => {
+> = ({ openPanel }) => {
     return (
-        <div className="training_folder_card_container">
+        <Link
+            to="#"
+            onClick={openPanel}
+            className="training_folder_card_container"
+        >
             <div className="training_folder_card_body">
                 <div className="training_folder_card_body_infos">
                     <Text variant="small" style={{ fontWeight: "bold" }}>
@@ -44,6 +50,6 @@ export const TrainingFolderCardComponent: React.FC<
                     Statut
                 </Text>
             </div>
-        </div>
+        </Link>
     );
 };

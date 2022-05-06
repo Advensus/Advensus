@@ -1,14 +1,18 @@
 import { IconButton, ITextStyles, Text } from "@fluentui/react";
 import React, { useState } from "react";
 import { Icon, IIconStyles } from "@fluentui/react/lib/Icon";
+import { Link } from "react-router-dom";
 
 export interface IBookingCardProps {
     default_props?: boolean;
+    openPanel: () => void;
 }
 
-export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
+export const BookingCardComponent: React.FC<IBookingCardProps> = ({
+    openPanel,
+}) => {
     return (
-        <div className="booking_card_container">
+        <Link to="#" onClick={openPanel} className="booking_card_container">
             <div className="booking_card_avatar">
                 <Text
                     variant="medium"
@@ -100,7 +104,7 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
                     </>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 const bookingCardDurationIconStyles: Partial<IIconStyles> = {

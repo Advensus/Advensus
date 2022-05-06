@@ -8,7 +8,9 @@ import {
 } from "../components";
 import {
     ADMIN_OF,
+    CALL_CENTER,
     CUSTOMER,
+    PATH_LABEL_CALL_CENTER,
     PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
@@ -85,6 +87,13 @@ export function useUserRouteHooks() {
         {
             path: `${user_type}/${SERVICES}`,
             label: `${PATH_LABEL_SERVICES}`,
+            icon: "la-id-badge",
+            component: TrainingsPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
+        },
+        {
+            path: `${user_type}/${CALL_CENTER}`,
+            label: `${PATH_LABEL_CALL_CENTER}`,
             icon: "la-id-badge",
             component: TrainingsPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],

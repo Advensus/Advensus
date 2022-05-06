@@ -180,6 +180,10 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     dropdownOptions={OF}
                     thePlaceHolder="RESPONSABLE PEDAGOGIQUE"
                 />
+                <CustomDropDownComponent
+                    dropdownOptions={OF}
+                    thePlaceHolder="CALL CENTER"
+                />
             </div>
             <div className="trainee_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />

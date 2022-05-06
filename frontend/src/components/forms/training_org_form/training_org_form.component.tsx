@@ -60,6 +60,25 @@ export const TrainingOrganizationFormComponent: React.FC<
                         canRevealPassword
                         revealPasswordAriaLabel="Show password"
                     />
+                    <hr />
+                    <TextField
+                        type="text"
+                        // value={values.password}
+                        // onChange={handleChange}
+                        placeholder="Identifiant mon compte formation"
+                        name="password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+                    />
+                    <TextField
+                        type="password"
+                        // value={values.password}
+                        // onChange={handleChange}
+                        placeholder="Mot de passe Mon compte formation"
+                        name="password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+                    />
                     <div className="training_org_form_stamp">Cachet</div>
                 </div>
             </div>
