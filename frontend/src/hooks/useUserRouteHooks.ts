@@ -3,7 +3,6 @@ import {
     AccountComponent,
     IRoute,
     SettingsComponent,
-    StatisticsComponent,
     TrainingOrganizationCardComponent,
 } from "../components";
 import {
@@ -27,6 +26,7 @@ import {
 import {
     ResourcesPage,
     SchedulerPage,
+    StatisticsPage,
     TraineesPage,
     TrainingCompanyPage,
     TrainingOrganisationPage,
@@ -51,7 +51,7 @@ export function useUserRouteHooks() {
             path: `stat`,
             label: "Tableaux de bord",
             icon: "la-id-badge",
-            component: StatisticsComponent,
+            component: StatisticsPage,
             roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
         },
         {

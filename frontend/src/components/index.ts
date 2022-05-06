@@ -11,7 +11,6 @@ export * from "./users_components/full-informations-tab/full_informations_tab.co
 export * from "./users_components/user-details/user_details.component";
 export * from "./users_components/account/account.component";
 
-export * from "./statistics/statistics.component";
 export * from "./settings/settings.component";
 
 export * from "./training_org_components/training_org_card/training_org_card.component";

@@ -13,3 +13,4 @@ export * from "./dashboard/users/trainees/trainees.page";
 export * from "./dashboard/trainings/trainings.page";
 export * from "./dashboard/companies/training_company/TrainingCompany.page";
 export * from "./dashboard/companies/training_orgainization/TrainingOrganisation";
+export * from "./dashboard/statistics/statistics.page";
