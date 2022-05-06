@@ -1,12 +1,13 @@
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from .company import  OrganismeFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddOrg,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
+from .serializers import AddStagiaire,AddFormateur,AddSociete,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from .model import User
+from .utilisateur import User
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -22,6 +23,8 @@ from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
+from .forms import formsouscrir
+from .mixin import ReadWriteSerializerMixin
 
 
 from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
@@ -31,14 +34,18 @@ def home(request):
 
 
 class RegisterStagiaire(generics.GenericAPIView):
-	serializer_class = AddStagiaire
+	# serializer_class = AddStagiaire
+	serializer_class = Adddsouscrir
+	
 	def post(self,request):
 		user = request.data
-		serializer = self.serializer_class(data=user)
+		# form = formsouscrir(request.data)
+		serializer =  self.serializer_class(data=user)
 		serializer.is_valid(raise_exception=True)
+		# f = form.save(commit=False)
+		# f.save()
 		serializer.save()
 		user_data = serializer.data
-
 		user = User.objects.get(email=user_data['email'])
 		token = RefreshToken.for_user(user).access_token
 
@@ -46,19 +53,23 @@ class RegisterStagiaire(generics.GenericAPIView):
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 		email_body = 'salut '+user.username+ '\n' +'utilise ce lien pour verifier ton compte\n'+absurl
-		
+			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
+	
+
+
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
-	def post(self,request): 
+	def post(self,request,*args,**kwargs): 
 		formateur = request.data
 		serializer = self.serializer_class(data=formateur)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
+		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
 		# formateur = User.objects.get(email=user_data['email'])
@@ -73,6 +84,14 @@ class RegisterFormateur(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
+	# def get_cleaned_data(self,request):
+	# 	formateur = request.data
+	# 	serializer = self.serializer_class(data=formateur)
+	# 	self.serializer_class.dispenser = serializer.get_cleaned_data()
+	# 	serializer.save()
+		
+    	
+    
 
 class RegisterResponsableP(generics.GenericAPIView):
 	serializer_class = AddRp
@@ -103,8 +122,8 @@ class RegisteradminOrg(generics.GenericAPIView):
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 		
-class CreateOrganisme(generics.GenericAPIView):
-	serializer_class = AddOrg
+class CreateSociete(generics.GenericAPIView):
+	serializer_class = AddSociete
 	def post(self,request):
 		organisme= request.data
 		serializer = self.serializer_class(data=organisme)
@@ -308,3 +327,18 @@ class LogoutUser(generics.GenericAPIView):
 		serializer.save()
 
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CreateOrganisme(CreateAPIView):
+    serializer_class =  CrudOrganisme
+    queryset =  OrganismeFormation.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()

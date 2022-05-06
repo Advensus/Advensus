@@ -1,22 +1,42 @@
 from ctypes import addressof, c_void_p
 from dataclasses import field
+from email.policy import default
 
 from .training import formation
 
-from .company import OrganismeFormation
+from .company import Company, OrganismeFormation, SocieteFormation
 from rest_framework import serializers
-from .model import User
+from .utilisateur import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document, souscriptionLiaison
+from .models import Document,souscrir
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
 
 
-# Sign Up Users
-class AddStagiaire(serializers.ModelSerializer):
+from django.contrib.auth.hashers import make_password
 
+
+# Sign Up Users
+
+class Adddsouscrir(serializers.ModelSerializer):
+    class Meta:
+        model = souscrir
+        fields = '__all__'
+        
+    def get_cleaned_data(self):
+            data = super(Adddsouscrir).get_cleaned_data()
+            return data
+
+    def save(self):
+            s = super(Adddsouscrir, self).save()
+            if s.duration > 4:
+                s.test_oral = True
+                s.save()
+
+
+class AddStagiaire(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
     adress = serializers.CharField(max_length=60)
@@ -25,10 +45,19 @@ class AddStagiaire(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
 
+    # def get_user_profile(self, obj):
+    #     try:
+    #         user_profile = souscrir.objects.all()
+    #         return  user_profile
+    #     except Exception as e:
+    #         return {}
+   
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id']
-
+        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir_detail']
+        extra_kwargs = {
+            'souscrir_detail': {'write_only': True},
+        }
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
@@ -43,6 +72,9 @@ class AddStagiaire(serializers.ModelSerializer):
     def create(self,validated_data):
         return User.objects.create_user1(**validated_data)
 
+class tout(serializers.Serializer):
+    s =  Adddsouscrir(many=True)
+    t = AddStagiaire(many=True)
 class AddRp(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
@@ -51,10 +83,11 @@ class AddRp(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-
     class Meta:
         model = User
+        
         fields = ['username','first_name','email','phone_number','adress','password','id']
+      
     def get_cleaned_data(self):
         data = super(AddRp, self).get_cleaned_data()
         return data
@@ -83,21 +116,21 @@ class AddSrp(serializers.ModelSerializer):
 
            
 
-class AddOrg(serializers.ModelSerializer):
+class AddSociete(serializers.ModelSerializer):
   
     class Meta:
-        model = OrganismeFormation
-        fields = ['id','company']
+        model = SocieteFormation
+        fields = ['id','company_name','company_adress','phone_number']
         
     
     def get_cleaned_data(self):
-            data = super(AddOrg).get_cleaned_data()
+            data = super(AddSociete).get_cleaned_data()
             return data
 
     def save(self):
-            societe = super(AddOrg, self).save()
-            # societe.is_organisme = True
-            societe.save()
+            company = super(AddSociete, self).save()
+
+            company.save()
 
 class AddAdmin(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
@@ -110,7 +143,7 @@ class AddAdmin(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','organisme_formation','id']
+        fields =  ['username','first_name','email','phone_number','adress','password','id','societe_formation']
         
     
     def get_cleaned_data(self):
@@ -133,14 +166,35 @@ class AddFormateur(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=70)
     id = serializers.UUIDField(read_only=True)
+   
   
+    
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id']
-
-    def create(self,validate_data):
-        return User.objects.create_user2(**validate_data)
+       
+    def validate(self,attrs):
+        email = attrs.get('email','')
+        username = attrs.get('username','')
+        first_name = attrs.get('first_name','')
+        
             
+        if not username.isalnum():
+            raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+        return attrs
+    # def create(request,validate_data):
+    #     user = User.objects.create_user2(**validate_data)
+    #     user.set(request.user)
+    #     return user
+    def create_data(self,request,validate_data):
+       
+        data = super(AddFormateur,self).get_cleaned_data()
+       
+        user = User.objects.create_user2(**validate_data)
+        user.set(request.user)
+        user.save()
+      
+        return data
 
 
 
@@ -181,18 +235,33 @@ class login(serializers.ModelSerializer):
 # CRUD Operations
 
 class crudformation(serializers.ModelSerializer):
-
+    # test_oral = serializers.BooleanField()
+    
     class Meta:
         model = formation
         fields = ['intitule','id']
 
+
+                
+    # def get_cleaned_data(self):
+    #         data = super(Adddsouscrir).get_cleaned_data()
+    #         return data
+
+    # def save(self):
+    #         s = super(Adddsouscrir, self).save()
+            # societe.is_organisme = True
+            # s.save()
+
+        # def validate(self):
+        #    limite = 4
+
+        #    test = super(crudformation,self).save()
+        #    if test.duration < limite:
+        #        test.test_oral = True
+        #        test.save()
+       
 class cruduser(serializers.ModelSerializer):
-    # username = serializers.CharField(max_length=60)
-    # email = serializers.CharField(max_length=60)
-    # adress = serializers.CharField(max_length=60)
-    # phone_number = serializers.CharField(max_length=60)
-    # first_name= serializers.CharField(max_length=60)
-    # id = serializers.UUIDField(read_only=True)
+    
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
@@ -200,35 +269,16 @@ class cruduser(serializers.ModelSerializer):
                  "user_type","competence","trainee_level","session_token","organisme_formation",
                  ]
 
-        # infos = {
-        # 'user':     {
-        #     'id':'id',
-        #     'email':'email',
-        #     "username":'username',
-        #     'first_name':'first_name',
-        #     'is_active':'is_active',
-        #     'avatar':'avatar',
-        #     'phone_number':'phone_number',
-        #     'adress':'adress',
-        #     'horaire':'horaire',
-        #     'signature_former':'signature_former',
-        #     'cv':'cv',
-        #     'user_type':'user_type',
-        #     'competence':'competence',
-        #     'trainee_level':'trainee_level',
-        #     'session_token':'session_token',
-        #     'organisme':'organisme'
-        #     }
-        # }
-        # print(infos['user'])
+        
             
         
 
 
 class cruddocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type']
+        fields = ['doc_content','doc_type','id']
 
 class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()
@@ -246,3 +296,10 @@ class LogoutUse(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('Mauvais token')
+
+
+class CrudOrganisme(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganismeFormation
+        fields = ['id','company_name','company_adress','phone_number','societe_formation']

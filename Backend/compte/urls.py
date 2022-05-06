@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import RegisterStagiaire,VerifyEmail,RegisterFormateur,CreateOrganisme,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
+from .views import CreateSociete, RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
 
 from . import views
 
@@ -13,7 +13,8 @@ urlpatterns = [
     path('register/formateur/', RegisterFormateur.as_view()),
     path('register/Rp/', RegisterResponsableP.as_view()),
     path('register/Srp/', RegisterSupResponsableP.as_view()),
-    path('register/admin_org/',RegisteradminOrg.as_view()),
+    path('register/admin_societe/',RegisteradminOrg.as_view()),
+    path('create/societe/', CreateSociete.as_view()),
     path('create/organisme/', CreateOrganisme.as_view()),
     path('email-verify/', VerifyEmail.as_view(),name="email-verify"), 
   

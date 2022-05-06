@@ -1,14 +1,16 @@
 from audioop import maxpp
 from django.db import models
-from .model import User
+from .utilisateur import User
 from .training import formation
-
-class souscriptionLiaison(models.Model):
+import uuid
+class souscriptionliaison(models.Model):
+   
     utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 
 
 class souscrir(models.Model):
+    id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     edof = models.CharField(max_length=50)
     training_status = models.CharField(max_length=50)
     hour_worked = models.CharField(max_length=50)
@@ -16,16 +18,18 @@ class souscrir(models.Model):
     start_session = models.DateField(auto_now_add=False)
     end_session = models.DateField(auto_now_add=False)
     test_oral = models.BooleanField(default=False)
-    souscriptionliaison = models.ManyToManyField(souscriptionLiaison,related_name='souscription_content_type')
+    souscriptionliaison = models.ManyToManyField(souscriptionliaison,related_name='souscription_content_type')
 
 
 
 class Presence(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     stagiaireform = models.ForeignKey(User,on_delete=models.CASCADE)
     # formateur = models.ForeignKey(Formateur,on_delete=models.CASCADE)
     
 
 class reservation(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     reservation = models.ManyToManyField(User,related_name='reservation_content_type')
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)
@@ -35,6 +39,7 @@ class reservation(models.Model):
    
 
 class Document(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     doc_type = models.FileField(upload_to="doc_type/")
     doc_content = models.CharField(max_length=255)
     administrer = models.ManyToManyField(User,related_name='administrer_content_type')
@@ -54,5 +59,10 @@ class Opinion(models.Model):
     rate = models.IntegerField(default=0)
     mind = models.CharField(max_length=255)
     
+# class relationtable(models.Model):
+#     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     formateur = models.ForeignKey(User,on_delete=models.CASCADE)
+#     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
+
 
 # Create your models here.

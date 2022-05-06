@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 
 from .company import OrganismeFormation
-from .model import User
+from .utilisateur import User
 class formation(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     intitule = models.CharField(max_length=20)
