@@ -20,3 +20,17 @@
     align-items: center;
     margin-bottom: 5px;
 }
+
+.user_details_training_folder {
+    margin-top: 20px;
+}
+.user_details_training_folder_head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+}
+.hr_user_details_training_folder {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 0px;
+}

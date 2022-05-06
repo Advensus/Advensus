@@ -1,12 +1,15 @@
-import { Text } from "@fluentui/react";
+import { IconButton, IIconProps, Text } from "@fluentui/react";
 import React, { useState } from "react";
 import { AttributeDisplayComponent } from "../../";
 import { IUser } from "../../../lib";
+import { TrainingFolderCardComponent } from "../../trainings_components/training_folder_card/training_folder_card.component";
 
 export interface IUserDetailsProps {
     default_props?: boolean;
     contentToDetail?: IUser;
 }
+
+const addFolderIcon: IIconProps = { iconName: "AddToShoppingList" };
 
 export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
     contentToDetail,
@@ -22,7 +25,7 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
             </div>
             <hr />
             <AttributeDisplayComponent
-                keyWord="Ressource ID"
+                keyWord="User ID"
                 valueWord={contentToDetail?.id}
             />
             <AttributeDisplayComponent
@@ -33,6 +36,29 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                 keyWord="Lastname"
                 valueWord={contentToDetail?.username}
             />
+            <AttributeDisplayComponent
+                keyWord="Email"
+                valueWord={contentToDetail?.email}
+            />
+            <AttributeDisplayComponent
+                keyWord="Téléphone"
+                valueWord={contentToDetail?.phone_number}
+            />
+            <div className="user_details_training_folder">
+                <div className="user_details_training_folder_head">
+                    <Text>Dossier(s) de Formation(s)</Text>
+                    <IconButton
+                        iconProps={addFolderIcon}
+                        // menuIconProps={{ iconName: "ClipboardListAdd" }}
+                        ariaLabel="add"
+                        title="Nouvelle Formation"
+                    />
+                </div>
+                <hr className="hr_user_details_training_folder" />
+                <TrainingFolderCardComponent />
+                <TrainingFolderCardComponent />
+                <TrainingFolderCardComponent />
+            </div>
         </div>
     );
 };

@@ -1,0 +1,49 @@
+.training_folder_card_container {
+    background-color: #fff;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    &:hover {
+        background: #f4f3f3;
+        border: 1px solid gray;
+    }
+}
+
+.training_folder_card_body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.training_folder_card_body_infos {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px 10px;
+}
+.training_folder_card_body_squares {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+.training_folder_card_body_squares_item {
+    margin: 2px;
+    padding: 2px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px black;
+    border-radius: 3px;
+}
+
+.training_folder_card_footer {
+    // background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+}

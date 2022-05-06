@@ -34,6 +34,7 @@ import {
 import UserService from "../../../../services/user.service";
 import { Text } from "@fluentui/react";
 import { useId } from "@fluentui/react-hooks";
+import TrainingService from "../../../../services/training.service";
 
 export interface IResourcesPageProps {
     default_props?: boolean;
@@ -99,6 +100,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
     useEffect(() => {
         getAllUser();
         toggleResourcesContent();
+        getAllTraining();
     }, []);
 
     // users_content_display_resources;
@@ -187,6 +189,24 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
+            });
+    };
+
+    const getAllTraining = async () => {
+        await TrainingService.get_all_trainings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((trainingsResp: ITraining[]) => {
+                console.log("the all trainings", trainingsResp);
+                setTrainings(trainingsResp);
+            })
+            .catch((err) => {
+                console.log("error while gettting all trainings:", err);
             });
     };
 

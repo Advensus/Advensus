@@ -41,17 +41,26 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     const [trainingAvailable, setTrainingAvailable] = useState<
         IDropdownOption[]
     >([]);
-    const [selectedTraining, setSelectedTraining] =
-        React.useState<IDropdownOption<string>>();
-
-    const [selectedSkill, setSelectedSkill] = React.useState<IDropdownOption>();
+    const [selectedSkill, setSelectedSkill] = React.useState<string[]>([]);
 
     const onChangeSkills = (
         event: React.FormEvent<HTMLDivElement>,
         item?: IDropdownOption
     ): void => {
-        setSelectedSkill(item);
+        console.log("item selected:", item?.key);
+        // setSelectedSkill(item);
+        if (item) {
+            setSelectedSkill(
+                item.selected
+                    ? [...selectedSkill, item.key as string]
+                    : selectedSkill.filter((key) => key !== item.key)
+            );
+        }
     };
+
+    useEffect(() => {
+        console.log({ selectedSkill });
+    }, [selectedSkill]);
 
     useEffect(() => {
         if (trainings) {
@@ -67,7 +76,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     }, [formToDisplay]);
 
     const onSubmit = (value: NewUserDto) => {
-        console.log("the skills:", selectedSkill?.key);
+        console.log("the skills:", selectedSkill);
         console.log({ value });
         if (formToDisplay === TEACHEAR_FORM) {
             // UserService.new_trainer(value)
@@ -120,7 +129,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             adress: "",
             password: "",
             horaire: "",
-            competence: selectedSkill ? selectedSkill?.key : undefined,
+            competence: selectedSkill,
         },
         // validationSchema,
         onSubmit,
@@ -205,8 +214,8 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <div className="oth_trainer">
                 {formToDisplay === TEACHEAR_FORM && (
                     <>
-                        {/* <TextField
-                            type="text"
+                        {/* <TextField 
+                            type="text" 
                             value={values.competence}
                             onChange={handleChange}
                             placeholder="Competence"
@@ -222,9 +231,10 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                         /> */}
 
                         <Dropdown
-                            selectedKey={values.competence}
+                            selectedKeys={selectedSkill}
                             onChange={onChangeSkills}
                             placeholder="Competences"
+                            multiSelect
                             options={trainingAvailable}
                         />
                         <TextField

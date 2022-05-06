@@ -35,7 +35,7 @@ export interface IFullInformationsTabProps {
     currentPath: string;
 }
 
-const addIcon: IIconProps = { iconName: "Add" };
+const planIcon: IIconProps = { iconName: "PlanView" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
@@ -119,7 +119,8 @@ export const FullInformationsTabComponent: React.FC<
                     {currentPath === PATH_LABEL_CUSTOMER && (
                         <TooltipHost content="Planifier" id={tooltipId}>
                             <IconButton
-                                iconProps={addIcon}
+                                iconProps={planIcon}
+                                // menuIconProps={{ iconName: "ClipboardListAdd" }}
                                 ariaLabel="add"
                                 // onClick={() =>
                                 //     showAddForm(
