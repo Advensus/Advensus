@@ -1,8 +1,9 @@
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from .company import  OrganismeFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddCompany,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse
+from .serializers import AddStagiaire,AddFormateur,AddSociete,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -121,8 +122,8 @@ class RegisteradminOrg(generics.GenericAPIView):
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 		
-class CreateComapny(generics.GenericAPIView):
-	serializer_class = AddCompany
+class CreateSociete(generics.GenericAPIView):
+	serializer_class = AddSociete
 	def post(self,request):
 		organisme= request.data
 		serializer = self.serializer_class(data=organisme)
@@ -326,3 +327,18 @@ class LogoutUser(generics.GenericAPIView):
 		serializer.save()
 
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CreateOrganisme(CreateAPIView):
+    serializer_class =  CrudOrganisme
+    queryset =  OrganismeFormation.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()

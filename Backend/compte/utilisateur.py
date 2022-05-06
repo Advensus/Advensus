@@ -42,13 +42,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,organisme=None):
+    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,societe_formation=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,organisme=organisme)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,societe_formation=societe_formation)
         user.user_type= 'is_admin'
         user.is_autorise  = True
         user.set_password(password)

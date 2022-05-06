@@ -116,7 +116,7 @@ class AddSrp(serializers.ModelSerializer):
 
            
 
-class AddCompany(serializers.ModelSerializer):
+class AddSociete(serializers.ModelSerializer):
   
     class Meta:
         model = SocieteFormation
@@ -124,11 +124,11 @@ class AddCompany(serializers.ModelSerializer):
         
     
     def get_cleaned_data(self):
-            data = super(AddCompany).get_cleaned_data()
+            data = super(AddSociete).get_cleaned_data()
             return data
 
     def save(self):
-            company = super(AddCompany, self).save()
+            company = super(AddSociete, self).save()
 
             company.save()
 
@@ -143,7 +143,7 @@ class AddAdmin(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','organisme_formation','id']
+        fields =  ['username','first_name','email','phone_number','adress','password','id','societe_formation']
         
     
     def get_cleaned_data(self):
@@ -298,8 +298,8 @@ class LogoutUse(serializers.Serializer):
             self.fail('Mauvais token')
 
 
-class crudsociete(serializers.ModelSerializer):
+class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
-        model = SocieteFormation
-        fields = ["comapny"]
+        model = OrganismeFormation
+        fields = ['id','company_name','company_adress','phone_number','societe_formation']
