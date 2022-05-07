@@ -25,10 +25,13 @@ class BaseService {
         //     "nous sommes bien dans le getHeadersAuth",
         //     `Bearer ${JSON.parse(token)}`
         // );
-        let convertTok = JSON.parse(token) as LoginDtoOut["tokens"];
-        console.log("the convert tok:", convertTok.access);
+        // let convertTok = JSON.parse(token) as LoginDtoOut["tokens"];
+        // let convertTok = token.split("'");
+        // console.log("the convert tok:", { convertTok });
+        // const testt = convertTok[7];
+        // console.log("the tesst", `'${testt}'`);
 
-        headers.append("Authorization", `Bearer ${convertTok}`);
+        headers.append("Authorization", `Bearer ${JSON.parse(token)}`);
         return headers;
     };
 
