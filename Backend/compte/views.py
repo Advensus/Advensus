@@ -123,7 +123,7 @@ class RegisteradminOrg(generics.GenericAPIView):
 		return Response(user_data,status=status.HTTP_201_CREATED)
 		
 class CreateSociete(generics.GenericAPIView):
-	permission_classes = (IsAuthenticated,IsAdminUser)
+	# permission_classes = (IsAuthenticated,IsAdminUser)
 	serializer_class = AddSociete
 	def post(self,request):
 		organisme= request.data
