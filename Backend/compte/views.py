@@ -335,9 +335,9 @@ class CreateOrganisme(CreateAPIView):
 @api_view(['GET'])
 def getallorganisme(request):
 	serializer_class = CrudOrganisme
-	organisme = OrganismeFormation.objects.all()
+	donnee = OrganismeFormation.objects.all()
 
-	serializer = serializer_class(organisme, many=True)
+	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
 
 
