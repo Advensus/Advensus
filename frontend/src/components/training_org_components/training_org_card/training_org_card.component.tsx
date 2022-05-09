@@ -1,16 +1,22 @@
 import { Text } from "@fluentui/react";
 import { Icon, IIconStyles } from "@fluentui/react/lib/Icon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ICompany } from "../../../lib/interfaces/Company";
 
 export interface ITrainingOrganizationCardProps {
     default_props?: boolean;
+    company: ICompany;
     toggleTab: (id: string) => void;
 }
 
 export const TrainingOrganizationCardComponent: React.FC<
     ITrainingOrganizationCardProps
-> = ({ toggleTab }) => {
+> = ({ toggleTab, company }) => {
+    useEffect(() => {
+        console.log({ company });
+    }, []);
+
     return (
         <Link
             to="#"
@@ -20,18 +26,18 @@ export const TrainingOrganizationCardComponent: React.FC<
             <div className="training_org_card_stamp">Stamp here</div>
             <div className="training_org_card_infos">
                 <Text variant="large" style={{ fontWeight: "bolder" }}>
-                    OF name
+                    {company.company_name}
                 </Text>
                 <div className="training_org_card_infos_txt">
                     <Icon iconName="Phone" styles={trainingOrgCardIconStyles} />
-                    <Text variant="tiny">Phone number</Text>
+                    <Text variant="tiny">{company.company_phone_number}</Text>
                 </div>
                 <div className="training_org_card_infos_txt">
                     <Icon
                         iconName="Location"
                         styles={trainingOrgCardIconStyles}
                     />
-                    <Text variant="tiny">Adress</Text>
+                    <Text variant="tiny">{company.company_adress}</Text>
                 </div>
             </div>
         </Link>

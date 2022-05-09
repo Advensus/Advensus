@@ -23,6 +23,9 @@ import {
     PATH_LABEL_ORGANIZATION,
     ORGANIZATION_FORM,
 } from "../../../../lib";
+import CompanyService from "../../../../services/company.service";
+import { ICompany } from "../../../../lib/interfaces/Company";
+import { TrainingOrganizationDtoIn } from "../../../../lib/dto/company.dto";
 
 export interface ITrainingOrganisationPageProps {
     default_props?: boolean;
@@ -45,6 +48,8 @@ export const TrainingOrganisationPage: React.FC<
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
+
+    const [organization, setOrganization] = useState<ICompany[]>([]);
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -74,7 +79,28 @@ export const TrainingOrganisationPage: React.FC<
 
     useEffect(() => {
         toggleOrganizationsContent();
+        getOrganization();
     }, []);
+
+    const getOrganization = async () => {
+        await CompanyService.get_all_organization()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((respOrganisations: ICompany[]) => {
+                console.log("the Organisations datas:", respOrganisations);
+                setOrganization(respOrganisations);
+            })
+            .catch((err) => {
+                console.log("error while getting tainings organisations");
+            });
+    };
 
     // users_content_display_organisation;
     const toggleOrganizationsContent = () => {
@@ -216,13 +242,17 @@ export const TrainingOrganisationPage: React.FC<
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
-                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                    <TrainingOrganizationCardComponent
-                                        toggleTab={() =>
-                                            toggleFullInfosTab("jmjqsfqsfm5")
-                                        }
-                                    />
-                                ) : null}
+                                {organization
+                                    ? organization.map((_) => (
+                                          <TrainingOrganizationCardComponent
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
+                                              company={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
                             </div>
                         </div>
                     ) : (

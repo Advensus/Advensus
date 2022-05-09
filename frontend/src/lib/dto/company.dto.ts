@@ -1,3 +1,5 @@
+import { ICompany } from "../interfaces/Company";
+
 export interface NewTrainingCompanyDtoOut {
     company_name: string;
     company_adress: string;
@@ -20,4 +22,11 @@ export interface NewTrainingCompanyDtoIn {
     company_adress: string;
     phone_number: string;
     fix_number: string;
+}
+
+export interface TrainingCompanyDtoIn {
+    trainingCompany: ICompany[];
+}
+export interface TrainingOrganizationDtoIn {
+    trainingOrganization: ICompany[];
 }

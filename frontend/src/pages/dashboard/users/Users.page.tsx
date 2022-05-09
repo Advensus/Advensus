@@ -342,13 +342,13 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                         : "tab_content_trainee"
                                 }
                             >
-                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
+                                {/* {pathLabel === PATH_LABEL_ORGANIZATION ? (
                                     <TrainingOrganizationCardComponent
                                         toggleTab={() =>
                                             toggleFullInfosTab("jmjqsfqsfm5")
                                         }
                                     />
-                                ) : null}
+                                ) : null} */}
                                 {trainers.length &&
                                 pathLabel === PATH_LABEL_RESOURCES
                                     ? trainers.map((_) => (

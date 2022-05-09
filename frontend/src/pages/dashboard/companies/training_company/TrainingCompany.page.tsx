@@ -17,13 +17,16 @@ import {
     FullInformationsTabComponent,
 } from "../../../../components";
 import {
-    ITraining,
     PATH_LABEL_RESOURCES,
     NewUserDtoIn,
     PATH_LABEL_ORGANIZATION,
     COMPANY_FORM,
+    PATH_LABEL_COMPANY,
 } from "../../../../lib";
 import { useId } from "@fluentui/react-hooks";
+import CompanyService from "../../../../services/company.service";
+import { TrainingCompanyDtoIn } from "../../../../lib/dto/company.dto";
+import { ICompany } from "../../../../lib/interfaces/Company";
 
 export interface ITrainingCompanyPageProps {
     default_props?: boolean;
@@ -38,11 +41,13 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     const location = useLocation();
+    const [trainingsCompanies, setTrainingsCompanies] = useState<ICompany[]>(
+        []
+    );
 
     const tooltipId = useId("tooltip");
     const [showForm, setShowForm] = useState<Boolean>(false);
     const [formToDisplay, setFormToDisplay] = useState<string>("");
-    const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
 
@@ -74,7 +79,48 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
 
     useEffect(() => {
         toggleCompaniesContent();
+        getSociete();
     }, []);
+
+    // const getSociete = async () => {
+    //     await CompanyService.get_all_societe()
+    //         .then(async (response) => {
+    //             if (response.status !== 200) {
+    //                 console.log(
+    //                     "Error resp while gettind all users:",
+    //                     response
+    //                 );
+    //                 return [];
+    //             }
+    //             const datas = (await response.json()) as TrainingCompanyDtoIn;
+    //             console.log("the societies:", datas);
+    //             // setTrainingsCompanies(datas.trainingCompany);
+    //             return datas;
+    //         })
+    //         .catch((err) => {
+    //             console.log("error while getting trainings companies:", err);
+    //         });
+    // };
+
+    const getSociete = async () => {
+        await CompanyService.get_all_societe()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((respCompanies: ICompany[]) => {
+                console.log("the companies datas:", respCompanies);
+                setTrainingsCompanies(respCompanies);
+            })
+            .catch((err) => {
+                console.log("error while getting tainings companies");
+            });
+    };
 
     // users_content_display_companies;
     const toggleCompaniesContent = () => {
@@ -214,13 +260,17 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
-                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                    <TrainingOrganizationCardComponent
-                                        toggleTab={() =>
-                                            toggleFullInfosTab("jmjqsfqsfm5")
-                                        }
-                                    />
-                                ) : null}
+                                {trainingsCompanies.length
+                                    ? trainingsCompanies.map((_) => (
+                                          <TrainingOrganizationCardComponent
+                                              toggleTab={() =>
+                                                  toggleFullInfosTab(_.id)
+                                              }
+                                              company={_}
+                                              key={_.id}
+                                          />
+                                      ))
+                                    : null}
                             </div>
                         </div>
                     ) : (
