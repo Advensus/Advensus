@@ -302,4 +302,4 @@ class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
         model = OrganismeFormation
-        fields = ['id','company_name','company_adress','phone_number','societe_formation']
+        fields = ['id','company_name','company_adress','company_phone_number','societe_formation']
