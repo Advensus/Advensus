@@ -142,6 +142,10 @@ def viewallsociete(request):
 
 	return Response(serializer.data)
 
+
+#UPDATE SOCIETE
+
+
 class VerifyEmail(views.APIView):
     serializer_class = EmailVerificationSerializer
 
