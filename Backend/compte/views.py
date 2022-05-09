@@ -1,3 +1,4 @@
+from re import X
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
@@ -316,19 +317,7 @@ def deletedocument(request, pk):
 
 # FIN CRUD OPERATION FOR DOCUMENTS
 
-
-class LogoutUser(generics.GenericAPIView):
-	serializer_class = LogoutUse
-	permission_classes = (permissions.IsAuthenticated,)
-
-	def post(self,request):
-		serializer = self.serializer_class(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-
-		return Response(status=status.HTTP_204_NO_CONTENT)
-
-
+#CRUD ORGANISME
 class CreateOrganisme(CreateAPIView):
     serializer_class =  CrudOrganisme
     queryset =  OrganismeFormation.objects.all()
@@ -342,3 +331,22 @@ class CreateOrganisme(CreateAPIView):
 
     def get_queryset(self):
         return self.queryset.filter()
+
+@api_view(['GET'])
+def getallorganisme(request):
+	serializer_class = CrudOrganisme
+	organisme = OrganismeFormation.objects.all()
+
+	serializer = serializer_class(organisme, many=True)
+	return Response(serializer.data)
+class LogoutUser(generics.GenericAPIView):
+	serializer_class = LogoutUse
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
