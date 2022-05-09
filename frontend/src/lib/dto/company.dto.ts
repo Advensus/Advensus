@@ -1,6 +1,7 @@
+import { IDropdownOption } from "@fluentui/react";
 import { ICompany } from "../interfaces/Company";
 
-export interface NewTrainingCompanyDtoOut {
+export interface NewCompanyDtoOut {
     company_name: string;
     company_adress: string;
     company_phone_number: string;
@@ -8,24 +9,35 @@ export interface NewTrainingCompanyDtoOut {
     company_stamp?: File;
     company_logo?: File;
 
-    username: string;
-    first_name: string;
-    email: string;
-    phone_number: string;
-    adress: string;
-    password: string;
+    username?: string;
+    first_name?: string;
+    email?: string;
+    phone_number?: string;
+    adress?: string;
+    password?: string;
     societe_formation_id: string;
 }
-export interface NewTrainingCompanyDtoIn {
+export interface NewCompanyDtoIn {
     id: string;
     company_name: string;
     company_adress: string;
     phone_number: string;
     fix_number: string;
+    societe_formation_id?: string;
 }
 
 export interface TrainingCompanyDtoIn {
     trainingCompany: ICompany[];
+}
+
+export interface NewOrganizationDtoOut {
+    company_name: string;
+    company_adress: string;
+    company_phone_number: string;
+    fix_number?: string;
+    company_stamp?: File;
+    company_logo?: File;
+    societe_formation_id: IDropdownOption<string> | string;
 }
 export interface TrainingOrganizationDtoIn {
     trainingOrganization: ICompany[];

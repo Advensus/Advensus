@@ -28,6 +28,7 @@ export const trainingUrls = {
 
 export const companyUrls = {
     NEW_COMPANY: `${prefixer}auth/create/societe/`,
+    NEW_ORGANISATION: `${prefixer}auth/create/organisme/`,
     GET_ALL_SOCIETE: `${prefixer}auth/GetAllSociete`,
     GET_ALL_ORGANISATION: `${prefixer}auth/GetAllOrganisme`,
 };

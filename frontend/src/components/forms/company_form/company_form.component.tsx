@@ -3,8 +3,8 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { NewUserDto } from "../../../lib";
 import {
-    NewTrainingCompanyDtoIn,
-    NewTrainingCompanyDtoOut,
+    NewCompanyDtoIn,
+    NewCompanyDtoOut,
 } from "../../../lib/dto/company.dto";
 import CompanyService from "../../../services/company.service";
 import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
@@ -20,19 +20,25 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
     const [companyId, setCompanyId] = useState<string>("");
     // useEffect(() => {}, [companyId]);
 
-    const onSubmit = (val: NewTrainingCompanyDtoOut) => {
+    const onSubmit = (val: NewCompanyDtoOut) => {
         console.log({ val });
         CompanyService.new_company(val)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
                 }
-                const data = (await response.json()) as NewTrainingCompanyDtoIn;
+                const data = (await response.json()) as NewCompanyDtoIn;
                 console.log("the current adding company:", data.id);
                 setCompanyId(data.id);
+                const inputElement = document.getElementById(
+                    "societe_formation_id"
+                ) as HTMLInputElement;
+                inputElement.defaultValue = "dfsdfsdfsfsdfsdfsdff";
+
                 setTimeout(() => {
                     if (data) {
                         addCompanyAdmin(val);
+                        console.log({ inputElement });
                     }
                 }, 1000);
                 // onCreate(data);
@@ -42,30 +48,33 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             });
     };
 
-    const addCompanyAdmin = (infos: NewTrainingCompanyDtoOut) => {
+    const addCompanyAdmin = (infos: NewCompanyDtoOut) => {
         console.log({ infos });
     };
 
-    const { values, handleChange, handleSubmit } =
-        useFormik<NewTrainingCompanyDtoOut>({
-            initialValues: {
-                company_name: "",
-                company_adress: "",
-                phone_number: "",
-                fix_number: "",
-                username: "",
-                first_name: "",
-                email: "",
-                company_phone_number: "",
-                adress: "",
-                password: "",
-                societe_formation_id: companyId,
-            },
-            onSubmit,
-        });
+    const { values, handleChange, handleSubmit } = useFormik<NewCompanyDtoOut>({
+        initialValues: {
+            company_name: "",
+            company_adress: "",
+            phone_number: "",
+            fix_number: "",
+            username: "",
+            first_name: "",
+            email: "",
+            company_phone_number: "",
+            adress: "",
+            password: "",
+            societe_formation_id: "",
+        },
+        onSubmit,
+    });
 
     return (
-        <form onSubmit={handleSubmit} className="company_form_container">
+        <form
+            name="new_comp"
+            onSubmit={handleSubmit}
+            className="company_form_container"
+        >
             <Text className="company_form_txt_divide_mov">Société</Text>
             <hr className="company_form_hr_solid" />
             <div className="of_company_form_sect">
@@ -126,6 +135,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                         onChange={handleChange}
                         placeholder="Société"
                         name="societe_formation_id"
+                        id="societe_formation_id"
                     />
                     <TextField
                         type="text"
