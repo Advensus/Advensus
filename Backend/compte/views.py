@@ -1,7 +1,8 @@
+from re import X
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .company import  OrganismeFormation
+from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
 from .serializers import AddStagiaire,AddFormateur,AddSociete,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
@@ -131,6 +132,19 @@ class CreateSociete(generics.GenericAPIView):
 		serializer.save()
 		organisme_data = serializer.data
 		return Response(organisme_data,status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def viewallsociete(request):
+	serializer_class = AddSociete
+	donnee =  SocieteFormation.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
+
+#UPDATE SOCIETE
+
 
 class VerifyEmail(views.APIView):
     serializer_class = EmailVerificationSerializer
@@ -316,19 +330,7 @@ def deletedocument(request, pk):
 
 # FIN CRUD OPERATION FOR DOCUMENTS
 
-
-class LogoutUser(generics.GenericAPIView):
-	serializer_class = LogoutUse
-	permission_classes = (permissions.IsAuthenticated,)
-
-	def post(self,request):
-		serializer = self.serializer_class(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-
-		return Response(status=status.HTTP_204_NO_CONTENT)
-
-
+#CRUD ORGANISME
 class CreateOrganisme(CreateAPIView):
     serializer_class =  CrudOrganisme
     queryset =  OrganismeFormation.objects.all()
@@ -342,3 +344,25 @@ class CreateOrganisme(CreateAPIView):
 
     def get_queryset(self):
         return self.queryset.filter()
+
+#CRUD ORGANISME
+@api_view(['GET'])
+def getallorganisme(request):
+	serializer_class = CrudOrganisme
+	donnee = OrganismeFormation.objects.all()
+
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)
+
+#FIN CRUD ORGANISME
+class LogoutUser(generics.GenericAPIView):
+	serializer_class = LogoutUse
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
