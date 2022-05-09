@@ -15,7 +15,7 @@ export interface NewCompanyDtoOut {
     phone_number?: string;
     adress?: string;
     password?: string;
-    societe_formation_id: string;
+    societe_formation: string;
 }
 export interface NewCompanyDtoIn {
     id: string;
@@ -23,7 +23,7 @@ export interface NewCompanyDtoIn {
     company_adress: string;
     phone_number: string;
     fix_number: string;
-    societe_formation_id?: string;
+    societe_formation?: string;
 }
 
 export interface TrainingCompanyDtoIn {
@@ -37,7 +37,14 @@ export interface NewOrganizationDtoOut {
     fix_number?: string;
     company_stamp?: File;
     company_logo?: File;
-    societe_formation_id: IDropdownOption<string> | string;
+    societe_formation_id:
+        | IDropdownOption<string>
+        | string
+        | number
+        | string[]
+        | number[]
+        | null
+        | undefined;
 }
 export interface TrainingOrganizationDtoIn {
     trainingOrganization: ICompany[];

@@ -38,7 +38,6 @@ export const TrainingOrganizationFormComponent: React.FC<
         item?: IDropdownOption
     ): void => {
         setSelectedSociety(item);
-        console.log({ event });
     };
 
     useEffect(() => {
