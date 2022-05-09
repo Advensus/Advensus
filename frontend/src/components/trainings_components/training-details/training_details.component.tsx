@@ -22,10 +22,6 @@ export const TrainingDetailsComponent: React.FC<ITrainingDetailsProps> = ({
                 valueWord={detailTraining?.id}
             />
             <AttributeDisplayComponent
-                keyWord="EDOF"
-                valueWord={detailTraining?.edof}
-            />
-            <AttributeDisplayComponent
                 keyWord="Intitulé"
                 valueWord={detailTraining?.intitule}
             />

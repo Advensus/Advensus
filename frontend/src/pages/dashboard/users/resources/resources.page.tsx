@@ -1,56 +1,42 @@
 import {
-    Dropdown,
-    DropdownMenuItemType,
-    IconButton,
-    IDropdownOption,
-    IDropdownStyles,
     IIconProps,
-    SearchBox,
-    Text,
+    IDropdownOption,
     TooltipHost,
+    IconButton,
+    SearchBox,
+    Dropdown,
+    IDropdownStyles,
+    DropdownMenuItemType,
 } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import {
-    CompanyFormComponent,
-    FullInformationsTabComponent,
-    TraineeDisplayComponent,
-    TraineeFormComponent,
-    TrainerFormComponent,
-    TrainingCardComponent,
-    TrainingFormComponent,
-    TrainingOrganizationCardComponent,
-    TrainingOrganizationFormComponent,
-    UsersDisplayComponent,
-} from "../../../components";
-import { useId } from "@fluentui/react-hooks";
-import UserService from "../../../services/user.service";
-import {
-    ADMIN_OF,
-    BASIC_RP_FORM,
-    ITraining,
-    IUser,
-    NewUserDto,
-    NewUserDtoIn,
-    PATH_LABEL_COMPANY,
-    PATH_LABEL_CUSTOMER,
-    PATH_LABEL_ORGANIZATION,
-    PATH_LABEL_RESOURCES,
-    PATH_LABEL_SERVICES,
-    RP,
-    SERVICES_FORM,
-    SUPER_RP,
-    SUPER_RP_FORM,
-    TEACHEAR,
-    TEACHEAR_FORM,
-    TRAINEE,
-    TRAINEE_FORM,
-    UserDtoIn,
-} from "../../../lib";
 import { useLocation } from "react-router-dom";
-import TrainingService from "../../../services/training.service";
-// import { RouteProps } from "react-router";
+import {
+    UsersDisplayComponent,
+    TrainerFormComponent,
+    FullInformationsTabComponent,
+} from "../../../../components";
+import {
+    IUser,
+    ITraining,
+    PATH_LABEL_RESOURCES,
+    PATH_LABEL_CUSTOMER,
+    UserDtoIn,
+    TEACHEAR,
+    TRAINEE,
+    RP,
+    SUPER_RP,
+    ADMIN_OF,
+    NewUserDtoIn,
+    TEACHEAR_FORM,
+    SUPER_RP_FORM,
+    BASIC_RP_FORM,
+} from "../../../../lib";
+import UserService from "../../../../services/user.service";
+import { Text } from "@fluentui/react";
+import { useId } from "@fluentui/react-hooks";
+import TrainingService from "../../../../services/training.service";
 
-export interface IUsersPageProps {
+export interface IResourcesPageProps {
     default_props?: boolean;
 }
 
@@ -61,7 +47,7 @@ interface IPath {
 const filterIcon: IIconProps = { iconName: "Filter" };
 const addIcon: IIconProps = { iconName: "Add" };
 
-export const UsersPage: React.FC<IUsersPageProps> = () => {
+export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
     const location = useLocation();
 
     const tooltipId = useId("tooltip");
@@ -107,16 +93,39 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                 thePath.label === PATH_LABEL_CUSTOMER
             ) {
                 getAllUser();
-            } else if (thePath.label === PATH_LABEL_SERVICES) {
-                getAllTraining();
             }
         }
     }, [location.pathname]);
 
     useEffect(() => {
         getAllUser();
+        toggleResourcesContent();
         getAllTraining();
     }, []);
+
+    // users_content_display_resources;
+    const toggleResourcesContent = () => {
+        var hint_resources = document.getElementById(
+            "users_content_display_resources"
+        ) as HTMLInputElement;
+
+        hint_resources.className =
+            hint_resources.className !== "show" ? "show" : "hide";
+        if (hint_resources.className === "show") {
+            hint_resources.style.display = "block";
+            window.setTimeout(() => {
+                hint_resources.style.opacity = "1";
+                hint_resources.style.transform = "scale(1)";
+            }, 0);
+        }
+        if (hint_resources.className === "hide") {
+            hint_resources.style.opacity = "0";
+            hint_resources.style.transform = "scale(0)";
+            window.setTimeout(function () {
+                hint_resources.style.display = "none";
+            }, 700); // timed to match animation-duration
+        }
+    };
 
     const toggleFullInfosTab = (id: string) => {
         // console.log({ id });
@@ -125,7 +134,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
             "display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
-            "users_content_display"
+            "users_content_display_resources"
         ) as HTMLInputElement;
 
         hint.className = hint.className !== "show" ? "show" : "hide";
@@ -171,16 +180,9 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                 const trainer = datas.user.filter(
                     (_) => _.user_type === TEACHEAR
                 );
-                const trainee = datas.user.filter(
-                    (_) => _.user_type === TRAINEE
-                );
                 const rp = datas.user.filter((_) => _.user_type === RP);
                 const srp = datas.user.filter((_) => _.user_type === SUPER_RP);
-                const admin = datas.user.filter(
-                    (_) => _.user_type === ADMIN_OF
-                );
                 setTrainers(trainer);
-                setTrainees(trainee);
                 setSrps(srp);
                 setRps(rp);
                 return datas;
@@ -218,137 +220,73 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
 
     return (
         <div className="user_page_container">
-            <div id="users_content_display">
+            <div id="users_content_display_resources">
                 <div className="display_tab">
                     <div className="tab_header">
                         <div className="tab_title">
                             {!showForm ? (
                                 // LIST TITLE
-                                pathLabel === PATH_LABEL_RESOURCES ? (
-                                    <Text>Ressources</Text>
-                                ) : pathLabel === PATH_LABEL_CUSTOMER ? (
-                                    <Text>Stagiaires</Text>
-                                ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                    <Text>O-F</Text>
-                                ) : (
-                                    <Text>Formations</Text>
-                                )
-                            ) : // FORM TITLE
-                            pathLabel === PATH_LABEL_RESOURCES ? (
-                                <Text> Ajouter Ressource</Text>
-                            ) : pathLabel === PATH_LABEL_CUSTOMER ? (
-                                <Text> Ajouter Stagiaire</Text>
-                            ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                <Text>Ajouter O-F</Text>
-                            ) : pathLabel === PATH_LABEL_COMPANY ? (
-                                <Text>Ajouter Société</Text>
+                                <Text>Ressources</Text>
                             ) : (
-                                <Text> Ajouter Formation</Text>
+                                // FORM TITLE
+                                <Text> Ajouter Ressource</Text>
                             )}
                             <TooltipHost
-                                content={
-                                    pathLabel === PATH_LABEL_RESOURCES
-                                        ? "Ajouter Formateur"
-                                        : pathLabel === PATH_LABEL_CUSTOMER
-                                        ? "Ajouter Stagiaire"
-                                        : pathLabel === PATH_LABEL_COMPANY
-                                        ? "Ajouter Société"
-                                        : "Ajouter Formation"
-                                }
+                                content="Ajouter Formateur"
                                 id={tooltipId}
                             >
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() =>
-                                        showAddForm(
-                                            pathLabel === PATH_LABEL_RESOURCES
-                                                ? TEACHEAR_FORM
-                                                : pathLabel ===
-                                                  PATH_LABEL_CUSTOMER
-                                                ? TRAINEE_FORM
-                                                : SERVICES_FORM
-                                        )
-                                    }
+                                    onClick={() => showAddForm(TEACHEAR_FORM)}
                                 />
                             </TooltipHost>
                         </div>
                         <hr className="hr_dashed" />
                         {!showForm ? (
                             <>
-                                <div
-                                    className={
-                                        pathLabel === PATH_LABEL_RESOURCES
-                                            ? "tab_header_contentii"
-                                            : "tab_header_content"
-                                    }
-                                >
+                                <div className="tab_header_content">
                                     <SearchBox
                                         placeholder="Search"
                                         onSearch={(newValue) =>
                                             console.log("value is " + newValue)
                                         }
                                     />
-                                    {pathLabel === "Trainees" && (
-                                        <div className="filter_box">
-                                            <Dropdown
-                                                selectedKey={
-                                                    selectedSortedItem
-                                                        ? selectedSortedItem.key
-                                                        : undefined
-                                                }
-                                                onChange={onChangeSorted}
-                                                placeholder="Trier par"
-                                                options={
-                                                    dropdownControlledSortBy
-                                                }
-                                                styles={dropdownStyles}
-                                            />
-                                            <Dropdown
-                                                selectedKey={
-                                                    selectedFilteredItem
-                                                        ? selectedFilteredItem.key
-                                                        : undefined
-                                                }
-                                                onChange={onChangeFiltered}
-                                                placeholder="Filtrer par OF"
-                                                options={
-                                                    dropdownControlledFilterBy
-                                                }
-                                                styles={dropdownStyles}
-                                            />
-                                        </div>
-                                    )}
+                                    <div className="filter_box">
+                                        <Dropdown
+                                            selectedKey={
+                                                selectedSortedItem
+                                                    ? selectedSortedItem.key
+                                                    : undefined
+                                            }
+                                            onChange={onChangeSorted}
+                                            placeholder="Trier par"
+                                            options={dropdownControlledSortBy}
+                                            styles={dropdownStyles}
+                                        />
+                                        <Dropdown
+                                            selectedKey={
+                                                selectedFilteredItem
+                                                    ? selectedFilteredItem.key
+                                                    : undefined
+                                            }
+                                            onChange={onChangeFiltered}
+                                            placeholder="Filtrer par OF"
+                                            options={dropdownControlledFilterBy}
+                                            styles={dropdownStyles}
+                                        />
+                                    </div>
                                 </div>
                             </>
                         ) : null}
                     </div>
                     {!showForm ? (
-                        <div
-                            className={
-                                pathLabel === PATH_LABEL_RESOURCES
-                                    ? "tab_content"
-                                    : "tab_content_scroll"
-                            }
-                        >
+                        <div className="tab_content">
                             <div>
                                 <Text>My "tab name" or allusersnumber()</Text>
                                 <hr className="hr_solid" />
                             </div>
-                            <div
-                                className={
-                                    pathLabel === PATH_LABEL_RESOURCES
-                                        ? "tab_content_trainer"
-                                        : "tab_content_trainee"
-                                }
-                            >
-                                {pathLabel === PATH_LABEL_ORGANIZATION ? (
-                                    <TrainingOrganizationCardComponent
-                                        toggleTab={() =>
-                                            toggleFullInfosTab("jmjqsfqsfm5")
-                                        }
-                                    />
-                                ) : null}
+                            <div className="tab_content_trainer">
                                 {trainers.length &&
                                 pathLabel === PATH_LABEL_RESOURCES
                                     ? trainers.map((_) => (
@@ -357,30 +295,6 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                                   toggleFullInfosTab(_.id)
                                               }
                                               detailsInfos={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
-                                {trainees.length &&
-                                pathLabel === PATH_LABEL_CUSTOMER
-                                    ? trainees.map((_) => (
-                                          <TraineeDisplayComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
-                                              }
-                                              detailsInfosTrainee={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
-                                {trainings.length &&
-                                pathLabel === PATH_LABEL_SERVICES
-                                    ? trainings.map((_) => (
-                                          <TrainingCardComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
-                                              }
-                                              trainingDetails={_}
                                               key={_.id}
                                           />
                                       ))
@@ -455,27 +369,12 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                                 </div>
                             )}
                         </div>
-                    ) : pathLabel === PATH_LABEL_RESOURCES ? (
+                    ) : (
                         <TrainerFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
                             formToDisplay={formToDisplay}
                             trainings={trainings}
-                        />
-                    ) : pathLabel === PATH_LABEL_CUSTOMER ? (
-                        <TraineeFormComponent
-                            onCreate={handleOnCreate}
-                            cancel={() => setShowForm(false)}
-                        />
-                    ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
-                        <TrainingOrganizationFormComponent
-                            cancel={() => setShowForm(false)}
-                        />
-                    ) : pathLabel === PATH_LABEL_COMPANY ? (
-                        <CompanyFormComponent />
-                    ) : (
-                        <TrainingFormComponent
-                            cancel={() => setShowForm(false)}
                         />
                     )}
                 </div>

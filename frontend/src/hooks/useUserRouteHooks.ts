@@ -3,12 +3,13 @@ import {
     AccountComponent,
     IRoute,
     SettingsComponent,
-    StatisticsComponent,
     TrainingOrganizationCardComponent,
 } from "../components";
 import {
     ADMIN_OF,
+    CALL_CENTER,
     CUSTOMER,
+    PATH_LABEL_CALL_CENTER,
     PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
@@ -22,7 +23,16 @@ import {
     TEACHEAR,
     TRAINEE,
 } from "../lib";
-import { SchedulerPage, UsersPage } from "../pages";
+import {
+    ResourcesPage,
+    SchedulerPage,
+    StatisticsPage,
+    TraineesPage,
+    TrainingCompanyPage,
+    TrainingOrganisationPage,
+    TrainingsPage,
+    UsersPage,
+} from "../pages";
 import { useAuthStore } from "../stores";
 
 export function useUserRouteHooks() {
@@ -39,23 +49,23 @@ export function useUserRouteHooks() {
         },
         {
             path: `stat`,
-            label: "Statistiques",
+            label: "Tableaux de bord",
             icon: "la-id-badge",
-            component: StatisticsComponent,
+            component: StatisticsPage,
             roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
         },
         {
             path: `Company`,
             label: `${PATH_LABEL_COMPANY}`,
             icon: "la-id-badge",
-            component: UsersPage,
+            component: TrainingCompanyPage,
             roles: [SUPER_USER],
         },
         {
             path: `of`,
             label: `${PATH_LABEL_ORGANIZATION}`,
             icon: "la-id-badge",
-            component: UsersPage,
+            component: TrainingOrganisationPage,
             roles: [SUPER_USER],
         },
 
@@ -64,21 +74,28 @@ export function useUserRouteHooks() {
             path: `${user_type}/${CUSTOMER}`,
             label: `${PATH_LABEL_CUSTOMER}`,
             icon: "la-id-badge",
-            component: UsersPage,
+            component: TraineesPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
             path: `${user_type}/${RESOURCES}`,
             label: `${PATH_LABEL_RESOURCES}`,
             icon: "la-id-badge",
-            component: UsersPage,
+            component: ResourcesPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
             path: `${user_type}/${SERVICES}`,
             label: `${PATH_LABEL_SERVICES}`,
             icon: "la-id-badge",
-            component: UsersPage,
+            component: TrainingsPage,
+            roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
+        },
+        {
+            path: `${user_type}/${CALL_CENTER}`,
+            label: `${PATH_LABEL_CALL_CENTER}`,
+            icon: "la-id-badge",
+            component: TrainingsPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
 

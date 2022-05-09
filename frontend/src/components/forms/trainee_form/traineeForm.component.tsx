@@ -150,6 +150,13 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     type="text"
                     // value={values.horaire}
                     // onChange={handleChange}
+                    placeholder="Montant de la formation"
+                    name="horaire"
+                />
+                <TextField
+                    type="text"
+                    // value={values.horaire}
+                    // onChange={handleChange}
                     placeholder="Date de début de session"
                     name="horaire"
                 />
@@ -172,6 +179,10 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                 <CustomDropDownComponent
                     dropdownOptions={OF}
                     thePlaceHolder="RESPONSABLE PEDAGOGIQUE"
+                />
+                <CustomDropDownComponent
+                    dropdownOptions={OF}
+                    thePlaceHolder="CALL CENTER"
                 />
             </div>
             <div className="trainee_form_btns">

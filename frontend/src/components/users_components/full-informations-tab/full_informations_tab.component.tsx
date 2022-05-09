@@ -28,6 +28,8 @@ import UserService from "../../../services/user.service";
 import { BookingCardComponent } from "../../booking_component/booking-card/booking_card.component";
 import { TrainingOrgTraineesDisplayComponent } from "../../training_org_components/training_org_trainees_display/training_org_trainees_display";
 import { UserDetailsComponent } from "../user-details/user_details.component";
+import { Panel } from "@fluentui/react/lib/Panel";
+import { useBoolean } from "@fluentui/react-hooks";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
@@ -35,7 +37,7 @@ export interface IFullInformationsTabProps {
     currentPath: string;
 }
 
-const addIcon: IIconProps = { iconName: "Add" };
+const planIcon: IIconProps = { iconName: "PlanView" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
@@ -44,6 +46,8 @@ export const FullInformationsTabComponent: React.FC<
     const [training, setTraining] = useState<ITraining>();
     const [currentTab, setCurrentTab] = useState<PivotItem>();
     const tooltipId = useId("toolt!p");
+    const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
+        useBoolean(false);
 
     const [selectedBooking, setSelectedBooking] =
         React.useState<IDropdownOption>();
@@ -119,7 +123,8 @@ export const FullInformationsTabComponent: React.FC<
                     {currentPath === PATH_LABEL_CUSTOMER && (
                         <TooltipHost content="Planifier" id={tooltipId}>
                             <IconButton
-                                iconProps={addIcon}
+                                iconProps={planIcon}
+                                // menuIconProps={{ iconName: "ClipboardListAdd" }}
                                 ariaLabel="add"
                                 // onClick={() =>
                                 //     showAddForm(
@@ -212,13 +217,16 @@ export const FullInformationsTabComponent: React.FC<
                                 </div>
                             </>
                         ) : (
-                            <UserDetailsComponent contentToDetail={content} />
+                            <UserDetailsComponent
+                                contentToDetail={content}
+                                currentPath={currentPath}
+                            />
                         )}
                         {/* FOR SERVICES TAB */}
                     </PivotItem>
                     {currentPath === PATH_LABEL_RESOURCES && (
                         <PivotItem
-                            headerText="Services"
+                            headerText="Formations"
                             className="label_service_tab_container"
                         >
                             {" "}
@@ -256,7 +264,7 @@ export const FullInformationsTabComponent: React.FC<
                         </PivotItem>
                     )}
                     {/* FOR BOOKING TAB */}
-                    {currentPath === PATH_LABEL_CUSTOMER && (
+                    {currentPath !== PATH_LABEL_SERVICES && (
                         <PivotItem
                             headerText="Réservations"
                             className="label_booking_tab_container"
@@ -292,9 +300,34 @@ export const FullInformationsTabComponent: React.FC<
                                 </Text>
                                 <hr className="booking_result_hr_solid" />
                                 <div className="booking_list">
-                                    <BookingCardComponent />
-                                    <BookingCardComponent />
-                                    <BookingCardComponent />
+                                    <BookingCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <BookingCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <BookingCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <div>
+                                        <br />
+                                        <br />
+                                        <Panel
+                                            isLightDismiss
+                                            isOpen={isOpen}
+                                            onDismiss={dismissPanel}
+                                            closeButtonAriaLabel="Close"
+                                            headerText="Détails de la Réservation"
+                                        >
+                                            <p>
+                                                'This panel uses "light dismiss"
+                                                behavior: it can be closed by
+                                                clicking or tapping ' + 'the
+                                                area outside the panel (or using
+                                                the close button as usual).';
+                                            </p>
+                                        </Panel>
+                                    </div>
                                 </div>
                             </div>
                         </PivotItem>

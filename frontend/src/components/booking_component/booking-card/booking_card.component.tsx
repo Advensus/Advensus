@@ -1,14 +1,18 @@
-import { ITextStyles, Text } from "@fluentui/react";
+import { IconButton, ITextStyles, Text } from "@fluentui/react";
 import React, { useState } from "react";
 import { Icon, IIconStyles } from "@fluentui/react/lib/Icon";
+import { Link } from "react-router-dom";
 
 export interface IBookingCardProps {
     default_props?: boolean;
+    openPanel: () => void;
 }
 
-export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
+export const BookingCardComponent: React.FC<IBookingCardProps> = ({
+    openPanel,
+}) => {
     return (
-        <div className="booking_card_container">
+        <Link to="#" onClick={openPanel} className="booking_card_container">
             <div className="booking_card_avatar">
                 <Text
                     variant="medium"
@@ -18,7 +22,23 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
                 </Text>
             </div>
             <div className="booking_card_infos">
-                <Text variant="mediumPlus">Inititulé</Text>
+                <div className="booing_card_infos_header">
+                    <Text variant="mediumPlus">Inititulé</Text>
+                    <div className="booking_card_container_hide">
+                        <IconButton
+                            menuIconProps={{ iconName: "Cancel" }}
+                            title="Annuler"
+                        />
+                        <IconButton
+                            menuIconProps={{ iconName: "Edit" }}
+                            title="Editer"
+                        />
+                        <IconButton
+                            menuIconProps={{ iconName: "ChangeEntitlements" }}
+                            title="Reporter"
+                        />
+                    </div>
+                </div>
                 <div className="booking_card_duration">
                     {/* BOOKING STARTER DAY */}
                     <>
@@ -84,7 +104,7 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = () => {
                     </>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 const bookingCardDurationIconStyles: Partial<IIconStyles> = {

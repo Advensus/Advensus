@@ -1,8 +1,15 @@
-import { DefaultButton, Text, TextField } from "@fluentui/react";
+import {
+    DefaultButton,
+    Dropdown,
+    IDropdownOption,
+    Text,
+    TextField,
+} from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
     BASIC_RP_FORM,
+    ITraining,
     NewUserDto,
     NewUserDtoIn,
     SERVICES_FORM,
@@ -17,33 +24,73 @@ export interface ITrainerFormProps {
     cancel?: () => void;
     onCreate: (data: NewUserDtoIn) => void;
     formToDisplay?: string;
+    trainings: ITraining[];
+}
+
+interface tttt {
+    key: string;
+    text: string;
 }
 
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     cancel,
     onCreate,
     formToDisplay,
+    trainings,
 }) => {
+    const [trainingAvailable, setTrainingAvailable] = useState<
+        IDropdownOption[]
+    >([]);
+    const [selectedSkill, setSelectedSkill] = React.useState<string[]>([]);
+
+    const onChangeSkills = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        console.log("item selected:", item?.key);
+        // setSelectedSkill(item);
+        if (item) {
+            setSelectedSkill(
+                item.selected
+                    ? [...selectedSkill, item.key as string]
+                    : selectedSkill.filter((key) => key !== item.key)
+            );
+        }
+    };
+
     useEffect(() => {
-        console.log({ formToDisplay });
+        console.log({ selectedSkill });
+    }, [selectedSkill]);
+
+    useEffect(() => {
+        if (trainings) {
+            const dropTraining = trainings.map((_) => {
+                let Civility = {
+                    key: _.id,
+                    text: _.intitule,
+                };
+                return Civility;
+            });
+            setTrainingAvailable(dropTraining);
+        }
     }, [formToDisplay]);
 
     const onSubmit = (value: NewUserDto) => {
+        console.log("the skills:", selectedSkill);
         console.log({ value });
-        console.log({ BASIC_RP_FORM });
         if (formToDisplay === TEACHEAR_FORM) {
-            UserService.new_trainer(value)
-                .then(async (response) => {
-                    if (response.status !== 200) {
-                        console.log({ response });
-                    }
-                    const data = (await response.json()) as NewUserDtoIn;
-                    console.log("the user just added:", data);
-                    onCreate(data);
-                })
-                .catch((err) => {
-                    console.log("error while adding new trainer:", err);
-                });
+            // UserService.new_trainer(value)
+            //     .then(async (response) => {
+            //         if (response.status !== 200) {
+            //             console.log({ response });
+            //         }
+            //         const data = (await response.json()) as NewUserDtoIn;
+            //         console.log("the user just added:", data);
+            //         onCreate(data);
+            //     })
+            //     .catch((err) => {
+            //         console.log("error while adding new trainer:", err);
+            //     });
         }
         if (formToDisplay === SUPER_RP_FORM) {
             UserService.new_super_rp(value)
@@ -82,7 +129,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             adress: "",
             password: "",
             horaire: "",
-            competence: "",
+            competence: selectedSkill,
         },
         // validationSchema,
         onSubmit,
@@ -167,12 +214,28 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             <div className="oth_trainer">
                 {formToDisplay === TEACHEAR_FORM && (
                     <>
-                        <TextField
-                            type="text"
+                        {/* <TextField 
+                            type="text" 
                             value={values.competence}
                             onChange={handleChange}
                             placeholder="Competence"
                             name="competence"
+                        /> */}
+                        {/* <CustomDropDownComponent
+                            dropdownOptions={trainingAvailable}
+                            thePlaceHolder="Competence"
+                            isChange={dropDownChange}
+                            keySelected={
+                                selectedTraining ? selectedTraining : undefined
+                            }
+                        /> */}
+
+                        <Dropdown
+                            selectedKeys={selectedSkill}
+                            onChange={onChangeSkills}
+                            placeholder="Competences"
+                            multiSelect
+                            options={trainingAvailable}
                         />
                         <TextField
                             type="text"
@@ -181,13 +244,12 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Horaire"
                             name="horaire"
                         />
-
-                        <CustomDropDownComponent
-                            dropdownOptions={Civility}
-                            thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
-                        />
                     </>
                 )}
+                <CustomDropDownComponent
+                    dropdownOptions={Civility}
+                    thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
+                />
                 <TextField
                     type="password"
                     value={values.password}

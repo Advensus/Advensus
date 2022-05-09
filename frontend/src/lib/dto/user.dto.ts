@@ -1,3 +1,4 @@
+import { IDropdownOption } from "@fluentui/react";
 import { IUser } from "../interfaces/User";
 
 export interface NewUserDto {
@@ -8,7 +9,7 @@ export interface NewUserDto {
     adress: string;
     password: string;
     horaire?: string;
-    competence?: string;
+    competence?: string[];
     cv?: File;
     organisme?: string;
 }
@@ -20,7 +21,7 @@ export interface NewUserDtoOut {
     phone_number: string;
     adress: string;
     horaire?: string;
-    competence?: string;
+    competence?: string[];
     cv?: File;
     organisme?: string;
 }
