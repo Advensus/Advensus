@@ -1,5 +1,11 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
-import React, { useState } from "react";
+import { useFormik } from "formik";
+import React from "react";
+import {
+    NewTrainingCompanyDtoIn,
+    NewTrainingCompanyDtoOut,
+} from "../../../lib/dto/company.dto";
+import CompanyService from "../../../services/company.service";
 import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ICompanyFormProps {
@@ -10,8 +16,34 @@ export interface ICompanyFormProps {
 export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
     cancel,
 }) => {
+    const onSubmit = (val: NewTrainingCompanyDtoOut) => {
+        console.log({ val });
+        CompanyService.new_company(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as NewTrainingCompanyDtoIn;
+                console.log("the current adding company:", data);
+                // onCreate(data);
+            })
+            .catch((err) => {
+                console.log("error while adding new company:", err);
+            });
+    };
+
+    const { values, handleChange, handleSubmit } =
+        useFormik<NewTrainingCompanyDtoOut>({
+            initialValues: {
+                company_name: "",
+                company_adress: "",
+                phone_number: "",
+            },
+            onSubmit,
+        });
+
     return (
-        <form className="company_form_container">
+        <form onSubmit={handleSubmit} className="company_form_container">
             <Text className="company_form_txt_divide_mov">Société</Text>
             <hr className="company_form_hr_solid" />
             <div className="of_company_form_sect">
@@ -19,38 +51,31 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                 <div className="of_company_form_fields">
                     <TextField
                         type="text"
-                        // value={values.first_name}
-                        // onChange={handleChange}
-                        placeholder="Nom O-F"
-                        name="first_name"
+                        value={values.company_name}
+                        onChange={handleChange}
+                        placeholder="Nom Société"
+                        name="company_name"
                     />
                     <TextField
                         type="text"
-                        // value={values.first_name}
-                        // onChange={handleChange}
-                        placeholder="Email O-F"
-                        name="first_name"
+                        value={values.company_adress}
+                        onChange={handleChange}
+                        placeholder="Adresse de la Société"
+                        name="company_adress"
                     />
                     <TextField
                         type="text"
-                        // value={values.username}
-                        // onChange={handleChange}
-                        placeholder="Adress O-F"
-                        name="username"
-                    />
-                    <TextField
-                        type="text"
-                        // value={values.email}
-                        // onChange={handleChange}
-                        placeholder="Téléphone Portable"
-                        name="email"
+                        value={values.phone_number}
+                        onChange={handleChange}
+                        placeholder="Numéro de la Société"
+                        name="phone_number"
                     />
                     <TextField
                         type="text"
                         // value={values.email}
                         // onChange={handleChange}
-                        placeholder="Téléphone Fixe"
-                        name="email"
+                        placeholder="Numéro 2 de la Société"
+                        name="fix_number"
                     />
                     <div className="company_form_stamp">Cachet</div>
                 </div>

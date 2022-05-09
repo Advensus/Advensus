@@ -339,6 +339,8 @@ def getallorganisme(request):
 
 	serializer = serializer_class(organisme, many=True)
 	return Response(serializer.data)
+
+
 class LogoutUser(generics.GenericAPIView):
 	serializer_class = LogoutUse
 	permission_classes = (permissions.IsAuthenticated,)

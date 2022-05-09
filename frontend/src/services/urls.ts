@@ -24,3 +24,7 @@ export const trainingUrls = {
     GET_ALL_TRAININGS: `${prefixer}auth/GetAllFormation`,
     GET_TRAINING_BY_ID: (id: string) => `${prefixer}auth/DetailFormation/${id}`,
 };
+
+export const companyUrls = {
+    NEW_COMPANY: `${prefixer}auth/create/societe/`,
+};

@@ -4,11 +4,11 @@ export interface LoginDtoIn {
 }
 
 export interface LoginDtoOut {
-    tokens: {
-        refresh: string;
-        access: string;
-    };
-    // tokens: string;
+    // tokens: {
+    //     refresh: string;
+    //     access: string;
+    // };
+    tokens: string;
     email: string;
     username: string;
     user_type: string;
