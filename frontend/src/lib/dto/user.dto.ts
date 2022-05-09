@@ -11,7 +11,8 @@ export interface NewUserDto {
     horaire?: string;
     competence?: string[];
     cv?: File;
-    organisme?: string;
+    organisme_formation_id?: string;
+    societe_formation_id?: string;
 }
 
 export interface NewUserDtoOut {

@@ -19,6 +19,9 @@ class UserService {
 
     static get_user_by_id = (id: string) =>
         BaseService.getRequest(userUls.GET_USER_BY_ID(id), false);
+
+    static new_company_admin = (info: unknown) =>
+        BaseService.postRequest(userUls.NEW_COMPANY_ADMIN, info, false);
 }
 
 export default UserService;
