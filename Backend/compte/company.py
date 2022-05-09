@@ -42,5 +42,6 @@ class OrganismeFormation(Company):
     # company_relation = models.OneToOneField(
     #     Company,
     #     on_delete=models.CASCADE,
+    
     # )
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
