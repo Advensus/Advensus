@@ -54,10 +54,8 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir_detail']
-        extra_kwargs = {
-            'souscrir_detail': {'write_only': True},
-        }
+        fields = ['username','first_name','email','phone_number','adress','password','id']
+     
     def validate(self,attrs):
         email = attrs.get('email','')
         username = attrs.get('username','')
