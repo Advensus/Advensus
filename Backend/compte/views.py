@@ -1,4 +1,4 @@
-from re import X
+
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
@@ -35,8 +35,7 @@ def home(request):
 
 
 class RegisterStagiaire(generics.GenericAPIView):
-	# serializer_class = AddStagiaire
-	serializer_class = Adddsouscrir
+	serializer_class = AddStagiaire
 	
 	def post(self,request):
 		user = request.data
@@ -124,6 +123,7 @@ class RegisteradminOrg(generics.GenericAPIView):
 		return Response(user_data,status=status.HTTP_201_CREATED)
 		
 class CreateSociete(generics.GenericAPIView):
+	# permission_classes = (IsAuthenticated,IsAdminUser)
 	serializer_class = AddSociete
 	def post(self,request):
 		organisme= request.data
@@ -182,7 +182,7 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-# @permission_classes([IsAuthenticated,autorisation])	
+@permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
