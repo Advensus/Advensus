@@ -1,36 +1,36 @@
 version: "3.7"
-   
+
 services:
-  db:
-    image: postgres
-    volumes:
-      - ./donnee/db:/var/lib/postgresql/donnee
-    environment:
-      - POSTGRES_DB=advansus
-      - POSTGRES_USER=advansus
-      - POSTGRES_PASSWORD=JrmkAV22@97
-      - POSTGRES_PORT=5432
-    # ports:
-    # - "5482:5432" 
-     
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=JrmkAV22@97#jr098
-      - POSTGRES_PORT=5432
-    depends_on:
-      - db
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
+    db:
+        image: postgres
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=advansus
+            - POSTGRES_USER=advansus
+            - POSTGRES_PASSWORD=JrmkAV22@97
+            - POSTGRES_PORT=5432
+        # ports:
+        # - "5482:5432"
+
+    web:
+        build: .
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/code
+        ports:
+            - "8000:8000"
+        environment:
+            - POSTGRES_NAME=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=JrmkAV22@97#jr098
+            - POSTGRES_PORT=5432
+        depends_on:
+            - db
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+        depends_on:
+            - db

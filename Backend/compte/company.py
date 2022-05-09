@@ -9,7 +9,7 @@ class Company(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company_name = models.CharField(max_length=100,unique=True)
     company_adress = models.CharField(max_length=50,unique=True)
-    phone_number = models.CharField(max_length=50,unique=True)
+    company_phone_number = models.CharField(max_length=50,unique=True)
     fix_number = models.CharField(max_length=50,unique=True)
     company_stamp = models.FileField(upload_to="company_stamp/",null=True)
     company_logo = models.FileField(upload_to="company_logo/",null=True)

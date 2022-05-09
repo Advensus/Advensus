@@ -9,7 +9,7 @@ class Affichage(admin.ModelAdmin):
     search_fields = ['username']
 
 class AffichageSociete(admin.ModelAdmin):
-    list_display = ('company_name','company_adress','phone_number','fix_number')
+    list_display = ('company_name','company_adress','company_phone_number','fix_number')
     search_fields = ['company_name']
 
 

@@ -1,6 +1,7 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { NewUserDto } from "../../../lib";
 import {
     NewTrainingCompanyDtoIn,
     NewTrainingCompanyDtoOut,
@@ -16,6 +17,9 @@ export interface ICompanyFormProps {
 export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
     cancel,
 }) => {
+    const [companyId, setCompanyId] = useState<string>("");
+    // useEffect(() => {}, [companyId]);
+
     const onSubmit = (val: NewTrainingCompanyDtoOut) => {
         console.log({ val });
         CompanyService.new_company(val)
@@ -24,12 +28,22 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                     console.log({ response });
                 }
                 const data = (await response.json()) as NewTrainingCompanyDtoIn;
-                console.log("the current adding company:", data);
+                console.log("the current adding company:", data.id);
+                setCompanyId(data.id);
+                setTimeout(() => {
+                    if (data) {
+                        addCompanyAdmin(val);
+                    }
+                }, 1000);
                 // onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new company:", err);
             });
+    };
+
+    const addCompanyAdmin = (infos: NewTrainingCompanyDtoOut) => {
+        console.log({ infos });
     };
 
     const { values, handleChange, handleSubmit } =
@@ -38,6 +52,14 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                 company_name: "",
                 company_adress: "",
                 phone_number: "",
+                fix_number: "",
+                username: "",
+                first_name: "",
+                email: "",
+                company_phone_number: "",
+                adress: "",
+                password: "",
+                societe_formation_id: companyId,
             },
             onSubmit,
         });
@@ -65,15 +87,15 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                     />
                     <TextField
                         type="text"
-                        value={values.phone_number}
+                        value={values.company_phone_number}
                         onChange={handleChange}
                         placeholder="Numéro de la Société"
-                        name="phone_number"
+                        name="company_phone_number"
                     />
                     <TextField
                         type="text"
-                        // value={values.email}
-                        // onChange={handleChange}
+                        value={values.fix_number}
+                        onChange={handleChange}
                         placeholder="Numéro 2 de la Société"
                         name="fix_number"
                     />
@@ -100,43 +122,50 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                     </div>
                     <TextField
                         type="text"
-                        // value={values.competence}
-                        // onChange={handleChange}
-                        placeholder="Prénom"
-                        name="competence"
+                        value={values.societe_formation_id}
+                        onChange={handleChange}
+                        placeholder="Société"
+                        name="societe_formation_id"
                     />
                     <TextField
                         type="text"
-                        // value={values.horaire}
-                        // onChange={handleChange}
+                        value={values.first_name}
+                        onChange={handleChange}
+                        placeholder="Prénom"
+                        name="first_name"
+                    />
+                    <TextField
+                        type="text"
+                        value={values.username}
+                        onChange={handleChange}
                         placeholder="Nom"
-                        name="horaire"
+                        name="username"
                     />
                     <TextField
                         type="email"
-                        // value={values.horaire}
-                        // onChange={handleChange}
+                        value={values.email}
+                        onChange={handleChange}
                         placeholder="Email"
-                        name="horaire"
+                        name="email"
                     />
                     <TextField
                         type="text"
-                        // value={values.horaire}
-                        // onChange={handleChange}
+                        value={values.phone_number}
+                        onChange={handleChange}
                         placeholder="Téléphone"
-                        name="horaire"
+                        name="phone_number"
                     />
                     <TextField
                         type="text"
-                        // value={values.horaire}
-                        // onChange={handleChange}
+                        value={values.adress}
+                        onChange={handleChange}
                         placeholder="Adresse"
-                        name="horaire"
+                        name="adress"
                     />
                     <TextField
                         type="password"
-                        // value={values.password}
-                        // onChange={handleChange}
+                        value={values.password}
+                        onChange={handleChange}
                         placeholder="Password"
                         name="password"
                         canRevealPassword

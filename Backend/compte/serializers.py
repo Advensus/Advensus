@@ -120,7 +120,7 @@ class AddSociete(serializers.ModelSerializer):
   
     class Meta:
         model = SocieteFormation
-        fields = ['id','company_name','company_adress','phone_number']
+        fields = ['id','company_name','company_adress','company_phone_number', 'fix_number', 'company_stamp','company_logo']
         
     
     def get_cleaned_data(self):
