@@ -345,7 +345,7 @@ class CreateOrganisme(CreateAPIView):
     def get_queryset(self):
         return self.queryset.filter()
 
-#CRUD ORGANISME
+#FIN CRUD ORGANISME
 @api_view(['GET'])
 def getallorganisme(request):
 	serializer_class = CrudOrganisme

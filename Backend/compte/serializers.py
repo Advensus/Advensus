@@ -18,6 +18,32 @@ from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 from django.contrib.auth.hashers import make_password
 
 
+class crudformation(serializers.ModelSerializer):
+    # test_oral = serializers.BooleanField()
+    
+    class Meta:
+        model = formation
+        fields = ['intitule','id']
+
+
+                
+    # def get_cleaned_data(self):
+    #         data = super(Adddsouscrir).get_cleaned_data()
+    #         return data
+
+    # def save(self):
+    #         s = super(Adddsouscrir, self).save()
+            # societe.is_organisme = True
+            # s.save()
+
+        # def validate(self):
+        #    limite = 4
+
+        #    test = super(crudformation,self).save()
+        #    if test.duration < limite:
+        #        test.test_oral = True
+        #        test.save()
+
 # Sign Up Users
 
 class Adddsouscrir(serializers.ModelSerializer):
@@ -44,7 +70,8 @@ class AddStagiaire(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-
+    souscrir = crudformation(many=True, read_only=False)
+  
     # def get_user_profile(self, obj):
     #     try:
     #         user_profile = souscrir.objects.all()
@@ -54,25 +81,30 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id']
-     
-    def validate(self,attrs):
-        email = attrs.get('email','')
-        username = attrs.get('username','')
-        first_name = attrs.get('first_name','')
-        
-            
-        if not username.isalnum():
-            raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
-                
-        
-        return attrs
-    def create(self,validated_data):
-        return User.objects.create_user1(**validated_data)
+        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir']
+    
 
-class tout(serializers.Serializer):
-    s =  Adddsouscrir(many=True)
-    t = AddStagiaire(many=True)
+    
+    def create(self,validate_data):
+          return User.objects.create_user1(**validate_data)
+
+    def update(self, instance, validated_data):
+        user_datas = validated_data.pop('souscrir')
+        instance = super(AddStagiaire, self).update(instance, validated_data)
+        
+        for user_data in user_datas:
+            user = formation.objects.filter(name__iexact=user_data['intitule'])
+            if user.exists():
+                s = user.first()
+            else:
+                u = formation.objects.create(user_data)
+            instance.u.add(u)
+        return instance
+               
+
+# class tout(serializers.Serializer):
+#     s =  Adddsouscrir(many=True)
+#     t = AddStagiaire(many=True)
 class AddRp(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
@@ -232,31 +264,7 @@ class login(serializers.ModelSerializer):
        
 # CRUD Operations
 
-class crudformation(serializers.ModelSerializer):
-    # test_oral = serializers.BooleanField()
-    
-    class Meta:
-        model = formation
-        fields = ['intitule','id']
 
-
-                
-    # def get_cleaned_data(self):
-    #         data = super(Adddsouscrir).get_cleaned_data()
-    #         return data
-
-    # def save(self):
-    #         s = super(Adddsouscrir, self).save()
-            # societe.is_organisme = True
-            # s.save()
-
-        # def validate(self):
-        #    limite = 4
-
-        #    test = super(crudformation,self).save()
-        #    if test.duration < limite:
-        #        test.test_oral = True
-        #        test.save()
        
 class cruduser(serializers.ModelSerializer):
     
@@ -300,4 +308,4 @@ class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
         model = OrganismeFormation
-        fields = ['id','company_name','company_adress','phone_number','societe_formation']
+        fields = ['id','company_name','company_adress','company_phone_number','societe_formation']

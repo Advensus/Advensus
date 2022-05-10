@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from .company import SocieteFormation, OrganismeFormation
-
+from .training import formation
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
@@ -146,7 +146,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     appartenir = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
- 
+    souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
