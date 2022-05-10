@@ -7,7 +7,7 @@ import { ICompany } from "../../../lib/interfaces/Company";
 export interface ITrainingOrganizationCardProps {
     default_props?: boolean;
     company: ICompany;
-    toggleTab: (id: string) => void;
+    toggleTab: (comp: ICompany) => void;
 }
 
 export const TrainingOrganizationCardComponent: React.FC<
@@ -20,7 +20,7 @@ export const TrainingOrganizationCardComponent: React.FC<
     return (
         <Link
             to="#"
-            onClick={() => toggleTab("sdfsf")}
+            onClick={() => toggleTab(company)}
             className="training_org_card_container"
         >
             <div className="training_org_card_stamp">Stamp here</div>

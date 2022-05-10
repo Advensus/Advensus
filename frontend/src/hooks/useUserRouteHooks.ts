@@ -55,7 +55,7 @@ export function useUserRouteHooks() {
             roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
         },
         {
-            path: `Company`,
+            path: `company`,
             label: `${PATH_LABEL_COMPANY}`,
             icon: "la-id-badge",
             component: TrainingCompanyPage,
