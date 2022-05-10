@@ -6,7 +6,7 @@ import {
     Text,
     TextField,
 } from "@fluentui/react";
-import { useFormik } from "formik";
+import { Formik, Field, Form } from "formik";
 import React, { useEffect, useState } from "react";
 import {
     NewCompanyDtoIn,
@@ -29,6 +29,9 @@ export const TrainingOrganizationFormComponent: React.FC<
     const [trainingsCompanies, setTrainingsCompanies] = useState<
         IDropdownOption[]
     >([]);
+    // const [trainingsCompanies, setTrainingsCompanies] = useState<ICompany[]>(
+    //     []
+    // );
 
     const [selectedSociety, setSelectedSociety] =
         React.useState<IDropdownOption<string>>();
@@ -69,115 +72,198 @@ export const TrainingOrganizationFormComponent: React.FC<
 
     const onSubmit = (val: NewOrganizationDtoOut) => {
         console.log({ val });
-        // CompanyService.new_organization(val)
-        //     .then(async (response) => {
-        //         if (response.status !== 200) {
-        //             console.log({ response });
-        //         }
-        //         const data = (await response.json()) as NewCompanyDtoIn;
-        //         console.log("the current adding organization:", data.id);
-        //         // onCreate(data);
-        //     })
-        //     .catch((err) => {
-        //         console.log("error while adding new organization:", err);
-        //     });
+        CompanyService.new_organization(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as NewCompanyDtoIn;
+                console.log("the current adding organization:", data);
+                // onCreate(data);
+            })
+            .catch((err) => {
+                console.log("error while adding new organization:", err);
+            });
     };
 
-    const { values, handleChange, handleSubmit } =
-        useFormik<NewOrganizationDtoOut>({
-            initialValues: {
-                company_name: "",
-                company_adress: "",
-                company_phone_number: "",
-                societe_formation_id: selectedSociety ? selectedSociety : "",
-            },
-            onSubmit,
-        });
+    const initialValues = {
+        company_name: "",
+        company_adress: "",
+        company_phone_number: "",
+        fix_number: "",
+        societe_formation: selectedSociety?.key ? selectedSociety.key : "",
+        company_stamp: undefined,
+        company_logo: undefined,
+    };
 
     return (
-        <form onSubmit={handleSubmit} className="training_org_form_container">
-            <Text className="training_org_form_txt_divide_mov">O-F</Text>
-            <hr className="training_org_form_hr_solid" />
-            <div className="of_training_org_form_sect">
-                <div className="training_org_form_pict">Logo</div>
-                <div className="of_training_org_form_fields">
-                    {/* <TextField
-                        type="text"
-                        // value={values.first_name}
-                        // onChange={handleChange}
-                        placeholder="Société"
-                        name="societe_formation_id"
-                    /> */}
-                    <Dropdown
-                        selectedKey={
-                            selectedSociety ? selectedSociety.key : undefined
-                        }
-                        onChange={onChange}
-                        placeholder="Société"
-                        options={trainingsCompanies}
-                        styles={dropdownStyles}
-                    />
-                    <TextField
-                        type="text"
-                        value={values.company_name}
-                        onChange={handleChange}
-                        placeholder="Nom O-F"
-                        name="company_name"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.company_adress}
-                        onChange={handleChange}
-                        placeholder="Adress O-F"
-                        name="company_adress"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.company_phone_number}
-                        onChange={handleChange}
-                        placeholder="Téléphone O-F"
-                        name="company_phone_number"
-                    />
-                    <TextField
-                        type="password"
-                        // value={values.password}
-                        // onChange={handleChange}
-                        placeholder="Password"
-                        name="password"
-                        canRevealPassword
-                        revealPasswordAriaLabel="Show password"
-                    />
-                    <hr />
-                    <TextField
-                        type="text"
-                        // value={values.password}
-                        // onChange={handleChange}
-                        placeholder="Identifiant mon compte formation"
-                        name="password"
-                        canRevealPassword
-                        revealPasswordAriaLabel="Show password"
-                    />
-                    <TextField
-                        type="password"
-                        // value={values.password}
-                        // onChange={handleChange}
-                        placeholder="Mot de passe Mon compte formation"
-                        name="password"
-                        canRevealPassword
-                        revealPasswordAriaLabel="Show password"
-                    />
-                    <div className="training_org_form_stamp">Cachet</div>
-                </div>
-            </div>
+        <div className="training_org_form_container">
+            <Formik initialValues={initialValues} onSubmit={onSubmit}>
+                <Form>
+                    <Text className="training_org_form_txt_divide_mov">
+                        O-F
+                    </Text>
+                    <hr className="training_org_form_hr_solid" />
+                    <div className="of_training_org_form_sect">
+                        <Field name="company_logo">
+                            {(props: { field: any; meta: any; form: any }) => {
+                                const { field, meta, form } = props;
+                                return (
+                                    <div className="training_org_form_pict">
+                                        <TextField
+                                            type="file"
+                                            id="company_logo"
+                                            placeholder="Logo de l'organisme"
+                                            {...field}
+                                        />
+                                    </div>
+                                );
+                            }}
+                        </Field>
+                        <div className="of_training_org_form_fields">
+                            <Field as="select" name="societe_formation">
+                                {trainingsCompanies.map((_) => {
+                                    return (
+                                        <option key={_.key} value={_.key}>
+                                            {_.text}
+                                        </option>
+                                    );
+                                })}
+                            </Field>
+                            <Field name="company_name">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            placeholder="Nom O-F"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="company_adress">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            id="company_adress"
+                                            placeholder="Adress O-F"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="company_phone_number">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            id="company_phone_number"
+                                            placeholder="Téléphone O-F"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="fix_number">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            id="fix_number"
+                                            placeholder="Fixe O-F"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="password">
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="password"
+                                            placeholder="Password"
+                                            canRevealPassword
+                                            revealPasswordAriaLabel="Show password"
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <hr />
+                            {/* <Field
+                            type="text"
+                            // value={props.values.password}
+                            // onChange={props.handleChange}
+                            placeholder="Identifiant mon compte formation"
+                            name="identifiant"
+                        /> */}
+                            <Field name="password">
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="password"
+                                            placeholder="Mot de passe Mon compte formation"
+                                            canRevealPassword
+                                            revealPasswordAriaLabel="Show password"
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="company_stamp">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <div className="training_org_form_stamp">
+                                            <TextField
+                                                type="file"
+                                                placeholder="Cachet de l'organisme"
+                                                {...field}
+                                            />
+                                        </div>
+                                    );
+                                }}
+                            </Field>
+                        </div>
+                    </div>
 
-            <div className="training_org_form_form_btns">
-                <DefaultButton text="Annuler" onClick={cancel} />
-                <DefaultButton
-                    style={{ marginLeft: "10px" }}
-                    text="Sauvegarder"
-                    type="submit"
-                />
-            </div>
-        </form>
+                    <div className="training_org_form_form_btns">
+                        <DefaultButton text="Annuler" onClick={cancel} />
+                        <DefaultButton
+                            style={{ marginLeft: "10px" }}
+                            text="Sauvegarder"
+                            type="submit"
+                        />
+                    </div>
+                </Form>
+            </Formik>
+        </div>
     );
+};
+
+const Cachet = () => {
+    <div>Cachet</div>;
 };

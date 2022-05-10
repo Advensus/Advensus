@@ -37,7 +37,7 @@ export interface NewOrganizationDtoOut {
     fix_number?: string;
     company_stamp?: File;
     company_logo?: File;
-    societe_formation_id:
+    societe_formation:
         | IDropdownOption<string>
         | string
         | number
