@@ -37,14 +37,27 @@ def home(request):
 class RegisterStagiaire(generics.GenericAPIView):
 	serializer_class = AddStagiaire
 	
-	def post(self,request):
-		user = request.data
+	def post(self,request,*args,**kwargs):
+		data = request.data
+		new_stagiaire = User.objects.create_user1(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+			)
+		new_stagiaire.save()
+
+		
+		f = formation.objects.get(intitule=data["souscrir"])
+		new_stagiaire.souscrir.add(f)
 		# form = formsouscrir(request.data)
-		serializer =  self.serializer_class(data=user)
-		serializer.is_valid(raise_exception=True)
+		serializer =  self.serializer_class(new_stagiaire)
+		# serializer.is_valid(raise_exception=True)
 		# f = form.save(commit=False)
 		# f.save()
-		serializer.save()
+		# serializer.save()
 		user_data = serializer.data
 		user = User.objects.get(email=user_data['email'])
 		token = RefreshToken.for_user(user).access_token
