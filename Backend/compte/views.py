@@ -51,9 +51,9 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		
 		f = formation.objects.get(id=data["souscrir"])
-		# s = OrganismeFormation.objects.get(id=data['appartenir_organisme'])
+		s = OrganismeFormation.objects.get(id=data['organisme_formation'])
 		new_stagiaire.souscrir.add(f)
-		# new_stagiaire.appartenir_organisme.add(s)
+		new_stagiaire.organisme_formation.add(s)
 
 		# 	f = formation.objects.get(intitule=data["souscrir"])
 		# new_stagiaire.souscrir.add(f)
@@ -63,20 +63,20 @@ class RegisterStagiaire(generics.GenericAPIView):
 		# f = form.save(commit=False)
 		# f.save()
 		# serializer.save()
-		
-		user = User.objects.get(email=data['email'])
+		user_data = serializer.data
+		user = User.objects.get(email=user_data['email'])
 		token = RefreshToken.for_user(user).access_token
 
 		current_site = get_current_site(request).domain
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-		email_body = 'salut '+user.username+ '\n' +'utilise ce lien pour verifier ton compte\n'+absurl
+		email_body = "Bonjour " +user.username+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+"[nom de la formation]"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :\n\n" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe [nom de l’organisme]\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
-		return Response(serializer.data,status=status.HTTP_201_CREATED)
-
+		return Response(user_data,status=status.HTTP_201_CREATED)
+       
 	
 
 
