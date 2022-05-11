@@ -17,13 +17,13 @@ from .training import formation
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None,appartenir_organisme=None):
+    def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
             raise TypeError('Mail est obligatoire')
         if username is None:
             raise TypeError('Nom est bligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,appartenir_organisme=appartenir_organisme)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
         user.user_type= 'is_client'
         user.set_password(password)
         user.save(using=self._db)
@@ -148,11 +148,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-    organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    organisme_formation = models.ManyToManyField(OrganismeFormation)
+    # societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
     souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
-    appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
+    # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
