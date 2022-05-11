@@ -50,8 +50,11 @@ class RegisterStagiaire(generics.GenericAPIView):
 		new_stagiaire.save()
 
 		
-		f = formation.objects.get(intitule=data["souscrir"])
+		f = formation.objects.get(id=data["souscrir"])
 		new_stagiaire.souscrir.add(f)
+
+		# 	f = formation.objects.get(intitule=data["souscrir"])
+		# new_stagiaire.souscrir.add(f)
 		# form = formsouscrir(request.data)
 		serializer =  self.serializer_class(new_stagiaire)
 		# serializer.is_valid(raise_exception=True)
