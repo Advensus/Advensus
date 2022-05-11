@@ -70,8 +70,7 @@ class AddStagiaire(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-    souscrir = crudformation(many=True, read_only=False)
-  
+    souscrir = crudformation
     # def get_user_profile(self, obj):
     #     try:
     #         user_profile = souscrir.objects.all()
@@ -82,25 +81,24 @@ class AddStagiaire(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','id','souscrir']
-    
-
-    
-    def create(self,validate_data):
-          return User.objects.create_user1(**validate_data)
-
-    def update(self, instance, validated_data):
-        user_datas = validated_data.pop('souscrir')
-        instance = super(AddStagiaire, self).update(instance, validated_data)
+    # def update(self,instance,validated_data):
+    #     user_datas = validated_data.pop('souscrir')
+    #     instance = super(AddStagiaire, self).update(instance, validated_data)
         
-        for user_data in user_datas:
-            user = formation.objects.filter(name__iexact=user_data['intitule'])
-            if user.exists():
-                s = user.first()
-            else:
-                u = formation.objects.create(user_data)
-            instance.u.add(u)
-        return instance
+    #     for user_data in user_datas:
+    #         user = formation.objects.filter(name__iexact=user_data['intitule'])
+    #         if user.exists():
+    #             s = user.first()
+    #         else:
+    #             souscrir = formation.objects.create(**user_data)
+    #         instance.souscrir.add(souscrir)
                
+        # return instance
+    # def create(self,validated_data):
+    #     formation_data = validated_data.pop('souscrir')
+    #     user = User.objects.create_user1(**validated_data)
+    #     formation.objects.create(user=user,**formation_data)
+    #     return user
 
 # class tout(serializers.Serializer):
 #     s =  Adddsouscrir(many=True)
