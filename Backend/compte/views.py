@@ -51,7 +51,9 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		
 		f = formation.objects.get(id=data["souscrir"])
+		s = OrganismeFormation.objects.get(id=data['appartenir_organisme'])
 		new_stagiaire.souscrir.add(f)
+		new_stagiaire.appartenir_organisme.add(s)
 
 		# 	f = formation.objects.get(intitule=data["souscrir"])
 		# new_stagiaire.souscrir.add(f)

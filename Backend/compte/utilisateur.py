@@ -17,13 +17,13 @@ from .training import formation
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
-    def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
+    def create_user1(self,email,username,first_name=None,adress=None,phone_number=None,password=None,appartenir_organisme=None):
         if email is None:
             raise TypeError('Mail est obligatoire')
         if username is None:
             raise TypeError('Nom est bligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,appartenir_organisme=appartenir_organisme)
         user.user_type= 'is_client'
         user.set_password(password)
         user.save(using=self._db)
