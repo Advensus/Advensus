@@ -150,8 +150,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    appartenir = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
+    appartenir_other_user = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
     souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
+    appartenir_stagiaire = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type',null=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
