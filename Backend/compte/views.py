@@ -51,9 +51,9 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		
 		f = formation.objects.get(id=data["souscrir"])
-		s = OrganismeFormation.objects.get(id=data['appartenir_organisme'])
+		# s = OrganismeFormation.objects.get(id=data['appartenir_organisme'])
 		new_stagiaire.souscrir.add(f)
-		new_stagiaire.appartenir_organisme.add(s)
+		# new_stagiaire.appartenir_organisme.add(s)
 
 		# 	f = formation.objects.get(intitule=data["souscrir"])
 		# new_stagiaire.souscrir.add(f)
@@ -63,8 +63,8 @@ class RegisterStagiaire(generics.GenericAPIView):
 		# f = form.save(commit=False)
 		# f.save()
 		# serializer.save()
-		user_data = serializer.data
-		user = User.objects.get(email=user_data['email'])
+		
+		user = User.objects.get(email=data['email'])
 		token = RefreshToken.for_user(user).access_token
 
 		current_site = get_current_site(request).domain
@@ -75,7 +75,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
-		return Response(user_data,status=status.HTTP_201_CREATED)
+		return Response(serializer.data,status=status.HTTP_201_CREATED)
 
 	
 
