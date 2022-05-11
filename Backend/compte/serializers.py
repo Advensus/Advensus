@@ -80,7 +80,7 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir']
+        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir','appartenir_stagiaire']
         
     # def update(self,instance,validated_data):
     #     user_datas = validated_data.pop('souscrir')
@@ -174,10 +174,10 @@ class AddAdmin(serializers.ModelSerializer):
     def create(self,validate_data):
         return User.objects.create_user3(**validate_data)
 class AddSociete(serializers.ModelSerializer):
-    admin_soc = AddStagiaire()
+    admin_soc = AddAdmin()
     class Meta:
         model = SocieteFormation
-        fields = ['id','company_name','company_adress','company_phone_number', 'fix_number', 'company_stamp','company_logo','admin_soc']
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number', 'company_stamp','company_logo','admin_soc']
         
     # def create(self,validate_data):
     #     return User.objects.create_user3(**validate_data)
