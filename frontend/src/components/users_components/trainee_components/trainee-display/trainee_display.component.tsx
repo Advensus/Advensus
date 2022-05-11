@@ -21,7 +21,6 @@ export const TraineeDisplayComponent: React.FC<ITraineeDisplayProps> = ({
         >
             <div className="text_displaying">
                 <Text variant="large" style={{ fontWeight: "bolder" }}>
-                    {detailsInfosTrainee.first_name}{" "}
                     {detailsInfosTrainee.username}
                 </Text>
                 <Text variant="tiny">{detailsInfosTrainee.phone_number}</Text>

@@ -72,6 +72,11 @@ export const TrainingOrganizationFormComponent: React.FC<
 
     const onSubmit = (val: NewOrganizationDtoOut) => {
         console.log({ val });
+        if (val) {
+            const logoPath = val.company_logo.lastIndexOf("\\");
+            val.company_logo = val.company_logo.substring(logoPath + 2);
+            console.log("logo path", val.company_logo);
+        }
         CompanyService.new_organization(val)
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -93,7 +98,7 @@ export const TrainingOrganizationFormComponent: React.FC<
         fix_number: "",
         societe_formation: selectedSociety?.key ? selectedSociety.key : "",
         company_stamp: undefined,
-        company_logo: undefined,
+        company_logo: "",
     };
 
     return (
