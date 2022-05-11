@@ -6,7 +6,9 @@
 }
 
 #scheduler_body {
+    position: relative;
     height: none;
-    background-color: yellow;
+    // background-color: yellow;
     display: flex;
+    width: inherit;
 }
