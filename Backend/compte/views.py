@@ -51,6 +51,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		
 		f = formation.objects.get(id=data["souscrir"])
+		# nom_for = formation.objects.get(intitule=data["souscrir.intitule"])
 		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
 		new_stagiaire.souscrir.add(f)
 		new_stagiaire.organisme_formation.add(org)
@@ -70,7 +71,9 @@ class RegisterStagiaire(generics.GenericAPIView):
 		current_site = get_current_site(request).domain
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-		email_body = "Bonjour " +user.username+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+"[nom de la formation]"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :\n\n" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe [nom de l’organisme]\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+		email_body = "[logo de l’organisme de formation]"+"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
