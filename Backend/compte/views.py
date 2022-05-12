@@ -83,10 +83,24 @@ class RegisterStagiaire(generics.GenericAPIView):
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
 	def post(self,request,*args,**kwargs): 
-		formateur = request.data
-		serializer = self.serializer_class(data=formateur)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		data = request.data
+		new_formateur= User.objects.create_user1(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+			horaire=data['horaire'],
+			competence=data['competence'],
+			cv=data['cv']
+			)
+		new_formateur.save()
+		f = formation.objects.get(id=data['dispenser'])
+		new_formateur.dispenser.add(f)
+		serializer = self.serializer_class(new_formateur)
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
