@@ -96,8 +96,10 @@ class RegisterFormateur(generics.GenericAPIView):
 			cv=data['cv']
 			)
 		new_formateur.save()
-		f = formation.objects.get(id=data['dispenser'])
-		new_formateur.dispenser.add(f)
+		forma = formation.objects.get(id=data['dispenser'])
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		new_formateur.dispenser.add(forma)
+		new_formateur.appartenir_societe.add(societe)
 		serializer = self.serializer_class(new_formateur)
 		# serializer.is_valid(raise_exception=True)
 		# serializer.save()
@@ -128,10 +130,21 @@ class RegisterFormateur(generics.GenericAPIView):
 class RegisterResponsableP(generics.GenericAPIView):
 	serializer_class = AddRp
 	def post(self,request):
-		rp = request.data
-		serializer = self.serializer_class(data=rp)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		data = request.data
+		new_Rp = User.objects.create_user5(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+		)
+		new_Rp.save()
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		new_Rp.appartenir_societe.add(societe)
+		serializer = self.serializer_class(new_Rp)
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
@@ -140,8 +153,8 @@ class RegisterSupResponsableP(generics.GenericAPIView):
 	def post(self,request):
 		srp = request.data
 		serializer = self.serializer_class(data=srp)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 class RegisteradminOrg(generics.GenericAPIView):

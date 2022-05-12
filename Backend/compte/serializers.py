@@ -124,14 +124,14 @@ class AddRp(serializers.ModelSerializer):
     class Meta:
         model = User
         
-        fields = ['username','first_name','email','phone_number','adress','password','id']
+        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id']
       
-    def get_cleaned_data(self):
-        data = super(AddRp, self).get_cleaned_data()
-        return data
+    # def get_cleaned_data(self):
+    #     data = super(AddRp, self).get_cleaned_data()
+    #     return data
 
-    def create(self,validate_data):
-        return User.objects.create_user5(**validate_data)
+    # def create(self,validate_data):
+    #     return User.objects.create_user5(**validate_data)
 
 class AddSrp(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
@@ -145,12 +145,12 @@ class AddSrp(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username','first_name','email','phone_number','adress','password','id']
-    def get_cleaned_data(self):
-        data = super(AddSrp, self).get_cleaned_data()
-        return data
+    # def get_cleaned_data(self):
+    #     data = super(AddSrp, self).get_cleaned_data()
+    #     return data
 
-    def create(self,validate_data):
-        return User.objects.create_user4(**validate_data)
+    # def create(self,validate_data):
+    #     return User.objects.create_user4(**validate_data)
 
            
 class AddAdmin(serializers.ModelSerializer):
