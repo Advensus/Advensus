@@ -230,7 +230,8 @@ export const FullInformationsTabComponent: React.FC<
                                     </div>
                                 </div>
                             </>
-                        ) : currentPath === PATH_LABEL_COMPANY ? (
+                        ) : currentPath === PATH_LABEL_COMPANY ||
+                          currentPath === PATH_LABEL_ORGANIZATION ? (
                             <CompanyDetailsComponent company={company} />
                         ) : (
                             <UserDetailsComponent

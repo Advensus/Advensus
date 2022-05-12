@@ -1,11 +1,22 @@
-import { FontIcon, IIconProps, SearchBox, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
+import { FontIcon, IIconProps, SearchBox, Text } from "@fluentui/react";
+import { Image, IImageProps, ImageFit } from "@fluentui/react/lib/Image";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { CurrentUserDetailsComponent } from "../users_components/current-user-details/current_user_details.component";
 
 export interface IHeaderDashboardProps {
     default_props?: boolean;
 }
+
+const imageProps: IImageProps = {
+    imageFit: ImageFit.cover,
+    width: "100%",
+    height: "100%",
+    // Show a border around the image (just for demonstration purposes)
+    styles: (props) => ({
+        root: {},
+    }),
+};
 
 const menuIcon: IIconProps = { iconName: "ResponsesMenu" };
 
@@ -87,7 +98,13 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                     className="header_dashboard_search"
                 />
             </div>
-            <div className="header_right">Right div Logo</div>
+            <div className="header_right">
+                <Image
+                    {...imageProps}
+                    src="https://images.unsplash.com/photo-1601158935942-52255782d322?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+                    alt='"none" on an image larger than the frame.'
+                />
+            </div>
         </div>
     );
 };

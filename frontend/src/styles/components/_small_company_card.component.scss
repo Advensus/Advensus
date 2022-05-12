@@ -8,6 +8,9 @@
     &:hover {
         background: #f4f3f3;
         border: 1px solid gray;
+        .small_company_card_logo {
+            height: 78px;
+        }
     }
 }
 
@@ -15,6 +18,7 @@
     background-color: gray;
     width: 100px;
     max-width: 110px;
+    height: inherit;
     display: flex;
     justify-content: center;
     align-items: center;

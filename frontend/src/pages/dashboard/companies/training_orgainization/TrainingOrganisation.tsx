@@ -47,7 +47,7 @@ export const TrainingOrganisationPage: React.FC<
     const [showForm, setShowForm] = useState<Boolean>(false);
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [pathLabel, setPathLabel] = useState<string>("");
-    const [contentId, setContentId] = useState<string>("");
+    const [theOrganization, setTheOrganization] = useState<ICompany>();
 
     const [organization, setOrganization] = useState<ICompany[]>([]);
 
@@ -126,9 +126,9 @@ export const TrainingOrganisationPage: React.FC<
         }
     };
 
-    const toggleFullInfosTab = (id: string) => {
+    const toggleFullInfosTab = (org: ICompany) => {
         // console.log({ id });
-        setContentId(id);
+        setTheOrganization(org);
         var hint = document.getElementById(
             "display_tab_ii"
         ) as HTMLInputElement;
@@ -246,7 +246,7 @@ export const TrainingOrganisationPage: React.FC<
                                     ? organization.map((_) => (
                                           <TrainingOrganizationCardComponent
                                               toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
+                                                  toggleFullInfosTab(_)
                                               }
                                               company={_}
                                               key={_.id}
@@ -264,8 +264,9 @@ export const TrainingOrganisationPage: React.FC<
             </div>
             <div id="display_tab_ii">
                 <FullInformationsTabComponent
-                    contentId={contentId}
+                    contentId={theOrganization?.id}
                     currentPath={pathLabel}
+                    company={theOrganization}
                 />
             </div>
         </div>
