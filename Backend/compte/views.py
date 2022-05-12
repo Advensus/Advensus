@@ -234,7 +234,7 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -299,7 +299,7 @@ def detailformation(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -310,7 +310,7 @@ def updateformation(request, pk):
 	return Response(serializer.data)
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
@@ -334,7 +334,7 @@ class CreateDocument(CreateAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def viewalldocument(request):
 	serializer_class = cruddocuments
 	donnee = Document.objects.all()
@@ -345,7 +345,7 @@ def viewalldocument(request):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def detaildocument(request, pk):
 	serializer_class = cruddocuments
 	donnee = Document.objects.get(id=pk)
@@ -365,7 +365,7 @@ def detaildocument(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def updatedocument(request, pk):
 	serializer_class = cruddocuments
 	donnee = Document.objects.get(id=pk)
@@ -375,7 +375,7 @@ def updatedocument(request, pk):
 
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def deletedocument(request, pk):
 	donnee = Document.objects.get(id=pk)
 	donnee.delete()
