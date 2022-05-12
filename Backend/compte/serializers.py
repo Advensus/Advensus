@@ -219,30 +219,30 @@ class AddFormateur(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser']
        
-    def validate(self,attrs):
-        email = attrs.get('email','')
-        username = attrs.get('username','')
-        first_name = attrs.get('first_name','')
+    # def validate(self,attrs):
+    #     email = attrs.get('email','')
+    #     username = attrs.get('username','')
+    #     first_name = attrs.get('first_name','')
         
             
-        if not username.isalnum():
-            raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
-        return attrs
+    #     if not username.isalnum():
+    #         raise serializers.ValidationError('Le nom ne peut contenir que des caractère alphanumerique')
+    #     return attrs
     # def create(request,validate_data):
     #     user = User.objects.create_user2(**validate_data)
     #     user.set(request.user)
     #     return user
-    def create_data(self,request,validate_data):
+    # def create_data(self,request,validate_data):
        
-        data = super(AddFormateur,self).get_cleaned_data()
+    #     data = super(AddFormateur,self).get_cleaned_data()
        
-        user = User.objects.create_user2(**validate_data)
-        user.set(request.user)
-        user.save()
+    #     user = User.objects.create_user2(**validate_data)
+    #     user.set(request.user)
+    #     user.save()
       
-        return data
+    #     return data
 
 
 
