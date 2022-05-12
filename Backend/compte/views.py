@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddSociete,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
+from .serializers import AddStagiaire,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -118,11 +118,7 @@ class RegisterFormateur(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-	# def get_cleaned_data(self,request):
-	# 	formateur = request.data
-	# 	serializer = self.serializer_class(data=formateur)
-	# 	self.serializer_class.dispenser = serializer.get_cleaned_data()
-	# 	serializer.save()
+
 		
     	
     

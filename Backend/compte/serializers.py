@@ -46,21 +46,20 @@ class crudformation(serializers.ModelSerializer):
 
 # Sign Up Users
 
-class Adddsouscrir(serializers.ModelSerializer):
-    class Meta:
-        model = souscrir
-        fields = '__all__'
+# class Adddsouscrir(serializers.ModelSerializer):
+#     class Meta:
+#         model = souscrir
+#         fields = '__all__'
         
-    def get_cleaned_data(self):
-            data = super(Adddsouscrir).get_cleaned_data()
-            return data
+#     def get_cleaned_data(self):
+#             data = super(Adddsouscrir).get_cleaned_data()
+#             return data
 
-    def save(self):
-            s = super(Adddsouscrir, self).save()
-            if s.duration > 4:
-                s.test_oral = True
-                s.save()
-
+#     def save(self):
+#             s = super(Adddsouscrir, self).save()
+#             if s.duration > 4:
+#                 s.test_oral = True
+#                 s.save()
 
 class AddStagiaire(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
@@ -152,29 +151,8 @@ class AddSrp(serializers.ModelSerializer):
     # def create(self,validate_data):
     #     return User.objects.create_user4(**validate_data)
 
-           
-class AddAdmin(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=60)
-    email = serializers.CharField(max_length=60)
-    adress = serializers.CharField(max_length=60)
-    phone_number = serializers.CharField(max_length=60)
-    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
-    first_name= serializers.CharField(max_length=60)
-    id = serializers.UUIDField(read_only=True)
-   
-    class Meta:
-        model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','id']
-        
-    
-    # def get_cleaned_data(self):
-    #         data = super(AddAdmin).get_cleaned_data()
-    #         return data
-
-    def create(self,validate_data):
-        return User.objects.create_user3(**validate_data)
 class AddSociete(serializers.ModelSerializer):
-    # admin_soc = AddAdmin()
+   
     class Meta:
         model = SocieteFormation
         fields = ['id','company_name','company_adress','company_phone_number','fix_number', 'company_stamp','company_logo']
@@ -197,14 +175,29 @@ class AddSociete(serializers.ModelSerializer):
     #     company = super(AddSociete, self).save()
 
     #     company.save()
-
+          
+class AddAdmin(serializers.ModelSerializer):
+    admin_soc = AddSociete()
+    username = serializers.CharField(max_length=60)
+    email = serializers.CharField(max_length=60)
+    adress = serializers.CharField(max_length=60)
+    phone_number = serializers.CharField(max_length=60)
+    password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    first_name= serializers.CharField(max_length=60)
+    id = serializers.UUIDField(read_only=True)
+   
+    class Meta:
+        model = User
+        fields =  ['username','first_name','email','phone_number','adress','password','id','admin_soc']
         
+    
+    # def get_cleaned_data(self):
+    #         data = super(AddAdmin).get_cleaned_data()
+    #         return data
 
+    def create(self,validate_data):
+        return User.objects.create_user3(**validate_data)
 
-
-
-
-            
         
 class AddFormateur(serializers.ModelSerializer):
     username = serializers.CharField(max_length=60)
