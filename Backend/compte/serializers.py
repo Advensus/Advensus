@@ -219,7 +219,7 @@ class AddFormateur(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser','appartenir_societe']
        
     # def validate(self,attrs):
     #     email = attrs.get('email','')

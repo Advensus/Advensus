@@ -84,7 +84,7 @@ class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
 	def post(self,request,*args,**kwargs): 
 		data = request.data
-		new_formateur= User.objects.create_user1(
+		new_formateur= User.objects.create_user2(
 			username=data['username'],
 			first_name=data['first_name'],
 			email=data['email'],
