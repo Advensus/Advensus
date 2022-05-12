@@ -177,7 +177,7 @@ class AddSociete(serializers.ModelSerializer):
     #     company.save()
           
 class AddAdmin(serializers.ModelSerializer):
-    admin_soc = AddSociete()
+    # societe = AddSociete()
     username = serializers.CharField(max_length=60)
     email = serializers.CharField(max_length=60)
     adress = serializers.CharField(max_length=60)
@@ -188,7 +188,7 @@ class AddAdmin(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields =  ['username','first_name','email','phone_number','adress','password','id','admin_soc']
+        fields =  ['username','first_name','email','phone_number','adress','password','id','societe']
         
     
     # def get_cleaned_data(self):

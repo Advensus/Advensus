@@ -42,22 +42,18 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,societe_formation=None,intitule=False):
+    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,societe=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,societe_formation=societe_formation)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,societe=societe)
         user.user_type= 'is_admin'
         user.is_autorise  = True
         user.set_password(password)
         user.save(using=self._db)
-        f = formation(
-            user=user,
-            intitule = intitule
-        )
-        f.save()
+      
         return user
     def create_user4(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
@@ -154,6 +150,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
+    societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
