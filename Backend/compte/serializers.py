@@ -144,7 +144,7 @@ class AddSrp(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id']
+        fields = ['username','first_name','email','phone_number','adress','password','id','appartenir_societe']
     # def get_cleaned_data(self):
     #     data = super(AddSrp, self).get_cleaned_data()
     #     return data

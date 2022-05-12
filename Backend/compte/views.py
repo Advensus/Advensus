@@ -151,8 +151,19 @@ class RegisterResponsableP(generics.GenericAPIView):
 class RegisterSupResponsableP(generics.GenericAPIView):
 	serializer_class = AddSrp
 	def post(self,request):
-		srp = request.data
-		serializer = self.serializer_class(data=srp)
+		data = request.data
+		new_Super_Rp = User.objects.create_user4(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+		)
+		new_Super_Rp.save()
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		new_Super_Rp.appartenir_societe.add(societe)
+		serializer = self.serializer_class(new_Super_Rp)
 		# serializer.is_valid(raise_exception=True)
 		# serializer.save()
 		user_data = serializer.data
