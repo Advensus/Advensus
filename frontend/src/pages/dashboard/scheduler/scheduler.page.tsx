@@ -14,9 +14,11 @@ import {
 import "@progress/kendo-theme-default/dist/all.css";
 import { guid } from "@progress/kendo-react-common";
 
-import { sampleData, displayDate } from "./events-utc";
+import { sampleData, displayDate, sampleDataWithResources } from "./events-utc";
 
 import products from "./products.json";
+import { CustomFooter } from "./custom-footer";
+import { CustomHeader } from "./custom-header";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -60,8 +62,24 @@ const resources: SchedulerResource[] = [
     },
 ];
 
+export const SchedulerConfigContext = React.createContext<{
+    slotDuration: [number, Function];
+    slotDivision: [number, Function];
+    traineeDisplay: [string, Function];
+    formerDisplay: [string, Function];
+}>({
+    slotDuration: [60, (_: any) => {}],
+    slotDivision: [2, (_: any) => {}],
+    traineeDisplay: ["Client2", (_: any) => {}],
+    formerDisplay: ["Former2", (_: any) => {}],
+});
+
 export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [data, setData] = React.useState<any[]>(sampleData);
+    const [slotDuration, setSlotDuration] = React.useState(60);
+    const [slotDivision, setSlotDivision] = React.useState(2);
+    const [traineeDisplay, setTraineeDisplay] = React.useState("client");
+    const [formerDisplay, setFormerDisplay] = React.useState("former");
 
     const handleDataChange = ({
         created,
@@ -95,31 +113,56 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
 
     return (
         <div className="scheduler_container">
-            <Scheduler
-                // group={group}
-                resources={resources}
-                data={sampleData}
-                defaultDate={displayDate}
-                header={(props) => <SchedulerHeader {...props} />}
-                // className="scheduler_body"
-                id="scheduler_body"
-                height={"100%"}
-                onDataChange={handleDataChange}
-                editable={{
-                    add: true,
-                    remove: true,
-                    drag: true,
-                    resize: true,
-                    select: true,
-                    edit: true,
+            <SchedulerConfigContext.Provider
+                value={{
+                    slotDuration: [slotDuration, setSlotDuration],
+                    slotDivision: [slotDivision, setSlotDivision],
+                    traineeDisplay: [traineeDisplay, setTraineeDisplay],
+                    formerDisplay: [formerDisplay, setFormerDisplay],
                 }}
             >
-                <AgendaView />
-                <TimelineView />
-                <DayView />
-                <WeekView />
-                <MonthView />
-            </Scheduler>
+                <Scheduler
+                    // group={group}
+                    resources={resources}
+                    data={sampleDataWithResources}
+                    defaultDate={displayDate}
+                    header={(props) => <CustomHeader {...props} />}
+                    // className="scheduler_body"
+                    id="scheduler_body"
+                    height={"100%"}
+                    onDataChange={handleDataChange}
+                    editable={{
+                        add: true,
+                        remove: true,
+                        drag: true,
+                        resize: true,
+                        select: true,
+                        edit: true,
+                    }}
+                    footer={(props) => <CustomFooter {...props} />}
+                >
+                    <AgendaView
+                        slotDivisions={slotDivision}
+                        slotDuration={slotDuration}
+                    />
+                    <TimelineView
+                        slotDivisions={slotDivision}
+                        slotDuration={slotDuration}
+                    />
+                    <DayView
+                        slotDivisions={slotDivision}
+                        slotDuration={slotDuration}
+                    />
+                    <WeekView
+                        slotDivisions={slotDivision}
+                        slotDuration={slotDuration}
+                    />
+                    <MonthView
+                        slotDivisions={slotDivision}
+                        slotDuration={slotDuration}
+                    />
+                </Scheduler>
+            </SchedulerConfigContext.Provider>
         </div>
     );
 };
