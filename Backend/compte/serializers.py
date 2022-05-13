@@ -213,7 +213,7 @@ class AddFormateur(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','competence','cv','id','dispenser','appartenir_societe']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','cv','id','competence','appartenir_societe']
        
     # def validate(self,attrs):
     #     email = attrs.get('email','')
@@ -320,4 +320,13 @@ class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
         model = OrganismeFormation
+<<<<<<< HEAD
         fields = ['id','company_name','company_adress','company_phone_number','fix_number','societe_formation','company_stamp','company_logo']
+=======
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','societe_formation', 'fix_number','company_stamp','company_logo']
+
+
+
+>>>>>>> 86ae4392758b826b80f2b9515da90946a1d3f182

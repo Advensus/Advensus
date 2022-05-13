@@ -29,14 +29,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,competence=None,cv=None):
+    def create_user2(self,email,username,first_name=None,adress=None,phone_number=None,password=None, horaire=None,cv=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
         
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,competence=competence,cv=cv)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,horaire=horaire,cv=cv)
         user.user_type= 'is_formateur'
         user.set_password(password)
         user.save(using=self._db)
@@ -137,7 +137,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     signature_former = models.FileField(upload_to="signature_former/")
     cv = models.FileField(upload_to="cv/",null=True)
     user_type =models.CharField(max_length=30,null=False)
-    competence = models.CharField(max_length=80)
+  
     trainee_level = models.CharField(max_length=50)
     trainee_level = models.CharField(max_length=40)
     
@@ -149,8 +149,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
     souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
-    dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
+    competence = models.ManyToManyField(formation,related_name='dispenser_content_type')
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
+    is_autorise = models.BooleanField(default=False)
+
     Rp_Stagiaire = models.ManyToManyField('self')
     objects = UserManager()
 
@@ -163,8 +165,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_autorise = models.BooleanField(default=False)
-
+  
     # fontction personalisé pour envoie des messages à l'utilisateur
     def email_user(self, *args, **kwargs):
         send_mail(
@@ -178,7 +179,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         # return {

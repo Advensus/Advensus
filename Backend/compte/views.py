@@ -53,6 +53,9 @@ class RegisterStagiaire(generics.GenericAPIView):
 		f = formation.objects.get(id=data["souscrir"])
 		# nom_for = formation.objects.get(intitule=data["souscrir.intitule"])
 		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+		
+		rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
+		new_stagiaire.Rp_Stagiaire.add(rp_peda)
 		new_stagiaire.souscrir.add(f)
 		new_stagiaire.organisme_formation.add(org)
 
@@ -73,7 +76,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 	    
 		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
-		email_body = org.company_logo.url +"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = "org.company_logo.url" +"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
@@ -95,16 +98,19 @@ class RegisterFormateur(generics.GenericAPIView):
 			adress=data['adress'],
 			password=data['password'],
 			horaire=data['horaire'],
+<<<<<<< HEAD
 			competence=data['competence'],
 			# cv=data['cv']
+=======
+			cv=data['cv']
+>>>>>>> 86ae4392758b826b80f2b9515da90946a1d3f182
 			)
 		new_formateur.save()
-		forma = formation.objects.get(id=data['dispenser'])
+		forma = formation.objects.get(id=data['competence'])
 		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
-		# if data.user_type == "is_planificateur":
-		rp_peda = User.objects.filter(user_type="is_planificateur")
-		new_formateur.Rp_Stagiaire.add(rp_peda)
-		new_formateur.dispenser.add(forma)
+		
+	
+		new_formateur.competence.add(forma)
 		new_formateur.appartenir_societe.add(societe)
 	
 		serializer = self.serializer_class(new_formateur)
