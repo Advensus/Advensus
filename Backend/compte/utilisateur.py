@@ -137,7 +137,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     signature_former = models.FileField(upload_to="signature_former/")
     cv = models.FileField(upload_to="cv/",null=True)
     user_type =models.CharField(max_length=30,null=False)
-    competence = models.CharField(max_length=80)
+  
     trainee_level = models.CharField(max_length=50)
     trainee_level = models.CharField(max_length=40)
     
@@ -149,7 +149,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
     souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
-    dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
+    competence = models.ManyToManyField(formation,related_name='dispenser_content_type')
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
     is_autorise = models.BooleanField(default=False)
 

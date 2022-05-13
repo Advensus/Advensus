@@ -102,11 +102,11 @@ class RegisterFormateur(generics.GenericAPIView):
 			cv=data['cv']
 			)
 		new_formateur.save()
-		forma = formation.objects.get(id=data['dispenser'])
+		forma = formation.objects.get(id=data['competence'])
 		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
 		
 	
-		new_formateur.dispenser.add(forma)
+		new_formateur.competence.add(forma)
 		new_formateur.appartenir_societe.add(societe)
 	
 		serializer = self.serializer_class(new_formateur)
