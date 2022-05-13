@@ -79,7 +79,7 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir','organisme_formation']
+        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir','organisme_formation','Rp_Stagiaire']
         
     # def update(self,instance,validated_data):
     #     user_datas = validated_data.pop('souscrir')

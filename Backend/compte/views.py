@@ -101,8 +101,12 @@ class RegisterFormateur(generics.GenericAPIView):
 		new_formateur.save()
 		forma = formation.objects.get(id=data['dispenser'])
 		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		# if data.user_type == "is_planificateur":
+		rp_peda = User.objects.filter(user_type="is_planificateur")
+		new_formateur.Rp_Stagiaire.add(rp_peda)
 		new_formateur.dispenser.add(forma)
 		new_formateur.appartenir_societe.add(societe)
+	
 		serializer = self.serializer_class(new_formateur)
 		# serializer.is_valid(raise_exception=True)
 		# serializer.save()

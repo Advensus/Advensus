@@ -151,6 +151,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
+    Rp_Stagiaire = models.ManyToManyField('self')
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
