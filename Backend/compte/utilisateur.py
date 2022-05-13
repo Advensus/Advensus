@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from .company import SocieteFormation, OrganismeFormation
-
+from .training import formation
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
@@ -42,17 +42,18 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,societe_formation=None):
+    def create_user3(self,email,username,first_name=None,adress=None,phone_number=None,password=None,societe=None):
         if email is None:
             raise TypeError('le mail est obligatoire')
         if username is None:
             raise TypeError('le nom est obligatoire')
 
-        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,societe_formation=societe_formation)
+        user=self.model(username=username,email=self.normalize_email(email), first_name=first_name,adress=adress,phone_number=phone_number,societe=societe)
         user.user_type= 'is_admin'
         user.is_autorise  = True
         user.set_password(password)
         user.save(using=self._db)
+      
         return user
     def create_user4(self,email,username,first_name=None,adress=None,phone_number=None,password=None):
         if email is None:
@@ -143,10 +144,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-    organisme_formation = models.ForeignKey(OrganismeFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    appartenir = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
- 
+    organisme_formation = models.ManyToManyField(OrganismeFormation)
+    # societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
+    appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
+    souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
+    # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
+    dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
+    societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
+    Rp_Stagiaire = models.ManyToManyField('self')
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
