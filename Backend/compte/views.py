@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddSociete,Adddsouscrir,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
+from .serializers import AddStagiaire,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -37,14 +37,33 @@ def home(request):
 class RegisterStagiaire(generics.GenericAPIView):
 	serializer_class = AddStagiaire
 	
-	def post(self,request):
-		user = request.data
+	def post(self,request,*args,**kwargs):
+		data = request.data
+		new_stagiaire = User.objects.create_user1(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+			)
+		new_stagiaire.save()
+
+		
+		f = formation.objects.get(id=data["souscrir"])
+		# nom_for = formation.objects.get(intitule=data["souscrir.intitule"])
+		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+		new_stagiaire.souscrir.add(f)
+		new_stagiaire.organisme_formation.add(org)
+
+		# 	f = formation.objects.get(intitule=data["souscrir"])
+		# new_stagiaire.souscrir.add(f)
 		# form = formsouscrir(request.data)
-		serializer =  self.serializer_class(data=user)
-		serializer.is_valid(raise_exception=True)
+		serializer =  self.serializer_class(new_stagiaire)
+		# serializer.is_valid(raise_exception=True)
 		# f = form.save(commit=False)
 		# f.save()
-		serializer.save()
+		# serializer.save()
 		user_data = serializer.data
 		user = User.objects.get(email=user_data['email'])
 		token = RefreshToken.for_user(user).access_token
@@ -52,23 +71,45 @@ class RegisterStagiaire(generics.GenericAPIView):
 		current_site = get_current_site(request).domain
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-		email_body = 'salut '+user.username+ '\n' +'utilise ce lien pour verifier ton compte\n'+absurl
+	    
+		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+		email_body = org.company_logo.url +"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +"\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique, [prénom responsable pédagogique] pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au [numéro téléphone] pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-
+       
 	
 
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
 	def post(self,request,*args,**kwargs): 
-		formateur = request.data
-		serializer = self.serializer_class(data=formateur)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		data = request.data
+		new_formateur= User.objects.create_user2(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+			horaire=data['horaire'],
+			competence=data['competence'],
+			cv=data['cv']
+			)
+		new_formateur.save()
+		forma = formation.objects.get(id=data['dispenser'])
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		# if data.user_type == "is_planificateur":
+		rp_peda = User.objects.filter(user_type="is_planificateur")
+		new_formateur.Rp_Stagiaire.add(rp_peda)
+		new_formateur.dispenser.add(forma)
+		new_formateur.appartenir_societe.add(societe)
+	
+		serializer = self.serializer_class(new_formateur)
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
@@ -84,11 +125,7 @@ class RegisterFormateur(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-	# def get_cleaned_data(self,request):
-	# 	formateur = request.data
-	# 	serializer = self.serializer_class(data=formateur)
-	# 	self.serializer_class.dispenser = serializer.get_cleaned_data()
-	# 	serializer.save()
+
 		
     	
     
@@ -96,20 +133,42 @@ class RegisterFormateur(generics.GenericAPIView):
 class RegisterResponsableP(generics.GenericAPIView):
 	serializer_class = AddRp
 	def post(self,request):
-		rp = request.data
-		serializer = self.serializer_class(data=rp)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		data = request.data
+		new_Rp = User.objects.create_user5(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+		)
+		new_Rp.save()
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		new_Rp.appartenir_societe.add(societe)
+		serializer = self.serializer_class(new_Rp)
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
 class RegisterSupResponsableP(generics.GenericAPIView):
 	serializer_class = AddSrp
 	def post(self,request):
-		srp = request.data
-		serializer = self.serializer_class(data=srp)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+		data = request.data
+		new_Super_Rp = User.objects.create_user4(
+			username=data['username'],
+			first_name=data['first_name'],
+			email=data['email'],
+			phone_number=data['phone_number'],
+			adress=data['adress'],
+			password=data['password'],
+		)
+		new_Super_Rp.save()
+		societe = SocieteFormation.objects.get(id=data['appartenir_societe'])
+		new_Super_Rp.appartenir_societe.add(societe)
+		serializer = self.serializer_class(new_Super_Rp)
+		# serializer.is_valid(raise_exception=True)
+		# serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
 class RegisteradminOrg(generics.GenericAPIView):
@@ -182,7 +241,7 @@ class login(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	donnee = User.objects.all()
@@ -247,7 +306,7 @@ def detailformation(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
 	donnee = formation.objects.get(id=pk)
@@ -258,7 +317,7 @@ def updateformation(request, pk):
 	return Response(serializer.data)
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated,autorisation])	
+# @permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
 	donnee = formation.objects.get(id=pk)
 	donnee.delete()
@@ -282,7 +341,7 @@ class CreateDocument(CreateAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def viewalldocument(request):
 	serializer_class = cruddocuments
 	donnee = Document.objects.all()
@@ -293,7 +352,7 @@ def viewalldocument(request):
 
 @api_view(['GET'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def detaildocument(request, pk):
 	serializer_class = cruddocuments
 	donnee = Document.objects.get(id=pk)
@@ -313,7 +372,7 @@ def detaildocument(request, pk):
 
 @api_view(['POST'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def updatedocument(request, pk):
 	serializer_class = cruddocuments
 	donnee = Document.objects.get(id=pk)
@@ -323,7 +382,7 @@ def updatedocument(request, pk):
 
 @api_view(['DELETE'])
 @csrf_exempt
-@permission_classes([IsAuthenticated])	
+# @permission_classes([IsAuthenticated])	
 def deletedocument(request, pk):
 	donnee = Document.objects.get(id=pk)
 	donnee.delete()
@@ -345,7 +404,7 @@ class CreateOrganisme(CreateAPIView):
     def get_queryset(self):
         return self.queryset.filter()
 
-#CRUD ORGANISME
+#FIN CRUD ORGANISME
 @api_view(['GET'])
 def getallorganisme(request):
 	serializer_class = CrudOrganisme

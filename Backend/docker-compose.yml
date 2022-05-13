@@ -4,7 +4,7 @@ services:
     db:
         image: postgres
         volumes:
-            - ./data/db:/var/lib/postgresql/data
+            - ./donnee/db:/var/lib/postgresql/donnee
         environment:
             - POSTGRES_DB=advansus
             - POSTGRES_USER=advansus
