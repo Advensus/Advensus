@@ -8,6 +8,9 @@
     &:hover {
         background: #f4f3f3;
         border: 1px solid #000;
+        .training_org_card_stamp {
+            height: 88px;
+        }
     }
 }
 .training_org_card_stamp {
@@ -15,6 +18,7 @@
     width: 120px;
     min-width: 100px;
     max-width: 130px;
+    height: inherit;
     display: flex;
     justify-content: center;
     align-items: center;

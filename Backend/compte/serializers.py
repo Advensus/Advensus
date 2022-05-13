@@ -319,4 +319,16 @@ class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
         model = OrganismeFormation
+<<<<<<< HEAD
         fields = ['id','company_name','company_adress','company_phone_number','fix_number','societe_formation','company_stamp','company_logo']
+=======
+<<<<<<< HEAD
+        fields = ['id','company_name','company_adress','company_phone_number','societe_formation', 'fix_number','company_stamp','company_logo']
+=======
+<<<<<<< HEAD
+        fields = ['id','company_name','company_adress','company_phone_number','societe_formation']
+=======
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number','societe_formation','company_stamp','company_logo']
+>>>>>>> backend
+>>>>>>> d7f29ca0f4fffe804fd3da643c44011c4b7e78f9
+>>>>>>> 2734e6e8d95a1e33f5df66615ac6e8809d14adbe

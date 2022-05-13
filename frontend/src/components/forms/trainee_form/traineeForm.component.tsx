@@ -2,7 +2,10 @@ import {
     DefaultButton,
     TextField,
     Text,
-    DropdownMenuItemType,
+    DatePicker,
+    defaultDatePickerStrings,
+    DayOfWeek,
+    mergeStyles,
 } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useState } from "react";
@@ -16,10 +19,19 @@ export interface ITraineeFormProps {
     onCreate: (data: NewUserDtoIn) => void;
 }
 
+const rootClass = mergeStyles({
+    maxWidth: 300,
+    selectors: { "> *": { marginBottom: 15 } },
+});
+
 export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     cancel,
     onCreate,
 }) => {
+    const [firstDayOfWeek, setFirstDayOfWeek] = React.useState(
+        DayOfWeek.Sunday
+    );
+
     const onSubmit = (value: NewUserDto) => {
         UserService.new_trainee(value)
             .then(async (response) => {
@@ -153,19 +165,19 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Montant de la formation"
                     name="horaire"
                 />
-                <TextField
-                    type="text"
-                    // value={values.horaire}
-                    // onChange={handleChange}
+                <DatePicker
+                    firstDayOfWeek={firstDayOfWeek}
                     placeholder="Date de début de session"
-                    name="horaire"
+                    ariaLabel="Select a date"
+                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                    strings={defaultDatePickerStrings}
                 />
-                <TextField
-                    type="text"
-                    // value={values.horaire}
-                    // onChange={handleChange}
+                <DatePicker
+                    firstDayOfWeek={firstDayOfWeek}
                     placeholder="Date de fin de session"
-                    name="horaire"
+                    ariaLabel="Select a date"
+                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                    strings={defaultDatePickerStrings}
                 />
 
                 <CustomDropDownComponent

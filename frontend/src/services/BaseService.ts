@@ -74,7 +74,16 @@ class BaseService {
             headers: head,
             mode: "cors" as RequestMode,
             cache: "default" as RequestCache,
-            body: body as string,
+            // Accept: "application/json",
+            // Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            // "Content-Type": "application/json",
+            // "Content-Type": "text/html; charset=utf-8",
+            // "Content-Type": "text/html; charset=utf-8",
+            // "Content-Type": "text/plain;charset=UTF-8",
+            // body: body as string,
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+            body: JSON.stringify(body),
         };
         const response = await fetch(url, headers)
             .then((response) => {

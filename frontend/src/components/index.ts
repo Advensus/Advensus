@@ -33,3 +33,6 @@ export * from "./booking_component/booking-card/booking_card.component";
 export * from "./forms/company_form/company_form.component";
 
 export * from "./custom_dropdown_component/custom_dropdown.component";
+
+export * from "./company_components/company_details/company_details.component";
+export * from "./company_components/small_company_card/small_company_card.component";

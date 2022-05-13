@@ -7,6 +7,7 @@ import {
     NewCompanyDtoOut,
 } from "../../../lib/dto/company.dto";
 import CompanyService from "../../../services/company.service";
+import UserService from "../../../services/user.service";
 import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ICompanyFormProps {
@@ -22,6 +23,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
 
     const onSubmit = (val: NewCompanyDtoOut) => {
         console.log({ val });
+        let companpyiiiid = "";
         CompanyService.new_company(val)
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -29,27 +31,41 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                 }
                 const data = (await response.json()) as NewCompanyDtoIn;
                 console.log("the current adding company:", data.id);
+                companpyiiiid = data.id;
                 setCompanyId(data.id);
                 const inputElement = document.getElementById(
                     "societe_formation_id"
                 ) as HTMLInputElement;
                 inputElement.defaultValue = "dfsdfsdfsfsdfsdfsdff";
-
-                setTimeout(() => {
-                    if (data) {
-                        addCompanyAdmin(val);
-                        console.log({ inputElement });
-                    }
-                }, 1000);
+                val.societe_formation = companpyiiiid;
+                // setTimeout(() => {
+                //     if (data) {
+                addCompanyAdmin(val);
+                //         console.log({ inputElement });
+                //     }
+                // }, 1000);
                 // onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new company:", err);
             });
+        // val.societe_formation_id = companpyiiiid;
+        // addCompanyAdmin(val);
     };
 
     const addCompanyAdmin = (infos: NewCompanyDtoOut) => {
         console.log({ infos });
+        UserService.new_company_admin(infos)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as NewCompanyDtoIn;
+                console.log("the current adding company admin:", data);
+            })
+            .catch((err) => {
+                console.log("error while adding new company admin:", err);
+            });
     };
 
     const { values, handleChange, handleSubmit } = useFormik<NewCompanyDtoOut>({
@@ -64,7 +80,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             company_phone_number: "",
             adress: "",
             password: "",
-            societe_formation_id: "",
+            societe_formation: "",
         },
         onSubmit,
     });
@@ -131,7 +147,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                     </div>
                     <TextField
                         type="text"
-                        value={values.societe_formation_id}
+                        value={values.societe_formation}
                         onChange={handleChange}
                         placeholder="Société"
                         name="societe_formation_id"

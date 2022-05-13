@@ -4,15 +4,20 @@ import { IIconProps, SearchBox, Text } from "@fluentui/react";
 
 export interface ITrainingOrgTraineesDisplayProps {
     default_props?: boolean;
+    openPanel: () => void;
 }
 
 const filterIcon: IIconProps = { iconName: "Filter" };
 
 export const TrainingOrgTraineesDisplayComponent: React.FC<
     ITrainingOrgTraineesDisplayProps
-> = () => {
+> = ({ openPanel }) => {
     return (
-        <div className="training_org_trainees_display_container">
+        <Link
+            to="#"
+            onClick={openPanel}
+            className="training_org_trainees_display_container"
+        >
             <SearchBox
                 placeholder="Filter"
                 iconProps={filterIcon}
@@ -40,6 +45,6 @@ export const TrainingOrgTraineesDisplayComponent: React.FC<
                     </div>
                 </Link>
             </div>
-        </div>
+        </Link>
     );
 };

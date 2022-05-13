@@ -3,6 +3,7 @@ import {
     IIconProps,
     Pivot,
     PivotItem,
+    SearchBox,
     Text,
     TooltipHost,
 } from "@fluentui/react";
@@ -14,10 +15,11 @@ import {
     IDropdownStyles,
 } from "@fluentui/react/lib/Dropdown";
 import React, { FormEvent, useEffect, useState } from "react";
-import { TrainingDetailsComponent } from "../..";
+import { SmallCompanyCardComponent, TrainingDetailsComponent } from "../..";
 import {
     ITraining,
     IUser,
+    PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
@@ -30,18 +32,21 @@ import { TrainingOrgTraineesDisplayComponent } from "../../training_org_componen
 import { UserDetailsComponent } from "../user-details/user_details.component";
 import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "@fluentui/react-hooks";
+import { ICompany } from "../../../lib/interfaces/Company";
+import { CompanyDetailsComponent } from "../../company_components/company_details/company_details.component";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
-    contentId: string;
+    contentId?: string;
     currentPath: string;
+    company?: ICompany;
 }
 
 const planIcon: IIconProps = { iconName: "PlanView" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath }) => {
+> = ({ contentId, currentPath, company }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
     const [currentTab, setCurrentTab] = useState<PivotItem>();
@@ -69,7 +74,13 @@ export const FullInformationsTabComponent: React.FC<
                 const emptyTraining = {} as ITraining;
                 setTraining(emptyTraining);
             }
-            getContentById(contentId);
+            if (currentPath === (PATH_LABEL_SERVICES || PATH_LABEL_RESOURCES)) {
+                getContentById(contentId);
+            }
+            if (currentPath === PATH_LABEL_COMPANY) {
+                console.log("on lance ge getCompanyById ici");
+                console.log({ company });
+            }
         }
     }, [contentId, currentTab]);
 
@@ -141,8 +152,11 @@ export const FullInformationsTabComponent: React.FC<
                     {currentPath === PATH_LABEL_SERVICES && (
                         <Text>{training?.intitule}</Text>
                     )}
-                    {currentPath === PATH_LABEL_ORGANIZATION && (
-                        <Text>Company name</Text>
+                    {(currentPath === PATH_LABEL_ORGANIZATION ||
+                        currentPath === PATH_LABEL_COMPANY) && (
+                        <Text style={{ fontWeight: "bold" }}>
+                            {company?.company_name}
+                        </Text>
                     )}
                 </div>
                 <hr className="full_infos_tab_hr_dashed" />
@@ -216,6 +230,9 @@ export const FullInformationsTabComponent: React.FC<
                                     </div>
                                 </div>
                             </>
+                        ) : currentPath === PATH_LABEL_COMPANY ||
+                          currentPath === PATH_LABEL_ORGANIZATION ? (
+                            <CompanyDetailsComponent company={company} />
                         ) : (
                             <UserDetailsComponent
                                 contentToDetail={content}
@@ -264,7 +281,8 @@ export const FullInformationsTabComponent: React.FC<
                         </PivotItem>
                     )}
                     {/* FOR BOOKING TAB */}
-                    {currentPath !== PATH_LABEL_SERVICES && (
+                    {(currentPath === PATH_LABEL_RESOURCES ||
+                        currentPath === PATH_LABEL_CUSTOMER) && (
                         <PivotItem
                             headerText="Réservations"
                             className="label_booking_tab_container"
@@ -335,7 +353,80 @@ export const FullInformationsTabComponent: React.FC<
 
                     {currentPath === PATH_LABEL_ORGANIZATION && (
                         <PivotItem headerText="Stagiaires">
-                            <TrainingOrgTraineesDisplayComponent />
+                            <TrainingOrgTraineesDisplayComponent
+                                openPanel={openPanel}
+                            />
+                            <div>
+                                <br />
+                                <br />
+                                <Panel
+                                    isLightDismiss
+                                    isOpen={isOpen}
+                                    onDismiss={dismissPanel}
+                                    closeButtonAriaLabel="Close"
+                                    headerText="Détails Stagaire"
+                                >
+                                    <p>
+                                        'This panel uses "light dismiss"
+                                        behavior: it can be closed by clicking
+                                        or tapping ' + 'the area outside the
+                                        panel (or using the close button as
+                                        usual).';
+                                    </p>
+                                </Panel>
+                            </div>
+                        </PivotItem>
+                    )}
+                    {currentPath === PATH_LABEL_COMPANY && (
+                        <PivotItem headerText="Organisme(s)">
+                            <div>
+                                <SearchBox
+                                    placeholder="Search"
+                                    underlined={true}
+                                    className="item_organisation_searcbar"
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                                <SmallCompanyCardComponent
+                                    openPanel={openPanel}
+                                />
+                            </div>
+                            <div>
+                                <br />
+                                <br />
+                                <Panel
+                                    isLightDismiss
+                                    isOpen={isOpen}
+                                    onDismiss={dismissPanel}
+                                    closeButtonAriaLabel="Close"
+                                    headerText={company?.company_name}
+                                >
+                                    <p>
+                                        'This panel uses "light dismiss"
+                                        behavior: it can be closed by clicking
+                                        or tapping ' + 'the area outside the
+                                        panel (or using the close button as
+                                        usual).';
+                                    </p>
+                                    <div>{company?.company_adress}</div>
+                                </Panel>
+                            </div>
                         </PivotItem>
                     )}
                 </Pivot>

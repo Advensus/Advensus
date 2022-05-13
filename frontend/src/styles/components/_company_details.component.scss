@@ -1,0 +1,31 @@
+.company_details_container {
+    // background-color: red;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.company_details_head {
+    // background-color: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.company_details_head_log {
+    background-color: gray;
+    height: 80px;
+    width: 30%;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+.hr_solid_company_details {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 5px;
+    width: 100%;
+}
+.company_details_infos {
+    // background-color: green;
+}

@@ -7,6 +7,7 @@
     color: #fff;
     display: grid;
     grid-template-columns: 250px 4fr 1fr;
+    // // align-items: center;
 }
 
 .header_left {
@@ -14,6 +15,7 @@
     display: grid;
     grid-template-columns: 60px auto;
     align-items: center;
+    height: inherit;
 }
 .header_toggle {
     // background-color: rgb(146, 146, 89);
@@ -40,20 +42,23 @@
 }
 
 .header_center {
-    // background-color: red;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .header_dashboard_search {
     height: 50%;
-    width: 90%;
+    width: 80%;
 }
 .header_right {
     // background-color: yellow;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
+    // padding: 10px;
+    height: 65px;
+    align-self: center;
+    margin: 0 0 0 10px;
 }
 
 // Media Query

@@ -17,15 +17,12 @@ import {
     FullInformationsTabComponent,
 } from "../../../../components";
 import {
-    PATH_LABEL_RESOURCES,
     NewUserDtoIn,
-    PATH_LABEL_ORGANIZATION,
     COMPANY_FORM,
     PATH_LABEL_COMPANY,
 } from "../../../../lib";
 import { useId } from "@fluentui/react-hooks";
 import CompanyService from "../../../../services/company.service";
-import { TrainingCompanyDtoIn } from "../../../../lib/dto/company.dto";
 import { ICompany } from "../../../../lib/interfaces/Company";
 
 export interface ITrainingCompanyPageProps {
@@ -49,7 +46,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     const [showForm, setShowForm] = useState<Boolean>(false);
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [pathLabel, setPathLabel] = useState<string>("");
-    const [contentId, setContentId] = useState<string>("");
+    const [theCompany, setTheCompany] = useState<ICompany>();
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -74,6 +71,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         if (location.state) {
             const thePath = location.state as IPath;
             setPathLabel(thePath.label);
+            console.log("the nav:", thePath.label);
         }
     }, [location.pathname]);
 
@@ -81,26 +79,6 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         toggleCompaniesContent();
         getSociete();
     }, []);
-
-    // const getSociete = async () => {
-    //     await CompanyService.get_all_societe()
-    //         .then(async (response) => {
-    //             if (response.status !== 200) {
-    //                 console.log(
-    //                     "Error resp while gettind all users:",
-    //                     response
-    //                 );
-    //                 return [];
-    //             }
-    //             const datas = (await response.json()) as TrainingCompanyDtoIn;
-    //             console.log("the societies:", datas);
-    //             // setTrainingsCompanies(datas.trainingCompany);
-    //             return datas;
-    //         })
-    //         .catch((err) => {
-    //             console.log("error while getting trainings companies:", err);
-    //         });
-    // };
 
     const getSociete = async () => {
         await CompanyService.get_all_societe()
@@ -146,9 +124,10 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         }
     };
 
-    const toggleFullInfosTab = (id: string) => {
-        // console.log({ id });
-        setContentId(id);
+    const toggleFullInfosTab = (comp: ICompany) => {
+        console.log({ comp });
+        console.log({ pathLabel });
+        setTheCompany(comp);
         var hint = document.getElementById(
             "display_tab_ii"
         ) as HTMLInputElement;
@@ -263,8 +242,8 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 {trainingsCompanies.length
                                     ? trainingsCompanies.map((_) => (
                                           <TrainingOrganizationCardComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
+                                              toggleTab={(i) =>
+                                                  toggleFullInfosTab(i)
                                               }
                                               company={_}
                                               key={_.id}
@@ -280,8 +259,9 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
             </div>
             <div id="display_tab_ii">
                 <FullInformationsTabComponent
-                    contentId={contentId}
+                    contentId={theCompany?.id}
                     currentPath={pathLabel}
+                    company={theCompany}
                 />
             </div>
         </div>
