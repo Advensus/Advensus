@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
+from .serializers import AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -193,6 +193,17 @@ class CreateSociete(generics.GenericAPIView):
 		organisme_data = serializer.data
 		return Response(organisme_data,status=status.HTTP_201_CREATED)
 
+
+class AddSouscrir(generics.GenericAPIView):
+	# permission_classes = (IsAuthenticated,IsAdminUser)
+	serializer_class = AddSouscrir
+	def post(self,request):
+		souscrir= request.data
+		serializer = self.serializer_class(data=souscrir)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		organisme_data = serializer.data
+		return Response(organisme_data,status=status.HTTP_201_CREATED)
 @api_view(['GET'])
 def viewallsociete(request):
 	serializer_class = AddSociete

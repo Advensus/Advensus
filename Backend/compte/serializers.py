@@ -324,4 +324,8 @@ class CrudOrganisme(serializers.ModelSerializer):
         fields = ['id','company_name','company_adress','company_phone_number','societe_formation', 'fix_number','company_stamp','company_logo']
 
 
+class AddSouscrir(serializers.ModelSerializer):
+    class Meta:
+        model = souscrir
 
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','souscriptionliaison']
