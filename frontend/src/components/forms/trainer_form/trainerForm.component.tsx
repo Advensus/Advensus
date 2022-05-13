@@ -5,7 +5,7 @@ import {
     Text,
     TextField,
 } from "@fluentui/react";
-import { useFormik } from "formik";
+import { Field, Form, Formik, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
     BASIC_RP_FORM,
@@ -120,155 +120,202 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         }
     };
 
-    const { values, handleChange, handleSubmit } = useFormik<NewUserDto>({
-        initialValues: {
-            username: "",
-            first_name: "",
-            email: "",
-            phone_number: "",
-            adress: "",
-            password: "",
-            horaire: "",
-            competence: selectedSkill,
-        },
-        // validationSchema,
-        onSubmit,
-    });
+    const initialValues = {
+        username: "",
+        first_name: "",
+        email: "",
+        phone_number: "",
+        adress: "",
+        password: "",
+        horaire: "",
+        // competence: selectedSkill,
+        competence: [],
+        //   appartenir_societe,
+    };
 
     return (
-        <form onSubmit={handleSubmit} className="trainer_form_container">
-            {formToDisplay === TEACHEAR_FORM && (
-                <Text className="trainer_txt_divide_mov">Formateur</Text>
-            )}
-            {formToDisplay === SUPER_RP_FORM && (
-                <Text className="trainer_txt_divide_mov">
-                    Super Responsable Pédagogique
-                </Text>
-            )}
-            {formToDisplay === BASIC_RP_FORM && (
-                <Text className="trainer_txt_divide_mov">
-                    Responsable Pédagogique Normal
-                </Text>
-            )}
-            <hr className="trainer_hr_solid" />
-            <div className="own_trainer_sect">
-                <div className="own_trainer_pict">Img part</div>
-                <div className="own_trainer_fields">
-                    <div className="own_trainer_align_fields">
-                        <CustomDropDownComponent
-                            dropdownOptions={Civility}
-                            thePlaceHolder="Civilité"
-                        />
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Titre"
-                            name="text"
-                        />
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+            <Form className="trainer_form_container">
+                {formToDisplay === TEACHEAR_FORM && (
+                    <Text className="trainer_txt_divide_mov">Formateur</Text>
+                )}
+                {formToDisplay === SUPER_RP_FORM && (
+                    <Text className="trainer_txt_divide_mov">
+                        Super Responsable Pédagogique
+                    </Text>
+                )}
+                {formToDisplay === BASIC_RP_FORM && (
+                    <Text className="trainer_txt_divide_mov">
+                        Responsable Pédagogique Normal
+                    </Text>
+                )}
+                <hr className="trainer_hr_solid" />
+                <div className="own_trainer_sect">
+                    <div className="own_trainer_pict">Img part</div>
+                    <div className="own_trainer_fields">
+                        <Field name="first_name">
+                            {(props: { field: any; meta: any; form: any }) => {
+                                const { field, meta, form } = props;
+                                return (
+                                    <TextField
+                                        type="text"
+                                        id="first_name"
+                                        placeholder="Fist name"
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        </Field>
+                        <Field name="username">
+                            {(props: { field: any; meta: any; form: any }) => {
+                                const { field, meta, form } = props;
+                                return (
+                                    <TextField
+                                        type="text"
+                                        // id="username"
+                                        placeholder="Last name"
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        </Field>
+                        <Field name="email">
+                            {(props: { field: any; meta: any; form: any }) => {
+                                const { field, meta, form } = props;
+                                return (
+                                    <TextField
+                                        type="email"
+                                        id="email"
+                                        placeholder="email"
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        </Field>
+                        <Field name="phone_number">
+                            {(props: { field: any; meta: any; form: any }) => {
+                                const { field, meta, form } = props;
+                                return (
+                                    <TextField
+                                        type="text"
+                                        id="Phonenumber"
+                                        placeholder="Phonenumber"
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        </Field>
                     </div>
-                    <TextField
-                        type="text"
-                        value={values.first_name}
-                        onChange={handleChange}
-                        placeholder="Fist name"
-                        name="first_name"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.username}
-                        onChange={handleChange}
-                        placeholder="last name"
-                        name="username"
-                    />
-                    <TextField
-                        type="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        placeholder="email"
-                        name="email"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.phone_number}
-                        onChange={handleChange}
-                        placeholder="Phonenumber"
-                        name="phone_number"
+                </div>
+                <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
+                <hr className="trainer_hr_solid" />
+                <div className="addr_trainer">
+                    <Field name="adress">
+                        {(props: { field: any; meta: any; form: any }) => {
+                            const { field, meta, form } = props;
+                            return (
+                                <TextField
+                                    type="text"
+                                    id="adress"
+                                    placeholder="Adresse"
+                                    {...field}
+                                />
+                            );
+                        }}
+                    </Field>
+                </div>
+                <Text className="trainer_txt_divide_mov">Other</Text>{" "}
+                <hr className="trainer_hr_solid" />
+                <div className="oth_trainer">
+                    {formToDisplay === TEACHEAR_FORM && (
+                        <>
+                            <Field as="select" multiSelect name="competence">
+                                {trainingAvailable.map((_) => {
+                                    return (
+                                        <option key={_.key} value={_.key}>
+                                            {_.text}
+                                        </option>
+                                    );
+                                })}
+                            </Field>
+                            <Field name="competence">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <Dropdown
+                                            selectedKeys={selectedSkill}
+                                            onChange={onChangeSkills}
+                                            placeholder="Competences"
+                                            multiSelect
+                                            options={trainingAvailable}
+                                            // {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="horaire">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            id="horaire"
+                                            placeholder="Horaire"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                        </>
+                    )}
+
+                    <Field>
+                        {(props: { field: any; meta: any; form: any }) => {
+                            const { field, meta, form } = props;
+                            return (
+                                <Dropdown
+                                    selectedKeys={selectedSkill}
+                                    onChange={onChangeSkills}
+                                    placeholder="ORGANISME(S) DE FORMATION(S)"
+                                    options={Civility}
+                                    // {...field}
+                                />
+                            );
+                        }}
+                    </Field>
+                    <Field name="password">
+                        {(props: { field: any; meta: any; form: any }) => {
+                            const { field, meta, form } = props;
+                            return (
+                                <TextField
+                                    type="password"
+                                    id="password"
+                                    placeholder="Password"
+                                    canRevealPassword
+                                    revealPasswordAriaLabel="Show password"
+                                />
+                            );
+                        }}
+                    </Field>
+                </div>
+                <div className="trainer_form_btns">
+                    <DefaultButton text="Annuler" onClick={cancel} />
+                    <DefaultButton
+                        style={{ marginLeft: "10px" }}
+                        text="Sauvegarder"
+                        type="submit"
                     />
                 </div>
-            </div>
-            <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
-            <hr className="trainer_hr_solid" />
-            <div className="addr_trainer">
-                <TextField
-                    type="text"
-                    value={values.adress}
-                    onChange={handleChange}
-                    placeholder="Adresse"
-                    name="adress"
-                />
-            </div>
-            <Text className="trainer_txt_divide_mov">Other</Text>{" "}
-            <hr className="trainer_hr_solid" />
-            <div className="oth_trainer">
-                {formToDisplay === TEACHEAR_FORM && (
-                    <>
-                        {/* <TextField 
-                            type="text" 
-                            value={values.competence}
-                            onChange={handleChange}
-                            placeholder="Competence"
-                            name="competence"
-                        /> */}
-                        {/* <CustomDropDownComponent
-                            dropdownOptions={trainingAvailable}
-                            thePlaceHolder="Competence"
-                            isChange={dropDownChange}
-                            keySelected={
-                                selectedTraining ? selectedTraining : undefined
-                            }
-                        /> */}
-
-                        <Dropdown
-                            selectedKeys={selectedSkill}
-                            onChange={onChangeSkills}
-                            placeholder="Competences"
-                            multiSelect
-                            options={trainingAvailable}
-                        />
-                        <TextField
-                            type="text"
-                            value={values.horaire}
-                            onChange={handleChange}
-                            placeholder="Horaire"
-                            name="horaire"
-                        />
-                    </>
-                )}
-                <CustomDropDownComponent
-                    dropdownOptions={Civility}
-                    thePlaceHolder="ORGANISME(S) DE FORMATION(S)"
-                />
-                <TextField
-                    type="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                    name="password"
-                    canRevealPassword
-                    revealPasswordAriaLabel="Show password"
-                />
-            </div>
-            <div className="trainer_form_btns">
-                <DefaultButton text="Annuler" onClick={cancel} />
-                <DefaultButton
-                    style={{ marginLeft: "10px" }}
-                    text="Sauvegarder"
-                    type="submit"
-                />
-            </div>
-        </form>
+            </Form>
+        </Formik>
     );
 };
 
