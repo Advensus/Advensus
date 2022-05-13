@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     SchedulerHeader,
     SchedulerHeaderProps,
@@ -11,8 +11,17 @@ import {
     ToolbarSpacer,
 } from "@progress/kendo-react-buttons";
 import { ToolbarDropdown } from "./toolbar-dropdown";
+import { IUser, TEACHEAR, TRAINEE, UserDtoIn } from "../../../lib";
+import UserService from "../../../services/user.service";
 
 export const CustomHeader = (props: SchedulerHeaderProps) => {
+    const [trainers, setTrainers] = useState<IUser[]>([]);
+    const [trainees, setTrainees] = useState<IUser[]>([]);
+
+    useEffect(() => {
+        getAllUser();
+    }, []);
+
     // FOR HEADER
     const [traineeDisplay, setTraineeDisplay] = React.useContext(
         SchedulerConfigContext
@@ -28,6 +37,33 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
         [traineeDisplay]
     );
 
+    const getAllUser = async () => {
+        await UserService.get_all_users()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log(
+                        "Error resp while gettind all users in scheduler:",
+                        response
+                    );
+                    return [];
+                }
+                const datas = (await response.json()) as UserDtoIn;
+                console.log("the users in scheduler:", datas.user);
+                const trainer = datas.user.filter(
+                    (_) => _.user_type === TEACHEAR
+                );
+                const trainee = datas.user.filter(
+                    (_) => _.user_type === TRAINEE
+                );
+                setTrainers(trainer);
+                setTrainees(trainee);
+                return datas;
+            })
+            .catch((err) => {
+                console.log("error while getting users in scheduler:", err);
+            });
+    };
+
     const handleFormerDisplayChange = React.useCallback(
         (event: DropDownListChangeEvent) => {
             setFormerDisplay(event.target.value);
@@ -41,7 +77,7 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
                 <ToolbarDropdown
                     text="Stagiaire"
                     value={traineeDisplay}
-                    data={["client1", "client2", "client3", "client4"]}
+                    data={trainees.map((_) => _.first_name)}
                     onChange={handleTraineeDisplayChange}
                 />
             </ToolbarItem>
@@ -50,7 +86,7 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
                 <ToolbarDropdown
                     text="Formateur"
                     value={formerDisplay}
-                    data={["f1", "f2", "f3", "f4"]}
+                    data={trainers.map((_) => _.first_name)}
                     onChange={handleFormerDisplayChange}
                 />
             </ToolbarItem>
