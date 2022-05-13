@@ -98,7 +98,6 @@ class RegisterFormateur(generics.GenericAPIView):
 			adress=data['adress'],
 			password=data['password'],
 			horaire=data['horaire'],
-			competence=data['competence'],
 			cv=data['cv']
 			)
 		new_formateur.save()
