@@ -12,7 +12,7 @@ export interface NewUserDto {
     competence?: string[];
     appartenir_societe?: string[];
     cv?: File;
-    organisme_formation_id?: string;
+    organisme_formation?: string | number | undefined;
     societe_formation_id?: string;
 }
 
