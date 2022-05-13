@@ -151,6 +151,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     dispenser = models.ManyToManyField(formation,related_name='dispenser_content_type')
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
+    is_autorise = models.BooleanField(default=False)
+
     Rp_Stagiaire = models.ManyToManyField('self')
     objects = UserManager()
 
@@ -163,8 +165,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_autorise = models.BooleanField(default=False)
-
+  
     # fontction personalisé pour envoie des messages à l'utilisateur
     def email_user(self, *args, **kwargs):
         send_mail(
@@ -178,7 +179,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         # return {
