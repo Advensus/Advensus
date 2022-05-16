@@ -7,3 +7,4 @@ django-allauth==0.50.0
 djangorestframework-simplejwt==5.1.0
 drf-yasg==1.20.0
 drf-writable-nested==0.6.3
+django-templated-email == 3.0.0

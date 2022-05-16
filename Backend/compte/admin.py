@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import souscrir,Presence,reservation,Document,Courses,Opinion
+from .models import Presence,reservation,Document,Courses,Opinion
 from .training import formation
 from .company import *
-from .utilisateur import User
+from .utilisateur import User,souscrir
 
 class Affichage(admin.ModelAdmin):
     list_display = ('username','first_name','email','phone_number','adress','date_joined','is_active','is_superuser','user_type','is_staff','updated_at','email_confirmed','is_autorise')

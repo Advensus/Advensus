@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 from .company import SocieteFormation, OrganismeFormation
 from .training import formation
+from django.conf import settings
+
 # classe de modification de gestion des utilisateur par defaut de django
 class UserManager(BaseUserManager):
 
@@ -115,8 +117,25 @@ class UserManager(BaseUserManager):
         fail_silently=False,
     )
 
+    def create_souscription(self,edof,training_status=None,hour_worked=None,duration=None,start_session=None,end_session=None,test_oral=None):
+        if edof is None:
+            raise TypeError('Le mail est obligatoire')
+        
+        s = self.model(edof=edof,training_status=training_status,hour_worked=hour_worked,adress=duration,start_session=start_session,end_session=end_session,test_oral=test_oral)
+        s.save(using=self._db)
+        return s
 
-
+class souscrir(models.Model):
+    id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    edof = models.CharField(max_length=50)
+    training_status = models.CharField(max_length=50)
+    hour_worked = models.CharField(max_length=50)
+    duration = models.CharField(max_length=50)
+    start_session = models.DateField(auto_now_add=False)
+    end_session = models.DateField(auto_now_add=False)
+    test_oral = models.BooleanField(default=False)
+    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
+    formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
@@ -147,7 +166,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     organisme_formation = models.ManyToManyField(OrganismeFormation)
     # societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
-    souscrir = models.ManyToManyField(formation,related_name="souscrir_training")
+    # souscription = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     competence = models.ManyToManyField(formation,related_name='dispenser_content_type')
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
@@ -187,4 +206,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         #     'access': str(refresh.access_token)
         # }
         return refresh.access_token
-       
+
