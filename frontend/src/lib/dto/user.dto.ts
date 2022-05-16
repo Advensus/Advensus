@@ -10,6 +10,7 @@ export interface NewUserDto {
     password: string;
     horaire?: string;
     competence?: string[];
+    appartenir_societe?: string[];
     cv?: File;
     organisme_formation_id?: string;
     societe_formation_id?: string;

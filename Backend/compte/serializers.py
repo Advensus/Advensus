@@ -206,6 +206,7 @@ class AddFormateur(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=70)
+    cv= serializers.FileField()
     id = serializers.UUIDField(read_only=True)
    
   
@@ -319,6 +320,9 @@ class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
         model = OrganismeFormation
+<<<<<<< HEAD
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number','societe_formation','company_stamp','company_logo']
+=======
 
 
         fields = ['id','company_name','company_adress','company_phone_number','societe_formation', 'fix_number','company_stamp','company_logo']
@@ -331,3 +335,4 @@ class AddSouscrir(serializers.ModelSerializer):
 
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','utilisateur','formation']
 
+>>>>>>> 86ae4392758b826b80f2b9515da90946a1d3f182
