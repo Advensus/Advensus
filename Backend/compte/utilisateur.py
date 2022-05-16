@@ -121,8 +121,9 @@ class UserManager(BaseUserManager):
         if edof is None:
             raise TypeError('Le mail est obligatoire')
         
-        souscrir = self.model(edof=edof,training_status=training_status,hour_worked=hour_worked,adress=duration,start_session=start_session,end_session=end_session,test_oral=test_oral)
-        return souscrir
+        s = self.model(edof=edof,training_status=training_status,hour_worked=hour_worked,adress=duration,start_session=start_session,end_session=end_session,test_oral=test_oral)
+        s.save(using=self._db)
+        return s
 
 class souscrir(models.Model):
     id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

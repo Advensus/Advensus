@@ -325,6 +325,7 @@ class CrudOrganisme(serializers.ModelSerializer):
 
 
 class AddSouscrir(serializers.ModelSerializer):
+   
     class Meta:
         model = souscrir
 
