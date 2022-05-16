@@ -19,7 +19,7 @@ import { sampleData, displayDate, sampleDataWithResources } from "./events-utc";
 import products from "./products.json";
 import { CustomFooter } from "./custom-footer";
 import { CustomHeader } from "./custom-header";
-import { FormWithAdditionalValidation } from "./custom-form";
+import { FormWithCustomEditor } from "./custom-form";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -136,7 +136,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     resources={resources}
                     data={fiteredData ? fiteredData : sampleDataWithResources}
                     defaultDate={displayDate}
-                    form={FormWithAdditionalValidation}
+                    // form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}

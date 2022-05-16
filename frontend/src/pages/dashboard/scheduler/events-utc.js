@@ -73,7 +73,7 @@ const baseData = [
         TaskID: 12,
         OwnerID: 2,
         Title: "Car Service",
-        RoomID: 1,
+        CoursesID: 1,
         Description: "Might come to work later!",
         StartTimezone: null,
         Start: "2013-06-24T08:30:00.000Z",
@@ -87,7 +87,7 @@ const baseData = [
     {
         TaskID: 14,
         OwnerID: 3,
-        RoomID: 2,
+        CoursesID: 2,
         PersonID: 3,
         Title: "Replace the printer on the 1st floor",
         Description: "",
@@ -299,7 +299,7 @@ const baseData = [
     {
         TaskID: 32,
         OwnerID: 2,
-        RoomID: 2,
+        CoursesID: 2,
         Title: "Job Interview - Bernard Atkins",
         Description: "Helpdesk",
         StartTimezone: null,
@@ -370,7 +370,7 @@ const baseData = [
     {
         TaskID: 68,
         OwnerID: 1,
-        RoomID: 2,
+        CoursesID: 2,
         Title: "Breakfast with Tom",
         Description: "",
         StartTimezone: null,
@@ -809,7 +809,7 @@ export const sampleData = baseData.map((dataItem) => ({
     recurrenceRule: dataItem.RecurrenceRule,
     recurrenceId: dataItem.RecurrenceID,
     recurrenceExceptions: dataItem.RecurrenceException,
-    roomId: dataItem.RoomID,
+    coursesId: dataItem.CoursesID,
     ownerID: dataItem.OwnerID,
     personId: dataItem.OwnerID,
 }));
@@ -825,7 +825,7 @@ export const sampleDataWithResources = baseData.map((dataItem) => ({
     recurrenceRule: dataItem.RecurrenceRule,
     recurrenceId: dataItem.RecurrenceID,
     recurrenceExceptions: dataItem.RecurrenceException,
-    roomId: randomInt(1, 2),
+    coursesId: randomInt(1, 2),
     personId: randomInt(1, 2),
 }));
 export const sampleDataWithCustomSchema = baseData.map((dataItem) => ({
@@ -833,5 +833,5 @@ export const sampleDataWithCustomSchema = baseData.map((dataItem) => ({
     Start: parseAdjust(dataItem.Start),
     End: parseAdjust(dataItem.End),
     PersonIDs: randomInt(1, 2),
-    RoomID: randomInt(1, 2),
+    CoursesID: randomInt(1, 2),
 }));
