@@ -33,24 +33,17 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                 console.log("the current adding company:", data.id);
                 companpyiiiid = data.id;
                 setCompanyId(data.id);
-                const inputElement = document.getElementById(
-                    "societe_formation_id"
-                ) as HTMLInputElement;
-                inputElement.defaultValue = "dfsdfsdfsfsdfsdfsdff";
-                val.societe_formation = companpyiiiid;
-                // setTimeout(() => {
-                //     if (data) {
-                addCompanyAdmin(val);
-                //         console.log({ inputElement });
-                //     }
-                // }, 1000);
+                val.societe = companpyiiiid;
+                setTimeout(() => {
+                    if (data) {
+                        addCompanyAdmin(val);
+                    }
+                }, 1000);
                 // onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new company:", err);
             });
-        // val.societe_formation_id = companpyiiiid;
-        // addCompanyAdmin(val);
     };
 
     const addCompanyAdmin = (infos: NewCompanyDtoOut) => {
@@ -80,7 +73,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             company_phone_number: "",
             adress: "",
             password: "",
-            societe_formation: "",
+            societe: "",
         },
         onSubmit,
     });
@@ -147,11 +140,11 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                     </div>
                     <TextField
                         type="text"
-                        value={values.societe_formation}
+                        value={values.societe}
                         onChange={handleChange}
                         placeholder="Société"
-                        name="societe_formation_id"
-                        id="societe_formation_id"
+                        name="societe"
+                        id="societe"
                     />
                     <TextField
                         type="text"

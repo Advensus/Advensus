@@ -15,7 +15,7 @@ export interface NewCompanyDtoOut {
     phone_number?: string;
     adress?: string;
     password?: string;
-    societe_formation: string;
+    societe: string;
 }
 export interface NewCompanyDtoIn {
     id: string;
@@ -23,7 +23,7 @@ export interface NewCompanyDtoIn {
     company_adress: string;
     phone_number: string;
     fix_number: string;
-    societe_formation?: string;
+    societe?: string;
 }
 
 export interface TrainingCompanyDtoIn {

@@ -14,12 +14,21 @@ import { ToolbarDropdown } from "./toolbar-dropdown";
 import { IUser, TEACHEAR, TRAINEE, UserDtoIn } from "../../../lib";
 import UserService from "../../../services/user.service";
 
-export const CustomHeader = (props: SchedulerHeaderProps) => {
+export interface ICutomHeaderProps {
+    default_props?: boolean;
+    displayEventByResource: (persoId: string) => void;
+}
+
+export const CustomHeader: React.FC<ICutomHeaderProps> = ({
+    displayEventByResource,
+    children,
+}) => {
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
 
     useEffect(() => {
         getAllUser();
+        console.log({ displayEventByResource });
     }, []);
 
     // FOR HEADER
@@ -33,7 +42,10 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
     const handleTraineeDisplayChange = React.useCallback(
         (event: DropDownListChangeEvent) => {
             setTraineeDisplay(event.target.value);
+            console.log({ event });
+            // displayEventByResource(event.target.value);
         },
+
         [traineeDisplay]
     );
 
@@ -72,13 +84,19 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
     );
     return (
         <SchedulerHeader>
-            {props.children} <ToolbarSpacer />
+            {children} <ToolbarSpacer />
             <ToolbarItem>
                 <ToolbarDropdown
                     text="Stagiaire"
                     value={traineeDisplay}
                     data={trainees.map((_) => _.first_name)}
-                    onChange={handleTraineeDisplayChange}
+                    onChange={(event) => {
+                        handleTraineeDisplayChange(event);
+                        displayEventByResource(event.target.value);
+                    }}
+                    onFilterChange={() => {
+                        console.log("filter was changed");
+                    }}
                 />
             </ToolbarItem>
             <ToolbarSeparator />
@@ -87,7 +105,10 @@ export const CustomHeader = (props: SchedulerHeaderProps) => {
                     text="Formateur"
                     value={formerDisplay}
                     data={trainers.map((_) => _.first_name)}
-                    onChange={handleFormerDisplayChange}
+                    onChange={(event) => {
+                        handleFormerDisplayChange(event);
+                        displayEventByResource("dksdjlkjklfkj");
+                    }}
                 />
             </ToolbarItem>
         </SchedulerHeader>
