@@ -3,22 +3,14 @@ from django.db import models
 from .utilisateur import User
 from .training import formation
 import uuid
-class souscriptionliaison(models.Model):
+# class souscriptionliaison(models.Model):
    
-    utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
-    formation = models.ForeignKey(formation,on_delete=models.CASCADE)
+#     utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
+#     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 
 
-class souscrir(models.Model):
-    id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    edof = models.CharField(max_length=50)
-    training_status = models.CharField(max_length=50)
-    hour_worked = models.CharField(max_length=50)
-    duration = models.CharField(max_length=50)
-    start_session = models.DateField(auto_now_add=False)
-    end_session = models.DateField(auto_now_add=False)
-    test_oral = models.BooleanField(default=False)
-    souscriptionliaison = models.ManyToManyField(souscriptionliaison,related_name='souscription_content_type')
+
+    # souscriptionliaison = models.ManyToManyField(souscriptionliaison,related_name='souscription_content_type')
 
 
 

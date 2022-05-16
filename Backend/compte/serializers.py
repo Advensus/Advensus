@@ -6,10 +6,10 @@ from .training import formation
 
 from .company import Company, OrganismeFormation, SocieteFormation
 from rest_framework import serializers
-from .utilisateur import User
+from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document,souscrir
+from .models import Document
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -79,7 +79,7 @@ class AddStagiaire(serializers.ModelSerializer):
    
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','souscrir','organisme_formation','Rp_Stagiaire']
+        fields = ['username','first_name','email','phone_number','adress','password','id','organisme_formation','Rp_Stagiaire']
         
     # def update(self,instance,validated_data):
     #     user_datas = validated_data.pop('souscrir')
@@ -328,4 +328,5 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','souscriptionliaison']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','utilisateur','formation']
+

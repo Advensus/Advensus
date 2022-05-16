@@ -8,7 +8,7 @@ from .serializers import AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from .utilisateur import User
+from .utilisateur import User,souscrir
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -50,13 +50,13 @@ class RegisterStagiaire(generics.GenericAPIView):
 		new_stagiaire.save()
 
 		
-		f = formation.objects.get(id=data["souscrir"])
+		
 		# nom_for = formation.objects.get(intitule=data["souscrir.intitule"])
 		org = OrganismeFormation.objects.get(id=data['organisme_formation'])
-		
 		rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
+		
 		new_stagiaire.Rp_Stagiaire.add(rp_peda)
-		new_stagiaire.souscrir.add(f)
+		# new_stagiaire.souscription.add(f)
 		new_stagiaire.organisme_formation.add(org)
 
 		# 	f = formation.objects.get(intitule=data["souscrir"])
@@ -68,24 +68,51 @@ class RegisterStagiaire(generics.GenericAPIView):
 		# f.save()
 		# serializer.save()
 		user_data = serializer.data
-		user = User.objects.get(email=user_data['email'])
+		# user = User.objects.get(email=user_data['email'])
+		# token = RefreshToken.for_user(user).access_token
+
+		# current_site = get_current_site(request).domain
+		# relativeLink= reverse('email-verify')
+		# absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+	    
+		# # org = OrganismeFormation.objects.get(id=data['organisme_formation'])
+	
+		# email_body =  org.company_logo.url  +"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + str(rp_peda) + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " "+ str(rp_peda.phone_number) + " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+			
+		# data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
+		# Util.send_email(data)
+
+		return Response(user_data,status=status.HTTP_201_CREATED)
+       
+	
+class AddSouscrir(generics.GenericAPIView):
+	# permission_classes = (IsAuthenticated,IsAdminUser)
+	serializer_class = AddSouscrir
+	def post(self,request):
+		data= request.data
+		serializer = self.serializer_class(data=data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		
+		user_data = serializer.data
+		user = User.objects.get(id=data['utilisateur'])
 		token = RefreshToken.for_user(user).access_token
 
 		current_site = get_current_site(request).domain
 		relativeLink= reverse('email-verify')
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-	    
+		infos = souscrir.objects.all()
+	 
 		# org = OrganismeFormation.objects.get(id=data['organisme_formation'])
-	
-		email_body = org.company_logo.url +"\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de xx" + "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + str(rp_peda) + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " "+ str(rp_peda.phone_number) + " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ str(org)+"\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		f = formation.objects.get(id=data["formation"])
+		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
+		email_body =   "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " + str(infos.duration)+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique,"  + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ "\n\n"+"Une question ? joignez nous en complétant notre formulaire => lien vers formulaire de contact\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 			
 		data = {'email_body': email_body,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 
-		return Response(user_data,status=status.HTTP_201_CREATED)
-       
 	
-
+		return Response(user_data,status=status.HTTP_201_CREATED)
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
@@ -127,9 +154,6 @@ class RegisterFormateur(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-
-		
-    	
     
 
 class RegisterResponsableP(generics.GenericAPIView):
@@ -152,6 +176,7 @@ class RegisterResponsableP(generics.GenericAPIView):
 		# serializer.save()
 		user_data = serializer.data
 		return Response(user_data,status=status.HTTP_201_CREATED)
+
 
 class RegisterSupResponsableP(generics.GenericAPIView):
 	serializer_class = AddSrp
@@ -195,16 +220,7 @@ class CreateSociete(generics.GenericAPIView):
 		return Response(organisme_data,status=status.HTTP_201_CREATED)
 
 
-class AddSouscrir(generics.GenericAPIView):
-	# permission_classes = (IsAuthenticated,IsAdminUser)
-	serializer_class = AddSouscrir
-	def post(self,request):
-		souscrir= request.data
-		serializer = self.serializer_class(data=souscrir)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		organisme_data = serializer.data
-		return Response(organisme_data,status=status.HTTP_201_CREATED)
+
 @api_view(['GET'])
 def viewallsociete(request):
 	serializer_class = AddSociete
