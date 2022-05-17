@@ -136,6 +136,7 @@ class souscrir(models.Model):
     test_oral = models.BooleanField(default=False)
     utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
+    organisme_sous = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
