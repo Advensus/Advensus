@@ -127,7 +127,7 @@ class UserManager(BaseUserManager):
 
 class souscrir(models.Model):
     id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    edof = models.CharField(max_length=50)
+    edof = models.CharField(max_length=50 ,unique=True)
     training_status = models.CharField(max_length=50)
     hour_worked = models.CharField(max_length=50)
     duration = models.CharField(max_length=50)

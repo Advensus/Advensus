@@ -278,17 +278,13 @@ class login(serializers.ModelSerializer):
 
        
 class cruduser(serializers.ModelSerializer):
-    
+   
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
                  "user_type","competence","trainee_level","session_token","organisme_formation",'societe'
-                 ]
-
-        
-            
-        
+                 ]  
 
 
 class cruddocuments(serializers.ModelSerializer):
