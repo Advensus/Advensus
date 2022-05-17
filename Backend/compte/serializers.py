@@ -284,7 +284,7 @@ class cruduser(serializers.ModelSerializer):
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation",'souscrir','societe'
+                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe'
                  ]
 
         
@@ -319,7 +319,7 @@ class LogoutUse(serializers.Serializer):
 class CrudOrganisme(serializers.ModelSerializer):
 
     class Meta:
-        model = OrganismeFormation
+        model = OrganismeFormation 
 
 
         fields = ['id','company_name','company_adress','company_phone_number','societe_formation', 'fix_number','company_stamp','company_logo']
@@ -330,5 +330,5 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','utilisateur','formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
 

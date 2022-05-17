@@ -1,0 +1,19 @@
+export interface NewTraineeDto {
+    username: string;
+    first_name: string;
+    email: string;
+    phone_number: string;
+    adress: string;
+    password: string;
+    organisme_formation: string | number | undefined;
+    Rp_Stagiaire: string | number | undefined;
+
+    edof: string;
+    training_status: string | number | undefined;
+    hour_worked: string;
+    duration: string;
+    start_session: Date | null | undefined | string;
+    end_session: Date | null | undefined | string;
+    formation: string | number | undefined;
+    stagiaire: string;
+}

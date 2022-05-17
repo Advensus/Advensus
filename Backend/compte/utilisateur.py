@@ -134,7 +134,7 @@ class souscrir(models.Model):
     start_session = models.DateField(auto_now_add=False)
     end_session = models.DateField(auto_now_add=False)
     test_oral = models.BooleanField(default=False)
-    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
+    stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

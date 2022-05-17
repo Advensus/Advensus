@@ -204,7 +204,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                 }}
                             </Field>
                             <hr />
-                            <Field name="fix_number">
+                            <Field>
                                 {(props: {
                                     field: any;
                                     meta: any;
@@ -216,12 +216,12 @@ export const TrainingOrganizationFormComponent: React.FC<
                                             type="email"
                                             id="fix_number"
                                             placeholder="Email O-F"
-                                            {...field}
+                                            // {...field}
                                         />
                                     );
                                 }}
                             </Field>
-                            <Field name="password">
+                            <Field>
                                 {() => {
                                     return (
                                         <TextField
@@ -272,8 +272,6 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     return (
                                         <TextField
                                             type="text"
-                                            // value={props.values.password}
-                                            // onChange={props.handleChange}
                                             placeholder="Identifiant mon compte formation"
                                             name="identifiant"
                                         />
