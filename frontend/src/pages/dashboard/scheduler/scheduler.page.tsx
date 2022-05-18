@@ -32,7 +32,7 @@ const group: SchedulerGroup = {
 
 const resources: SchedulerResource[] = [
     {
-        name: "Rooms",
+        name: "Cours",
         data: [
             { text: "Meeting Room 101", value: 1, color: "#5392E4" },
             { text: "Meeting Room 201", value: 2, color: "#FF7272" },
@@ -43,7 +43,7 @@ const resources: SchedulerResource[] = [
         colorField: "color",
     },
     {
-        name: "Persons",
+        name: "Formateur",
         data: [
             {
                 text: "Peter",
@@ -136,7 +136,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     resources={resources}
                     data={fiteredData ? fiteredData : sampleDataWithResources}
                     defaultDate={displayDate}
-                    // form={FormWithCustomEditor}
+                    form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}
