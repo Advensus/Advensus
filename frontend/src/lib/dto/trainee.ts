@@ -6,6 +6,7 @@ export interface NewTraineeDto {
     adress: string;
     password: string;
     organisme_formation: string | number | undefined;
+    organisme_sous: string | number | undefined;
     Rp_Stagiaire: string | number | undefined;
 
     edof: string;

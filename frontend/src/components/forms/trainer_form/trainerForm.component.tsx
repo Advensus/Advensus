@@ -168,7 +168,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         password: "",
         horaire: "",
         // competence: selectedSkill,
-        competence: [...selectedSkill],
+        competence: selectedSkill,
         appartenir_societe: "",
         cv: undefined,
     };

@@ -34,9 +34,11 @@ export interface NewOrganizationDtoOut {
     company_name: string;
     company_adress: string;
     company_phone_number: string;
+    password: string;
+    email: string;
     fix_number?: string;
     company_stamp?: File;
-    company_logo: string;
+    company_logo?: File;
     societe_formation:
         | IDropdownOption<string>
         | string

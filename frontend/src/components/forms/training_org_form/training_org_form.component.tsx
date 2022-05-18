@@ -34,9 +34,16 @@ export const TrainingOrganizationFormComponent: React.FC<
     // );
 
     const [selectedSociety, setSelectedSociety] =
-        React.useState<IDropdownOption<string>>();
+        React.useState<IDropdownOption>();
 
     const onChange = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedSociety(item);
+    };
+
+    const onChangeCompany = (
         event: React.FormEvent<HTMLDivElement>,
         item?: IDropdownOption
     ): void => {
@@ -71,12 +78,13 @@ export const TrainingOrganizationFormComponent: React.FC<
     };
 
     const onSubmit = (val: NewOrganizationDtoOut) => {
+        val.societe_formation = selectedSociety ? selectedSociety.key : "";
         console.log({ val });
-        if (val) {
-            const logoPath = val.company_logo.lastIndexOf("\\");
-            val.company_logo = val.company_logo.substring(logoPath + 2);
-            console.log("logo path", val.company_logo);
-        }
+        //  if (val) {
+        //      const logoPath = val.company_logo.lastIndexOf("\\");
+        //      val.company_logo = val.company_logo.substring(logoPath + 2);
+        //      console.log("logo path", val.company_logo);
+        //  }
         CompanyService.new_organization(val)
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -96,9 +104,11 @@ export const TrainingOrganizationFormComponent: React.FC<
         company_adress: "",
         company_phone_number: "",
         fix_number: "",
-        societe_formation: selectedSociety?.key ? selectedSociety.key : "",
+        societe_formation: selectedSociety ? selectedSociety.key : "dfqfqds",
         company_stamp: undefined,
-        company_logo: "",
+        company_logo: undefined,
+        password: "",
+        email: "",
     };
 
     return (
@@ -118,7 +128,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                         <TextField
                                             label="Logo"
                                             type="file"
-                                            id="company_logo"
+                                            // id="company_logo"
                                             placeholder="Logo de l'organisme"
                                             {...field}
                                         />
@@ -127,7 +137,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                             }}
                         </Field>
                         <div className="of_training_org_form_fields">
-                            <Field as="select" name="societe_formation">
+                            {/* <Field as="select" name="societe_formation">
                                 {trainingsCompanies.map((_) => {
                                     return (
                                         <option key={_.key} value={_.key}>
@@ -135,7 +145,18 @@ export const TrainingOrganizationFormComponent: React.FC<
                                         </option>
                                     );
                                 })}
-                            </Field>
+                            </Field> */}
+                            <Dropdown
+                                selectedKey={
+                                    selectedSociety
+                                        ? selectedSociety.key
+                                        : undefined
+                                }
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={onChangeCompany}
+                                placeholder="Formtion(s)"
+                                options={trainingsCompanies}
+                            />
                             <Field name="company_name">
                                 {(props: {
                                     field: any;
@@ -204,7 +225,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                 }}
                             </Field>
                             <hr />
-                            <Field>
+                            <Field name="email">
                                 {(props: {
                                     field: any;
                                     meta: any;
@@ -214,9 +235,9 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     return (
                                         <TextField
                                             type="email"
-                                            id="fix_number"
+                                            // id="email"
                                             placeholder="Email O-F"
-                                            // {...field}
+                                            {...field}
                                         />
                                     );
                                 }}
@@ -241,7 +262,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     );
                                 }}
                             </Field>
-                            <Field name="password">
+                            <Field>
                                 {() => {
                                     return (
                                         <TextField
@@ -254,13 +275,19 @@ export const TrainingOrganizationFormComponent: React.FC<
                                 }}
                             </Field>
                             <Field name="password">
-                                {() => {
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
                                     return (
                                         <TextField
                                             type="password"
                                             placeholder="Mot de passe de connexion"
                                             canRevealPassword
                                             revealPasswordAriaLabel="Show password"
+                                            {...field}
                                         />
                                     );
                                 }}
@@ -278,7 +305,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     );
                                 }}
                             </Field>
-                            <Field name="password">
+                            <Field>
                                 {() => {
                                     return (
                                         <TextField
@@ -302,13 +329,28 @@ export const TrainingOrganizationFormComponent: React.FC<
                                             <TextField
                                                 label="Cachet"
                                                 type="file"
-                                                placeholder="Cachet de l'organisme"
                                                 {...field}
                                             />
                                         </div>
                                     );
                                 }}
                             </Field>
+                            {/* <Field name="cv">
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            label="Cachet"
+                                            type="file"
+                                            {...field}
+                                        />
+                                    );
+                                }}
+                            </Field> */}
                         </div>
                     </div>
 
