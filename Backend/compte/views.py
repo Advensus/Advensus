@@ -98,7 +98,7 @@ class AddSouscrir(generics.GenericAPIView):
 		serializer.save()
 		
 		user_data = serializer.data
-		user = User.objects.get(id=data['utilisateur'])
+		user = User.objects.get(id=data['stagiaire'])
 		token = RefreshToken.for_user(user).access_token
 		# s = souscrir.objects.get(duration=self.duration)
 		current_site = get_current_site(request).domain

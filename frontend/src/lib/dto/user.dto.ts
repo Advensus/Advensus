@@ -10,10 +10,9 @@ export interface NewUserDto {
     password: string;
     horaire?: string;
     competence?: string[];
-    appartenir_societe?: string[];
+    appartenir_societe?: string | number | undefined;
     cv?: File;
     organisme_formation?: string | number | undefined;
-    societe_formation_id?: string;
 }
 
 export interface NewUserDtoOut {

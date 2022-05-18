@@ -28,11 +28,6 @@ export interface ITrainerFormProps {
     trainings: ITraining[];
 }
 
-interface tttt {
-    key: string;
-    text: string;
-}
-
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     cancel,
     onCreate,
@@ -43,8 +38,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         IDropdownOption[]
     >([]);
     const [selectedSkill, setSelectedSkill] = React.useState<string[]>([]);
-    const [selectedOrg, setSelectedOrg] = React.useState<IDropdownOption>();
-    const [organizations, setOrganizations] = useState<IDropdownOption[]>([]);
+    const [selectedSociety, setSelectedSociety] =
+        React.useState<IDropdownOption>();
+    const [societies, setSocieties] = useState<IDropdownOption[]>([]);
 
     const onChangeSkills = (
         event: React.FormEvent<HTMLDivElement>,
@@ -65,7 +61,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         event: React.FormEvent<HTMLDivElement>,
         item?: IDropdownOption
     ): void => {
-        setSelectedOrg(item);
+        setSelectedSociety(item);
     };
 
     useEffect(() => {
@@ -87,7 +83,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     }, [formToDisplay]);
 
     const getOrganization = async () => {
-        await CompanyService.get_all_organization()
+        await CompanyService.get_all_societe()
             .then(async (response) => {
                 if (response.status !== 200) {
                     //@TODO #4
@@ -97,17 +93,17 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 }
                 return response.json();
             })
-            .then((respOrganisations: ICompany[]) => {
-                console.log("the Organisations datas:", respOrganisations);
-                if (respOrganisations) {
-                    const dropOrgs = respOrganisations.map((_) => {
+            .then((respOSocieties: ICompany[]) => {
+                console.log("the Organisations datas:", respOSocieties);
+                if (respOSocieties) {
+                    const dropOrgs = respOSocieties.map((_) => {
                         let orgs = {
                             key: _.id,
                             text: _.company_name,
                         };
                         return orgs;
                     });
-                    setOrganizations(dropOrgs);
+                    setSocieties(dropOrgs);
                 }
             })
             .catch((err) => {
@@ -119,18 +115,21 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         console.log("the skills:", selectedSkill);
         console.log({ value });
         if (formToDisplay === TEACHEAR_FORM) {
-            // UserService.new_trainer(value)
-            //     .then(async (response) => {
-            //         if (response.status !== 200) {
-            //             console.log({ response });
-            //         }
-            //         const data = (await response.json()) as NewUserDtoIn;
-            //         console.log("the user just added:", data);
-            //         onCreate(data);
-            //     })
-            //     .catch((err) => {
-            //         console.log("error while adding new trainer:", err);
-            //     });
+            value.appartenir_societe = selectedSociety
+                ? selectedSociety.key
+                : undefined;
+            UserService.new_trainer(value)
+                .then(async (response) => {
+                    if (response.status !== 200) {
+                        console.log({ response });
+                    }
+                    const data = (await response.json()) as NewUserDtoIn;
+                    console.log("the user just added:", data);
+                    onCreate(data);
+                })
+                .catch((err) => {
+                    console.log("error while adding new trainer:", err);
+                });
         }
         if (formToDisplay === SUPER_RP_FORM) {
             UserService.new_super_rp(value)
@@ -169,10 +168,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         password: "",
         horaire: "",
         // competence: selectedSkill,
-        competence: ["", ...selectedSkill],
-        //   appartenir_societe,
+        competence: [...selectedSkill],
+        appartenir_societe: "",
         cv: undefined,
-        organisme_formation: selectedOrg ? selectedOrg.key : "",
     };
 
     return (
@@ -323,19 +321,19 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                         </>
                     )}
 
-                    <Field name="organisme_formation">
+                    <Field name="appartenir_societe">
                         {(props: { field: any; meta: any; form: any }) => {
                             const { field, meta, form } = props;
                             return (
                                 <Dropdown
                                     selectedKey={
-                                        selectedOrg
-                                            ? selectedOrg.key
+                                        selectedSociety
+                                            ? selectedSociety.key
                                             : undefined
                                     }
                                     onChange={onChangeOrgs}
-                                    placeholder="ORGANISME(S) DE FORMATION(S)"
-                                    options={organizations}
+                                    placeholder="SOCIETÉ(S) DE FORMATION(S)"
+                                    options={societies}
                                     {...field}
                                 />
                             );
