@@ -129,12 +129,7 @@ class RegisterFormateur(generics.GenericAPIView):
 			adress=data['adress'],
 			password=data['password'],
 			horaire=data['horaire'],
-<<<<<<< HEAD
-			competence=data['competence'],
-			# cv=data['cv']
-=======
 			cv=data['cv']
->>>>>>> 86ae4392758b826b80f2b9515da90946a1d3f182
 			)
 		new_formateur.save()
 		forma = formation.objects.get(id=data['competence'])

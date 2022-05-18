@@ -19,6 +19,7 @@ import { sampleData, displayDate, sampleDataWithResources } from "./events-utc";
 import products from "./products.json";
 import { CustomFooter } from "./custom-footer";
 import { CustomHeader } from "./custom-header";
+import { FormWithCustomEditor } from "./custom-form";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -76,6 +77,7 @@ export const SchedulerConfigContext = React.createContext<{
 
 export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [data, setData] = React.useState<any[]>(sampleData);
+    const [fiteredData, setFilteredData] = React.useState<any[]>(sampleData);
     const [slotDuration, setSlotDuration] = React.useState(60);
     const [slotDivision, setSlotDivision] = React.useState(2);
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
@@ -111,6 +113,14 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         );
     };
 
+    const filterByResources = (perso: string) => {
+        const filterData = sampleDataWithResources.filter(
+            (_) => _.personId === perso
+        );
+        setFilteredData(filterData);
+        console.log({ perso });
+    };
+
     return (
         <div className="scheduler_container">
             <SchedulerConfigContext.Provider
@@ -124,9 +134,17 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 <Scheduler
                     // group={group}
                     resources={resources}
-                    data={sampleDataWithResources}
+                    data={fiteredData ? fiteredData : sampleDataWithResources}
                     defaultDate={displayDate}
-                    header={(props) => <CustomHeader {...props} />}
+                    // form={FormWithCustomEditor}
+                    header={(props) => (
+                        <CustomHeader
+                            {...props}
+                            displayEventByResource={(id: string) =>
+                                filterByResources(id)
+                            }
+                        />
+                    )}
                     // className="scheduler_body"
                     id="scheduler_body"
                     height={"100%"}

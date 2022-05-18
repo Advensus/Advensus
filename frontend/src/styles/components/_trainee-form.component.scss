@@ -26,11 +26,6 @@
     height: 300px;
     justify-content: space-between;
 }
-.own_trainee_align_fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
 .addr_trainee {
     // background: moccasin;
     height: 50px;
@@ -40,7 +35,7 @@
 }
 .oth_trainee {
     // background: mediumvioletred;
-    height: 360px;
+    height: 460px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

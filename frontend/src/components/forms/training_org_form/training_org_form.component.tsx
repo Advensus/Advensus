@@ -116,6 +116,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                 return (
                                     <div className="training_org_form_pict">
                                         <TextField
+                                            label="Logo"
                                             type="file"
                                             id="company_logo"
                                             placeholder="Logo de l'organisme"
@@ -202,12 +203,62 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     );
                                 }}
                             </Field>
+                            <hr />
+                            <Field>
+                                {(props: {
+                                    field: any;
+                                    meta: any;
+                                    form: any;
+                                }) => {
+                                    const { field, meta, form } = props;
+                                    return (
+                                        <TextField
+                                            type="email"
+                                            id="fix_number"
+                                            placeholder="Email O-F"
+                                            // {...field}
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field>
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            placeholder="Serveur sortant"
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field>
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            placeholder="Port"
+                                        />
+                                    );
+                                }}
+                            </Field>
                             <Field name="password">
                                 {() => {
                                     return (
                                         <TextField
                                             type="password"
-                                            placeholder="Password"
+                                            placeholder="Mot de pass d'emailing"
+                                            canRevealPassword
+                                            revealPasswordAriaLabel="Show password"
+                                        />
+                                    );
+                                }}
+                            </Field>
+                            <Field name="password">
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="password"
+                                            placeholder="Mot de passe de connexion"
                                             canRevealPassword
                                             revealPasswordAriaLabel="Show password"
                                         />
@@ -215,13 +266,18 @@ export const TrainingOrganizationFormComponent: React.FC<
                                 }}
                             </Field>
                             <hr />
-                            {/* <Field
-                            type="text"
-                            // value={props.values.password}
-                            // onChange={props.handleChange}
-                            placeholder="Identifiant mon compte formation"
-                            name="identifiant"
-                        /> */}
+
+                            <Field>
+                                {() => {
+                                    return (
+                                        <TextField
+                                            type="text"
+                                            placeholder="Identifiant mon compte formation"
+                                            name="identifiant"
+                                        />
+                                    );
+                                }}
+                            </Field>
                             <Field name="password">
                                 {() => {
                                     return (
@@ -244,6 +300,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     return (
                                         <div className="training_org_form_stamp">
                                             <TextField
+                                                label="Cachet"
                                                 type="file"
                                                 placeholder="Cachet de l'organisme"
                                                 {...field}

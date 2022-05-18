@@ -16,8 +16,9 @@ import {
     SUPER_RP_FORM,
     TEACHEAR_FORM,
 } from "../../../lib";
+import { ICompany } from "../../../lib/interfaces/Company";
+import CompanyService from "../../../services/company.service";
 import UserService from "../../../services/user.service";
-import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
@@ -42,6 +43,8 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         IDropdownOption[]
     >([]);
     const [selectedSkill, setSelectedSkill] = React.useState<string[]>([]);
+    const [selectedOrg, setSelectedOrg] = React.useState<IDropdownOption>();
+    const [organizations, setOrganizations] = useState<IDropdownOption[]>([]);
 
     const onChangeSkills = (
         event: React.FormEvent<HTMLDivElement>,
@@ -56,6 +59,13 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     : selectedSkill.filter((key) => key !== item.key)
             );
         }
+    };
+
+    const onChangeOrgs = (
+        event: React.FormEvent<HTMLDivElement>,
+        item?: IDropdownOption
+    ): void => {
+        setSelectedOrg(item);
     };
 
     useEffect(() => {
@@ -73,7 +83,37 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             });
             setTrainingAvailable(dropTraining);
         }
+        getOrganization();
     }, [formToDisplay]);
+
+    const getOrganization = async () => {
+        await CompanyService.get_all_organization()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((respOrganisations: ICompany[]) => {
+                console.log("the Organisations datas:", respOrganisations);
+                if (respOrganisations) {
+                    const dropOrgs = respOrganisations.map((_) => {
+                        let orgs = {
+                            key: _.id,
+                            text: _.company_name,
+                        };
+                        return orgs;
+                    });
+                    setOrganizations(dropOrgs);
+                }
+            })
+            .catch((err) => {
+                console.log("error while getting tainings organisations");
+            });
+    };
 
     const onSubmit = (value: NewUserDto) => {
         console.log("the skills:", selectedSkill);
@@ -120,7 +160,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         }
     };
 
-    const initialValues = {
+    const initialValues: NewUserDto = {
         username: "",
         first_name: "",
         email: "",
@@ -129,12 +169,18 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         password: "",
         horaire: "",
         // competence: selectedSkill,
-        competence: [],
+        competence: ["", ...selectedSkill],
         //   appartenir_societe,
+        cv: undefined,
+        organisme_formation: selectedOrg ? selectedOrg.key : "",
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validateOnChange={false}
+        >
             <Form className="trainer_form_container">
                 {formToDisplay === TEACHEAR_FORM && (
                     <Text className="trainer_txt_divide_mov">Formateur</Text>
@@ -229,7 +275,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 <div className="oth_trainer">
                     {formToDisplay === TEACHEAR_FORM && (
                         <>
-                            <Field as="select" multiSelect name="competence">
+                            {/* <Field as="select" multiSelect name="competence">
                                 {trainingAvailable.map((_) => {
                                     return (
                                         <option key={_.key} value={_.key}>
@@ -237,7 +283,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                                         </option>
                                     );
                                 })}
-                            </Field>
+                            </Field> */}
                             <Field name="competence">
                                 {(props: {
                                     field: any;
@@ -277,16 +323,20 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                         </>
                     )}
 
-                    <Field>
+                    <Field name="organisme_formation">
                         {(props: { field: any; meta: any; form: any }) => {
                             const { field, meta, form } = props;
                             return (
                                 <Dropdown
-                                    selectedKeys={selectedSkill}
-                                    onChange={onChangeSkills}
+                                    selectedKey={
+                                        selectedOrg
+                                            ? selectedOrg.key
+                                            : undefined
+                                    }
+                                    onChange={onChangeOrgs}
                                     placeholder="ORGANISME(S) DE FORMATION(S)"
-                                    options={Civility}
-                                    // {...field}
+                                    options={organizations}
+                                    {...field}
                                 />
                             );
                         }}
@@ -301,7 +351,16 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                                     placeholder="Password"
                                     canRevealPassword
                                     revealPasswordAriaLabel="Show password"
+                                    {...field}
                                 />
+                            );
+                        }}
+                    </Field>
+                    <Field name="cv">
+                        {(props: { field: any; meta: any; form: any }) => {
+                            const { field, meta, form } = props;
+                            return (
+                                <TextField label="CV" type="file" {...field} />
                             );
                         }}
                     </Field>
