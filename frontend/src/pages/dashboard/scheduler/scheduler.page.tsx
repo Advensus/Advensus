@@ -43,7 +43,7 @@ const resources: SchedulerResource[] = [
         colorField: "color",
     },
     {
-        name: "Formateur",
+        name: "Perso",
         data: [
             {
                 text: "Peter",
@@ -105,9 +105,9 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 )
                 // Add the newly created items and assign an `id`.
                 .concat(
-                    created.map((item) =>
+                    created.map((booking) =>
                         // Object.assign({}, item, { id: guid() })
-                        console.log({ item })
+                        console.log({ booking })
                     )
                 )
         );
@@ -136,7 +136,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     resources={resources}
                     data={fiteredData ? fiteredData : sampleDataWithResources}
                     defaultDate={displayDate}
-                    form={FormWithCustomEditor}
+                    // form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}

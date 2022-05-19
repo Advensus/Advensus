@@ -24,14 +24,17 @@ import {
     TRAINEE,
 } from "../lib";
 import {
+    AdministrativeDocsPage,
     ResourcesPage,
     SchedulerPage,
     StatisticsPage,
     TraineesPage,
     TrainingCompanyPage,
+    TrainingModulePage,
     TrainingOrganisationPage,
     TrainingsPage,
     UsersPage,
+    VisioPage,
 } from "../pages";
 import { useAuthStore } from "../stores";
 
@@ -111,21 +114,21 @@ export function useUserRouteHooks() {
             path: `visio`,
             label: "Visio",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: VisioPage,
             roles: [SUPER_USER, TEACHEAR],
         },
         {
             path: `doc`,
             label: "Documents admin",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: AdministrativeDocsPage,
             roles: [SUPER_USER, TEACHEAR],
         },
         {
             path: `mod_form`,
             label: "Modules de formation",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: TrainingModulePage,
             roles: [SUPER_USER, TEACHEAR],
         },
 

@@ -1,4 +1,6 @@
 export interface IBooking {
+    id: string;
+    courses: string;
     TaskID: string;
     OwnerID: string;
     Title: string;
