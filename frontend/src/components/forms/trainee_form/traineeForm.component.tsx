@@ -297,7 +297,21 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             <Text className="trainee_txt_divide_mov">Stagiaire</Text>
             <hr className="trainee_hr_solid" />
             <div className="own_trainee_sect">
-                <div className="own_trainee_pict">Img part</div>
+                <div className="own_trainee_pict">
+                    {/* User picture */}
+                    <TextField
+                        label="Photo de profile"
+                        type="file"
+                        // name="company_stamp"
+                        // onChange={(event: any) => {
+                        //     setFieldValue(
+                        //         "company_stamp",
+                        //         event.target.files[0]
+                        //     );
+                        //     setFieldTouched("company_stamp", true);
+                        // }}
+                    />
+                </div>
                 <div className="own_trainee_fields">
                     <TextField
                         type="text"

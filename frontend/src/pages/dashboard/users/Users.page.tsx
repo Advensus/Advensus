@@ -474,7 +474,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                             onCreate={handleOnCreate}
                         />
                     ) : pathLabel === PATH_LABEL_COMPANY ? (
-                        <CompanyFormComponent />
+                        <CompanyFormComponent onCreate={handleOnCreate} />
                     ) : (
                         <TrainingFormComponent
                             cancel={() => setShowForm(false)}

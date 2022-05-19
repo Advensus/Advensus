@@ -9,9 +9,9 @@ export interface NewUserDto {
     adress: string;
     password: string;
     horaire?: string;
-    competence?: string[];
+    competence?: string;
     appartenir_societe?: string | number | undefined;
-    cv?: File;
+    cv?: string | Blob;
     organisme_formation?: string | number | undefined;
 }
 
@@ -23,7 +23,7 @@ export interface NewUserDtoOut {
     adress: string;
     horaire?: string;
     competence?: string[];
-    cv?: File;
+    cv?: string | Blob;
     organisme?: string;
 }
 

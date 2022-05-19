@@ -24,6 +24,7 @@ import {
 import { useId } from "@fluentui/react-hooks";
 import CompanyService from "../../../../services/company.service";
 import { ICompany } from "../../../../lib/interfaces/Company";
+import { NewCompanyDtoIn } from "../../../../lib/dto/company.dto";
 
 export interface ITrainingCompanyPageProps {
     default_props?: boolean;
@@ -162,7 +163,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
+    const handleOnCreate = (data: NewCompanyDtoIn) => {
         console.log({ data });
         // pathLabel === PATH_LABEL_RESOURCES
         //     ? setTrainers([data.user, ...trainers])
@@ -253,7 +254,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                             </div>
                         </div>
                     ) : (
-                        <CompanyFormComponent />
+                        <CompanyFormComponent onCreate={handleOnCreate} />
                     )}
                 </div>
             </div>

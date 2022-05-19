@@ -6,8 +6,8 @@ export interface NewCompanyDtoOut {
     company_adress: string;
     company_phone_number: string;
     fix_number?: string;
-    company_stamp?: File;
-    company_logo?: File;
+    company_stamp: string | Blob;
+    company_logo: string | Blob;
 
     username?: string;
     first_name?: string;
