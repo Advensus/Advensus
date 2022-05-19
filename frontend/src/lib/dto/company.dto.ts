@@ -37,8 +37,8 @@ export interface NewOrganizationDtoOut {
     password: string;
     email: string;
     fix_number?: string;
-    company_stamp?: File;
-    company_logo?: File;
+    company_stamp: string | Blob;
+    company_logo: string | Blob;
     societe_formation:
         | IDropdownOption<string>
         | string

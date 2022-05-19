@@ -48,6 +48,7 @@ import {
 } from "../../../lib";
 import { useLocation } from "react-router-dom";
 import TrainingService from "../../../services/training.service";
+import { NewCompanyDtoIn } from "../../../lib/dto/company.dto";
 // import { RouteProps } from "react-router";
 
 export interface IUsersPageProps {
@@ -208,7 +209,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
             });
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
+    const handleOnCreate = (data: NewUserDtoIn | NewCompanyDtoIn) => {
         console.log({ data });
         // pathLabel === PATH_LABEL_RESOURCES
         //     ? setTrainers([data.user, ...trainers])
@@ -470,6 +471,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                     ) : pathLabel === PATH_LABEL_ORGANIZATION ? (
                         <TrainingOrganizationFormComponent
                             cancel={() => setShowForm(false)}
+                            onCreate={handleOnCreate}
                         />
                     ) : pathLabel === PATH_LABEL_COMPANY ? (
                         <CompanyFormComponent />

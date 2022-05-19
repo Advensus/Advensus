@@ -25,7 +25,10 @@ import {
 } from "../../../../lib";
 import CompanyService from "../../../../services/company.service";
 import { ICompany } from "../../../../lib/interfaces/Company";
-import { TrainingOrganizationDtoIn } from "../../../../lib/dto/company.dto";
+import {
+    NewCompanyDtoIn,
+    TrainingOrganizationDtoIn,
+} from "../../../../lib/dto/company.dto";
 
 export interface ITrainingOrganisationPageProps {
     default_props?: boolean;
@@ -163,7 +166,7 @@ export const TrainingOrganisationPage: React.FC<
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
+    const handleOnCreate = (data: NewCompanyDtoIn) => {
         console.log({ data });
         setShowForm(false);
     };
@@ -258,6 +261,7 @@ export const TrainingOrganisationPage: React.FC<
                     ) : (
                         <TrainingOrganizationFormComponent
                             cancel={() => setShowForm(false)}
+                            onCreate={handleOnCreate}
                         />
                     )}
                 </div>
