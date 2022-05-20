@@ -136,7 +136,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     resources={resources}
                     data={fiteredData ? fiteredData : sampleDataWithResources}
                     defaultDate={displayDate}
-                    // form={FormWithCustomEditor}
+                    form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}
