@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document
+from .models import Document,Courses
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -338,3 +338,8 @@ class AddSouscrir(serializers.ModelSerializer):
 
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
 
+class CrudCourses(serializers.ModelSerializer):
+
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','etablir','lier']
