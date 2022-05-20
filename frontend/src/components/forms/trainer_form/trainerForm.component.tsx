@@ -122,7 +122,10 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         formData.append("adress", value.adress);
         formData.append("password", value.password);
         formData.append("horaire", `${value.horaire}`);
-        formData.append("competence", `${value.competence}`);
+        formData.append("competence[0]", value.competence as any);
+        formData.append("competence[1]", value.competence as any);
+        formData.append("competence[2]", value.competence as any);
+        formData.append("competence[3]", value.competence as any);
         formData.append("appartenir_societe", `${value.appartenir_societe}`);
         formData.append("cv", value.cv ? value.cv : "");
         if (formToDisplay === TEACHEAR_FORM) {
@@ -185,7 +188,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             adress: "",
             password: "",
             horaire: "",
-            competence: JSON.stringify(selectedSkill),
+            competence: [],
             appartenir_societe: "",
             cv: "",
         },
@@ -275,8 +278,27 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 {formToDisplay === TEACHEAR_FORM && (
                     <>
                         <Dropdown
-                            selectedKeys={selectedSkill}
-                            onChange={onChangeSkills}
+                            selectedKeys={values.competence}
+                            // onChange={onChangeSkills}
+                            onChange={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                console.log("item selected:", item?.key);
+                                // setSelectedSkill(item);
+                                if (item) {
+                                    const selected = item.selected
+                                        ? [
+                                              ...values.competence,
+                                              item.key as string,
+                                          ]
+                                        : values.competence.filter(
+                                              (key) => key !== item.key
+                                          );
+                                    setFieldValue("competence", selected);
+                                    setFieldTouched("selected", true);
+                                }
+                            }}
                             placeholder="Competences"
                             multiSelect
                             options={trainingAvailable}

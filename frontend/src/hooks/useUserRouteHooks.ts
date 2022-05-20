@@ -40,7 +40,7 @@ import { useAuthStore } from "../stores";
 
 export function useUserRouteHooks() {
     const [userRoutes, setUserRoutes] = useState<IRoute[]>([]);
-    const { user_type } = useAuthStore();
+    const { user } = useAuthStore();
 
     const menuRoutes: IRoute[] = [
         {
@@ -74,28 +74,28 @@ export function useUserRouteHooks() {
 
         //  Super Rp & Rp
         {
-            path: `${user_type}/${CUSTOMER}`,
+            path: `${user?.id}/${CUSTOMER}`,
             label: `${PATH_LABEL_CUSTOMER}`,
             icon: "la-id-badge",
             component: TraineesPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
-            path: `${user_type}/${RESOURCES}`,
+            path: `${user?.id}/${RESOURCES}`,
             label: `${PATH_LABEL_RESOURCES}`,
             icon: "la-id-badge",
             component: ResourcesPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
-            path: `${user_type}/${SERVICES}`,
+            path: `${user?.id}/${SERVICES}`,
             label: `${PATH_LABEL_SERVICES}`,
             icon: "la-id-badge",
             component: TrainingsPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP],
         },
         {
-            path: `${user_type}/${CALL_CENTER}`,
+            path: `${user?.id}/${CALL_CENTER}`,
             label: `${PATH_LABEL_CALL_CENTER}`,
             icon: "la-id-badge",
             component: TrainingsPage,
@@ -141,14 +141,14 @@ export function useUserRouteHooks() {
             roles: [TRAINEE],
         },
         {
-            path: `planninn`,
+            path: `programm`,
             label: "Programme de formation",
             icon: "la-id-badge",
             component: TrainingOrganizationCardComponent,
             roles: [TRAINEE],
         },
         {
-            path: `planninn`,
+            path: `test niv`,
             label: "Test de niveau",
             icon: "la-id-badge",
             component: TrainingOrganizationCardComponent,
@@ -176,7 +176,7 @@ export function useUserRouteHooks() {
             roles: [TRAINEE],
         },
         {
-            path: `nextcours`,
+            path: `docs`,
             label: "Mes documents",
             icon: "la-id-badge",
             component: TrainingOrganizationCardComponent,
@@ -199,15 +199,15 @@ export function useUserRouteHooks() {
     ];
 
     useEffect(() => {
-        if (!user_type) {
+        if (!user) {
             setUserRoutes([]);
             return;
         }
         const filteredRoutes = menuRoutes.filter((route) => {
-            return route.roles.includes(user_type);
+            return route.roles.includes(user.user_type);
         });
         setUserRoutes(filteredRoutes);
-    }, [user_type]);
+    }, [user]);
 
     return userRoutes;
 }

@@ -30,34 +30,15 @@ export const TrainingOrganizationFormComponent: React.FC<
     const [trainingsCompanies, setTrainingsCompanies] = useState<
         IDropdownOption[]
     >([]);
-    // const [trainingsCompanies, setTrainingsCompanies] = useState<ICompany[]>(
-    //     []
-    // );
 
     const [selectedSociety, setSelectedSociety] =
         React.useState<IDropdownOption>();
-    const [selectedLogo, setSelectedLogo] = React.useState<any>();
-    const [selectedStamp, setSelectedStamp] = React.useState<any>();
-
-    const onChange = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedSociety(item);
-    };
 
     const onChangeCompany = (
         event: React.FormEvent<HTMLDivElement>,
         item?: IDropdownOption
     ): void => {
         setSelectedSociety(item);
-    };
-    const onChangeCompanyLogo = (event: any): void => {
-        console.log({ event });
-        setSelectedLogo(event.target.files[0]);
-    };
-    const onChangeCompanyStamp = (event: any): void => {
-        setSelectedStamp(event.target.files[0]);
     };
 
     useEffect(() => {
@@ -265,8 +246,4 @@ export const TrainingOrganizationFormComponent: React.FC<
             </form>
         </div>
     );
-};
-
-const Cachet = () => {
-    <div>Cachet</div>;
 };

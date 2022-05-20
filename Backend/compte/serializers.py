@@ -261,7 +261,13 @@ class login(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens','user_type','is_superuser','is_active','id']
+        fields = ['username','email','password','tokens','user_type','is_superuser',
+            'is_active','id', 
+            'organisme_formation',
+            'appartenir_societe',
+            'competence',
+            'societe'
+        ]
 
     def validate(self,attrs):
         email = attrs.get('email','')
