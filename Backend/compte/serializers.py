@@ -336,5 +336,9 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
+<<<<<<< HEAD
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation', 'organisme_sous']
+=======
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
+>>>>>>> 0ce20f9941220eafd3a2d94e488e4f77fb2fcd65
 

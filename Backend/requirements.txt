@@ -6,4 +6,5 @@ django-rest-auth==0.3.3
 django-allauth==0.50.0
 djangorestframework-simplejwt==5.1.0
 drf-yasg==1.20.0
-django-environ == 0.8.1
+drf-pdf==0.2.0
+reportlab== 3.6.9
