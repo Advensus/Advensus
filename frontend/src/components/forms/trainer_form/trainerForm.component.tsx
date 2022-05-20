@@ -37,36 +37,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     const [trainingAvailable, setTrainingAvailable] = useState<
         IDropdownOption[]
     >([]);
-    const [selectedSkill, setSelectedSkill] = React.useState<string[]>([]);
-    const [selectedSociety, setSelectedSociety] =
-        React.useState<IDropdownOption>();
     const [societies, setSocieties] = useState<IDropdownOption[]>([]);
-
-    const onChangeSkills = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        console.log("item selected:", item?.key);
-        // setSelectedSkill(item);
-        if (item) {
-            setSelectedSkill(
-                item.selected
-                    ? [...selectedSkill, item.key as string]
-                    : selectedSkill.filter((key) => key !== item.key)
-            );
-        }
-    };
-
-    const onChangeOrgs = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedSociety(item);
-    };
-
-    useEffect(() => {
-        console.log({ selectedSkill });
-    }, [selectedSkill]);
 
     useEffect(() => {
         if (trainings) {
@@ -112,7 +83,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     };
 
     const onSubmit = (value: NewUserDto) => {
-        console.log("the skills:", selectedSkill);
         console.log({ value });
         const formData = new FormData();
         formData.append("username", value.username);
@@ -129,9 +99,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         formData.append("appartenir_societe", `${value.appartenir_societe}`);
         formData.append("cv", value.cv ? value.cv : "");
         if (formToDisplay === TEACHEAR_FORM) {
-            value.appartenir_societe = selectedSociety
-                ? selectedSociety.key
-                : undefined;
             UserService.new_trainer(formData)
                 .then(async (response) => {
                     if (response.status !== 200) {
@@ -146,7 +113,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 });
         }
         if (formToDisplay === SUPER_RP_FORM) {
-            UserService.new_super_rp(formData)
+            UserService.new_super_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
                         console.log({ response });
@@ -159,7 +126,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 });
         }
         if (formToDisplay === BASIC_RP_FORM) {
-            UserService.new_basic_rp(formData)
+            UserService.new_basic_rp(value)
                 .then(async (response) => {
                     if (response.status !== 200) {
                         console.log({ response });
@@ -279,13 +246,11 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     <>
                         <Dropdown
                             selectedKeys={values.competence}
-                            // onChange={onChangeSkills}
                             onChange={(
                                 event: React.FormEvent<HTMLDivElement>,
                                 item?: IDropdownOption
                             ): void => {
                                 console.log("item selected:", item?.key);
-                                // setSelectedSkill(item);
                                 if (item) {
                                     const selected = item.selected
                                         ? [
@@ -302,7 +267,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Competences"
                             multiSelect
                             options={trainingAvailable}
-                            // name="competence"
                         />
 
                         <TextField
@@ -317,13 +281,15 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                 )}
 
                 <Dropdown
-                    selectedKey={
-                        selectedSociety ? selectedSociety.key : undefined
-                    }
-                    onChange={onChangeOrgs}
+                    selectedKey={values.appartenir_societe}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("appartenir_societe", item?.key);
+                    }}
                     placeholder="SOCIETÉ(S) DE FORMATION(S)"
                     options={societies}
-                    // name="appartenir_societe"
                 />
 
                 <TextField
