@@ -106,9 +106,7 @@ class AddSouscrir(generics.GenericAPIView):
 		rp_stagiaire = user.Rp_Stagiaire.all().get()
 		# org_user = user_org..all()
 		# print(user_org.organisme_formation.email)
-		print(user_org.email)
-		print(user_org.company_name)
-		print(rp_stagiaire.username)
+		
 		# print(org_user)
 		# print(org__in)
 		# if user.organisme_formation == org.id:
