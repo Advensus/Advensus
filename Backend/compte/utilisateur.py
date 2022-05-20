@@ -164,12 +164,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-    organisme_formation = models.ManyToManyField(OrganismeFormation)
+    organisme_formation = models.ManyToManyField(OrganismeFormation, null=True)
     # societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
-    appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type')
+    appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type',null=True)
     # souscription = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
-    competence = models.ManyToManyField(formation,related_name='dispenser_content_type')
+    competence = models.ManyToManyField(formation,related_name='dispenser_content_type', null=True)
     societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
     is_autorise = models.BooleanField(default=False)
 

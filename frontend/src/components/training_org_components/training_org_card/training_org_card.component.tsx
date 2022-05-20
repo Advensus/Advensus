@@ -4,6 +4,7 @@ import { Image, IImageProps, ImageFit } from "@fluentui/react/lib/Image";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ICompany } from "../../../lib/interfaces/Company";
+import { prefixer } from "../../../services/urls";
 
 // import immmm from "../../../../../Backend/media/company_logo/Capture1.PNG";
 
@@ -42,7 +43,7 @@ export const TrainingOrganizationCardComponent: React.FC<
                     // src="https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                     src={
                         company.company_logo
-                            ? "../../../../../Backend/media/company_logo/Capture1.PNG"
+                            ? `${prefixer}${company.company_logo}`
                             : "https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                     }
                     alt='Example of the image fit value "center" on an image larger than the frame.'

@@ -14,3 +14,7 @@ export * from "./dashboard/trainings/trainings.page";
 export * from "./dashboard/companies/training_company/TrainingCompany.page";
 export * from "./dashboard/companies/training_orgainization/TrainingOrganisation";
 export * from "./dashboard/statistics/statistics.page";
+
+export * from "./dashboard/visio/visio.page";
+export * from "./dashboard/Docs/administrative-docs/AdminDocs.page";
+export * from "./dashboard/training-module/TrainingModule.page";

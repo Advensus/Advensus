@@ -24,26 +24,22 @@ export interface ILoginPageProps {
 
 export const LoginPage: React.FC<ILoginPageProps> = () => {
     const navigate = useNavigate();
-    const { updateToken, updateCurrentUserType } = useAuthStore();
+    const { updateToken, updateCurrentUser } = useAuthStore();
 
     const onSubmit = async (value: LoginDtoIn) => {
-        console.log("the submited val:", value);
         AuthService.login(value)
             .then(async (resp) => {
-                console.log("start resp:", resp.status);
                 if ([200, 201].includes(resp.status)) {
-                    console.log({ resp });
-                    const { is_active, user_type, id, tokens } =
-                        (await resp.json()) as LoginDtoOut;
-                    console.log("le token dans login:", tokens);
-                    if (!is_active) {
+                    const { user } = (await resp.json()) as LoginDtoOut;
+                    console.log("le token dans login:", user);
+                    if (!user.is_active) {
                         //TODO: do nothing
                         return;
                     }
 
-                    routeToAppropriatePagePerRole(user_type, id);
-                    updateToken(tokens);
-                    updateCurrentUserType(user_type);
+                    routeToAppropriatePagePerRole(user);
+                    updateToken(user.tokens);
+                    updateCurrentUser(user);
                 } else if ([404, 401].includes(resp.status)) {
                     const { message } = await resp.json();
                     console.log("the error:", resp.status);
@@ -57,29 +53,26 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
             });
     };
 
-    const routeToAppropriatePagePerRole = (
-        user_type: LoginDtoOut["user_type"],
-        id: LoginDtoOut["id"]
-    ) => {
-        switch (user_type) {
+    const routeToAppropriatePagePerRole = (user: LoginDtoOut["user"]) => {
+        switch (user.user_type) {
             case SUPER_USER:
                 // Display dashboard
-                navigate(`/dashboard/${id}`, { state: { id } });
+                navigate(`/dashboard/${user.id}`);
                 break;
             case ADMIN_OF:
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${user.id}`);
                 break;
             case SUPER_RP:
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${user.id}`);
                 break;
             case RP:
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${user.id}`);
                 break;
             case TEACHEAR:
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${user.id}`);
                 break;
             case TRAINEE:
-                navigate(`/dashboard/${id}`);
+                navigate(`/dashboard/${user.id}`);
                 break;
         }
     };

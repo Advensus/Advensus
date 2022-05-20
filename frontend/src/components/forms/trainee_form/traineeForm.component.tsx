@@ -214,6 +214,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         value.formation = selectedTraining?.key;
         value.training_status = selectedFolderState?.key;
         value.organisme_formation = selectedOrg?.key;
+        value.organisme_sous = selectedOrg?.key;
         value.Rp_Stagiaire = selectedRp?.key;
         // value.end_session = endDate;
         value.end_session = !endDate
@@ -277,6 +278,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             adress: "",
             password: "",
             organisme_formation: "",
+            organisme_sous: "fffddds",
             Rp_Stagiaire: "",
             edof: "",
             training_status: "",
@@ -295,7 +297,21 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             <Text className="trainee_txt_divide_mov">Stagiaire</Text>
             <hr className="trainee_hr_solid" />
             <div className="own_trainee_sect">
-                <div className="own_trainee_pict">Img part</div>
+                <div className="own_trainee_pict">
+                    {/* User picture */}
+                    <TextField
+                        label="Photo de profile"
+                        type="file"
+                        // name="company_stamp"
+                        // onChange={(event: any) => {
+                        //     setFieldValue(
+                        //         "company_stamp",
+                        //         event.target.files[0]
+                        //     );
+                        //     setFieldTouched("company_stamp", true);
+                        // }}
+                    />
+                </div>
                 <div className="own_trainee_fields">
                     <TextField
                         type="text"

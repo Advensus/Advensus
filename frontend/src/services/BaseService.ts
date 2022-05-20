@@ -62,7 +62,7 @@ class BaseService {
 
     static postFileRequest = async (
         url: string,
-        body: any,
+        body: FormData,
         required_auth: boolean
     ) => {
         const head = required_auth
@@ -74,17 +74,11 @@ class BaseService {
             headers: head,
             mode: "cors" as RequestMode,
             cache: "default" as RequestCache,
-            // Accept: "application/json",
             // Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            // "Content-Type": "application/json",
             // body: body as string,
-            // Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            // "Content-Type":
-            //     "multipart/form-data ; boundary=----WebKitFormBoundaryD0lRbAxNOQXlekcA",
-            // delete options.headers['Content-Type'],
-            body: JSON.stringify(body),
-            // body: new FormData(body as HTMLFormElement),
+            // body: JSON.stringify(body),
+            body,
         };
         const response = await fetch(url, headers)
             .then((response) => {

@@ -12,19 +12,35 @@ import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_
 
 export interface ICompanyFormProps {
     default_props?: boolean;
+    onCreate: (data: NewCompanyDtoIn) => void;
     cancel?: () => void;
 }
 
 export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
     cancel,
+    onCreate,
 }) => {
     const [companyId, setCompanyId] = useState<string>("");
     // useEffect(() => {}, [companyId]);
 
     const onSubmit = (val: NewCompanyDtoOut) => {
-        console.log({ val });
+        // console.log({ val });
         let companpyiiiid = "";
-        CompanyService.new_company(val)
+        const formData = new FormData();
+        formData.append("company_name", val.company_name);
+        formData.append("company_adress", val.company_adress);
+        formData.append("phone_number", `${val.phone_number}`);
+        formData.append("fix_number", `${val.fix_number}`);
+        formData.append("username", `${val.username}`);
+        formData.append("first_name", `${val.first_name}`);
+        formData.append("email", `${val.email}`);
+        formData.append("company_phone_number", val.company_phone_number);
+        formData.append("adress", `${val.adress}`);
+        formData.append("password", `${val.password}`);
+        formData.append("societe", val.societe);
+        formData.append("company_logo", val.company_logo);
+        formData.append("company_stamp", val.company_stamp);
+        CompanyService.new_company(formData)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
@@ -39,7 +55,7 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                         addCompanyAdmin(val);
                     }
                 }, 1000);
-                // onCreate(data);
+                onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new company:", err);
@@ -61,7 +77,13 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             });
     };
 
-    const { values, handleChange, handleSubmit } = useFormik<NewCompanyDtoOut>({
+    const {
+        values,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        setFieldTouched,
+    } = useFormik<NewCompanyDtoOut>({
         initialValues: {
             company_name: "",
             company_adress: "",
@@ -74,6 +96,8 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             adress: "",
             password: "",
             societe: "",
+            company_logo: "",
+            company_stamp: "",
         },
         onSubmit,
     });
@@ -87,7 +111,21 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
             <Text className="company_form_txt_divide_mov">Société</Text>
             <hr className="company_form_hr_solid" />
             <div className="of_company_form_sect">
-                <div className="company_form_pict">Logo</div>
+                <div className="company_form_pict">
+                    {" "}
+                    <TextField
+                        label="Logo"
+                        type="file"
+                        name="company_logo"
+                        onChange={(event: any) => {
+                            setFieldValue(
+                                "company_logo",
+                                event.target.files[0]
+                            );
+                            setFieldTouched("company_logo", true);
+                        }}
+                    />
+                </div>
                 <div className="of_company_form_fields">
                     <TextField
                         type="text"
@@ -117,34 +155,33 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                         placeholder="Numéro 2 de la Société"
                         name="fix_number"
                     />
-                    <div className="company_form_stamp">Cachet</div>
+                    <div className="company_form_stamp">
+                        <TextField
+                            label="Cachet"
+                            type="file"
+                            name="company_stamp"
+                            onChange={(event: any) => {
+                                setFieldValue(
+                                    "company_stamp",
+                                    event.target.files[0]
+                                );
+                                setFieldTouched("company_stamp", true);
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
             <Text className="company_form_txt_divide_mov">Admin</Text>{" "}
             <hr className="company_form_hr_solid" />
             <div className="head_company_form">
                 <div className="head_company_form_fields">
-                    <div className="head_company_form_align_fields">
-                        <CustomDropDownComponent
-                            thePlaceHolder="Civilité"
-                            dropdownOptions={Civility}
-                        />
-                        <TextField
-                            type="text"
-                            // label="text"
-                            // value={values.text}
-                            // onChange={handleChange}
-                            placeholder="Titre"
-                            name="text"
-                        />
-                    </div>
+                    {/* Hidden field for society_id */}
                     <TextField
-                        type="text"
+                        type="hidden"
                         value={values.societe}
                         onChange={handleChange}
                         placeholder="Société"
                         name="societe"
-                        id="societe"
                     />
                     <TextField
                         type="text"
@@ -191,7 +228,21 @@ export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
                         revealPasswordAriaLabel="Show password"
                     />
                 </div>
-                <div className="company_form_pict">Pict</div>
+                <div className="company_form_pict">
+                    {/* User picture */}
+                    <TextField
+                        label="Photo de profile"
+                        type="file"
+                        // name="company_stamp"
+                        // onChange={(event: any) => {
+                        //     setFieldValue(
+                        //         "company_stamp",
+                        //         event.target.files[0]
+                        //     );
+                        //     setFieldTouched("company_stamp", true);
+                        // }}
+                    />
+                </div>
             </div>
             <div className="company_form_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />

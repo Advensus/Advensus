@@ -261,7 +261,13 @@ class login(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens','user_type','is_superuser','is_active','id']
+        fields = ['username','email','password','tokens','user_type','is_superuser',
+            'is_active','id', 
+            'organisme_formation',
+            'appartenir_societe',
+            'competence',
+            'societe'
+        ]
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -330,5 +336,9 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
+<<<<<<< HEAD
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation', 'organisme_sous']
+=======
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
+>>>>>>> 0ce20f9941220eafd3a2d94e488e4f77fb2fcd65
 

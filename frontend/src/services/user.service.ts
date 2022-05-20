@@ -5,8 +5,8 @@ class UserService {
     static get_all_users = () =>
         BaseService.getRequest(userUls.GET_ALL_USERS, true);
 
-    static new_trainer = (info: unknown) =>
-        BaseService.postRequest(userUls.NEW_TRAINER, info, false);
+    static new_trainer = (info: FormData) =>
+        BaseService.postFileRequest(userUls.NEW_TRAINER, info, false);
 
     static new_trainee = (info: unknown) =>
         BaseService.postRequest(userUls.NEW_TRAINEE, info, false);
