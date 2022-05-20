@@ -18,7 +18,7 @@ export interface IUser {
     organisme?: string;
     societe?: string;
     appartenir_societe?: string;
-    organisme_formation?: string;
+    organisme_formation?: string[];
     is_superuser?: string;
     tokens: string;
 }

@@ -29,9 +29,7 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
     const onSubmit = async (value: LoginDtoIn) => {
         AuthService.login(value)
             .then(async (resp) => {
-                console.log("start resp:", resp.status);
                 if ([200, 201].includes(resp.status)) {
-                    console.log({ resp });
                     const { user } = (await resp.json()) as LoginDtoOut;
                     console.log("le token dans login:", user);
                     if (!user.is_active) {
