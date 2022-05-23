@@ -281,9 +281,6 @@ class login(serializers.ModelSerializer):
         return user
        
 # CRUD Operations
-
-
-       
 class cruduser(serializers.ModelSerializer):
    
     class Meta:
