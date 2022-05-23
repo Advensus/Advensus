@@ -4,7 +4,7 @@ from email.policy import default
 
 from .training import formation
 
-from .company import Company, OrganismeFormation, SocieteFormation
+from .company import OrganismeFormation, SocieteFormation
 from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
