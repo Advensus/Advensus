@@ -17,7 +17,7 @@ const imageProps: IImageProps = {
     imageFit: ImageFit.cover,
     width: "100%",
     height: "100%",
-    // Show a border around the image (just for demonstration purposes)
+    // Show a border around the image (just for demon stration purposes)
     styles: (props) => ({
         root: { backgroundSize: "cover" },
     }),
