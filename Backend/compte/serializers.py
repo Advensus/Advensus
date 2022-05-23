@@ -342,6 +342,6 @@ class CrudCourses(serializers.ModelSerializer):
 
     class Meta:
         model = Courses
-        fields = ['superviser','assister','lier']
+        fields = ['id','superviser','assister','lier']
 
     

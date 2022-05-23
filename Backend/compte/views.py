@@ -492,10 +492,26 @@ class CrudCourses(CreateAPIView):
         return self.queryset.filter()
 
 
-@api_view(['GET'])
-def viewallcourses(request):
-	serializer_class = CrudCourses
-	donnee = Courses.objects.all()
+class ViewAllCourses(ListAPIView):
+	serializer_class=CrudCourses
+	queryset = Courses.objects.all()
 
-	serializer = serializer_class(donnee, many=True)
-	return Response(serializer.data)
+	def get_queryset(self):
+		return self.queryset.filter()
+
+
+# @api_view(['GET'])
+# def viewallcourses(request):
+    
+#     # checking for the parameters from the URL
+#     if request.query_params:
+#         courses = Courses.objects.filter(**request.query_param.dict())
+#     else:
+#         courses = Courses.objects.all()
+  
+#     # if there is something in items else raise error
+#     if courses:
+#         data = CrudCourses(courses)
+#         return Response(data)
+#     else:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
