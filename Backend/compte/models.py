@@ -22,7 +22,7 @@ class Courses(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser_content_type')
     assister = models.ManyToManyField(User,related_name='assister_content_type')
-    etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
+    # etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
 class reservation(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -492,7 +492,7 @@ class CrudCourses(CreateAPIView):
         return self.queryset.filter()
 
 
-
+@api_view(['GET'])
 def viewallcourses(request):
 	serializer_class = CrudCourses
 	donnee = Courses.objects.all()

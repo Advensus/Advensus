@@ -23,7 +23,7 @@ urlpatterns = [
 
     # CRUD COURSES 
     path('create/courses/', CrudCourses.as_view()),
-    path('viewallcourses/',views.viewallcourses),
+    path('GetAllCourses/',views.viewallcourses),
         
    #LOGIN URLS
 
