@@ -477,7 +477,7 @@ class LogoutUser(generics.GenericAPIView):
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
 # CRUD COURSES
-class CrudCourses(CreateAPIView):
+class CreateCourses(CreateAPIView):
     serializer_class = CrudCourses
     queryset = Courses.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
@@ -492,12 +492,12 @@ class CrudCourses(CreateAPIView):
         return self.queryset.filter()
 
 
-class ViewAllCourses(ListAPIView):
-	serializer_class=CrudCourses
-	queryset = Courses.objects.all()
+# class ViewAllCourses(ListAPIView):
+# 	serializer_class=CrudCourses
+# 	queryset = Courses.objects.all()
 
-	def get_queryset(self):
-		return self.queryset.filter()
+# 	def get_queryset(self):
+# 		return self.queryset.filter()
 
 
 # @api_view(['GET'])
@@ -511,7 +511,17 @@ class ViewAllCourses(ListAPIView):
   
 #     # if there is something in items else raise error
 #     if courses:
-#         data = CrudCourses(courses)
+#         data = CrudCourses(courses,many=True)
 #         return Response(data)
 #     else:
 #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])
+def viewallcourses(request):
+	serializer_class = CrudCourses
+	donnee = Courses.objects.all()
+
+	serializer = serializer_class(donnee, many=True)
+	return Response(serializer.data)

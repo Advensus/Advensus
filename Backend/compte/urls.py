@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import CrudCourses,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
+from .views import CreateCourses,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
 
 from . import views
 
@@ -21,7 +21,7 @@ urlpatterns = [
     path('create/souscrir/', AddSouscrir.as_view()),
 
     # CRUD COURSES 
-    path('create/courses/', CrudCourses.as_view()),
+    path('create/courses/', CreateCourses.as_view()),
     path('GetAllCourses/',views.viewallcourses),
         
    #LOGIN URLS
