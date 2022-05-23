@@ -524,4 +524,4 @@ def viewallcourses(request):
 	donnee = Courses.objects.all()
 
 	serializer = serializer_class(donnee, many=True)
-	return Response(serializer.data)
+	return Response({"courses":serializer.data})
