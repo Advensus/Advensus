@@ -294,6 +294,8 @@ class LoginOrg(serializers.ModelSerializer):
 
             if not organisme:
                 raise AuthenticationFailed('Donnée incorrecte')
+            else:
+                print("je suis connecté")
             return organisme
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
@@ -335,13 +337,18 @@ class LogoutUse(serializers.Serializer):
 
 
 class CrudOrganisme(serializers.ModelSerializer):
-
+    password_connexion = serializers.CharField(max_length=100)
     class Meta:
         model = OrganismeFormation 
 
 
         fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
-
+        
+    def create(self,validate_data):
+        organisme = super(CrudOrganisme,self).create(validate_data)
+        organisme.password_connexion = make_password('password_connexion')
+        organisme.save()
+        return organisme
 
 class AddSouscrir(serializers.ModelSerializer):
    
@@ -350,6 +357,7 @@ class AddSouscrir(serializers.ModelSerializer):
 
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 
+   
 class CrudCourses(serializers.ModelSerializer):
 
     class Meta:

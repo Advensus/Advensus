@@ -141,6 +141,8 @@ class souscrir(models.Model):
     objectifs_formation = models.CharField(max_length = 100)
     level_start = models.CharField(max_length=50)
     level_end = models.CharField(max_length=50)
+    lieu_formation = models.CharField(max_length=100)
+    
     # organisme_sous = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -453,14 +453,14 @@ class CreateOrganisme(CreateAPIView):
     queryset =  OrganismeFormation.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
-    def perform_create(self, serializer):
-        return serializer.save()
+    # def perform_create(self, serializer):
+    #     return serializer.save()
 
-    def get_queryset(self):
-        return self.queryset.filter()
+    # def get_queryset(self):
+    #     return self.queryset.filter()
 
-    def get_queryset(self):
-        return self.queryset.filter()
+    # def get_queryset(self):
+    #     return self.queryset.filter()
 
 #FIN CRUD ORGANISME
 @api_view(['GET'])

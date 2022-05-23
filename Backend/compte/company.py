@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-
+# from django.contrib.auth.models import AbstractUser
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
 
@@ -47,8 +47,8 @@ class OrganismeFormation(Company):
     
     # )
     email = models.EmailField(max_length=40)
-    password_connexion = models.CharField(max_length=30)
-    password_messagerie = models.CharField(max_length=30,default="password")
+    password_connexion = models.CharField(max_length=100)
+    password_messagerie = models.CharField(max_length=100)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
 
     
