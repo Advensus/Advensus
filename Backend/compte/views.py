@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses
+from .serializers import LoginOrg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -121,7 +121,7 @@ class AddSouscrir(generics.GenericAPIView):
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 	
 		settings.EMAIL_HOST_USER = user_org.email
-		settings.EMAIL_HOST_PASSWORD = user_org.password
+		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
 		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
@@ -277,14 +277,21 @@ class VerifyEmail(views.APIView):
 
 # LOGIN USER
 class login(generics.GenericAPIView):
-	serializer_class = login
+	serializer_class = loginuser
 	def post(self,request):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
 		return Response({"user": serializer.data},status=status.HTTP_200_OK)
 
+#LOGIN ORGANISME
+class login_org(generics.GenericAPIView):
+	serializer_class = LoginOrg
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
 
+		return Response({'courses':serializer.data},status=status.HTTP_200_OK)
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])

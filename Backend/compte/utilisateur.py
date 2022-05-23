@@ -136,6 +136,11 @@ class souscrir(models.Model):
     test_oral = models.BooleanField(default=False)
     stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
+    certification = models.CharField(max_length=255)
+    programme_formation = models.CharField(max_length=255)
+    objectifs_formation = models.CharField(max_length = 100)
+    level_start = models.CharField(max_length=50)
+    level_end = models.CharField(max_length=50)
     # organisme_sous = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -159,7 +164,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_type =models.CharField(max_length=30,null=False)
   
     trainee_level = models.CharField(max_length=50)
-    trainee_level = models.CharField(max_length=40)
+ 
     
     
 

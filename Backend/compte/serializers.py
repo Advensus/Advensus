@@ -250,7 +250,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
-class login(serializers.ModelSerializer): 
+class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
@@ -279,7 +279,22 @@ class login(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed('compte non activé...')
         return user
-       
+
+class LoginOrg(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=40)
+    password_connexion = serializers.CharField(max_length=30)
+    class Meta:
+        model = OrganismeFormation
+        fields = ['email','password_connexion']
+        def validate(self,attrs):
+            email = attrs.get('email','')
+            password_connexion = attrs.get('password_connexion','')
+
+            organisme = auth.authenticate(email=email,password_connexion=password_connexion)
+
+            if not organisme:
+                raise AuthenticationFailed('Donnée incorrecte')
+            return organisme
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
    
@@ -325,7 +340,7 @@ class CrudOrganisme(serializers.ModelSerializer):
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password','societe_formation', 'fix_number','company_stamp','company_logo']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
 
 
 class AddSouscrir(serializers.ModelSerializer):
@@ -333,7 +348,7 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 
 class CrudCourses(serializers.ModelSerializer):
 
