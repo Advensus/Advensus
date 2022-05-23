@@ -1,5 +1,5 @@
 import { IconButton, IIconProps, Text } from "@fluentui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AttributeDisplayComponent } from "../../";
 import { IUser, PATH_LABEL_CUSTOMER } from "../../../lib";
 import { TrainingFolderCardComponent } from "../../trainings_components/training_folder_card/training_folder_card.component";
@@ -22,6 +22,10 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
 }) => {
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
         useBoolean(false);
+
+    useEffect(() => {
+        console.log({ contentToDetail });
+    }, [contentToDetail]);
 
     return (
         <div className="user_details_container">

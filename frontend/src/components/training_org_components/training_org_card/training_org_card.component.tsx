@@ -42,7 +42,7 @@ export const TrainingOrganizationCardComponent: React.FC<
                     {...imageProps}
                     // src="https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                     src={
-                        company.company_logo
+                        company?.company_logo
                             ? `${prefixer}${company.company_logo}`
                             : "https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                     }
@@ -51,18 +51,18 @@ export const TrainingOrganizationCardComponent: React.FC<
             </div>
             <div className="training_org_card_infos">
                 <Text variant="large" style={{ fontWeight: "bolder" }}>
-                    {company.company_name}
+                    {company?.company_name}
                 </Text>
                 <div className="training_org_card_infos_txt">
                     <Icon iconName="Phone" styles={trainingOrgCardIconStyles} />
-                    <Text variant="tiny">{company.company_phone_number}</Text>
+                    <Text variant="tiny">{company?.company_phone_number}</Text>
                 </div>
                 <div className="training_org_card_infos_txt">
                     <Icon
                         iconName="Location"
                         styles={trainingOrgCardIconStyles}
                     />
-                    <Text variant="tiny">{company.company_adress}</Text>
+                    <Text variant="tiny">{company?.company_adress}</Text>
                 </div>
             </div>
         </Link>

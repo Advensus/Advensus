@@ -9,13 +9,6 @@ import {
     SchedulerFormEditorProps,
 } from "@progress/kendo-react-scheduler";
 
-import {
-    TitleEditor,
-    TreatmentEditor,
-    RoomEditor,
-    TherapistEditor,
-} from "./editors";
-
 export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
     return <SchedulerFormEditor {...props} />;
 };

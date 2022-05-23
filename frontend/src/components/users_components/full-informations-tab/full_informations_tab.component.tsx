@@ -65,7 +65,6 @@ export const FullInformationsTabComponent: React.FC<
     };
 
     useEffect(() => {
-        console.log("Content received:", contentId, currentPath);
         if (contentId) {
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
@@ -74,7 +73,11 @@ export const FullInformationsTabComponent: React.FC<
                 const emptyTraining = {} as ITraining;
                 setTraining(emptyTraining);
             }
-            if (currentPath === (PATH_LABEL_SERVICES || PATH_LABEL_RESOURCES)) {
+            if (
+                currentPath === PATH_LABEL_RESOURCES ||
+                currentPath === PATH_LABEL_SERVICES ||
+                currentPath === PATH_LABEL_CUSTOMER
+            ) {
                 getContentById(contentId);
             }
             if (currentPath === PATH_LABEL_COMPANY) {
@@ -123,7 +126,7 @@ export const FullInformationsTabComponent: React.FC<
             <div className="full_infos_tab_header">
                 <div className="full_infos_tab_header_title">
                     {(currentPath === PATH_LABEL_RESOURCES ||
-                        PATH_LABEL_CUSTOMER) && (
+                        currentPath === PATH_LABEL_CUSTOMER) && (
                         <Text>
                             {content?.username !== undefined &&
                                 content?.username.toUpperCase()}{" "}
