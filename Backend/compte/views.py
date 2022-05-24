@@ -20,7 +20,7 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .training import formation
-from .models import Document,Courses
+from .models import Document,Courses, reservation
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
@@ -534,3 +534,28 @@ def viewallcourses(request):
 	return Response({"courses":serializer.data})
 
 #END CRUD COURSES
+
+#CRUD RESERVATION
+
+class CreateReservation(CreateAPIView):
+    serializer_class = crudreservation
+    queryset = reservation.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+@api_view(['GET'])
+def viewallreservations(request):
+	serializer_class = crudreservation
+	donnee = reservation.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
