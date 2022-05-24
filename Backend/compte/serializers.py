@@ -372,4 +372,4 @@ class crudreservation(serializers.ModelSerializer):
 
     class Meta:
         model = reservation
-        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+        fields = ['id','title','description','status','start_date','end_date','reserver','concerner']

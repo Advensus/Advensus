@@ -8,6 +8,7 @@ import {
 } from "@fluentui/react";
 import { Formik, Field, Form, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { ORG } from "../../../lib";
 import {
     NewCompanyDtoIn,
     NewCompanyDtoOut,
@@ -80,6 +81,7 @@ export const TrainingOrganizationFormComponent: React.FC<
         formData.append("company_logo", val.company_logo);
         formData.append("password_messagerie", val.password_messagerie);
         formData.append("password_connexion", val.password_connexion);
+        // formData.append("password_connexion", ORG + val.password_connexion);
         formData.append("email", val.email);
         CompanyService.new_organization(formData)
             .then(async (response) => {
