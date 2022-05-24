@@ -56,8 +56,8 @@ urlpatterns = [
    path('GetAllOrganisme/',views.getallorganisme),
    path('create/organisme/', CreateOrganisme.as_view()),
    #LOGOUT URL
-    # path('Logout/',LogoutUser.as_view()),
- 
+   path('StByOrg/<str:pk>/',views.getstagiairebyorg),
+
 ]
 
 

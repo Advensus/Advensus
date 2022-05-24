@@ -31,6 +31,8 @@ from django.template.loader import render_to_string
 from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -84,7 +86,16 @@ class RegisterStagiaire(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-       
+
+@api_view(['GET'])
+def getstagiairebyorg(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(organisme_formation=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data)   
 	
 class AddSouscrir(generics.GenericAPIView):
 	# permission_classes = (IsAuthenticated,IsAdminUser)
@@ -386,7 +397,7 @@ def deleteformation(request, pk):
 class CreateDocument(CreateAPIView):
     serializer_class = cruddocuments
     queryset = Document.objects.all()
-    permission_classes = (permissions.IsAuthenticated,autorisation)
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
 
     def perform_create(self, serializer):
         return serializer.save()
