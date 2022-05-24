@@ -1,13 +1,15 @@
 import { FontIcon, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
+import { IUser } from "../../../lib";
 
 export interface ICurrentUserDetailsProps {
     default_props?: boolean;
+    user?: IUser;
 }
 
 export const CurrentUserDetailsComponent: React.FC<
     ICurrentUserDetailsProps
-> = () => {
+> = ({ user }) => {
     // Handle media query
     const [isMobile, setIsMobile] = useState<Boolean>(false);
     function mqChange(mq: any) {
@@ -54,7 +56,7 @@ export const CurrentUserDetailsComponent: React.FC<
                 id={isMobile ? "username" : ""}
                 style={{ color: "#fff" }}
             >
-                User name
+                {user?.username}
             </Text>
         </div>
     );

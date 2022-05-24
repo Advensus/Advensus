@@ -194,7 +194,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                 console.log("the users:", datas.user);
 
                 const rp = datas.user.filter(
-                    (_) => _.user_type === (RP || SUPER_RP)
+                    (_) => _.user_type === RP || _.user_type === SUPER_RP
                 );
                 const theRps = rp.map((_) => {
                     return { key: _.id, text: _.username };
@@ -214,7 +214,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         value.formation = selectedTraining?.key;
         value.training_status = selectedFolderState?.key;
         value.organisme_formation = selectedOrg?.key;
-        value.organisme_sous = selectedOrg?.key;
         value.Rp_Stagiaire = selectedRp?.key;
         // value.end_session = endDate;
         value.end_session = !endDate
@@ -278,7 +277,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             adress: "",
             password: "",
             organisme_formation: "",
-            organisme_sous: "fffddds",
             Rp_Stagiaire: "",
             edof: "",
             training_status: "",

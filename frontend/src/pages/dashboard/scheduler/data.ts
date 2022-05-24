@@ -1,4 +1,6 @@
 import { guid } from "@progress/kendo-react-common";
+import { TEACHEAR } from "../../../lib";
+import { useUsersStore } from "../../../stores/users.store";
 
 export const therapists = [
     { value: "andr", name: "Dr. Anderson", color: "#7F96FF" },
@@ -18,6 +20,9 @@ export const treatments = [
     { value: 392, text: "Electrooculography(EOG)" },
     { value: 491, text: "Holter monitor(ECG)" },
 ];
+
+// const { users } = useUsersStore();
+// export const formers = users.user.filter((_) => _.user_type === TEACHEAR);
 
 export const patients = [
     { id: 0, name: "Liam" },

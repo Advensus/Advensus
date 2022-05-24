@@ -55,7 +55,7 @@ export function useUserRouteHooks() {
             label: "Tableaux de bord",
             icon: "la-id-badge",
             component: StatisticsPage,
-            roles: [SUPER_USER, TEACHEAR, ADMIN_OF],
+            roles: [SUPER_USER, TEACHEAR, ADMIN_OF, TRAINEE],
         },
         {
             path: `company`,
@@ -133,13 +133,13 @@ export function useUserRouteHooks() {
         },
 
         // Stagiaire
-        {
-            path: `bord`,
-            label: "Tabela de bord",
-            icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
-            roles: [TRAINEE],
-        },
+        // {
+        //     path: `bord`,
+        //     label: "Tabela de bord",
+        //     icon: "la-id-badge",
+        //     component: TrainingOrganizationCardComponent,
+        //     roles: [TRAINEE],
+        // },
         {
             path: `programm`,
             label: "Programme de formation",

@@ -7,10 +7,10 @@ import { DatePicker, DateTimePicker } from "@progress/kendo-react-dateinputs";
 import { SchedulerFormEditorProps } from "@progress/kendo-react-scheduler";
 
 import {
-    TitleEditor,
     TreatmentEditor,
-    RoomEditor,
-    TherapistEditor,
+    FormerList,
+    TraineesList,
+    CoursesEditor,
 } from "./editors";
 
 export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
@@ -25,18 +25,18 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
             <div className="k-form-field">
                 <Label>Formateur</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Patient"} component={TitleEditor} />
-                    {props.errors.Patient && (
-                        <Error>{props.errors.Patient}</Error>
+                    <Field name={"Former"} component={FormerList} />
+                    {props.errors.Former && (
+                        <Error>{props.errors.Former}</Error>
                     )}
                 </div>
             </div>
             <div className="k-form-field">
                 <Label>Stagiaire</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Trainee"} component={TitleEditor} />
-                    {props.errors.Patient && (
-                        <Error>{props.errors.Patient}</Error>
+                    <Field name={"Trainee"} component={TraineesList} />
+                    {props.errors.Trainee && (
+                        <Error>{props.errors.Trainee}</Error>
                     )}
                 </div>
             </div>
@@ -44,9 +44,9 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
             <div className="k-form-field">
                 <Label>Cours</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Treatment"} component={TreatmentEditor} />
-                    {props.errors.Treatment && (
-                        <Error>{props.errors.Treatment}</Error>
+                    <Field name={"Training"} component={CoursesEditor} />
+                    {props.errors.Training && (
+                        <Error>{props.errors.Training}</Error>
                     )}
                 </div>
             </div>
@@ -62,7 +62,7 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                     name={"Start"}
                     component={props.startEditor || DatePicker}
                     as={DateTimePicker}
-                    rows={1}
+                    rows={1} 
                     // width={"140px"}
                     // format="t"
                 />

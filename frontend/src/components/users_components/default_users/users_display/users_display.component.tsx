@@ -1,4 +1,5 @@
 import { Text } from "@fluentui/react";
+import { Icon, IIconStyles } from "@fluentui/react/lib/Icon";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IUser } from "../../../../lib";
@@ -24,9 +25,20 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
             className="users_display_container"
         >
             <div className="users_display_item">
-                <div className="action_icon">icon</div>
-                <Text style={{ alignSelf: "center" }}>
-                    {detailsInfos.username}
+                <div className="action_icon">
+                    <Icon
+                        iconName="ContactCardSettings"
+                        styles={trainingOrgCardIconStyles}
+                    />
+                </div>
+                <Text
+                    style={{
+                        alignSelf: "center",
+                        color: "#fff",
+                        fontWeight: "bolder",
+                    }}
+                >
+                    {detailsInfos.username.toLocaleUpperCase()}
                 </Text>
             </div>
             <div className="users_display_text">
@@ -39,4 +51,8 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
             </div>
         </Link>
     );
+};
+
+const trainingOrgCardIconStyles: Partial<IIconStyles> = {
+    root: { fontSize: "16px", color: "#fff", marginRight: "4px" },
 };

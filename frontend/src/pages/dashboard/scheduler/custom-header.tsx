@@ -13,6 +13,7 @@ import {
 import { ToolbarDropdown } from "./toolbar-dropdown";
 import { IUser, TEACHEAR, TRAINEE, UserDtoIn } from "../../../lib";
 import UserService from "../../../services/user.service";
+import { useUsersStore } from "../../../stores/users.store";
 
 export interface ICutomHeaderProps {
     default_props?: boolean;
@@ -25,6 +26,7 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
 }) => {
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
+    const { updateCurrentUsers } = useUsersStore();
 
     useEffect(() => {
         getAllUser();
@@ -69,6 +71,7 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                 );
                 setTrainers(trainer);
                 setTrainees(trainee);
+                updateCurrentUsers(datas);
                 return datas;
             })
             .catch((err) => {

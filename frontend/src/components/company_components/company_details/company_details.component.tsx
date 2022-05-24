@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AttributeDisplayComponent } from "../..";
 import { ICompany } from "../../../lib/interfaces/Company";
 import { Image, IImageProps, ImageFit } from "@fluentui/react/lib/Image";
+import { prefixer } from "../../../services/urls";
 
 export interface ICompanyDetailsProps {
     default_props?: boolean;
@@ -30,7 +31,7 @@ export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
                         // src="http://via.placeholder.com/150x100"
                         src={
                             company?.company_logo
-                                ? "../../../../../Backend/media/company_logo/Capture1.PNG"
+                                ? prefixer + company.company_logo
                                 : "https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                         }
                         alt='Example of the image fit value "center" on an image larger than the frame.'

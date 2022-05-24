@@ -12,7 +12,8 @@ a {
     text-decoration: none;
 }
 .users_display_item {
-    background-color: #6e8aa7;
+    // background-color: #6e8aa7;
+    background-color: gray;
     height: 90px;
     width: 90px;
     border-radius: 3em;
@@ -22,9 +23,10 @@ a {
     align-items: center;
 }
 .action_icon {
-    background-color: brown;
+    background-color: rgb(80, 71, 71);
     // position: sticky;
     margin: 0 0 4px 55px;
+    padding: 1px 0 0 5px;
     height: 32px;
     width: 32px;
     border-radius: 1em;

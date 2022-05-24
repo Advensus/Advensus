@@ -145,7 +145,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     : undefined
                             }
                             onChange={onChangeCompany}
-                            placeholder="Formtion(s)"
+                            placeholder="Société(s)"
                             options={trainingsCompanies}
                         />
 
