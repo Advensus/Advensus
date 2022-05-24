@@ -24,6 +24,9 @@ class Courses(models.Model):
     assister = models.ManyToManyField(User,related_name='assister_content_type')
     # etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.lier.intitule
 class reservation(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=120)
