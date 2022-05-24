@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document,Courses
+from .models import Document,Courses,reservation
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -366,4 +366,10 @@ class CrudCourses(serializers.ModelSerializer):
         model = Courses
         fields = ['id','superviser','assister','lier']
 
-    
+
+
+class crudreservation(serializers.ModelSerializer):
+
+    class Meta:
+        model = reservation
+        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
