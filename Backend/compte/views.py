@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,login,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme
+from .serializers import LoginOrg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -20,7 +20,7 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .training import formation
-from .models import Document
+from .models import Document,Courses
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
@@ -121,10 +121,16 @@ class AddSouscrir(generics.GenericAPIView):
 		absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 	
 		settings.EMAIL_HOST_USER = user_org.email
-		settings.EMAIL_HOST_PASSWORD = user_org.password
+		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
+<<<<<<< HEAD
 		# rp_peda = user.objects.get(id=data["Rp_Stagiaire"])
 		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+=======
+		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
+		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+
+>>>>>>> f07c2dda148ae6cf517378e3d9002bf97173ee95
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
@@ -276,14 +282,21 @@ class VerifyEmail(views.APIView):
 
 # LOGIN USER
 class login(generics.GenericAPIView):
-	serializer_class = login
+	serializer_class = loginuser
 	def post(self,request):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
 		return Response({"user": serializer.data},status=status.HTTP_200_OK)
 
+#LOGIN ORGANISME
+class login_org(generics.GenericAPIView):
+	serializer_class = LoginOrg
+	def post(self,request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
 
+		return Response({'courses':serializer.data},status=status.HTTP_200_OK)
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
@@ -445,14 +458,14 @@ class CreateOrganisme(CreateAPIView):
     queryset =  OrganismeFormation.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
-    def perform_create(self, serializer):
-        return serializer.save()
+    # def perform_create(self, serializer):
+    #     return serializer.save()
 
-    def get_queryset(self):
-        return self.queryset.filter()
+    # def get_queryset(self):
+    #     return self.queryset.filter()
 
-    def get_queryset(self):
-        return self.queryset.filter()
+    # def get_queryset(self):
+    #     return self.queryset.filter()
 
 #FIN CRUD ORGANISME
 @api_view(['GET'])
@@ -475,3 +488,52 @@ class LogoutUser(generics.GenericAPIView):
 
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
+# CRUD COURSES
+class CreateCourses(CreateAPIView):
+    serializer_class = CrudCourses
+    queryset = Courses.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+
+# class ViewAllCourses(ListAPIView):
+# 	serializer_class=CrudCourses
+# 	queryset = Courses.objects.all()
+
+# 	def get_queryset(self):
+# 		return self.queryset.filter()
+
+
+# @api_view(['GET'])
+# def viewallcourses(request):
+    
+#     # checking for the parameters from the URL
+#     if request.query_params:
+#         courses = Courses.objects.filter(**request.query_param.dict())
+#     else:
+#         courses = Courses.objects.all()
+  
+#     # if there is something in items else raise error
+#     if courses:
+#         data = CrudCourses(courses,many=True)
+#         return Response(data)
+#     else:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])
+def viewallcourses(request):
+	serializer_class = CrudCourses
+	donnee = Courses.objects.all()
+
+	serializer = serializer_class(donnee, many=True)
+	return Response({"courses":serializer.data})

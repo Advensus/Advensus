@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document
+from .models import Document,Courses
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -250,7 +250,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
-class login(serializers.ModelSerializer): 
+class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
@@ -279,11 +279,25 @@ class login(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed('compte non activé...')
         return user
-       
+
+class LoginOrg(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=40)
+    password_connexion = serializers.CharField(max_length=30)
+    class Meta:
+        model = OrganismeFormation
+        fields = ['email','password_connexion']
+        def validate(self,attrs):
+            email = attrs.get('email','')
+            password_connexion = attrs.get('password_connexion','')
+
+            organisme = auth.authenticate(email=email,password_connexion=password_connexion)
+
+            if not organisme:
+                raise AuthenticationFailed('Donnée incorrecte')
+            else:
+                print("je suis connecté")
+            return organisme
 # CRUD Operations
-
-
-       
 class cruduser(serializers.ModelSerializer):
    
     class Meta:
@@ -323,18 +337,37 @@ class LogoutUse(serializers.Serializer):
 
 
 class CrudOrganisme(serializers.ModelSerializer):
-
+    password_connexion = serializers.CharField(max_length=100)
+    password_messagerie = serializers.CharField(max_length=100)
     class Meta:
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password','societe_formation', 'fix_number','company_stamp','company_logo']
-
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        
+    def create(self,validate_data):
+        organisme = super(CrudOrganisme,self).create(validate_data) 
+        organisme.password_connexion = make_password('password_connexion')
+        # organisme.password_messagerie = make_password('password_messagerie')
+        organisme.save()
+        return organisme
 
 class AddSouscrir(serializers.ModelSerializer):
    
     class Meta:
         model = souscrir
 
+<<<<<<< HEAD
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
+=======
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 
+   
+class CrudCourses(serializers.ModelSerializer):
+
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','lier']
+>>>>>>> f07c2dda148ae6cf517378e3d9002bf97173ee95
+
+    

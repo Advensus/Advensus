@@ -1,8 +1,7 @@
 from django.urls import path,include
-from .views import CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
+from .views import CreateCourses,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument
 
 from . import views
-
 
 
 urlpatterns = [
@@ -20,10 +19,15 @@ urlpatterns = [
     path("GetAllSociete/", views.viewallsociete),
     path('create/societe/', CreateSociete.as_view()),
     path('create/souscrir/', AddSouscrir.as_view()),
+
+    # CRUD COURSES 
+    path('create/courses/', CreateCourses.as_view()),
+    path('GetAllCourses/',views.viewallcourses),
         
    #LOGIN URLS
 
     path('login/',login.as_view()),
+    path('login_org/',login_org.as_view()),
     path('DetailUser/<str:pk>/', views.detailuser),
 
    #VIEW ALL USERS URLS
