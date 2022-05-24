@@ -357,9 +357,6 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-<<<<<<< HEAD
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation']
-=======
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 
    
@@ -368,6 +365,5 @@ class CrudCourses(serializers.ModelSerializer):
     class Meta:
         model = Courses
         fields = ['id','superviser','assister','lier']
->>>>>>> f07c2dda148ae6cf517378e3d9002bf97173ee95
 
     
