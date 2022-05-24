@@ -280,12 +280,18 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             Rp_Stagiaire: "",
             edof: "",
             training_status: "",
-            hour_worked: "",
+            hour_worked: "0",
             duration: "",
             start_session: new Date(),
             end_session: new Date(),
             formation: "",
             stagiaire: "",
+            certification: "",
+            programme_formation: "",
+            objectifs_formation: "",
+            level_start: "",
+            level_end: "",
+            lieu_formation: "",
         },
         onSubmit,
     });
@@ -355,6 +361,38 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                         canRevealPassword
                         revealPasswordAriaLabel="Show password"
                     />
+                    <TextField
+                        type="text"
+                        value={values.level_start}
+                        onChange={handleChange}
+                        placeholder="Niveau actuel du stagiaire"
+                        // label="Niveau actuel du stagiaire"
+                        name="level_start"
+                    />
+                    <TextField
+                        type="text"
+                        value={values.level_end}
+                        onChange={handleChange}
+                        placeholder="Niveau final du stagiaire"
+                        // label="Niveau final du stagiaire"
+                        name="level_end"
+                    />
+                    <Dropdown
+                        selectedKey={selectedOrg ? selectedOrg.key : undefined}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        onChange={onChangeOrg}
+                        placeholder="ORGANISME DE FORMATION(S)"
+                        options={organizations}
+                        // label="Organisme du stagiaire"
+                    />
+                    <Dropdown
+                        selectedKey={selectedRp ? selectedRp.key : undefined}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        onChange={onChangeRp}
+                        placeholder="RESPONSABLE PEDAGOGIQUE"
+                        options={rps}
+                        // label="Rp du stagiaire"
+                    />
                 </div>
             </div>
             <Text className="trainee_txt_divide_mov">Adress</Text>{" "}
@@ -387,7 +425,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Formtion(s)"
                     options={trainings}
                 />
-
                 <TextField
                     type="text"
                     value={values.hour_worked}
@@ -402,12 +439,47 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Durée de la formation"
                     name="duration"
                 />
+                {/* new fields */}
+                <TextField
+                    type="text"
+                    value={values.certification}
+                    onChange={handleChange}
+                    placeholder="Certification"
+                    label="Certification"
+                    name="certification"
+                />
+                <TextField
+                    type="text"
+                    value={values.programme_formation}
+                    onChange={handleChange}
+                    placeholder="Programme de formation"
+                    label="Programme de formation"
+                    name="programme_formation"
+                />
+                <TextField
+                    type="text"
+                    value={values.objectifs_formation}
+                    onChange={handleChange}
+                    placeholder="Objectifs de la formation"
+                    label="Objectifs de la formation"
+                    name="objectifs_formation"
+                />
+                <TextField
+                    type="text"
+                    value={values.lieu_formation}
+                    onChange={handleChange}
+                    placeholder="Lieu de la formation"
+                    label="Lieu"
+                    name="lieu_formation"
+                />
+
                 <TextField
                     type="text"
                     // value={values.horaire}
                     // onChange={handleChange}
                     placeholder="Montant de la formation"
                     // name="horaire"
+                    label="Montant de la formation"
                 />
                 <DatePicker
                     firstDayOfWeek={firstDayOfWeek}
@@ -417,6 +489,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     strings={defaultDatePickerStrings}
                     onSelectDate={(s) => setStartDate(s)}
                     value={startDate ? startDate : undefined}
+                    label="Date de début de session"
                 />
                 <DatePicker
                     firstDayOfWeek={firstDayOfWeek}
@@ -427,22 +500,8 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     // onChange={handleChange}
                     onSelectDate={(d) => setEndDate(d)}
                     value={endDate ? endDate : undefined}
+                    label="Date de fin de session"
                 />
-
-                {/* <DatePicker
-                    componentRef={datePickerRef}
-                    label="Start date"
-                    allowTextInput
-                    ariaLabel="Select a date. Input format is day slash month slash year."
-                    value={endDate ? endDate : undefined}
-                    onSelectDate={setEndDate as (date?: Date | null) => void}
-                    formatDate={onFormatDate}
-                    parseDateFromString={onParseDateFromString}
-                    // className={styles.control}
-                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                    strings={defaultDatePickerStrings}
-                /> */}
-
                 <Dropdown
                     selectedKey={
                         selectedFolderState
@@ -453,24 +512,15 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onChange={onChangeFolderState}
                     placeholder="Status du dossier"
                     options={FolderState}
+                    label="Status du dossier"
                 />
                 <Dropdown
-                    selectedKey={selectedOrg ? selectedOrg.key : undefined}
+                    // selectedKey={selectedRp ? selectedRp.key : undefined}
                     // eslint-disable-next-line react/jsx-no-bind
-                    onChange={onChangeOrg}
-                    placeholder="ORGANISME DE FORMATION(S)"
-                    options={organizations}
-                />
-                <Dropdown
-                    selectedKey={selectedRp ? selectedRp.key : undefined}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={onChangeRp}
-                    placeholder="RESPONSABLE PEDAGOGIQUE"
-                    options={rps}
-                />
-                <CustomDropDownComponent
-                    dropdownOptions={OF}
-                    thePlaceHolder="SOURCE"
+                    // onChange={onChangeRp}
+                    placeholder="SOURCE"
+                    options={OF}
+                    label="Provenence du stagiaire"
                 />
             </div>
             <div className="trainee_form_btns">

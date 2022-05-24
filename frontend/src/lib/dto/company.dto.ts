@@ -34,7 +34,8 @@ export interface NewOrganizationDtoOut {
     company_name: string;
     company_adress: string;
     company_phone_number: string;
-    password: string;
+    password_connexion: string;
+    password_messagerie: string;
     email: string;
     fix_number?: string;
     company_stamp: string | Blob;
