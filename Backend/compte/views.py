@@ -32,7 +32,8 @@ from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,Upd
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -132,12 +133,21 @@ class AddSouscrir(generics.GenericAPIView):
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
+		my_canvas = canvas.Canvas("stagiaire.pdf", pagesize=letter)
+		my_canvas.setLineWidth(.3)
+		my_canvas.setFont('Helvetica', 12)
+		my_canvas.drawString(30, 750, 'Documents')
+		my_canvas.drawString(30, 735, user.username)
+		my_canvas.save()
 
 	
-		return Response(user_data,status=status.HTTP_201_CREATED)
+		return Response(user_data,
+            status=status.HTTP_201_CREATED)
+	
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
+	
 	def post(self,request,*args,**kwargs): 
 		data = request.data
 		new_formateur= User.objects.create_user2(
@@ -164,6 +174,7 @@ class RegisterFormateur(generics.GenericAPIView):
 		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
+      
 		# formateur = User.objects.get(email=user_data['email'])
 		# token = RefreshToken.for_user(formateur).access_token
 
