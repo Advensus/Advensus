@@ -21,9 +21,11 @@ export interface NewCompanyDtoIn {
     id: string;
     company_name: string;
     company_adress: string;
-    phone_number: string;
+    company_phone_number: string;
     fix_number: string;
-    societe?: string;
+    // societe?: string;
+    company_stamp: string;
+    company_logo: string;
 }
 
 export interface TrainingCompanyDtoIn {

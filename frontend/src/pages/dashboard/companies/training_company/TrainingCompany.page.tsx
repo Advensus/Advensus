@@ -168,6 +168,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         // pathLabel === PATH_LABEL_RESOURCES
         //     ? setTrainers([data.user, ...trainers])
         //     : setTrainees([data.user, ...trainees]);
+        setTrainingsCompanies([data, ...trainingsCompanies]);
         setShowForm(false);
     };
 
