@@ -93,10 +93,11 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         formData.append("adress", value.adress);
         formData.append("password", value.password);
         formData.append("horaire", `${value.horaire}`);
-        formData.append("competence[0]", value.competence as any);
-        formData.append("competence[1]", value.competence as any);
-        formData.append("competence[2]", value.competence as any);
-        formData.append("competence[3]", value.competence as any);
+        for (let i = 0; i < value.competence.length; i++) {
+            formData.append("competence", value.competence[0 + i]);
+        }
+        // formData.append("competence", value.competence[2]);
+        // formData.append("competence", value.competence[3]);
         formData.append("appartenir_societe", `${value.appartenir_societe}`);
         formData.append("cv", value.cv ? value.cv : "");
         if (formToDisplay === TEACHEAR_FORM) {
@@ -309,8 +310,8 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     type="file"
                     name="cv"
                     onChange={(event: any) => {
-                        setFieldValue("company_logo", event.target.files[0]);
-                        setFieldTouched("company_logo", true);
+                        setFieldValue("cv", event.target.files[0]);
+                        setFieldTouched("cv", true);
                     }}
                 />
             </div>

@@ -213,7 +213,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
     const handleOnCreate = (data: IUser) => {
         console.log({ data });
         if (data.user_type === TEACHEAR) {
-            setTrainers([data, ...trainees]);
+            setTrainers([data, ...trainers]);
         } else if (data.user_type === SUPER_RP) {
             setSrps([data, ...srps]);
         } else {
