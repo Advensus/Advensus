@@ -54,16 +54,9 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
     const [showForm, setShowForm] = useState<Boolean>(false);
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [users, setUsers] = useState<IUser[]>([]);
-    const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
-    const [training, setTraining] = useState<ITraining[]>([]);
-    const [rps, setRps] = useState<IUser[]>([]);
-    const [srps, setSrps] = useState<IUser[]>([]);
-    const [admins, setAdmins] = useState<IUser[]>([]);
-    const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
-
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
     const [selectedFilteredItem, setSelectedFiltererItem] =
@@ -188,11 +181,8 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
             });
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
-        console.log({ data });
-        // pathLabel === PATH_LABEL_RESOURCES
-        //     ? setTrainers([data.user, ...trainers])
-        //     : setTrainees([data.user, ...trainees]);
+    const handleOnCreate = (data: IUser) => {
+        setTrainees([data, ...trainees]);
         setShowForm(false);
     };
 

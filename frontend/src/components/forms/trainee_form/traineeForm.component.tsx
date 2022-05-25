@@ -34,23 +34,13 @@ import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_
 export interface ITraineeFormProps {
     default_props?: boolean;
     cancel: () => void;
-    onCreate: (data: NewUserDtoIn) => void;
+    onCreate: (data: IUser) => void;
 }
 
 const rootClass = mergeStyles({
     maxWidth: 300,
     selectors: { "> *": { marginBottom: 15 } },
 });
-
-const onFormatDate = (date?: Date): string => {
-    return !date
-        ? ""
-        : date.getDate() +
-              "/" +
-              (date.getMonth() + 1) +
-              "/" +
-              (date.getFullYear() % 100);
-};
 
 export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     cancel,
@@ -106,35 +96,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     ): void => {
         setSelectedFolderState(item);
     };
-
-    const onParseDateFromString = React.useCallback(
-        (newValue: string): Date => {
-            const previousValue = endDate || new Date();
-            const newValueParts = (newValue || "").trim().split("/");
-            const day =
-                newValueParts.length > 0
-                    ? Math.max(1, Math.min(31, parseInt(newValueParts[0], 10)))
-                    : previousValue.getDate();
-            const month =
-                newValueParts.length > 1
-                    ? Math.max(
-                          1,
-                          Math.min(12, parseInt(newValueParts[1], 10))
-                      ) - 1
-                    : previousValue.getMonth();
-            let year =
-                newValueParts.length > 2
-                    ? parseInt(newValueParts[2], 10)
-                    : previousValue.getFullYear();
-            if (year < 100) {
-                year +=
-                    previousValue.getFullYear() -
-                    (previousValue.getFullYear() % 100);
-            }
-            return new Date(year, month, day);
-        },
-        [endDate]
-    );
 
     const getOrganization = async () => {
         await CompanyService.get_all_organization()
@@ -245,7 +206,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     value.stagiaire = data.id;
                     newTrainingFolder(value);
                 }
-                // onCreate(data);
+                onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new trainee:", err);
@@ -261,7 +222,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                 }
                 const data = (await response.json()) as NewUserDtoIn;
                 console.log("the current adding training folder:", data);
-                onCreate(data);
+                // onCreate(data);
             })
             .catch((err) => {
                 console.log("error while adding new training folder:", err);
