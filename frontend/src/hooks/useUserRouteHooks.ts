@@ -4,6 +4,7 @@ import {
     IRoute,
     SettingsComponent,
     TrainingOrganizationCardComponent,
+    TrainingProgramComponent,
 } from "../components";
 import {
     ADMIN_OF,
@@ -144,7 +145,7 @@ export function useUserRouteHooks() {
             path: `programm`,
             label: "Programme de formation",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: TrainingProgramComponent,
             roles: [TRAINEE],
         },
         {
