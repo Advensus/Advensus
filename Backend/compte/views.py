@@ -87,15 +87,7 @@ class RegisterStagiaire(generics.GenericAPIView):
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
 
-@api_view(['GET'])
-def getstagiairebyorg(request,pk):
-	serializer_class = cruduser
-	donnee = User.objects.filter(organisme_formation=pk)
-
-
-	serializer = serializer_class(donnee, many=True)
-
-	return Response(serializer.data)   
+  
 	
 class AddSouscrir(generics.GenericAPIView):
 	# permission_classes = (IsAuthenticated,IsAdminUser)
@@ -570,3 +562,36 @@ def viewallreservations(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response({"reservation":serializer.data})
+
+
+# ALL GET BY
+
+@api_view(['GET'])
+def getstagiairebyorg(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(organisme_formation=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getorganismebysoc(request,pk):
+	serializer_class = CrudOrganisme
+	donnee = OrganismeFormation.objects.filter(societe_formation=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getstagiairebyreser(request,pk):
+	serializer_class = crudreservation
+	donnee = reservation.objects.filter(proposer=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
