@@ -218,7 +218,7 @@ class RegisterSupResponsableP(generics.GenericAPIView):
 		serializer = self.serializer_class(new_Super_Rp)
 		# serializer.is_valid(raise_exception=True)
 		# serializer.save()
-		user_data = serializer.data
+		user_data = {"user":serializer.data}
 		return Response(user_data,status=status.HTTP_201_CREATED)
 class RegisteradminOrg(generics.GenericAPIView):
 	serializer_class = AddAdmin
@@ -590,6 +590,16 @@ def getorganismebysoc(request,pk):
 def getreservationbysta(request,pk):
 	serializer_class = crudreservation
 	donnee = reservation.objects.filter(proposer=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getreservationbyrp(request,pk):
+	serializer_class = crudreservation
+	donnee = reservation.objects.filter(reserver=pk)
 
 
 	serializer = serializer_class(donnee, many=True)

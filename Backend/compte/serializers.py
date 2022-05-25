@@ -140,10 +140,11 @@ class AddSrp(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
+    user_type = serializers.CharField(max_length=60,read_only=True)
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','appartenir_societe']
+        fields = ['username','first_name','email','phone_number','adress','password','id','appartenir_societe','user_type']
     # def get_cleaned_data(self):
     #     data = super(AddSrp, self).get_cleaned_data()
     #     return data
