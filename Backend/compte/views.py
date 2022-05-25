@@ -294,7 +294,7 @@ class login_org(generics.GenericAPIView):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
-		return Response({'courses':serializer.data},status=status.HTTP_200_OK)
+		return Response({'organisme':serializer.data},status=status.HTTP_200_OK)
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
@@ -587,7 +587,7 @@ def getorganismebysoc(request,pk):
 	return Response(serializer.data) 
 
 @api_view(['GET'])
-def getstagiairebyreser(request,pk):
+def getreservationbysta(request,pk):
 	serializer_class = crudreservation
 	donnee = reservation.objects.filter(proposer=pk)
 

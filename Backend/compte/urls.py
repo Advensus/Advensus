@@ -56,11 +56,11 @@ urlpatterns = [
    path('GetAllOrganisme/',views.getallorganisme),
    path('create/organisme/', CreateOrganisme.as_view()),
    #LOGOUT URL
-    # path('Logout/',LogoutUser.as_view()),
+   # path('Logout/',LogoutUser.as_view()),
 
     path('GetStagaireByOrg/<str:pk>/',views.getstagiairebyorg),
     path('GetOrganismeBySoc/<str:pk>/',views.getorganismebysoc),
-    path('GetStagiaireByrese/<str:pk>/',views.getstagiairebyreser),
+    path('GetReservationBySta/<str:pk>/',views.getreservationbysta),
 
 
 ]
