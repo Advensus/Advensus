@@ -20,3 +20,5 @@ export * from "./dashboard/Docs/administrative-docs/AdminDocs.page";
 export * from "./dashboard/training-module/TrainingModule.page";
 
 export * from "./dashboard/Booking/lesson-booking/LessonBooking.page";
+export * from "./dashboard/level-test/LevelTest.page";
+export * from "./dashboard/next-lesson/NextLesson.page";

@@ -27,6 +27,8 @@ import {
 import {
     AdministrativeDocsPage,
     LessonBookingPage,
+    LevelTestPage,
+    NextLessonPage,
     ResourcesPage,
     SchedulerPage,
     StatisticsPage,
@@ -150,10 +152,10 @@ export function useUserRouteHooks() {
             roles: [TRAINEE],
         },
         {
-            path: `test niv`,
+            path: `testlevel`,
             label: "Test de niveau",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: LevelTestPage,
             roles: [TRAINEE],
         },
         {
@@ -167,7 +169,7 @@ export function useUserRouteHooks() {
             path: `nextcours`,
             label: "Prochaine cours",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: NextLessonPage,
             roles: [TRAINEE],
         },
         {
