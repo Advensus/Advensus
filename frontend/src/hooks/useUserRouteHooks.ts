@@ -26,6 +26,7 @@ import {
 } from "../lib";
 import {
     AdministrativeDocsPage,
+    LessonBookingPage,
     ResourcesPage,
     SchedulerPage,
     StatisticsPage,
@@ -159,7 +160,7 @@ export function useUserRouteHooks() {
             path: `reserv`,
             label: "Réservation de cours",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: LessonBookingPage,
             roles: [TRAINEE],
         },
         {
