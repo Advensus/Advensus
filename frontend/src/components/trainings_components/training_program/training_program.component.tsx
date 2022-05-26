@@ -1,117 +1,113 @@
 import React, { useState } from "react";
 
+import { getTheme, mergeStyleSets } from "@fluentui/react/lib/Styling";
+import { lorem } from "@fluentui/example-data";
 import {
-    GroupHeader,
-    GroupedList,
-    IGroupHeaderCheckboxProps,
-    IGroupHeaderProps,
-    IGroupRenderProps,
-    IGroup,
-} from "@fluentui/react/lib/GroupedList";
-import {
-    IColumn,
-    IObjectWithKey,
-    DetailsRow,
-} from "@fluentui/react/lib/DetailsList";
-import { FocusZone } from "@fluentui/react/lib/FocusZone";
-import {
-    Selection,
-    SelectionMode,
-    SelectionZone,
-} from "@fluentui/react/lib/Selection";
-import { Icon } from "@fluentui/react/lib/Icon";
-import { useConst } from "@fluentui/react-hooks";
-import {
-    createListItems,
-    createGroups,
-    IExampleItem,
-} from "@fluentui/example-data";
+    ScrollablePane,
+    IScrollablePaneStyles,
+} from "@fluentui/react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "@fluentui/react/lib/Sticky";
+import { Text } from "@fluentui/react";
 
-const groupCount = 3;
-const groupDepth = 1;
+export interface IScrollablePaneExampleItem {
+    color: string;
+    text: string;
+    index: number;
+}
+const theme = getTheme();
+const classNames = mergeStyleSets({
+    wrapper: {
+        height: "40vh",
+        position: "relative",
+        maxHeight: "inherit",
+    },
+    pane: {
+        maxWidth: 400,
+        border: "1px solid " + theme.palette.neutralLight,
+    },
+    sticky: {
+        color: theme.palette.neutralDark,
+        padding: "5px 20px 5px 10px",
+        fontSize: "13px",
+        borderTop: "1px solid " + theme.palette.black,
+        borderBottom: "1px solid " + theme.palette.black,
+        height: "50px",
+    },
+    textContent: {
+        padding: "15px 10px",
+        color: "#000",
+    },
+});
+const scrollablePaneStyles: Partial<IScrollablePaneStyles> = {
+    // root: classNames.pane,
+};
+const colors = [
+    "#eaeaea",
+    "#dadada",
+    "#d0d0d0",
+    "#c8c8c8",
+    "#a6a6a6",
+    "#c7e0f4",
+    "#71afe5",
+    "#eff6fc",
+    "#deecf9",
+];
+const items = Array.from({ length: 5 }).map((item, index) => ({
+    color: colors.splice(Math.floor(Math.random() * colors.length), 1)[0],
+    text: lorem(200),
+    index,
+}));
+const createContentArea = (item: IScrollablePaneExampleItem) => (
+    <div
+        key={item.index}
+        style={{
+            backgroundColor: item.color,
+        }}
+    >
+        <Sticky stickyPosition={StickyPositionType.Both}>
+            <div role="heading" aria-level={1} className={classNames.sticky}>
+                <Text variant="large">Module Formation</Text> #{item.index + 1}
+            </div>
+        </Sticky>
+        <div className={classNames.textContent}>{item.text}</div>
+    </div>
+);
 
 export interface ITrainingProgramProps {
     default_props?: boolean;
 }
 
-const groupProps: IGroupRenderProps = {
-    onRenderHeader: (props?: IGroupHeaderProps): JSX.Element => (
-        <GroupHeader
-            onRenderGroupHeaderCheckbox={onRenderGroupHeaderCheckbox}
-            {...props}
-        />
-    ),
-};
-
-/* This is rendered within a checkbox, so it must not be interactive itself. */
-const onRenderGroupHeaderCheckbox = (props?: IGroupHeaderCheckboxProps) => {
-    const iconStyles = { root: { fontSize: "36px" } };
-
-    return props?.checked ? (
-        <Icon iconName="ToggleRight" styles={iconStyles} />
-    ) : (
-        <Icon iconName="ToggleLeft" styles={iconStyles} />
-    );
-};
-
 export const TrainingProgramComponent: React.FC<ITrainingProgramProps> = () => {
-    const items: IObjectWithKey[] = useConst(() =>
-        createListItems(Math.pow(groupCount, groupDepth + 1))
-    );
-    const groups = useConst(() =>
-        createGroups(groupCount, groupDepth, 0, groupCount)
-    );
-    const columns = useConst(() =>
-        Object.keys(items[0])
-            .slice(0, 3)
-            .map(
-                (key: string): IColumn => ({
-                    key: key,
-                    name: key,
-                    fieldName: key,
-                    minWidth: 300,
-                })
-            )
-    );
-    const selection = useConst(() => new Selection({ items }));
-
-    const onRenderCell = React.useCallback(
-        (
-            nestingDepth?: number,
-            item?: IExampleItem,
-            itemIndex?: number,
-            group?: IGroup
-        ): React.ReactNode => (
-            <DetailsRow
-                columns={columns}
-                groupNestingDepth={nestingDepth}
-                item={item}
-                itemIndex={itemIndex!}
-                selection={selection}
-                selectionMode={SelectionMode.multiple}
-                group={group}
-            />
-        ),
-        [columns, selection]
-    );
-
     return (
         <div className="training_program_container">
-            <FocusZone>
-                <SelectionZone
-                    selection={selection}
-                    selectionMode={SelectionMode.multiple}
-                >
-                    <GroupedList
-                        items={items}
-                        onRenderCell={onRenderCell}
-                        selection={selection}
-                        selectionMode={SelectionMode.multiple}
-                        groups={groups}
-                        groupProps={groupProps}
-                    />
-                </SelectionZone>
-            </FocusZone>
+            <div className="training_program_box">
+                <Text variant="xLarge" style={{ fontWeight: "bolder" }}>
+                    NOM FORMATION
+                </Text>
+                <div className="training_program_scrollablepane_container">
+                    <ScrollablePane
+                        scrollContainerFocus={true}
+                        scrollContainerAriaLabel="Sticky component example"
+                        // styles={scrollablePaneStyles}
+                    >
+                        {items.map(createContentArea)}
+                    </ScrollablePane>
+                </div>
+            </div>
+            <div className="training_program_box">
+                <Text variant="xLarge" style={{ fontWeight: "bolder" }}>
+                    NOM FORMATION
+                </Text>
+                <div className="training_program_scrollablepane_container">
+                    <ScrollablePane
+                        scrollContainerFocus={true}
+                        scrollContainerAriaLabel="Sticky component example"
+                        // styles={scrollablePaneStyles}
+                    >
+                        {items.map(createContentArea)}
+                    </ScrollablePane>
+                </div>
+            </div>
         </div>
     );
 };
