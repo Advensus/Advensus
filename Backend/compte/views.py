@@ -249,8 +249,8 @@ class CreateSociete(generics.GenericAPIView):
 		serializer = self.serializer_class(data=organisme)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
-		organisme_data = serializer.data
-		return Response(organisme_data,status=status.HTTP_201_CREATED)
+		societe_data = serializer.data
+		return Response(societe_data,status=status.HTTP_201_CREATED)
 
 
 
