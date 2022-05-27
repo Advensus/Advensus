@@ -3,10 +3,12 @@ import { AttributeDisplayComponent } from "../..";
 import { ICompany } from "../../../lib/interfaces/Company";
 import { Image, IImageProps, ImageFit } from "@fluentui/react/lib/Image";
 import { prefixer } from "../../../services/urls";
+import { PATH_LABEL_COMPANY, PATH_LABEL_ORGANIZATION } from "../../../lib";
 
 export interface ICompanyDetailsProps {
     default_props?: boolean;
     company?: ICompany;
+    currentPath: string;
 }
 
 const imageProps: IImageProps = {
@@ -21,6 +23,7 @@ const imageProps: IImageProps = {
 
 export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
     company,
+    currentPath,
 }) => {
     return (
         <div className="company_details_container">
@@ -39,30 +42,59 @@ export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
                 </div>
             </div>
             <hr className="hr_solid_company_details" />
-            <div className="company_details_infos">
-                <AttributeDisplayComponent
-                    keyWord="Société ID"
-                    valueWord={company?.id}
-                />
-                <AttributeDisplayComponent
-                    keyWord="Nom Société"
-                    valueWord={company?.company_name}
-                />
-                <AttributeDisplayComponent
-                    keyWord="Addresse Société"
-                    valueWord={company?.company_adress}
-                />
-                <AttributeDisplayComponent
-                    keyWord="Numéro de Téléphone"
-                    valueWord={company?.company_phone_number}
-                />
-                {company?.fix_number && (
+            {currentPath === PATH_LABEL_COMPANY && (
+                <div className="company_details_infos">
                     <AttributeDisplayComponent
-                        keyWord="Fix"
-                        valueWord={company?.fix_number}
+                        keyWord="Société ID"
+                        valueWord={company?.id}
                     />
-                )}
-            </div>
+                    <AttributeDisplayComponent
+                        keyWord="Nom Société"
+                        valueWord={company?.company_name}
+                    />
+                    <AttributeDisplayComponent
+                        keyWord="Addresse Société"
+                        valueWord={company?.company_adress}
+                    />
+                    <AttributeDisplayComponent
+                        keyWord="Numéro de Téléphone"
+                        valueWord={company?.company_phone_number}
+                    />
+                    {company?.fix_number && (
+                        <AttributeDisplayComponent
+                            keyWord="Fix"
+                            valueWord={company?.fix_number}
+                        />
+                    )}
+                </div>
+            )}
+            {/* FOR ORGANISATION */}
+            {currentPath === PATH_LABEL_ORGANIZATION && (
+                <div className="company_details_infos">
+                    <AttributeDisplayComponent
+                        keyWord="Organisation ID"
+                        valueWord={company?.id}
+                    />
+                    <AttributeDisplayComponent
+                        keyWord="Nom Organisation"
+                        valueWord={company?.company_name}
+                    />
+                    <AttributeDisplayComponent
+                        keyWord="Addresse Organisation"
+                        valueWord={company?.company_adress}
+                    />
+                    <AttributeDisplayComponent
+                        keyWord="Numéro de Téléphone"
+                        valueWord={company?.company_phone_number}
+                    />
+                    {company?.fix_number && (
+                        <AttributeDisplayComponent
+                            keyWord="Fix"
+                            valueWord={company?.fix_number}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 };

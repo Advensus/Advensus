@@ -21,6 +21,7 @@
 @import "./components/training_folder_card.component";
 @import "./components/company_details.component";
 @import "./components/small_company_card.component";
+@import "./components/training_program.component";
 
 // pages
 @import "./pages/Home.page";
@@ -34,6 +35,12 @@
 @import "./pages/Training_company.page";
 @import "./pages/Training_organisation.page";
 @import "./pages/Statistique.page";
+@import "./pages/Lesson_booking.page";
+@import "./pages/Level_test.page";
+@import "./pages/Next_lesson.page";
+@import "./pages/Trainee_docs.page";
+@import "./pages/Historical.page";
+@import "./pages/Account.page";
 
 html,
 body,

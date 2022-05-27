@@ -1,5 +1,6 @@
 from audioop import maxpp
 from django.db import models
+from pkg_resources import require
 from .utilisateur import User
 from .training import formation
 import uuid
@@ -36,7 +37,7 @@ class reservation(models.Model):
     annuler = models.BooleanField(default=False)
     start_date = models.DateField(auto_now_add=False)
     end_date = models.DateField(auto_now_add=False)
-    proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type')
+    # proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type', require=False)
     concerner = models.OneToOneField(Courses,on_delete=models.CASCADE)
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
    

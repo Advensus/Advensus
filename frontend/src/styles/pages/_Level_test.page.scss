@@ -1,0 +1,42 @@
+.level_test_container {
+    // background-color: red;
+    width: 100vw;
+    padding: 30px 40px;
+}
+
+.level_test_box {
+    background-color: #f4f3f3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100px;
+    color: #000;
+}
+.level_test_box_header {
+    // background-color: yellow;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+.level_test_box_body {
+    // background-color: green;
+    padding: 0 15px;
+}
+
+.level_test_body_head {
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    padding: 15px;
+    text-align: center;
+}
+
+.level_test_body_action {
+    background-color: rgb(99, 99, 71);
+    margin-bottom: 25px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

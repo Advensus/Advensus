@@ -8,6 +8,7 @@ import {
 } from "@fluentui/react";
 import { Formik, Field, Form, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { ORG } from "../../../lib";
 import {
     NewCompanyDtoIn,
     NewCompanyDtoOut,
@@ -78,7 +79,9 @@ export const TrainingOrganizationFormComponent: React.FC<
         formData.append("societe_formation", `${val.societe_formation}`);
         formData.append("company_stamp", val.company_stamp);
         formData.append("company_logo", val.company_logo);
-        formData.append("password", val.password);
+        formData.append("password_messagerie", val.password_messagerie);
+        formData.append("password_connexion", val.password_connexion);
+        // formData.append("password_connexion", ORG + val.password_connexion);
         formData.append("email", val.email);
         CompanyService.new_organization(formData)
             .then(async (response) => {
@@ -110,7 +113,8 @@ export const TrainingOrganizationFormComponent: React.FC<
                 : "dfqfqds",
             company_stamp: "",
             company_logo: "",
-            password: "",
+            password_connexion: "",
+            password_messagerie: "",
             email: "",
         },
         onSubmit,
@@ -193,7 +197,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                             placeholder="Mot de pass d'emailing"
                             canRevealPassword
                             revealPasswordAriaLabel="Show password"
-                            name="password"
+                            name="password_messagerie"
                             onChange={handleChange}
                         />
                         <TextField
@@ -201,6 +205,8 @@ export const TrainingOrganizationFormComponent: React.FC<
                             placeholder="Mot de passe de connexion"
                             canRevealPassword
                             revealPasswordAriaLabel="Show password"
+                            name="password_connexion"
+                            onChange={handleChange}
                         />
 
                         <hr />

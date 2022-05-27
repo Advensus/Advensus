@@ -119,11 +119,12 @@ class AddRp(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    user_type = serializers.CharField(max_length=60,read_only=True)
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = User
         
-        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id']
+        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
       
     # def get_cleaned_data(self):
     #     data = super(AddRp, self).get_cleaned_data()
@@ -139,11 +140,12 @@ class AddSrp(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
+    user_type = serializers.CharField(max_length=60,read_only=True)
     id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','appartenir_societe']
+        fields = ['username','first_name','email','phone_number','adress','password','id','appartenir_societe','user_type']
     # def get_cleaned_data(self):
     #     data = super(AddSrp, self).get_cleaned_data()
     #     return data
@@ -205,6 +207,7 @@ class AddFormateur(serializers.ModelSerializer):
     adress = serializers.CharField(max_length=60)
     phone_number = serializers.CharField(max_length=60)
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
+    user_type = serializers.CharField(max_length=60,read_only=True)
     first_name= serializers.CharField(max_length=70)
     cv= serializers.FileField()
     id = serializers.UUIDField(read_only=True)
@@ -213,7 +216,7 @@ class AddFormateur(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','cv','id','competence','appartenir_societe']
+        fields = ['username','first_name','email','phone_number','adress','password','horaire','cv','id','competence','appartenir_societe','user_type']
        
     # def validate(self,attrs):
     #     email = attrs.get('email','')
@@ -372,4 +375,4 @@ class crudreservation(serializers.ModelSerializer):
 
     class Meta:
         model = reservation
-        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+        fields = ['id','title','description','status','start_date','end_date','reserver','concerner']

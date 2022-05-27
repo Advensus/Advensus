@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
-    AccountComponent,
     IRoute,
     SettingsComponent,
     TrainingOrganizationCardComponent,
+    TrainingProgramComponent,
 } from "../components";
 import {
     ADMIN_OF,
@@ -24,10 +24,16 @@ import {
     TRAINEE,
 } from "../lib";
 import {
+    AccountPage,
     AdministrativeDocsPage,
+    HistoricalPage,
+    LessonBookingPage,
+    LevelTestPage,
+    NextLessonPage,
     ResourcesPage,
     SchedulerPage,
     StatisticsPage,
+    TraineeDocsPage,
     TraineesPage,
     TrainingCompanyPage,
     TrainingModulePage,
@@ -47,7 +53,7 @@ export function useUserRouteHooks() {
             path: `account`,
             label: "Account",
             icon: "la-id-badge",
-            component: AccountComponent,
+            component: AccountPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP, TEACHEAR, TRAINEE],
         },
         {
@@ -144,42 +150,42 @@ export function useUserRouteHooks() {
             path: `programm`,
             label: "Programme de formation",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: TrainingProgramComponent,
             roles: [TRAINEE],
         },
         {
-            path: `test niv`,
+            path: `testlevel`,
             label: "Test de niveau",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: LevelTestPage,
             roles: [TRAINEE],
         },
         {
             path: `reserv`,
             label: "Réservation de cours",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: LessonBookingPage,
             roles: [TRAINEE],
         },
         {
             path: `nextcours`,
             label: "Prochaine cours",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: NextLessonPage,
             roles: [TRAINEE],
         },
         {
             path: `hist`,
             label: "Historique",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: HistoricalPage,
             roles: [TRAINEE],
         },
         {
             path: `docs`,
             label: "Mes documents",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: TraineeDocsPage,
             roles: [TRAINEE],
         },
         {

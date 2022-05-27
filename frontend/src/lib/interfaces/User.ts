@@ -17,7 +17,7 @@ export interface IUser {
     trainee_level?: string;
     organisme?: string;
     societe?: string;
-    appartenir_societe?: string;
+    appartenir_societe?: string[];
     organisme_formation?: string[];
     is_superuser?: string;
     tokens: string;

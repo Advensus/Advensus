@@ -1,0 +1,22 @@
+.next_lesson_container {
+    width: 100vw;
+    padding: 30px 40px;
+}
+
+.next_lesson_box {
+    background-color: #f4f3f3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100px;
+    color: #000;
+}
+
+.next_lesson_box_header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+.next_lesson_box_body {
+    padding: 0 15px;
+}

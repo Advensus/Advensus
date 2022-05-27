@@ -6,6 +6,7 @@ import {
     ADMIN_OF,
     LoginDtoIn,
     LoginDtoOut,
+    ORG,
     RP,
     SUPER_RP,
     SUPER_USER,
@@ -27,6 +28,11 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
     const { updateToken, updateCurrentUser } = useAuthStore();
 
     const onSubmit = async (value: LoginDtoIn) => {
+        if (value.password.substring(0, 3) === ORG) {
+            //ORGANIZATION CONNEXION
+        } else {
+            //USERS CONNEXION
+        }
         AuthService.login(value)
             .then(async (resp) => {
                 if ([200, 201].includes(resp.status)) {

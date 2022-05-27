@@ -167,7 +167,7 @@ export const TrainingOrganisationPage: React.FC<
     };
 
     const handleOnCreate = (data: NewCompanyDtoIn) => {
-        console.log({ data });
+        setOrganization([data, ...organization]);
         setShowForm(false);
     };
 

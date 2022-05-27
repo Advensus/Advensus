@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { FormElement, Field } from "@progress/kendo-react-form";
 import { Label, Error } from "@progress/kendo-react-labels";
-import { Input, TextArea } from "@progress/kendo-react-inputs";
+import { Input } from "@progress/kendo-react-inputs";
 import { DatePicker, DateTimePicker } from "@progress/kendo-react-dateinputs";
 import { SchedulerFormEditorProps } from "@progress/kendo-react-scheduler";
 
@@ -40,16 +40,16 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                     )}
                 </div>
             </div>
-
             <div className="k-form-field">
                 <Label>Cours</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Training"} component={CoursesEditor} />
+                    <Field name={"Training"} component={TraineesList} />
                     {props.errors.Training && (
                         <Error>{props.errors.Training}</Error>
                     )}
                 </div>
             </div>
+
             <div className="k-form-field">
                 <Label>Description</Label>
                 <div className="k-form-field-wrap">

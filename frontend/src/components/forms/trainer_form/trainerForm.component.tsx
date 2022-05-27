@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import {
     BASIC_RP_FORM,
     ITraining,
+    IUser,
     NewUserDto,
     NewUserDtoIn,
     SERVICES_FORM,
@@ -23,7 +24,7 @@ import UserService from "../../../services/user.service";
 export interface ITrainerFormProps {
     default_props?: boolean;
     cancel?: () => void;
-    onCreate: (data: NewUserDtoIn) => void;
+    onCreate: (data: IUser) => void;
     formToDisplay?: string;
     trainings: ITraining[];
 }
@@ -92,10 +93,11 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         formData.append("adress", value.adress);
         formData.append("password", value.password);
         formData.append("horaire", `${value.horaire}`);
-        formData.append("competence[0]", value.competence as any);
-        formData.append("competence[1]", value.competence as any);
-        formData.append("competence[2]", value.competence as any);
-        formData.append("competence[3]", value.competence as any);
+        for (let i = 0; i < value.competence.length; i++) {
+            formData.append("competence", value.competence[0 + i]);
+        }
+        // formData.append("competence", value.competence[2]);
+        // formData.append("competence", value.competence[3]);
         formData.append("appartenir_societe", `${value.appartenir_societe}`);
         formData.append("cv", value.cv ? value.cv : "");
         if (formToDisplay === TEACHEAR_FORM) {
@@ -104,7 +106,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     if (response.status !== 200) {
                         console.log({ response });
                     }
-                    const data = (await response.json()) as NewUserDtoIn;
+                    const data = (await response.json()) as IUser;
                     console.log("the user just added:", data);
                     onCreate(data);
                 })
@@ -118,7 +120,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     if (response.status !== 200) {
                         console.log({ response });
                     }
-                    const data = (await response.json()) as NewUserDtoIn;
+                    const data = (await response.json()) as IUser;
                     onCreate(data);
                 })
                 .catch((err) => {
@@ -131,7 +133,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     if (response.status !== 200) {
                         console.log({ response });
                     }
-                    const data = (await response.json()) as NewUserDtoIn;
+                    const data = (await response.json()) as IUser;
                     onCreate(data);
                 })
                 .catch((err) => {
@@ -308,8 +310,8 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     type="file"
                     name="cv"
                     onChange={(event: any) => {
-                        setFieldValue("company_logo", event.target.files[0]);
-                        setFieldTouched("company_logo", true);
+                        setFieldValue("cv", event.target.files[0]);
+                        setFieldTouched("cv", true);
                     }}
                 />
             </div>

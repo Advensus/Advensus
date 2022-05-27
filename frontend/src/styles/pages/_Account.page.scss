@@ -1,0 +1,46 @@
+.account_container {
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    overflow: hidden;
+}
+#account_content_display {
+    position: relative;
+    background-color: #f4f3f3;
+    min-width: 300px;
+    max-width: 600px;
+    width: 550px;
+    padding: 20px 10px 0 10px;
+    height: 100%;
+    transform: scale(0);
+    transition: 1s ease opacity, 0.6s ease transform, 300ms ease-in-out width;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+}
+
+.account_content_display_header {
+    // background-color: #fff;
+}
+.account_content_display_header_title {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.hr_dashed_account {
+    border-top: 0.1em dashed black;
+    border-bottom: 0;
+    margin-top: 0;
+}
+
+.account_content_display_body {
+    overflow: auto;
+}
+.account_content_display_body_infos {
+    color: #000;
+}
+.account_content_display_body_infos_tab {
+    background-color: #fff;
+    padding: 20px 25px;
+}
