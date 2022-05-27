@@ -289,10 +289,11 @@ class LoginOrg(serializers.ModelSerializer):
     company_phone_number = serializers.CharField(max_length=50,read_only=True)
     fix_number = serializers.CharField(max_length=50,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
+    id = serializers.UUIDField(read_only=True)
     
     class Meta:
         model = OrganismeFormation
-        fields = ['email','password_connexion','company_name','company_adress','company_phone_number','fix_number','tokens']
+        fields = ['id','email','password_connexion','company_name','company_adress','company_phone_number','fix_number','tokens']
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
