@@ -260,6 +260,7 @@ class loginuser(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)
     id = serializers.UUIDField(read_only=True)
+    
     class Meta:
         model = User
         fields = ['username','email','password','tokens','user_type','is_superuser',
@@ -281,9 +282,9 @@ class loginuser(serializers.ModelSerializer):
             raise AuthenticationFailed('compte non activé...')
         return user
 
-class LoginOrg(serializers.ModelSerializer):
+class loginorg(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=40)
-    password_connexion = serializers.CharField(max_length=30)
+    password_connexion = serializers.CharField(max_length=30,write_only=True)
     company_name = serializers.CharField(max_length=100,read_only=True)
     company_adress = serializers.CharField(max_length=50,read_only=True)
     company_phone_number = serializers.CharField(max_length=50,read_only=True)
