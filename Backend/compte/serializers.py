@@ -18,6 +18,21 @@ from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 from django.contrib.auth.hashers import make_password
 
 
+# DATA ENTITY
+class SocieteData(serializers.ModelSerializer):
+    class Meta:
+        model=SocieteFormation
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number']     
+class OrganismeData(serializers.ModelSerializer):
+    societe_formation = SocieteData(read_only=True)
+    class Meta:
+        model = OrganismeFormation 
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number']
+        
+
+#END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
     
@@ -142,6 +157,7 @@ class AddSrp(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=60)
     user_type = serializers.CharField(max_length=60,read_only=True)
     id = serializers.UUIDField(read_only=True)
+    user_type = serializers.CharField(max_length=60,read_only=True)
 
     class Meta:
         model = User
@@ -253,6 +269,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
+
 class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
@@ -262,15 +279,20 @@ class loginuser(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)
     id = serializers.UUIDField(read_only=True)
+    appartenir_societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    organisme_formation = OrganismeData(many=True,read_only=True)
+    competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens','user_type','is_superuser',
+        fields = ['username','first_name','email','password','tokens','user_type','is_superuser',
             'is_active','id', 
             'organisme_formation',
             'appartenir_societe',
             'competence',
             'societe'
         ]
+        read_only_fields = ()
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -283,12 +305,20 @@ class loginuser(serializers.ModelSerializer):
             raise AuthenticationFailed('compte non activé...')
         return user
 
-class LoginOrg(serializers.ModelSerializer):
+
+class loginorg(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=40)
-    password_connexion = serializers.CharField(max_length=30)
+    password_connexion = serializers.CharField(max_length=30,write_only=True)
+    company_name = serializers.CharField(max_length=100,read_only=True)
+    company_adress = serializers.CharField(max_length=50,read_only=True)
+    company_phone_number = serializers.CharField(max_length=50,read_only=True)
+    fix_number = serializers.CharField(max_length=50,read_only=True)
+    tokens = serializers.CharField(max_length=60,read_only=True)
+    id = serializers.UUIDField(read_only=True)
+    
     class Meta:
         model = OrganismeFormation
-        fields = ['email','password_connexion']
+        fields = ['id','email','password_connexion','company_name','company_adress','company_phone_number','fix_number','tokens']
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
@@ -312,8 +342,24 @@ class cruduser(serializers.ModelSerializer):
 
         
             
-        
 
+class CrudOrganisme(serializers.ModelSerializer):
+    password_connexion = serializers.CharField(max_length=100)
+    password_messagerie = serializers.CharField(max_length=100)
+    societe_formation = SocieteData(read_only=True)
+    
+    class Meta:
+        model = OrganismeFormation 
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        
+    def create(self,validate_data):
+        organisme = super(CrudOrganisme,self).create(validate_data) 
+        organisme.password_connexion = make_password('password_connexion')
+        # organisme.password_messagerie = make_password('password_messagerie')
+        organisme.save()
+        return organisme
 
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
@@ -339,21 +385,7 @@ class LogoutUse(serializers.Serializer):
             self.fail('Mauvais token')
 
 
-class CrudOrganisme(serializers.ModelSerializer):
-    password_connexion = serializers.CharField(max_length=100)
-    password_messagerie = serializers.CharField(max_length=100)
-    class Meta:
-        model = OrganismeFormation 
 
-
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
-        
-    def create(self,validate_data):
-        organisme = super(CrudOrganisme,self).create(validate_data) 
-        organisme.password_connexion = make_password('password_connexion')
-        # organisme.password_messagerie = make_password('password_messagerie')
-        organisme.save()
-        return organisme
 
 class AddSouscrir(serializers.ModelSerializer):
    

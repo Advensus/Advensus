@@ -171,7 +171,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
 
-    organisme_formation = models.ManyToManyField(OrganismeFormation, null=True)
+    organisme_formation = models.ManyToManyField(OrganismeFormation, null=True,related_name='organisme')
     # societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE,related_name='org_content_type',null=True)
     appartenir_societe = models.ManyToManyField(SocieteFormation,related_name='appartenir_content_type',null=True)
     # souscription = models.ManyToManyField(formation,related_name="souscrir_training")

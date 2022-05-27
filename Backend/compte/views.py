@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import LoginOrg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -31,6 +31,9 @@ from django.template.loader import render_to_string
 from rest_framework.generics import CreateAPIView,ListAPIView,DestroyAPIView,UpdateAPIView
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -84,7 +87,8 @@ class RegisterStagiaire(generics.GenericAPIView):
 		# Util.send_email(data)
 
 		return Response(user_data,status=status.HTTP_201_CREATED)
-       
+
+  
 	
 class AddSouscrir(generics.GenericAPIView):
 	# permission_classes = (IsAuthenticated,IsAdminUser)
@@ -129,12 +133,21 @@ class AddSouscrir(generics.GenericAPIView):
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
+		my_canvas = canvas.Canvas("stagiaire.pdf", pagesize=letter)
+		my_canvas.setLineWidth(.3)
+		my_canvas.setFont('Helvetica', 12)
+		my_canvas.drawString(30, 750, 'Documents')
+		my_canvas.drawString(30, 735, user.username)
+		my_canvas.save()
 
 	
-		return Response(user_data,status=status.HTTP_201_CREATED)
+		return Response(user_data,
+            status=status.HTTP_201_CREATED)
+	
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
+	
 	def post(self,request,*args,**kwargs): 
 		data = request.data
 		new_formateur= User.objects.create_user2(
@@ -161,6 +174,7 @@ class RegisterFormateur(generics.GenericAPIView):
 		# serializer.user.set[(formateur)]
 		user_data = serializer.data
 
+      
 		# formateur = User.objects.get(email=user_data['email'])
 		# token = RefreshToken.for_user(formateur).access_token
 
@@ -215,7 +229,7 @@ class RegisterSupResponsableP(generics.GenericAPIView):
 		serializer = self.serializer_class(new_Super_Rp)
 		# serializer.is_valid(raise_exception=True)
 		# serializer.save()
-		user_data = serializer.data
+		user_data = {"user":serializer.data}
 		return Response(user_data,status=status.HTTP_201_CREATED)
 class RegisteradminOrg(generics.GenericAPIView):
 	serializer_class = AddAdmin
@@ -286,12 +300,12 @@ class login(generics.GenericAPIView):
 
 #LOGIN ORGANISME
 class login_org(generics.GenericAPIView):
-	serializer_class = LoginOrg
+	serializer_class = loginorg
 	def post(self,request):
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
-		return Response({'courses':serializer.data},status=status.HTTP_200_OK)
+		return Response({'organisme':serializer.data},status=status.HTTP_200_OK)
 # CRUD OPERATION VIEW ALL USERS
 
 @api_view(['GET'])
@@ -386,7 +400,7 @@ def deleteformation(request, pk):
 class CreateDocument(CreateAPIView):
     serializer_class = cruddocuments
     queryset = Document.objects.all()
-    permission_classes = (permissions.IsAuthenticated,autorisation)
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -559,3 +573,46 @@ def viewallreservations(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response({"reservation":serializer.data})
+
+
+# ALL GET BY
+
+@api_view(['GET'])
+def getstagiairebyorg(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(organisme_formation=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getorganismebysoc(request,pk):
+	serializer_class = CrudOrganisme
+	donnee = OrganismeFormation.objects.filter(societe_formation=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getreservationbysta(request,pk):
+	serializer_class = crudreservation
+	donnee = reservation.objects.filter(proposer=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getreservationbyrp(request,pk):
+	serializer_class = crudreservation
+	donnee = reservation.objects.filter(reserver=pk)
+
+
+	serializer = serializer_class(donnee, many=True)
+
+	return Response(serializer.data) 
