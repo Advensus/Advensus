@@ -251,21 +251,14 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
-class CrudOrganisme(serializers.ModelSerializer):
-    password_connexion = serializers.CharField(max_length=100)
-    password_messagerie = serializers.CharField(max_length=100)
+class OrganismeData(serializers.ModelSerializer):
     class Meta:
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number']
         
-    def create(self,validate_data):
-        organisme = super(CrudOrganisme,self).create(validate_data) 
-        organisme.password_connexion = make_password('password_connexion')
-        # organisme.password_messagerie = make_password('password_messagerie')
-        organisme.save()
-        return organisme
+   
 class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
@@ -276,7 +269,7 @@ class loginuser(serializers.ModelSerializer):
     is_active = serializers.BooleanField(read_only=True)
     id = serializers.UUIDField(read_only=True)
     appartenir_societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
-    organisme_formation = CrudOrganisme(many=True,read_only=True)
+    organisme_formation = OrganismeData(many=True,read_only=True)
     competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     class Meta:
@@ -339,7 +332,21 @@ class cruduser(serializers.ModelSerializer):
         
             
         
+class CrudOrganisme(serializers.ModelSerializer):
+    password_connexion = serializers.CharField(max_length=100)
+    password_messagerie = serializers.CharField(max_length=100)
+    class Meta:
+        model = OrganismeFormation 
 
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        
+    def create(self,validate_data):
+        organisme = super(CrudOrganisme,self).create(validate_data) 
+        organisme.password_connexion = make_password('password_connexion')
+        # organisme.password_messagerie = make_password('password_messagerie')
+        organisme.save()
+        return organisme
 
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
