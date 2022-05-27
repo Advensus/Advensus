@@ -343,18 +343,17 @@ class cruduser(serializers.ModelSerializer):
 class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-    donnee_formation = SocieteData(read_only=True)
+    # donnee_formation = SocieteData(read_only=True)
     
     
     class Meta:
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo','donnee_formation']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
    
     def create(self,validate_data):
-        organisme = super(CrudOrganisme,self).create(validate_data)
-     
+        organisme = super(CreateOrganisme,self).create(validate_data) 
         organisme.password_connexion = make_password('password_connexion')
         # organisme.password_messagerie = make_password('password_messagerie')
         organisme.save()
