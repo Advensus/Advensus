@@ -286,7 +286,10 @@ class LoginOrg(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=30)
     company_name = serializers.CharField(max_length=100,read_only=True)
     company_adress = serializers.CharField(max_length=50,read_only=True)
+    company_phone_number = serializers.CharField(max_length=50,unique=True)
+    fix_number = serializers.CharField(max_length=50,unique=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
+    
     class Meta:
         model = OrganismeFormation
         fields = ['email','password_connexion','tokens']
