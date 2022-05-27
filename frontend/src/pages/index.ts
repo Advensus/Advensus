@@ -24,3 +24,4 @@ export * from "./dashboard/Booking/lesson-booking/LessonBooking.page";
 export * from "./dashboard/level-test/LevelTest.page";
 export * from "./dashboard/next-lesson/NextLesson.page";
 export * from "./dashboard/Hitorical/Historical.page";
+export * from "./dashboard/Account/Account.page";

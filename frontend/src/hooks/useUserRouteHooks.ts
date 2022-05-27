@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-    AccountComponent,
     IRoute,
     SettingsComponent,
     TrainingOrganizationCardComponent,
@@ -25,6 +24,7 @@ import {
     TRAINEE,
 } from "../lib";
 import {
+    AccountPage,
     AdministrativeDocsPage,
     HistoricalPage,
     LessonBookingPage,
@@ -53,7 +53,7 @@ export function useUserRouteHooks() {
             path: `account`,
             label: "Account",
             icon: "la-id-badge",
-            component: AccountComponent,
+            component: AccountPage,
             roles: [SUPER_USER, ADMIN_OF, SUPER_RP, RP, TEACHEAR, TRAINEE],
         },
         {
