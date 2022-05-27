@@ -26,12 +26,14 @@ import {
 } from "../lib";
 import {
     AdministrativeDocsPage,
+    HistoricalPage,
     LessonBookingPage,
     LevelTestPage,
     NextLessonPage,
     ResourcesPage,
     SchedulerPage,
     StatisticsPage,
+    TraineeDocsPage,
     TraineesPage,
     TrainingCompanyPage,
     TrainingModulePage,
@@ -176,14 +178,14 @@ export function useUserRouteHooks() {
             path: `hist`,
             label: "Historique",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: HistoricalPage,
             roles: [TRAINEE],
         },
         {
             path: `docs`,
             label: "Mes documents",
             icon: "la-id-badge",
-            component: TrainingOrganizationCardComponent,
+            component: TraineeDocsPage,
             roles: [TRAINEE],
         },
         {

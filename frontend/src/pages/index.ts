@@ -17,8 +17,10 @@ export * from "./dashboard/statistics/statistics.page";
 
 export * from "./dashboard/visio/visio.page";
 export * from "./dashboard/Docs/administrative-docs/AdminDocs.page";
+export * from "./dashboard/Docs/Trainee-docs/TraineeDocs.page";
 export * from "./dashboard/training-module/TrainingModule.page";
 
 export * from "./dashboard/Booking/lesson-booking/LessonBooking.page";
 export * from "./dashboard/level-test/LevelTest.page";
 export * from "./dashboard/next-lesson/NextLesson.page";
+export * from "./dashboard/Hitorical/Historical.page";
