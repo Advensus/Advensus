@@ -284,9 +284,10 @@ class loginuser(serializers.ModelSerializer):
 class LoginOrg(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=40)
     password_connexion = serializers.CharField(max_length=30)
+    tokens = serializers.CharField(max_length=60,read_only=True)
     class Meta:
         model = OrganismeFormation
-        fields = ['email','password_connexion']
+        fields = ['email','password_connexion','tokens']
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
