@@ -292,7 +292,7 @@ class LoginOrg(serializers.ModelSerializer):
     
     class Meta:
         model = OrganismeFormation
-        fields = ['email','password_connexion','tokens']
+        fields = ['email','password_connexion','company_name','company_adress','company_phone_number','fix_number','tokens']
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
