@@ -282,7 +282,7 @@ class loginuser(serializers.ModelSerializer):
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     class Meta:
         model = User
-        fields = ['username','email','password','tokens','user_type','is_superuser',
+        fields = ['username','first_name','email','password','tokens','user_type','is_superuser',
             'is_active','id', 
             'organisme_formation',
             'appartenir_societe',
