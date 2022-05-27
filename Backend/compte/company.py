@@ -16,7 +16,7 @@ class Company(models.Model):
     company_logo = models.FileField(upload_to="company_logo/",null=True)
 
     def __str__(self):
-        return '%s: %s' % (self.company_adress, self.company_name)
+        return self.company_name
     class Meta:
         abstract = True 
 
@@ -51,8 +51,7 @@ class OrganismeFormation(Company):
     password_connexion = models.CharField(max_length=100)
     password_messagerie = models.CharField(max_length=100)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.company_name
+  
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         return {

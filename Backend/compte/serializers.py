@@ -18,6 +18,21 @@ from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 from django.contrib.auth.hashers import make_password
 
 
+# DATA ENTITY
+class SocieteData(serializers.ModelSerializer):
+    class Meta:
+        model=SocieteFormation
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number']     
+class OrganismeData(serializers.ModelSerializer):
+    societe_formation = SocieteData(read_only=True)
+    class Meta:
+        model = OrganismeFormation 
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number']
+        
+
+#END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
     
@@ -251,14 +266,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
-class OrganismeData(serializers.ModelSerializer):
-    class Meta:
-        model = OrganismeFormation 
 
-
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number']
-        
-   
 class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
@@ -331,10 +339,12 @@ class cruduser(serializers.ModelSerializer):
 
         
             
-        
+
 class CrudOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
+    societe_formation = SocieteData(read_only=True)
+    
     class Meta:
         model = OrganismeFormation 
 
