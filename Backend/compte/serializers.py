@@ -284,6 +284,8 @@ class loginuser(serializers.ModelSerializer):
 class LoginOrg(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=40)
     password_connexion = serializers.CharField(max_length=30)
+    company_name = serializers.CharField(max_length=100,read_only=True)
+    company_adress = serializers.CharField(max_length=50,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
     class Meta:
         model = OrganismeFormation
