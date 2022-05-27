@@ -251,6 +251,21 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 # Login Users
+class CrudOrganisme(serializers.ModelSerializer):
+    password_connexion = serializers.CharField(max_length=100)
+    password_messagerie = serializers.CharField(max_length=100)
+    class Meta:
+        model = OrganismeFormation 
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        
+    def create(self,validate_data):
+        organisme = super(CrudOrganisme,self).create(validate_data) 
+        organisme.password_connexion = make_password('password_connexion')
+        # organisme.password_messagerie = make_password('password_messagerie')
+        organisme.save()
+        return organisme
 class loginuser(serializers.ModelSerializer): 
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
@@ -260,7 +275,10 @@ class loginuser(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)
     id = serializers.UUIDField(read_only=True)
-    
+    appartenir_societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    organisme_formation = CrudOrganisme(many=True,read_only=True)
+    competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     class Meta:
         model = User
         fields = ['username','email','password','tokens','user_type','is_superuser',
@@ -270,6 +288,7 @@ class loginuser(serializers.ModelSerializer):
             'competence',
             'societe'
         ]
+        read_only_fields = ()
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -281,6 +300,7 @@ class loginuser(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed('compte non activé...')
         return user
+
 
 class loginorg(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=40)
@@ -345,21 +365,7 @@ class LogoutUse(serializers.Serializer):
             self.fail('Mauvais token')
 
 
-class CrudOrganisme(serializers.ModelSerializer):
-    password_connexion = serializers.CharField(max_length=100)
-    password_messagerie = serializers.CharField(max_length=100)
-    class Meta:
-        model = OrganismeFormation 
 
-
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
-        
-    def create(self,validate_data):
-        organisme = super(CrudOrganisme,self).create(validate_data) 
-        organisme.password_connexion = make_password('password_connexion')
-        # organisme.password_messagerie = make_password('password_messagerie')
-        organisme.save()
-        return organisme
 
 class AddSouscrir(serializers.ModelSerializer):
    
