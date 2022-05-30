@@ -643,6 +643,15 @@ def viewallprogramme(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response({'programme':serializer.data})
+
+@api_view(['GET'])
+def getprogrammebycert(request,pk):
+	serializer_class = crudprogramme
+	donnee = programme.objects.filter(attribue=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
 class CreateCertificate(CreateAPIView):
     serializer_class = crudcertificate
     queryset = certificate.objects.all()
@@ -665,3 +674,12 @@ def viewallcertificate(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response({'certificate':serializer.data})
+
+@api_view(['GET'])
+def getcertificationbyform(request,pk):
+	serializer_class = crudcertificate
+	donnee = certificate.objects.filter(allouer=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)

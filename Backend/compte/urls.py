@@ -20,11 +20,13 @@ urlpatterns = [
     path('create/societe/', CreateSociete.as_view()),
     path('create/souscrir/', AddSouscrir.as_view()),
 
-    #CRUD SOCIETE
+    #CRUD PROGRAMME AND CERTIFICATE
     path("GetAllProgramme/", views.viewallprogramme),
     path("GetAllCertificate/", views.viewallcertificate),
     path('create/programme/', CreateProgramme.as_view()),
     path('create/certificate/', CreateCertificate.as_view()),
+    path('GetCertificationByFor/<str:pk>/',views.getcertificationbyform),
+    path('GetProgrammeByCert/<str:pk>/',views.getprogrammebycert),
 
     # CRUD COURSES 
     path('create/courses/', CreateCourses.as_view()),
