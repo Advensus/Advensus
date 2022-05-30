@@ -2,7 +2,7 @@ from ctypes import addressof, c_void_p
 from dataclasses import field
 from email.policy import default
 
-from .training import formation
+from .training import formation,certificate,programme
 
 from .company import OrganismeFormation, SocieteFormation
 from rest_framework import serializers
@@ -416,3 +416,9 @@ class crudreservation(serializers.ModelSerializer):
     class Meta:
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+
+class crudcertifcate(serializers.ModelSerializer):
+
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
