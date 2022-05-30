@@ -48,12 +48,12 @@ class CertificatData(serializers.ModelSerializer):
 
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
-    allouer = CertificatData(read_only=True,many=True)
+    certification = CertificatData(read_only=True,many=True)
     # test_oral = serializers.BooleanField()
     
     class Meta:
         model = formation
-        fields = ['intitule','id','allouer']
+        fields = ['intitule','id','certification']
 
 
                 
