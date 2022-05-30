@@ -422,3 +422,9 @@ class crudcertifcate(serializers.ModelSerializer):
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
+class crudcertifcate(serializers.ModelSerializer):
+
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','description','attribue']
