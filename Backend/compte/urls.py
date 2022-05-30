@@ -61,8 +61,8 @@ urlpatterns = [
     path('UpdateDocument/<str:pk>/', views.updatedocument),
     path('DeleteDocument/<str:pk>/', views.deletedocument),
    #CRUDORGANISME
-   path('GetAllOrganisme/',views.getallorganisme),
-   path('create/organisme/', CreateOrganisme.as_view()),
+    path('GetAllOrganisme/',views.getallorganisme),
+    path('create/organisme/', CreateOrganisme.as_view()),
    #LOGOUT URL
    # path('Logout/',LogoutUser.as_view()),
 
