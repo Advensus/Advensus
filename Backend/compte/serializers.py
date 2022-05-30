@@ -426,5 +426,5 @@ class crudcertificate(serializers.ModelSerializer):
 class crudprogramme(serializers.ModelSerializer):
 
     class Meta:
-        model = certificate
+        model = programme
         fields = ['id','intitule','description','attribue']
