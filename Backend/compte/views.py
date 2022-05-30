@@ -621,7 +621,7 @@ def getreservationbyrp(request,pk):
 
 
 # CRUD PRGRAMME AND CERTIFICATE
-class CreatePrograme(CreateAPIView):
+class CreateProgramme(CreateAPIView):
     serializer_class = crudprogramme
     queryset = programme.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
@@ -643,7 +643,7 @@ def viewallprogramme(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response({'programme':serializer.data})
-class CreateCertifcate(CreateAPIView):
+class CreateCertificate(CreateAPIView):
     serializer_class = crudcertificate
     queryset = certificate.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
