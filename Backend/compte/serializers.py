@@ -19,6 +19,7 @@ from django.contrib.auth.hashers import make_password
 
 
 # DATA ENTITY
+
 class SocieteData(serializers.ModelSerializer):
     class Meta:
         model=SocieteFormation
@@ -30,15 +31,29 @@ class OrganismeData(serializers.ModelSerializer):
 
 
         fields=['societe_formation']
-        
 
-#END DATA ENTITY
-class crudformation(serializers.ModelSerializer):
+class FormationData(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
     
     class Meta:
         model = formation
         fields = ['intitule','id']
+
+class CertificatData(serializers.ModelSerializer):
+    allouer = FormationData(read_only=True,many=True)
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+        
+
+#END DATA ENTITY
+class crudformation(serializers.ModelSerializer):
+    allouer = CertificatData(read_only=True,many=True)
+    # test_oral = serializers.BooleanField()
+    
+    class Meta:
+        model = formation
+        fields = ['intitule','id','allouer']
 
 
                 
@@ -418,13 +433,13 @@ class crudreservation(serializers.ModelSerializer):
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
 
 class crudcertificate(serializers.ModelSerializer):
-
+    allouer = FormationData(read_only=True,many=True)
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
 class crudprogramme(serializers.ModelSerializer):
-
+    attribue= CertificatData(read_only=True)
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
