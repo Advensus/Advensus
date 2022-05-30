@@ -417,13 +417,13 @@ class crudreservation(serializers.ModelSerializer):
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
 
-class crudcertifcate(serializers.ModelSerializer):
+class crudcertificate(serializers.ModelSerializer):
 
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
-class crudcertifcate(serializers.ModelSerializer):
+class crudprogramme(serializers.ModelSerializer):
 
     class Meta:
         model = certificate
