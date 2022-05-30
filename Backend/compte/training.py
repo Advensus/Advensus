@@ -13,3 +13,12 @@ class formation(models.Model):
 
     def __str__(self):
         return self.intitule
+
+class certificate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,unique=True)
+    intitule = models.CharField(max_length=100)
+    objectif = models.TextField(max_length=255)
+    code = models.CharField(max_length=50)
+    competence_atteste = models.CharField(max_length=100)
+    modalite_evaluation = models.CharField(max_length=100)
+    allouer = models.ManyToManyField(formation)
