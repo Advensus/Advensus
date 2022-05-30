@@ -20,6 +20,8 @@ export * from "./forms/trainee_form/traineeForm.component";
 export * from "./forms/rp_form/rpForm.component";
 export * from "./forms/training_form/trainingForm.component";
 export * from "./forms/training_org_form/training_org_form.component";
+export * from "./forms/certificate_form/certificateForm.component";
+export * from "./forms/training_program_form/trainingProgramForm.component";
 
 export * from "./trainings_components/training-card/training_card.component";
 export * from "./trainings_components/training-details/training_details.component";
@@ -36,3 +38,4 @@ export * from "./custom_dropdown_component/custom_dropdown.component";
 
 export * from "./company_components/company_details/company_details.component";
 export * from "./company_components/small_company_card/small_company_card.component";
+export * from "./certificate_card/certificate_card.component";

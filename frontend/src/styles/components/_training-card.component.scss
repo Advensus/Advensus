@@ -1,10 +1,11 @@
 .training_card_container {
     background: #fff;
-    display: flex;
-    flex-direction: column;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
     height: 70px;
     justify-content: space-around;
-    padding: 10px;
+
     margin-bottom: 10px;
     border-radius: 5px;
     &:hover {
@@ -15,5 +16,17 @@
 
 .training_card_subtitle {
     display: flex;
+    // align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    // background-color: red;
+}
+
+.training_card_details {
+    // background-color: yellowgreen;
+    padding: 3px 10px 3px 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }

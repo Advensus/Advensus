@@ -1,0 +1,29 @@
+.certificate_form_container {
+    // height: 400px;
+    overflow: auto;
+}
+.certif_form_txt_divide_mov {
+    display: block;
+    margin-top: 15px;
+}
+.certif_form_hr_solid {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 2px;
+}
+.certif_form_fields_sect {
+    padding: 20px;
+}
+.certif_form_form_btns {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.certif_form_input {
+    margin-bottom: 10px;
+}
+
+.certif_form_program_fields {
+    padding: 15px;
+}

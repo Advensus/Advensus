@@ -1,3 +1,5 @@
+import { ICompany } from "./Company";
+
 export interface IUser {
     id: string;
     username: string;
@@ -17,8 +19,8 @@ export interface IUser {
     trainee_level?: string;
     organisme?: string;
     societe?: string;
-    appartenir_societe?: string[];
-    organisme_formation?: string[];
+    appartenir_societe?: ICompany[];
+    organisme_formation?: ICompany[];
     is_superuser?: string;
     tokens: string;
 }

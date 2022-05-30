@@ -38,12 +38,14 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
                         fontWeight: "bolder",
                     }}
                 >
-                    {detailsInfos.username.toLocaleUpperCase()}
+                    {detailsInfos &&
+                        detailsInfos.first_name.toLocaleUpperCase()}
                 </Text>
             </div>
             <div className="users_display_text">
                 <Text variant="small" style={{ fontWeight: "bold" }}>
-                    {detailsInfos.first_name} {detailsInfos.username}
+                    {detailsInfos && detailsInfos.first_name}{" "}
+                    {detailsInfos && detailsInfos.username}
                 </Text>
                 <Text variant="tiny" className="users_status">
                     ONLINE

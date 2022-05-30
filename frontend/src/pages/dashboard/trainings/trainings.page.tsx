@@ -274,6 +274,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
             <div id="display_tab_ii">
                 <FullInformationsTabComponent
                     contentId={contentId}
+                    trainings={trainings}
                     currentPath={pathLabel}
                 />
             </div>

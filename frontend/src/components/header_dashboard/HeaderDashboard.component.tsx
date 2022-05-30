@@ -55,9 +55,7 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
     }, [isMobile]);
 
     useEffect(() => {
-        console.log({ user });
-        getOrganization();
-        getSociete();
+        console.log("le current user:", user);
     }, [user]);
 
     const openNav = () => {
@@ -94,59 +92,6 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
         }
     };
 
-    const getOrganization = async () => {
-        await CompanyService.get_all_organization()
-            .then(async (response) => {
-                if (response.status !== 200) {
-                    //@TODO #4
-                    // alert('error getting users');
-                    console.log("the error resp", response);
-                    return [];
-                }
-                return response.json();
-            })
-            .then((respOrganisations: ICompany[]) => {
-                console.log("the Organisations datas:", respOrganisations);
-                const currentOrg = respOrganisations.find((_) =>
-                    user.organisme_formation
-                        ? _.id === user.organisme_formation[0]
-                        : null
-                );
-                console.log({ currentOrg });
-
-                setOrganization(currentOrg);
-            })
-            .catch((err) => {
-                console.log("error while getting tainings organisations");
-            });
-    };
-
-    const getSociete = async () => {
-        await CompanyService.get_all_societe()
-            .then(async (response) => {
-                if (response.status !== 200) {
-                    //@TODO #4
-                    // alert('error getting users');
-                    console.log("the error resp", response);
-                    return [];
-                }
-                return response.json();
-            })
-            .then((respCompanies: ICompany[]) => {
-                console.log("the companies datas:", respCompanies);
-                const currentCompany = respCompanies.find((_) =>
-                    user.appartenir_societe
-                        ? _.id === user.appartenir_societe[0]
-                        : null
-                );
-                setTrainingComp(currentCompany);
-                console.log({ currentCompany });
-            })
-            .catch((err) => {
-                console.log("error while getting tainings companies");
-            });
-    };
-
     return (
         <div className="header_dashboard_container">
             <div className="header_left">
@@ -174,7 +119,9 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                         variant="xLargePlus"
                         style={{ fontWeight: "bold", color: "#fff" }}
                     >
-                        {organization?.company_name}
+                        {user.organisme_formation &&
+                            user.organisme_formation[0] != undefined &&
+                            user.organisme_formation[0].company_name}
                     </Text>
                 )}
             </div>
@@ -184,12 +131,13 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                     src={
                         user &&
                         user.organisme_formation &&
-                        user.organisme_formation.length > 0
-                            ? prefixer + organization?.company_logo
+                        user.organisme_formation[0] != undefined
+                            ? prefixer +
+                              user.organisme_formation[0].company_logo
                             : user &&
                               user.appartenir_societe &&
-                              user.appartenir_societe.length > 0
-                            ? prefixer + trainingComp?.company_logo
+                              user.appartenir_societe[0] != undefined
+                            ? prefixer + user.appartenir_societe[0].company_logo
                             : "https://images.unsplash.com/photo-1638913659197-46040471de1d?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470"
                     }
                     alt='"none" on an image larger than the frame.'

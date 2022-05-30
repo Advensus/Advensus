@@ -48,6 +48,12 @@
     margin-top: 2px;
 }
 
+// FOR FORM
+.full_infos_tab_display_form {
+    background: #f4f3f3;
+    overflow: auto;
+}
+
 // SMALL CARD RESOURCES
 
 .resources_own_small_card_container {
@@ -127,6 +133,26 @@
         background: #f4f3f3;
         border: 1px solid #000;
     }
+}
+
+.label_certif_tab_container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.label_certif_tab_display_card {
+    overflow: auto;
+}
+.label_service_tab_certif_search {
+    margin: 10px 25px;
+}
+.certif_hr_solid {
+    border-bottom: 0;
+    margin-top: 3px;
+    margin-bottom: 5px;
+    // border: 1px solid #000;
+    width: 98%;
 }
 
 // FOR BOOKING

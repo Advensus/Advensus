@@ -20,18 +20,21 @@ export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
             onClick={() => toggleTab(trainingDetails.id)}
             className="training_card_container"
         >
-            <Text variant="large" style={{ fontWeight: "initial" }}>
-                {trainingDetails.intitule}
-            </Text>
             <div className="training_card_subtitle">
-                <Icon iconName="Group" styles={trainingCardIconStyles} />
-                <Text variant="tiny" style={{ margin: "0 6px" }}>
-                    49 Resources
+                <Text variant="large" style={{ fontWeight: "initial" }}>
+                    {trainingDetails.intitule}
                 </Text>
-                <Icon iconName="HourGlass" styles={trainingCardIconStyles} />
-                <Text variant="tiny" style={{ margin: "0 6px" }}>
-                    4
-                </Text>
+                <div>
+                    <Icon iconName="Group" styles={trainingCardIconStyles} />
+                    <Text variant="tiny">49 Resources</Text>
+                </div>
+                {/* <Icon iconName="HourGlass" styles={trainingCardIconStyles} /> */}
+            </div>
+            <div className="training_card_details">
+                <Text variant="tiny">- Certif 1</Text>
+                <Text variant="tiny">- Certif 2</Text>
+                <Text variant="tiny">- Certif 3</Text>
+                <Text variant="tiny">...</Text>
             </div>
         </Link>
     );

@@ -71,6 +71,7 @@ export const TrainingOrganizationFormComponent: React.FC<
 
     const onSubmit = (val: NewOrganizationDtoOut) => {
         val.societe_formation = selectedSociety ? selectedSociety.key : "";
+        console.log({ val });
         const formData = new FormData();
         formData.append("company_name", val.company_name);
         formData.append("company_adress", val.company_adress);
