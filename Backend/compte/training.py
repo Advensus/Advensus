@@ -23,8 +23,14 @@ class certificate(models.Model):
     modalite_evaluation = models.CharField(max_length=100)
     allouer = models.ManyToManyField(formation)
 
+    def __str__(self):
+        return self.intitule
+
 class programme(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,unique=True)
     intitule = models.CharField(max_length=100)
     description = models.TextField(max_length=255)
     attribue = models.ForeignKey(certificate,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.intitule

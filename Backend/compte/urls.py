@@ -24,7 +24,7 @@ urlpatterns = [
     path("GetAllProgramme/", views.viewallprogramme),
     path("GetAllCertificate/", views.viewallcertificate),
     path('create/programme/', CreateProgramme.as_view()),
-    path('create/certificate/', CreateProgramme.as_view()),
+    path('create/certificate/', CreateCertificate.as_view()),
 
     # CRUD COURSES 
     path('create/courses/', CreateCourses.as_view()),
