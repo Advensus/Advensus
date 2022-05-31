@@ -26,11 +26,10 @@ class SocieteData(serializers.ModelSerializer):
         fields = ['id','company_name','company_adress','company_phone_number','fix_number']     
 class OrganismeData(serializers.ModelSerializer):
     societe_formation = SocieteData(read_only=True)
+     
     class Meta:
         model = OrganismeFormation 
-
-
-        fields=['societe_formation']
+        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','societe_formation']
 
 class FormationData(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
@@ -239,6 +238,8 @@ class AddFormateur(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=70)
     cv= serializers.FileField()
     id = serializers.UUIDField(read_only=True)
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    competence = FormationData(many=True,read_only=True)
    
   
     
@@ -344,7 +345,8 @@ class loginorg(serializers.ModelSerializer):
             return organisme
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
-   
+    organisme_formation = OrganismeData(many=True,read_only=True)
+    societe = SocieteData(read_only=True)
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
