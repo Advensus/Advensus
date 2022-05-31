@@ -161,25 +161,14 @@ export const FullInformationsTabComponent: React.FC<
                     )}
                     {currentPath === PATH_LABEL_CUSTOMER && (
                         <TooltipHost content="Planifier" id={tooltipId}>
-                            <IconButton
-                                iconProps={planIcon}
-                                // menuIconProps={{ iconName: "ClipboardListAdd" }}
-                                ariaLabel="add"
-                                // onClick={() =>
-                                //     showAddForm(
-                                //         pathLabel === PATH_LABEL_RESOURCES
-                                //             ? TEACHEAR_FORM
-                                //             : pathLabel === PATH_LABEL_CUSTOMER
-                                //             ? TRAINEE_FORM
-                                //             : SERVICES_FORM
-                                //     )
-                                // }
-                            />
+                            <IconButton iconProps={planIcon} ariaLabel="add" />
                         </TooltipHost>
                     )}
-                    {currentPath === PATH_LABEL_SERVICES && (
-                        <Text>{training?.intitule}</Text>
-                    )}
+                    {currentPath === PATH_LABEL_SERVICES &&
+                        !showCertificateForm &&
+                        !showTrainingProgramForm && (
+                            <Text>{training?.intitule}</Text>
+                        )}
                     {currentPath === PATH_LABEL_SERVICES && (
                         <>
                             <TooltipHost
@@ -331,11 +320,40 @@ export const FullInformationsTabComponent: React.FC<
                                 />
                                 <hr className="certif_hr_solid" />
                                 <div className="label_certif_tab_display_card">
-                                    <CertificateCardComponent />
-                                    <CertificateCardComponent />
-                                    <CertificateCardComponent />
-                                    <CertificateCardComponent />
-                                    <CertificateCardComponent />
+                                    <CertificateCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <CertificateCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <CertificateCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <CertificateCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                    <CertificateCardComponent
+                                        openPanel={openPanel}
+                                    />
+                                </div>
+                                <div>
+                                    <br />
+                                    <br />
+                                    <Panel
+                                        isLightDismiss
+                                        isOpen={isOpen}
+                                        onDismiss={dismissPanel}
+                                        closeButtonAriaLabel="Close"
+                                        headerText="Détails de la certification"
+                                    >
+                                        <p>
+                                            'This panel uses "light dismiss"
+                                            behavior: it can be closed by
+                                            clicking or tapping ' + 'the area
+                                            outside the panel (or using the
+                                            close button as usual).';
+                                        </p>
+                                    </Panel>
                                 </div>
                             </PivotItem>
                         )}

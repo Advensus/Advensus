@@ -8,6 +8,7 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { ITraining } from "../../../lib";
+import { NewTrainingProgramDtoIn } from "../../../lib/dto/certificate.dto";
 
 export interface ITrainingProgramFormProps {
     default_props?: boolean;
@@ -45,18 +46,11 @@ export const TrainingProgramFormComponent: React.FC<
         handleSubmit,
         setFieldValue,
         setFieldTouched,
-    } = useFormik<any>({
+    } = useFormik<NewTrainingProgramDtoIn>({
         initialValues: {
-            username: "",
-            first_name: "",
-            email: "",
-            phone_number: "",
-            adress: "",
-            password: "",
-            horaire: "",
-            competence: [],
-            appartenir_societe: "",
-            cv: "",
+            intitule: "",
+            description: "",
+            certificate: "",
         },
         onSubmit,
     });
@@ -69,12 +63,12 @@ export const TrainingProgramFormComponent: React.FC<
             <hr className="certif_form_hr_solid" />
             <div className="certif_form_fields_sect">
                 <Dropdown
-                    selectedKey={values.competence}
+                    selectedKey={values.certificate}
                     onChange={(
                         event: React.FormEvent<HTMLDivElement>,
                         item?: IDropdownOption
                     ): void => {
-                        setFieldValue("competence", item?.key);
+                        setFieldValue("certificate", item?.key);
                         setFieldTouched("selected", true);
                     }}
                     placeholder="Certification Concerné"

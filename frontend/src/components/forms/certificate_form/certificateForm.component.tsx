@@ -146,9 +146,9 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
                             type="text"
                             // value={values.duration}
                             // onChange={handleChange}
-                            placeholder="Libellé du programm"
+                            placeholder="Intitulé du programm"
                             name="duration"
-                            label="Libellé"
+                            label="Intitulé"
                             className="certif_form_input"
                         />
                         <TextField
