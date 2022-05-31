@@ -25,6 +25,7 @@ import { useId } from "@fluentui/react-hooks";
 import CompanyService from "../../../../services/company.service";
 import { ICompany } from "../../../../lib/interfaces/Company";
 import { NewCompanyDtoIn } from "../../../../lib/dto/company.dto";
+import { LoadingComponent } from "../../../../components/loading_component/Loading.component";
 
 export interface ITrainingCompanyPageProps {
     default_props?: boolean;
@@ -48,6 +49,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [pathLabel, setPathLabel] = useState<string>("");
     const [theCompany, setTheCompany] = useState<ICompany>();
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -82,12 +84,14 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     }, []);
 
     const getSociete = async () => {
+        // setLoading(true);
         await CompanyService.get_all_societe()
             .then(async (response) => {
                 if (response.status !== 200) {
                     //@TODO #4
                     // alert('error getting users');
                     console.log("the error resp", response);
+                    setLoading(false);
                     return [];
                 }
                 return response.json();
@@ -95,9 +99,11 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
             .then((respCompanies: ICompany[]) => {
                 console.log("the companies datas:", respCompanies);
                 setTrainingsCompanies(respCompanies);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log("error while getting tainings companies");
+                setLoading(false);
             });
     };
 
@@ -236,17 +242,19 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
-                                {trainingsCompanies.length
-                                    ? trainingsCompanies.map((_) => (
-                                          <TrainingOrganizationCardComponent
-                                              toggleTab={(i) =>
-                                                  toggleFullInfosTab(i)
-                                              }
-                                              company={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : trainingsCompanies.length ? (
+                                    trainingsCompanies.map((_) => (
+                                        <TrainingOrganizationCardComponent
+                                            toggleTab={(i) =>
+                                                toggleFullInfosTab(i)
+                                            }
+                                            company={_}
+                                            key={_.id}
+                                        />
+                                    ))
+                                ) : null}
                             </div>
                         </div>
                     ) : (
