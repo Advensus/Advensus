@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument, viewallreservations
+from .views import CreateCertificate,CreateProgramme,CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument, viewallreservations
 
 from . import views
 
@@ -19,6 +19,14 @@ urlpatterns = [
     path("GetAllSociete/", views.viewallsociete),
     path('create/societe/', CreateSociete.as_view()),
     path('create/souscrir/', AddSouscrir.as_view()),
+
+    #CRUD PROGRAMME AND CERTIFICATE
+    path("GetAllProgramme/", views.viewallprogramme),
+    path("GetAllCertificate/", views.viewallcertificate),
+    path('create/programme/', CreateProgramme.as_view()),
+    path('create/certificate/', CreateCertificate.as_view()),
+    path('GetCertificationByFor/<str:pk>/',views.getcertificationbyform),
+    path('GetProgrammeByCert/<str:pk>/',views.getprogrammebycert),
 
     # CRUD COURSES 
     path('create/courses/', CreateCourses.as_view()),
@@ -53,8 +61,8 @@ urlpatterns = [
     path('UpdateDocument/<str:pk>/', views.updatedocument),
     path('DeleteDocument/<str:pk>/', views.deletedocument),
    #CRUDORGANISME
-   path('GetAllOrganisme/',views.getallorganisme),
-   path('create/organisme/', CreateOrganisme.as_view()),
+    path('GetAllOrganisme/',views.getallorganisme),
+    path('create/organisme/', CreateOrganisme.as_view()),
    #LOGOUT URL
    # path('Logout/',LogoutUser.as_view()),
 
@@ -62,6 +70,9 @@ urlpatterns = [
     path('GetOrganismeBySoc/<str:pk>/',views.getorganismebysoc),
     path('GetReservationBySta/<str:pk>/',views.getreservationbysta),
     path('GetReservationByRp/<str:pk>/',views.getreservationbyrp),
+
+    path('GetFormateurByFormation/<str:pk>/',views.getformateurbyformation),
+    path('GetAdminBySociete/<str:pk>/',views.getadminbysociete),
 
 
 ]

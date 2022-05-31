@@ -2,7 +2,7 @@ from ctypes import addressof, c_void_p
 from dataclasses import field
 from email.policy import default
 
-from .training import formation
+from .training import formation,certificate,programme
 
 from .company import OrganismeFormation, SocieteFormation
 from rest_framework import serializers
@@ -19,26 +19,44 @@ from django.contrib.auth.hashers import make_password
 
 
 # DATA ENTITY
+
 class SocieteData(serializers.ModelSerializer):
     class Meta:
         model=SocieteFormation
         fields = ['id','company_name','company_adress','company_phone_number','fix_number','company_logo', 'company_stamp']     
 class OrganismeData(serializers.ModelSerializer):
     societe_formation = SocieteData(read_only=True)
+     
     class Meta:
         model = OrganismeFormation 
+        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','societe_formation']
 
-
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number','company_logo', 'company_stamp']
-        
-
-#END DATA ENTITY
-class crudformation(serializers.ModelSerializer):
+class FormationData(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
     
     class Meta:
         model = formation
         fields = ['intitule','id']
+
+<<<<<<< HEAD
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number','company_logo', 'company_stamp']
+=======
+class CertificatData(serializers.ModelSerializer):
+    allouer = FormationData(read_only=True,many=True)
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+>>>>>>> 6ab57ec60254530994ae1e4497119e6261a889d4
+        
+
+#END DATA ENTITY
+class crudformation(serializers.ModelSerializer):
+    certification = CertificatData(read_only=True,many=True)
+    # test_oral = serializers.BooleanField()
+    
+    class Meta:
+        model = formation
+        fields = ['intitule','id','certification']
 
 
                 
@@ -203,7 +221,7 @@ class AddAdmin(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-   
+    # societe = SocieteData(read_only=True)
     class Meta:
         model = User
         fields =  ['username','first_name','email','phone_number','adress','password','id','societe']
@@ -227,6 +245,8 @@ class AddFormateur(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=70)
     cv= serializers.FileField()
     id = serializers.UUIDField(read_only=True)
+    # appartenir_societe = SocieteData(many=True,read_only=True)
+    # competence = FormationData(many=True,read_only=True)
    
   
     
@@ -332,35 +352,53 @@ class loginorg(serializers.ModelSerializer):
             return organisme
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
-   
+    organisme_formation = OrganismeData(many=True,read_only=True)
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    societe = SocieteData(read_only=True)
+    competence = FormationData(many=True,read_only=True)
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe'
+                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe','appartenir_societe'
                  ]
 
         
             
 
-class CrudOrganisme(serializers.ModelSerializer):
+class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
+<<<<<<< HEAD
     # societe_formation = SocieteData()
+=======
+    # donnee_formation = SocieteData(read_only=True)
+    
+>>>>>>> 6ab57ec60254530994ae1e4497119e6261a889d4
     
     class Meta:
         model = OrganismeFormation 
 
 
         fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
-        
+   
     def create(self,validate_data):
-        organisme = super(CrudOrganisme,self).create(validate_data) 
+        organisme = super(CreateOrganisme,self).create(validate_data) 
         organisme.password_connexion = make_password('password_connexion')
         # organisme.password_messagerie = make_password('password_messagerie')
         organisme.save()
         return organisme
 
+class CrudOrganisme(serializers.ModelSerializer):
+   
+    societe_formation = SocieteData(read_only=True)
+    
+    
+    class Meta:
+        model = OrganismeFormation 
+
+
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
@@ -407,4 +445,16 @@ class crudreservation(serializers.ModelSerializer):
 
     class Meta:
         model = reservation
-        fields = ['id','title','description','status','start_date','end_date','reserver','concerner']
+        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+
+class crudcertificate(serializers.ModelSerializer):
+    allouer = FormationData(read_only=True,many=True)
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
+class crudprogramme(serializers.ModelSerializer):
+    attribue= CertificatData(read_only=True)
+    class Meta:
+        model = programme
+        fields = ['id','intitule','description','attribue']

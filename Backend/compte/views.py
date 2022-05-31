@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -19,7 +19,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from .training import formation
+from .training import formation,certificate,programme
 from .models import Document,Courses, reservation
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
@@ -249,8 +249,8 @@ class CreateSociete(generics.GenericAPIView):
 		serializer = self.serializer_class(data=organisme)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
-		organisme_data = serializer.data
-		return Response(organisme_data,status=status.HTTP_201_CREATED)
+		societe_data = serializer.data
+		return Response(societe_data,status=status.HTTP_201_CREATED)
 
 
 
@@ -349,7 +349,9 @@ class CreateFormation(CreateAPIView):
 def viewallformation(request):
 	serializer_class = crudformation
 	donnee = formation.objects.all()
-	serializer = serializer_class(donnee, many=True)
+	
+	
+	serializer = serializer_class(donnee,many=True)
 	return Response(serializer.data)
 
 @api_view(['GET'])
@@ -463,7 +465,7 @@ def deletedocument(request, pk):
 
 #CRUD ORGANISME
 class CreateOrganisme(CreateAPIView):
-    serializer_class =  CrudOrganisme
+    serializer_class =  CreateOrganisme
     queryset =  OrganismeFormation.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -616,3 +618,88 @@ def getreservationbyrp(request,pk):
 	serializer = serializer_class(donnee, many=True)
 
 	return Response(serializer.data) 
+
+@api_view(['GET'])
+def getformateurbyformation(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(competence=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
+@api_view(['GET'])
+def getadminbysociete(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(societe=pk)
+
+	serializer = serializer_class(donnee,many=True)
+	return Response(serializer.data)
+
+#END GET BY
+
+
+# CRUD PRGRAMME AND CERTIFICATE
+class CreateProgramme(CreateAPIView):
+    serializer_class = crudprogramme
+    queryset = programme.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+@api_view(['GET'])
+def viewallprogramme(request):
+	serializer_class = crudprogramme
+	donnee = programme.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response({'programme':serializer.data})
+
+@api_view(['GET'])
+def getprogrammebycert(request,pk):
+	serializer_class = crudprogramme
+	donnee = programme.objects.filter(attribue=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+class CreateCertificate(CreateAPIView):
+    serializer_class = crudcertificate
+    queryset = certificate.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,autorisation)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+    def get_queryset(self):
+        return self.queryset.filter()
+
+@api_view(['GET'])
+def viewallcertificate(request):
+	serializer_class = crudcertificate
+	donnee = certificate.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response({'certificate':serializer.data})
+
+@api_view(['GET'])
+def getcertificationbyform(request,pk):
+	serializer_class = crudcertificate
+	donnee = certificate.objects.filter(allouer=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
