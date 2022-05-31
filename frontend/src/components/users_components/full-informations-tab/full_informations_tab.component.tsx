@@ -15,7 +15,11 @@ import {
     IDropdownStyles,
 } from "@fluentui/react/lib/Dropdown";
 import React, { FormEvent, useEffect, useState } from "react";
-import { SmallCompanyCardComponent, TrainingDetailsComponent } from "../..";
+import {
+    AttributeDisplayComponent,
+    SmallCompanyCardComponent,
+    TrainingDetailsComponent,
+} from "../..";
 import {
     ITraining,
     IUser,
@@ -56,6 +60,7 @@ export const FullInformationsTabComponent: React.FC<
 > = ({ contentId, currentPath, company, trainings }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
+    const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
     const [currentTab, setCurrentTab] = useState<PivotItem>();
     const tooltipId = useId("toolt!p");
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
@@ -82,6 +87,7 @@ export const FullInformationsTabComponent: React.FC<
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
                 setContent(emptyContent);
+                getFormerByTrainingId(contentId);
             } else {
                 const emptyTraining = {} as ITraining;
                 setTraining(emptyTraining);
@@ -131,6 +137,23 @@ export const FullInformationsTabComponent: React.FC<
             )
             .catch((err) => {
                 console.log("error while getting content by his id:", err);
+            });
+    };
+
+    const getFormerByTrainingId = (idTraining: string) => {
+        UserService.get_former_by_training_id(idTraining)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respFormer: IUser[]) => {
+                console.log({ respFormer });
+                setFormersTrainings(respFormer);
+            })
+            .catch((err) => {
+                console.log("error while getting former by training id:", err);
             });
     };
 
@@ -261,49 +284,88 @@ export const FullInformationsTabComponent: React.FC<
                                     {/* JUST FOR SERVICES */}
                                     <div className="full_infos_resources_own">
                                         <Text variant="large">
-                                            {" "}
                                             Mes Ressources
                                         </Text>
                                         <hr className="full_infos_hr_solid" />
-                                        <div className="resources_own_small_card_container">
-                                            <div className="resources_own_start">
-                                                <div className="res_cycle">
-                                                    <Text
-                                                        variant="small"
-                                                        style={{
-                                                            color: "#fff",
-                                                            fontWeight: "bold",
+                                        {loading ? (
+                                            <LoadingComponent />
+                                        ) : formersTrainings.length ? (
+                                            formersTrainings.map((_) => (
+                                                <div
+                                                    className="resources_own_small_card_container"
+                                                    key={_.id}
+                                                >
+                                                    <div className="resources_own_start">
+                                                        <div className="res_cycle">
+                                                            <Text
+                                                                variant="small"
+                                                                style={{
+                                                                    color: "#fff",
+                                                                    fontWeight:
+                                                                        "bold",
+                                                                }}
+                                                            >
+                                                                RES
+                                                            </Text>
+                                                        </div>
+                                                        <div className="res_info">
+                                                            <Text
+                                                                variant="large"
+                                                                style={{
+                                                                    fontWeight:
+                                                                        "lighter",
+                                                                }}
+                                                            >
+                                                                {_.first_name +
+                                                                    " " +
+                                                                    _.username}
+                                                            </Text>
+                                                            <Text
+                                                                className="tag_online"
+                                                                variant="tiny"
+                                                            >
+                                                                Online
+                                                            </Text>
+                                                        </div>
+                                                    </div>
+                                                    <Panel
+                                                        isLightDismiss
+                                                        isOpen={isOpen}
+                                                        onDismiss={dismissPanel}
+                                                        closeButtonAriaLabel="Close"
+                                                        headerText="Détails du formateur"
+                                                    >
+                                                        <br />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Formateur Id"
+                                                            valueWord={_.id}
+                                                        />
+                                                        {/* <AttributeDisplayComponent
+                                                                keyWord="Sté Formateur"
+                                                                valueWord={
+                                                                    _
+                                                                        ?.appartenir_societe
+                                                                        ?.company_name
+                                                                }
+                                                            /> */}
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Prénom Formateur"
+                                                            valueWord={
+                                                                _.first_name
+                                                            }
+                                                        />
+                                                    </Panel>
+                                                    <IconButton
+                                                        menuIconProps={{
+                                                            iconName:
+                                                                "ChevronRightSmall",
                                                         }}
-                                                    >
-                                                        RES
-                                                    </Text>
+                                                        className="res_action"
+                                                        onClick={openPanel}
+                                                    />
                                                 </div>
-                                                <div className="res_info">
-                                                    <Text
-                                                        variant="large"
-                                                        style={{
-                                                            fontWeight:
-                                                                "lighter",
-                                                        }}
-                                                    >
-                                                        Name blabla bla
-                                                    </Text>
-                                                    <Text
-                                                        className="tag_online"
-                                                        variant="tiny"
-                                                    >
-                                                        Online
-                                                    </Text>
-                                                </div>
-                                            </div>
-                                            <IconButton
-                                                menuIconProps={{
-                                                    iconName:
-                                                        "ChevronRightSmall",
-                                                }}
-                                                className="res_action"
-                                            />
-                                        </div>
+                                            ))
+                                        ) : null}
                                     </div>
                                 </>
                             ) : currentPath === PATH_LABEL_COMPANY ||
@@ -353,32 +415,51 @@ export const FullInformationsTabComponent: React.FC<
                                         <LoadingComponent />
                                     ) : certificates.length ? (
                                         certificates.map((_) => (
-                                            <CertificateCardComponent
-                                                openPanel={openPanel}
-                                                key={_.id}
-                                                certificate={_}
-                                            />
+                                            <div>
+                                                <CertificateCardComponent
+                                                    openPanel={openPanel}
+                                                    key={_.id}
+                                                    certificate={_}
+                                                />
+                                                <Panel
+                                                    isLightDismiss
+                                                    isOpen={isOpen}
+                                                    onDismiss={dismissPanel}
+                                                    closeButtonAriaLabel="Close"
+                                                    headerText={
+                                                        "Certification" +
+                                                        " " +
+                                                        _.intitule
+                                                    }
+                                                >
+                                                    <p>
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Code"
+                                                            valueWord={_.code}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Objectifs"
+                                                            valueWord={
+                                                                _.objectif
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Compétences à tester"
+                                                            valueWord={
+                                                                _.competence_atteste
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Modalités d'évaluation"
+                                                            valueWord={
+                                                                _.modalite_evaluation
+                                                            }
+                                                        />
+                                                    </p>
+                                                </Panel>
+                                            </div>
                                         ))
                                     ) : null}
-                                </div>
-                                <div>
-                                    <br />
-                                    <br />
-                                    <Panel
-                                        isLightDismiss
-                                        isOpen={isOpen}
-                                        onDismiss={dismissPanel}
-                                        closeButtonAriaLabel="Close"
-                                        headerText="Détails de la certification"
-                                    >
-                                        <p>
-                                            'This panel uses "light dismiss"
-                                            behavior: it can be closed by
-                                            clicking or tapping ' + 'the area
-                                            outside the panel (or using the
-                                            close button as usual).';
-                                        </p>
-                                    </Panel>
                                 </div>
                             </PivotItem>
                         )}

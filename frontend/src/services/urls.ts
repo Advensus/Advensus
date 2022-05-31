@@ -18,6 +18,8 @@ export const userUls = {
     NEW_BASIC_RP: `${prefixer}/auth/register/Rp/`,
     NEW_COMPANY_ADMIN: `${prefixer}/auth/register/admin_societe/`,
     GET_USER_BY_ID: (id: string) => `${prefixer}/auth/DetailUser/${id}`,
+    GET_FORMER_BY_TRAINING_ID: (id: string) =>
+        `${prefixer}/auth/GetFormateurByFormation/${id}`,
 };
 
 export const trainingUrls = {
