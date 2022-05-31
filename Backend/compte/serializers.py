@@ -446,8 +446,15 @@ class crudcertificate(serializers.ModelSerializer):
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
+class createcertificate(serializers.ModelSerializer):
+   
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
 class crudprogramme(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
+   
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
