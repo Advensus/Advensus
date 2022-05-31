@@ -22,14 +22,14 @@ from django.contrib.auth.hashers import make_password
 class SocieteData(serializers.ModelSerializer):
     class Meta:
         model=SocieteFormation
-        fields = ['id','company_name','company_adress','company_phone_number','fix_number']     
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number','company_logo', 'company_stamp']     
 class OrganismeData(serializers.ModelSerializer):
     societe_formation = SocieteData(read_only=True)
     class Meta:
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number','company_logo', 'company_stamp']
         
 
 #END DATA ENTITY
@@ -279,7 +279,7 @@ class loginuser(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)
     id = serializers.UUIDField(read_only=True)
-    appartenir_societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    appartenir_societe = SocieteData(many=True,read_only=True)
     organisme_formation = OrganismeData(many=True,read_only=True)
     competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
@@ -346,7 +346,7 @@ class cruduser(serializers.ModelSerializer):
 class CrudOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-    societe_formation = SocieteData(read_only=True)
+    # societe_formation = SocieteData()
     
     class Meta:
         model = OrganismeFormation 
