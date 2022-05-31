@@ -37,6 +37,8 @@ import { CompanyDetailsComponent } from "../../company_components/company_detail
 import { CertificateCardComponent } from "../../certificate_card/certificate_card.component";
 import { CertificateFormComponent } from "../../forms/certificate_form/certificateForm.component";
 import { TrainingProgramFormComponent } from "../../forms/training_program_form/trainingProgramForm.component";
+import { ICertificate } from "../../../lib/interfaces/Certificate";
+import { LoadingComponent } from "../../loading_component/Loading.component";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
@@ -62,9 +64,10 @@ export const FullInformationsTabComponent: React.FC<
         useState<Boolean>(false);
     const [showTrainingProgramForm, setShowTrainingProgramForm] =
         useState<Boolean>(false);
-
     const [selectedBooking, setSelectedBooking] =
         React.useState<IDropdownOption>();
+    const [certificates, setCertificates] = useState<ICertificate[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -144,6 +147,32 @@ export const FullInformationsTabComponent: React.FC<
         showTrainingProgramForm
             ? setShowTrainingProgramForm(!showTrainingProgramForm)
             : setShowTrainingProgramForm(!showTrainingProgramForm);
+    };
+
+    useEffect(() => {
+        // if (currentTab?.props.headerText === "Certifications") {
+        getAllCertificate();
+        // }
+    }, [currentTab]);
+
+    const getAllCertificate = async () => {
+        await TrainingService.get_all_certificate()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                setLoading(false);
+                return resp.json();
+            })
+            .then((certificateResp: ICertificate[]) => {
+                setCertificates(certificateResp);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log("error while gettting all certificate:", err);
+                setLoading(false);
+            });
     };
 
     return (
@@ -320,21 +349,17 @@ export const FullInformationsTabComponent: React.FC<
                                 />
                                 <hr className="certif_hr_solid" />
                                 <div className="label_certif_tab_display_card">
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : certificates.length ? (
+                                        certificates.map((_) => (
+                                            <CertificateCardComponent
+                                                openPanel={openPanel}
+                                                key={_.id}
+                                                certificate={_}
+                                            />
+                                        ))
+                                    ) : null}
                                 </div>
                                 <div>
                                     <br />
@@ -566,7 +591,7 @@ export const FullInformationsTabComponent: React.FC<
             ) : showTrainingProgramForm ? (
                 <div className="full_infos_tab_display_form">
                     <TrainingProgramFormComponent
-                        trainings={trainings}
+                        certificates={certificates}
                         cancel={() => setShowTrainingProgramForm(false)}
                     />
                 </div>

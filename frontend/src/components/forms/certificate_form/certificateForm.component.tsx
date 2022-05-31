@@ -8,7 +8,11 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { ITraining } from "../../../lib";
-import { NewCertificateDtoIn } from "../../../lib/dto/certificate.dto";
+import {
+    NewCertificateDtoIn,
+    NewCertificateDtoOut,
+} from "../../../lib/dto/certificate.dto";
+import TrainingService from "../../../services/training.service";
 
 export interface ICertificateFormProps {
     default_props?: boolean;
@@ -37,8 +41,19 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
         }
     }, []);
 
-    const onSubmit = (val: any) => {
+    const onSubmit = (val: NewCertificateDtoIn) => {
         console.log({ val });
+        TrainingService.new_certificate(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as NewCertificateDtoOut;
+                console.log("the new certificate", data);
+            })
+            .catch((err) => {
+                console.log("error while adding new certificate:", err);
+            });
     };
 
     const {
@@ -51,23 +66,23 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
         initialValues: {
             intitule: "",
             code: "",
-            objectifs: "",
-            competences_tester: "",
-            modaliter_evaluation: "",
-            formations: [],
+            objectif: "",
+            competence_atteste: "",
+            modalite_evaluation: "",
+            allouer: [],
         },
         onSubmit,
     });
 
     return (
-        <form className="certificate_form_container">
+        <form onSubmit={handleSubmit} className="certificate_form_container">
             <Text className="certif_form_txt_divide_mov">
                 Ajouter une nouvelle Certification
             </Text>
             <hr className="certif_form_hr_solid" />
             <div className="certif_form_fields_sect">
                 <Dropdown
-                    selectedKeys={values.formations}
+                    selectedKeys={values.allouer}
                     onChange={(
                         event: React.FormEvent<HTMLDivElement>,
                         item?: IDropdownOption
@@ -75,11 +90,11 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
                         console.log("item selected:", item?.key);
                         if (item) {
                             const selected = item.selected
-                                ? [...values.formations, item.key as string]
-                                : values.formations.filter(
+                                ? [...values.allouer, item.key as string]
+                                : values.allouer.filter(
                                       (key: any) => key !== item.key
                                   );
-                            setFieldValue("formations", selected);
+                            setFieldValue("allouer", selected);
                             setFieldTouched("selected", true);
                         }
                     }}
@@ -89,8 +104,8 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.intitule}
+                    onChange={handleChange}
                     placeholder="Intitulé"
                     name="intitule"
                     label="Intitulé"
@@ -98,44 +113,44 @@ export const CertificateFormComponent: React.FC<ICertificateFormProps> = ({
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.code}
+                    onChange={handleChange}
                     placeholder="Code"
-                    name="Code"
+                    name="code"
                     label="Code"
                     className="certif_form_input"
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.objectif}
+                    onChange={handleChange}
                     placeholder="Objectifs"
                     multiline
-                    name="Objectif"
+                    name="objectif"
                     label="Objectifs"
                     className="certif_form_input"
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.competence_atteste}
+                    onChange={handleChange}
                     placeholder="Compétences à tester"
-                    name="comptences"
+                    name="competence_atteste"
                     label="Compétences à tester"
                     className="certif_form_input"
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.modalite_evaluation}
+                    onChange={handleChange}
                     placeholder="Modadlité d'évaluation"
-                    name="Objectif"
+                    name="modalite_evaluation"
                     label="Modadlité d'évaluation"
                     className="certif_form_input"
                 />
             </div>
             {/* Program part */}
-            {values.formations.length <= 1 && (
+            {values.allouer.length <= 1 && (
                 <>
                     <Text className="certif_form_txt_divide_mov">
                         Programme de formation

@@ -7,25 +7,29 @@ import {
 } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { ITraining } from "../../../lib";
-import { NewTrainingProgramDtoIn } from "../../../lib/dto/certificate.dto";
+import { ICertificate } from "../../../lib";
+import {
+    NewTrainingProgramDtoIn,
+    NewTrainingProgramDtoOut,
+} from "../../../lib/dto/certificate.dto";
+import TrainingService from "../../../services/training.service";
 
 export interface ITrainingProgramFormProps {
     default_props?: boolean;
-    trainings?: ITraining[];
+    certificates?: ICertificate[];
     cancel?: () => void;
 }
 
 export const TrainingProgramFormComponent: React.FC<
     ITrainingProgramFormProps
-> = ({ trainings, cancel }) => {
+> = ({ certificates, cancel }) => {
     const [trainingAvailable, setTrainingAvailable] = useState<
         IDropdownOption[]
     >([]);
 
     useEffect(() => {
-        if (trainings) {
-            const dropTraining = trainings.map((_) => {
+        if (certificates) {
+            const dropTraining = certificates.map((_) => {
                 let Civility = {
                     key: _.id,
                     text: _.intitule,
@@ -36,8 +40,20 @@ export const TrainingProgramFormComponent: React.FC<
         }
     }, []);
 
-    const onSubmit = (val: any) => {
+    const onSubmit = (val: NewTrainingProgramDtoIn) => {
         console.log({ val });
+        TrainingService.new_training_program(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data =
+                    (await response.json()) as NewTrainingProgramDtoOut;
+                console.log("the new training program", data);
+            })
+            .catch((err) => {
+                console.log("error while adding new training program:", err);
+            });
     };
 
     const {
@@ -50,25 +66,25 @@ export const TrainingProgramFormComponent: React.FC<
         initialValues: {
             intitule: "",
             description: "",
-            certificate: "",
+            attribue: "",
         },
         onSubmit,
     });
 
     return (
-        <form className="certificate_form_container">
+        <form onSubmit={handleSubmit} className="certificate_form_container">
             <Text className="certif_form_txt_divide_mov">
                 Ajouter un nouveau programme de formation
             </Text>
             <hr className="certif_form_hr_solid" />
             <div className="certif_form_fields_sect">
                 <Dropdown
-                    selectedKey={values.certificate}
+                    selectedKey={values.attribue}
                     onChange={(
                         event: React.FormEvent<HTMLDivElement>,
                         item?: IDropdownOption
                     ): void => {
-                        setFieldValue("certificate", item?.key);
+                        setFieldValue("attribue", item?.key);
                         setFieldTouched("selected", true);
                     }}
                     placeholder="Certification Concerné"
@@ -76,8 +92,8 @@ export const TrainingProgramFormComponent: React.FC<
                 />
                 <TextField
                     type="text"
-                    // value={values.intitule}
-                    // onChange={handleChange}
+                    value={values.intitule}
+                    onChange={handleChange}
                     placeholder="Intitulé"
                     name="intitule"
                     label="Intitulé"
@@ -85,11 +101,11 @@ export const TrainingProgramFormComponent: React.FC<
                 />
                 <TextField
                     type="text"
-                    // value={values.duration}
-                    // onChange={handleChange}
+                    value={values.description}
+                    onChange={handleChange}
                     placeholder="Description du programm"
                     label="Description"
-                    name="duration"
+                    name="description"
                     className="certif_form_input"
                     multiline
                 />

@@ -5,3 +5,5 @@ export * from "./constants/ROLE";
 export * from "./constants/NAVE";
 export * from "./dto/user.dto";
 export * from "./dto/training.dto";
+export * from "./dto/certificate.dto";
+export * from "./interfaces/Certificate";
