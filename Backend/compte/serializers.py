@@ -38,15 +38,11 @@ class FormationData(serializers.ModelSerializer):
         model = formation
         fields = ['intitule','id']
 
-<<<<<<< HEAD
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','societe_formation', 'fix_number','company_logo', 'company_stamp']
-=======
 class CertificatData(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
->>>>>>> 6ab57ec60254530994ae1e4497119e6261a889d4
         
 
 #END DATA ENTITY
@@ -294,6 +290,7 @@ class loginuser(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
+    first_name = serializers.CharField(max_length=100,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
     user_type = serializers.CharField(max_length=60,read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
@@ -312,7 +309,7 @@ class loginuser(serializers.ModelSerializer):
             'competence',
             'societe'
         ]
-        read_only_fields = ()
+        
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -334,6 +331,7 @@ class loginorg(serializers.ModelSerializer):
     company_phone_number = serializers.CharField(max_length=50,read_only=True)
     fix_number = serializers.CharField(max_length=50,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
+    # societe_formation = SocieteData(many=True,read_only=True)
     id = serializers.UUIDField(read_only=True)
     
     class Meta:
@@ -342,14 +340,14 @@ class loginorg(serializers.ModelSerializer):
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
+            user = auth.authenticate(email=email,password=password_connexion)
 
-            organisme = auth.authenticate(email=email,password_connexion=password_connexion)
-
-            if not organisme:
-                raise AuthenticationFailed('Donnée incorrecte')
-            else:
-                print("je suis connecté")
-            return organisme
+            if not user:
+                raise AuthenticationFailed('donnée incorrecte...')
+            if not user.is_active:
+                raise AuthenticationFailed('compte non activé...')
+            return user
+            # return organisme
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
@@ -369,12 +367,7 @@ class cruduser(serializers.ModelSerializer):
 class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-<<<<<<< HEAD
     # societe_formation = SocieteData()
-=======
-    # donnee_formation = SocieteData(read_only=True)
-    
->>>>>>> 6ab57ec60254530994ae1e4497119e6261a889d4
     
     class Meta:
         model = OrganismeFormation 
