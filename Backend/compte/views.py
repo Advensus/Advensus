@@ -628,6 +628,14 @@ def getformateurbyformation(request,pk):
 
 	return Response(serializer.data)
 
+@api_view(['GET'])
+def getadminbysociete(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(societe=pk)
+
+	serializer = serializer_class(donnee,many=True)
+	return Response(serializer.data)
+
 #END GET BY
 
 
