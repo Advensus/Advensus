@@ -215,7 +215,7 @@ class AddAdmin(serializers.ModelSerializer):
     password= serializers.CharField(max_length=60, min_length=8,write_only=True)
     first_name= serializers.CharField(max_length=60)
     id = serializers.UUIDField(read_only=True)
-   
+    societe = SocieteData(read_only=True)
     class Meta:
         model = User
         fields =  ['username','first_name','email','phone_number','adress','password','id','societe']
@@ -238,8 +238,8 @@ class AddFormateur(serializers.ModelSerializer):
     first_name= serializers.CharField(max_length=70)
     cv= serializers.FileField()
     id = serializers.UUIDField(read_only=True)
-    appartenir_societe = SocieteData(many=True,read_only=True)
-    competence = FormationData(many=True,read_only=True)
+    # appartenir_societe = SocieteData(many=True,read_only=True)
+    # competence = FormationData(many=True,read_only=True)
    
   
     
@@ -346,12 +346,13 @@ class loginorg(serializers.ModelSerializer):
 # CRUD Operations
 class cruduser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
-    societe = SocieteData(read_only=True)
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    competence = FormationData(many=True,read_only=True)
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe'
+                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe','appartenir_societe'
                  ]
 
         

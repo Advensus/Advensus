@@ -71,6 +71,8 @@ urlpatterns = [
     path('GetReservationBySta/<str:pk>/',views.getreservationbysta),
     path('GetReservationByRp/<str:pk>/',views.getreservationbyrp),
 
+    path('GetFormateurByFormation/<str:pk>/',views.getformateurbyformation),
+
 
 ]
 

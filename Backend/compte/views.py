@@ -619,6 +619,15 @@ def getreservationbyrp(request,pk):
 
 	return Response(serializer.data) 
 
+@api_view(['GET'])
+def getformateurbyformation(request,pk):
+	serializer_class = cruduser
+	donnee = User.objects.filter(competence=pk)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
 #END GET BY
 
 
@@ -685,3 +694,4 @@ def getcertificationbyform(request,pk):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
+
