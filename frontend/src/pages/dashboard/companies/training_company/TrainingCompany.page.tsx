@@ -158,16 +158,12 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     };
 
     const showAddForm = (displayForm: string) => {
-        console.log("the form to display:", displayForm);
         setFormToDisplay(displayForm);
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
     const handleOnCreate = (data: NewCompanyDtoIn) => {
-        console.log({ data });
-        // pathLabel === PATH_LABEL_RESOURCES
-        //     ? setTrainers([data.user, ...trainers])
-        //     : setTrainees([data.user, ...trainees]);
+        setTrainingsCompanies([data, ...trainingsCompanies]);
         setShowForm(false);
     };
 

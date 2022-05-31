@@ -209,7 +209,7 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
             });
     };
 
-    const handleOnCreate = (data: NewUserDtoIn | NewCompanyDtoIn) => {
+    const handleOnCreate = (data: NewUserDtoIn | NewCompanyDtoIn | IUser) => {
         console.log({ data });
         // pathLabel === PATH_LABEL_RESOURCES
         //     ? setTrainers([data.user, ...trainers])

@@ -1,0 +1,25 @@
+.lesson_booking_container {
+    // background-color: red;
+    width: 100vw;
+    padding: 30px 40px;
+}
+
+.lesson_booking_box {
+    background-color: #f4f3f3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100px;
+    color: #000;
+}
+
+.lesson_booking_box_header {
+    // background-color: brown;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+.lesson_booking_box_body {
+    // background-color: yellowgreen;
+    padding: 0 15px;
+}

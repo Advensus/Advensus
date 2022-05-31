@@ -210,11 +210,15 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
             });
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
+    const handleOnCreate = (data: IUser) => {
         console.log({ data });
-        // pathLabel === PATH_LABEL_RESOURCES
-        //     ? setTrainers([data.user, ...trainers])
-        //     : setTrainees([data.user, ...trainees]);
+        if (data.user_type === TEACHEAR) {
+            setTrainers([data, ...trainers]);
+        } else if (data.user_type === SUPER_RP) {
+            setSrps([data, ...srps]);
+        } else {
+            setRps([data, ...rps]);
+        }
         setShowForm(false);
     };
 

@@ -1,0 +1,38 @@
+.trainee_docs_container {
+    width: 100vw;
+    padding: 30px 40px;
+}
+
+.trainee_docs_box {
+    background-color: #f4f3f3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100px;
+    color: #000;
+}
+
+.trainee_docs_box_header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+.trainee_docs_box_body {
+    padding: 0 15px;
+}
+
+.trainee_docs_box_body_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 50px 0;
+}
+
+.trainee_docs_box_body_content_action {
+    background-color: gray;
+    height: 13em;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

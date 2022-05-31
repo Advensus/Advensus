@@ -235,7 +235,10 @@ export const FullInformationsTabComponent: React.FC<
                             </>
                         ) : currentPath === PATH_LABEL_COMPANY ||
                           currentPath === PATH_LABEL_ORGANIZATION ? (
-                            <CompanyDetailsComponent company={company} />
+                            <CompanyDetailsComponent
+                                company={company}
+                                currentPath={currentPath}
+                            />
                         ) : (
                             <UserDetailsComponent
                                 contentToDetail={content}
