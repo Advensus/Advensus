@@ -437,7 +437,6 @@ class crudreservation(serializers.ModelSerializer):
 
     class Meta:
         model = reservation
-<<<<<<< HEAD
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
 
 class crudcertificate(serializers.ModelSerializer):
@@ -451,6 +450,3 @@ class crudprogramme(serializers.ModelSerializer):
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
-=======
-        fields = ['id','title','description','status','start_date','end_date','reserver','concerner']
->>>>>>> 47407d161ba4156935a657b99bb7aee400586b62
