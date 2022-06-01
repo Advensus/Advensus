@@ -122,6 +122,9 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                         {user.organisme_formation &&
                             user.organisme_formation[0] != undefined &&
                             user.organisme_formation[0].company_name}
+                        {user.appartenir_societe &&
+                            user.appartenir_societe[0] != undefined &&
+                            user.appartenir_societe[0].company_name}
                     </Text>
                 )}
             </div>

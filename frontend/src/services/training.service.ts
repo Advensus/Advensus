@@ -14,6 +14,11 @@ class TrainingService {
         BaseService.postRequest(certificateUrls.NEW_CERTIFICATE, info, false);
     static get_all_certificate = () =>
         BaseService.getRequest(certificateUrls.GET_ALL_CERTIFICATE, false);
+    static get_certificate_by_training_id = (id: string) =>
+        BaseService.getRequest(
+            certificateUrls.GET_CERTIF_BY_TRAINING_ID(id),
+            false
+        );
 
     // For Training Program
     static new_training_program = (info: unknown) =>

@@ -19,6 +19,7 @@ import {
     AttributeDisplayComponent,
     SmallCompanyCardComponent,
     TrainingDetailsComponent,
+    EmptyComponent,
 } from "../..";
 import {
     ITraining,
@@ -73,6 +74,8 @@ export const FullInformationsTabComponent: React.FC<
         React.useState<IDropdownOption>();
     const [certificates, setCertificates] = useState<ICertificate[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [search, setSearch] = useState<string>("");
+    const [filteredCertif, setFilteredCertif] = useState<ICertificate[]>([]);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -82,12 +85,12 @@ export const FullInformationsTabComponent: React.FC<
     };
 
     useEffect(() => {
-        console.log({ trainings });
         if (contentId) {
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
                 setContent(emptyContent);
                 getFormerByTrainingId(contentId);
+                getCertificateByTrainingId(contentId);
             } else {
                 const emptyTraining = {} as ITraining;
                 setTraining(emptyTraining);
@@ -104,7 +107,7 @@ export const FullInformationsTabComponent: React.FC<
                 console.log({ company });
             }
         }
-    }, [contentId, currentTab]);
+    }, [contentId, currentTab, search]);
 
     useEffect(() => {
         console.log("the tab current:", selectedBooking);
@@ -127,7 +130,6 @@ export const FullInformationsTabComponent: React.FC<
             .then(
                 currentPath === PATH_LABEL_SERVICES
                     ? (resp: ITraining) => {
-                          console.log({ resp });
                           setTraining(resp);
                       }
                     : (resp: IUser) => {
@@ -149,11 +151,44 @@ export const FullInformationsTabComponent: React.FC<
                 return response.json();
             })
             .then((respFormer: IUser[]) => {
-                console.log({ respFormer });
                 setFormersTrainings(respFormer);
             })
             .catch((err) => {
                 console.log("error while getting former by training id:", err);
+            });
+    };
+
+    const filterCertificates = (searchTerm: string) => {
+        return certificates.filter(
+            (_) =>
+                `${_.intitule} ${_.code} ${_.objectif}`.indexOf(searchTerm) !==
+                -1
+        );
+    };
+
+    const getCertificateByTrainingId = (id: string) => {
+        setLoading(true);
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                setLoading(false);
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log({ respCertif });
+                setCertificates(respCertif);
+                setLoading(false);
+
+                const searchByKeyWord = search
+                    ? filterCertificates(search)
+                    : respCertif;
+                setFilteredCertif(searchByKeyWord);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+                setLoading(false);
             });
     };
 
@@ -170,32 +205,6 @@ export const FullInformationsTabComponent: React.FC<
         showTrainingProgramForm
             ? setShowTrainingProgramForm(!showTrainingProgramForm)
             : setShowTrainingProgramForm(!showTrainingProgramForm);
-    };
-
-    useEffect(() => {
-        // if (currentTab?.props.headerText === "Certifications") {
-        getAllCertificate();
-        // }
-    }, [currentTab]);
-
-    const getAllCertificate = async () => {
-        await TrainingService.get_all_certificate()
-            .then(async (resp) => {
-                if (resp.status !== 200) {
-                    console.log({ resp });
-                    return [];
-                }
-                setLoading(false);
-                return resp.json();
-            })
-            .then((certificateResp: ICertificate[]) => {
-                setCertificates(certificateResp);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log("error while gettting all certificate:", err);
-                setLoading(false);
-            });
     };
 
     return (
@@ -340,18 +349,33 @@ export const FullInformationsTabComponent: React.FC<
                                                             keyWord="Formateur Id"
                                                             valueWord={_.id}
                                                         />
-                                                        {/* <AttributeDisplayComponent
-                                                                keyWord="Sté Formateur"
-                                                                valueWord={
-                                                                    _
-                                                                        ?.appartenir_societe
-                                                                        ?.company_name
-                                                                }
-                                                            /> */}
                                                         <AttributeDisplayComponent
-                                                            keyWord="Prénom Formateur"
+                                                            keyWord="Prénom"
                                                             valueWord={
                                                                 _.first_name
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Nom"
+                                                            valueWord={
+                                                                _.username
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Email"
+                                                            valueWord={_.email}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Adress"
+                                                            valueWord={_.adress}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Sté Formateur"
+                                                            valueWord={
+                                                                _.appartenir_societe &&
+                                                                _
+                                                                    ?.appartenir_societe[0]
+                                                                    ?.company_name
                                                             }
                                                         />
                                                     </Panel>
@@ -365,7 +389,12 @@ export const FullInformationsTabComponent: React.FC<
                                                     />
                                                 </div>
                                             ))
-                                        ) : null}
+                                        ) : (
+                                            <EmptyComponent
+                                                messageText="Pas de Formateur pour cette
+                                                    Formation"
+                                            />
+                                        )}
                                     </div>
                                 </>
                             ) : currentPath === PATH_LABEL_COMPANY ||
@@ -390,22 +419,13 @@ export const FullInformationsTabComponent: React.FC<
                                 <SearchBox
                                     placeholder="Search"
                                     onEscape={(ev) => {
-                                        console.log("Custom onEscape Called");
+                                        setSearch("");
                                     }}
                                     onClear={(ev) => {
-                                        console.log("Custom onClear Called");
+                                        setSearch("");
                                     }}
                                     onChange={(_, newValue) =>
-                                        console.log(
-                                            "SearchBox onChange fired: " +
-                                                newValue
-                                        )
-                                    }
-                                    onSearch={(newValue) =>
-                                        console.log(
-                                            "SearchBox onSearch fired: " +
-                                                newValue
-                                        )
+                                        setSearch(newValue || "")
                                     }
                                     className="label_service_tab_certif_search"
                                 />
@@ -413,9 +433,9 @@ export const FullInformationsTabComponent: React.FC<
                                 <div className="label_certif_tab_display_card">
                                     {loading ? (
                                         <LoadingComponent />
-                                    ) : certificates.length ? (
-                                        certificates.map((_) => (
-                                            <div>
+                                    ) : filteredCertif.length > 0 ? (
+                                        filteredCertif.map((_) => (
+                                            <div key={_.id}>
                                                 <CertificateCardComponent
                                                     openPanel={openPanel}
                                                     key={_.id}
@@ -432,34 +452,33 @@ export const FullInformationsTabComponent: React.FC<
                                                         _.intitule
                                                     }
                                                 >
-                                                    <p>
-                                                        <AttributeDisplayComponent
-                                                            keyWord="Code"
-                                                            valueWord={_.code}
-                                                        />
-                                                        <AttributeDisplayComponent
-                                                            keyWord="Objectifs"
-                                                            valueWord={
-                                                                _.objectif
-                                                            }
-                                                        />
-                                                        <AttributeDisplayComponent
-                                                            keyWord="Compétences à tester"
-                                                            valueWord={
-                                                                _.competence_atteste
-                                                            }
-                                                        />
-                                                        <AttributeDisplayComponent
-                                                            keyWord="Modalités d'évaluation"
-                                                            valueWord={
-                                                                _.modalite_evaluation
-                                                            }
-                                                        />
-                                                    </p>
+                                                    <br />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Code"
+                                                        valueWord={_.code}
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Objectifs"
+                                                        valueWord={_.objectif}
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Compétences à tester"
+                                                        valueWord={
+                                                            _.competence_atteste
+                                                        }
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Modalités d'évaluation"
+                                                        valueWord={
+                                                            _.modalite_evaluation
+                                                        }
+                                                    />
                                                 </Panel>
                                             </div>
                                         ))
-                                    ) : null}
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun élément" />
+                                    )}
                                 </div>
                             </PivotItem>
                         )}

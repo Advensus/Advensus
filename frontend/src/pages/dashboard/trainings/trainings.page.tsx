@@ -15,6 +15,7 @@ import {
     TrainingCardComponent,
     TrainingFormComponent,
     FullInformationsTabComponent,
+    EmptyComponent,
 } from "../../../components";
 import {
     IUser,
@@ -28,6 +29,7 @@ import {
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import { useId } from "@fluentui/react-hooks";
+import { LoadingComponent } from "../../../components/loading_component/Loading.component";
 
 export interface ITrainingsPageProps {
     default_props?: boolean;
@@ -50,6 +52,9 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
     const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [contentId, setContentId] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+    const [filteredTraining, setFilteredTraining] = useState<ITraining[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -82,9 +87,48 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        getAllTraining();
         toggleTrainingsContent();
     }, []);
+
+    useEffect(() => {
+        getAllTraining();
+        // const searchByKeyWord = search ? filterTrainings(search) : trainings;
+        // setFilteredTraining(searchByKeyWord);
+        // console.log({ searchByKeyWord });
+    }, [search]);
+
+    const filterTrainings = (searchTerm: string) => {
+        return trainings.filter(
+            (_) => `${_.intitule} ${_.intitule}`.indexOf(searchTerm) !== -1
+        );
+    };
+
+    const getAllTraining = async () => {
+        setLoading(true);
+        await TrainingService.get_all_trainings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                setLoading(false);
+                return resp.json();
+            })
+            .then((trainingsResp: ITraining[]) => {
+                console.log("the all trainings", trainingsResp);
+                setTrainings(trainingsResp);
+                setLoading(false);
+
+                const searchByKeyWord = search
+                    ? filterTrainings(search)
+                    : trainingsResp;
+                setFilteredTraining(searchByKeyWord);
+            })
+            .catch((err) => {
+                console.log("error while gettting all trainings:", err);
+                setLoading(false);
+            });
+    };
 
     // users_content_display_trainings;
     const toggleTrainingsContent = () => {
@@ -147,24 +191,6 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
-    const getAllTraining = async () => {
-        await TrainingService.get_all_trainings()
-            .then(async (resp) => {
-                if (resp.status !== 200) {
-                    console.log({ resp });
-                    return [];
-                }
-                return resp.json();
-            })
-            .then((trainingsResp: ITraining[]) => {
-                console.log("the all trainings", trainingsResp);
-                setTrainings(trainingsResp);
-            })
-            .catch((err) => {
-                console.log("error while gettting all trainings:", err);
-            });
-    };
-
     const handleOnCreate = (data: NewUserDtoIn) => {
         console.log({ data });
         // pathLabel === PATH_LABEL_RESOURCES
@@ -205,8 +231,14 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                                 <div className="tab_header_content">
                                     <SearchBox
                                         placeholder="Search"
-                                        onSearch={(newValue) =>
-                                            console.log("value is " + newValue)
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
                                         }
                                     />
                                     {pathLabel === "Trainees" && (
@@ -246,22 +278,26 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                     {!showForm ? (
                         <div className="tab_content_scroll">
                             <div>
-                                <Text>My "tab name" or allusersnumber()</Text>
+                                <Text>Total ({trainings.length})</Text>
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
-                                {trainings.length &&
-                                pathLabel === PATH_LABEL_SERVICES
-                                    ? trainings.map((_) => (
-                                          <TrainingCardComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
-                                              }
-                                              trainingDetails={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : filteredTraining.length &&
+                                  pathLabel === PATH_LABEL_SERVICES ? (
+                                    filteredTraining.map((_) => (
+                                        <TrainingCardComponent
+                                            toggleTab={() =>
+                                                toggleFullInfosTab(_.id)
+                                            }
+                                            trainingDetails={_}
+                                            key={_.id}
+                                        />
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucune Formation pou le moment" />
+                                )}
                             </div>
                         </div>
                     ) : (

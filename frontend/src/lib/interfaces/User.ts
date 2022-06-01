@@ -18,7 +18,7 @@ export interface IUser {
     competence?: string;
     trainee_level?: string;
     organisme?: string;
-    societe?: string;
+    societe?: ICompany;
     appartenir_societe?: ICompany[];
     organisme_formation?: ICompany[];
     is_superuser?: string;

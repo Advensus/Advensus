@@ -31,6 +31,8 @@ export const trainingUrls = {
 export const certificateUrls = {
     NEW_CERTIFICATE: `${prefixer}/auth/create/certificate/`,
     GET_ALL_CERTIFICATE: `${prefixer}/auth/GetAllCertificate/`,
+    GET_CERTIF_BY_TRAINING_ID: (id: string) =>
+        `${prefixer}/auth/GetCertificationByFor/${id}`,
 };
 export const trainingProgramUrls = {
     NEW_TRAINING_PROGRAMM: `${prefixer}/auth/create/programme/`,
