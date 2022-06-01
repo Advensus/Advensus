@@ -34,6 +34,7 @@ from django.shortcuts import get_object_or_404
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -313,7 +314,7 @@ class login_org(generics.GenericAPIView):
 # @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
-	org = OrganismeFormation.objects.all()
+	# org = OrganismeFormation.objects.all()
 	donnee = User.objects.all()
     
 	serializer = serializer_class(donnee, many=True)
@@ -486,6 +487,23 @@ def getallorganisme(request):
 
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
+
+@api_view(['POST'])
+@csrf_exempt
+def updateorganisme(request,pk):
+	serializer_class = CrudOrganisme
+	donnee =  OrganismeFormation.objects.filter(id=pk)
+
+	serializer = serializer_class(donnee,data=request.data)
+
+	if serializer.is_valid():
+		serializer.save()
+@api_view(['DELETE'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])	
+def deleteorganisme(request, pk):
+	donnee = OrganismeFormation.objects.get(id=pk)
+	donnee.delete()
 
 #FIN CRUD ORGANISME
 class LogoutUser(generics.GenericAPIView):
