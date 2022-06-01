@@ -56,7 +56,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
-    const [contentId, setContentId] = useState<string>("");
+    const [trainee, setTrainee] = useState<IUser>();
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
     const [selectedFilteredItem, setSelectedFiltererItem] =
@@ -119,9 +119,9 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
         }
     };
 
-    const toggleFullInfosTab = (id: string) => {
-        // console.log({ id });
-        setContentId(id);
+    const toggleFullInfosTab = (usr: IUser) => {
+        // console.log({ usr });
+        setTrainee(usr);
         var hint = document.getElementById(
             "display_tab_ii"
         ) as HTMLInputElement;
@@ -274,7 +274,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                                     ? trainees.map((_) => (
                                           <TraineeDisplayComponent
                                               toggleTab={() =>
-                                                  toggleFullInfosTab(_.id)
+                                                  toggleFullInfosTab(_)
                                               }
                                               detailsInfosTrainee={_}
                                               key={_.id}
@@ -293,7 +293,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
             </div>
             <div id="display_tab_ii">
                 <FullInformationsTabComponent
-                    contentId={contentId}
+                    user={trainee}
                     currentPath={pathLabel}
                 />
             </div>

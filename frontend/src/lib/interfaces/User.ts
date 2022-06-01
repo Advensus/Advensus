@@ -1,4 +1,5 @@
 import { ICompany } from "./Company";
+import { ITraining } from "./Training";
 
 export interface IUser {
     id: string;
@@ -15,7 +16,7 @@ export interface IUser {
     session_token?: string;
     horaire?: string;
     cv?: File;
-    competence?: string;
+    competence?: ITraining[];
     trainee_level?: string;
     organisme?: string;
     societe?: ICompany;

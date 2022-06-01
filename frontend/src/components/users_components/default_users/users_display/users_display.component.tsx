@@ -7,7 +7,7 @@ import { IUser } from "../../../../lib";
 export interface IUsersDisplayProps {
     default_props?: boolean;
     detailsInfos: IUser;
-    toggleTab: (id: string) => void;
+    toggleTab: (id: IUser) => void;
 }
 
 export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
@@ -21,7 +21,7 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
     return (
         <Link
             to="#"
-            onClick={() => toggleTab(detailsInfos.id)}
+            onClick={() => toggleTab(detailsInfos)}
             className="users_display_container"
         >
             <div className="users_display_item">

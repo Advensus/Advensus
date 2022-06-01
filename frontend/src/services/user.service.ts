@@ -25,6 +25,9 @@ class UserService {
 
     static get_former_by_training_id = (id: string) =>
         BaseService.getRequest(userUls.GET_FORMER_BY_TRAINING_ID(id), false);
+
+    static get_trainee_by_org_id = (id: string) =>
+        BaseService.getRequest(userUls.GET_TRAINEE_BY_ORG_ID(id), false);
 }
 
 export default UserService;

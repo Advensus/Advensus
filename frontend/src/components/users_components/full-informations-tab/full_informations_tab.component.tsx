@@ -44,10 +44,12 @@ import { CertificateFormComponent } from "../../forms/certificate_form/certifica
 import { TrainingProgramFormComponent } from "../../forms/training_program_form/trainingProgramForm.component";
 import { ICertificate } from "../../../lib/interfaces/Certificate";
 import { LoadingComponent } from "../../loading_component/Loading.component";
+import CompanyService from "../../../services/company.service";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
     contentId?: string;
+    user?: IUser;
     trainings?: ITraining[];
     currentPath: string;
     company?: ICompany;
@@ -58,7 +60,7 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath, company, trainings }) => {
+> = ({ contentId, currentPath, company, trainings, user }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
     const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
@@ -76,6 +78,8 @@ export const FullInformationsTabComponent: React.FC<
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState<string>("");
     const [filteredCertif, setFilteredCertif] = useState<ICertificate[]>([]);
+    const [traineesOrg, setTraineesOrg] = useState<IUser[]>([]);
+    const [orgsCompant, setOrgsCompant] = useState<ICompany[]>([]);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -85,6 +89,12 @@ export const FullInformationsTabComponent: React.FC<
     };
 
     useEffect(() => {
+        if (company && currentPath === PATH_LABEL_ORGANIZATION) {
+            getTraineeByOrgId(company.id);
+        }
+        if (company && currentPath === PATH_LABEL_COMPANY) {
+            getOrgByCompnanyId(company.id);
+        }
         if (contentId) {
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
@@ -100,7 +110,7 @@ export const FullInformationsTabComponent: React.FC<
                 currentPath === PATH_LABEL_SERVICES ||
                 currentPath === PATH_LABEL_CUSTOMER
             ) {
-                getContentById(contentId);
+                // getContentById(contentId);
             }
             if (currentPath === PATH_LABEL_COMPANY) {
                 console.log("on lance ge getCompanyById ici");
@@ -113,32 +123,65 @@ export const FullInformationsTabComponent: React.FC<
         console.log("the tab current:", selectedBooking);
     }, [selectedBooking]);
 
-    const getContentById = (id: string) => {
-        const serviceToCall =
-            currentPath === PATH_LABEL_SERVICES
-                ? TrainingService.get_training_by_id(id)
-                : UserService.get_user_by_id(id);
+    // const getContentById = (id: string) => {
+    //     const serviceToCall =
+    //         currentPath === PATH_LABEL_SERVICES
+    //             ? TrainingService.get_training_by_id(id)
+    //             : UserService.get_user_by_id(id);
 
-        serviceToCall
+    //     serviceToCall
+    //         .then((response) => {
+    //             if (response.status !== 200) {
+    //                 return;
+    //             }
+
+    //             return response.json();
+    //         })
+    //         .then(
+    //             currentPath === PATH_LABEL_SERVICES
+    //                 ? (resp: ITraining) => {
+    //                       setTraining(resp);
+    //                   }
+    //                 : (resp: IUser) => {
+    //                       console.log({ resp });
+    //                       setContent(resp);
+    //                   }
+    //         )
+    //         .catch((err) => {
+    //             console.log("error while getting content by his id:", err);
+    //         });
+    // };
+
+    const getTraineeByOrgId = (orgId: string) => {
+        UserService.get_trainee_by_org_id(orgId)
             .then((response) => {
                 if (response.status !== 200) {
                     return;
                 }
-
                 return response.json();
             })
-            .then(
-                currentPath === PATH_LABEL_SERVICES
-                    ? (resp: ITraining) => {
-                          setTraining(resp);
-                      }
-                    : (resp: IUser) => {
-                          console.log({ resp });
-                          setContent(resp);
-                      }
-            )
+            .then((resTrainee: IUser[]) => {
+                setTraineesOrg(resTrainee);
+            })
             .catch((err) => {
-                console.log("error while getting content by his id:", err);
+                console.log("error while getting trainee by org id:", err);
+            });
+    };
+
+    const getOrgByCompnanyId = (companyId: string) => {
+        CompanyService.get_org_by_compnany_id(companyId)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respOrg: ICompany[]) => {
+                setOrgsCompant(respOrg);
+                console.log({ respOrg });
+            })
+            .catch((err) => {
+                console.log("error while getting org by company id:", err);
             });
     };
 
@@ -405,7 +448,7 @@ export const FullInformationsTabComponent: React.FC<
                                 />
                             ) : (
                                 <UserDetailsComponent
-                                    contentToDetail={content}
+                                    contentToDetail={user}
                                     currentPath={currentPath}
                                 />
                             )}
@@ -497,30 +540,18 @@ export const FullInformationsTabComponent: React.FC<
                                     Par défaut
                                 </Text>
                                 <hr className="full_infos_hr_solid" />
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
+                                {user &&
+                                    user.competence &&
+                                    user.competence.map((_) => (
+                                        <div className="display_serv_item">
+                                            <Text
+                                                variant="small"
+                                                style={{ fontWeight: "bolder" }}
+                                            >
+                                                {_.intitule}
+                                            </Text>
+                                        </div>
+                                    ))}
                             </PivotItem>
                         )}
                         {/* FOR BOOKING TAB */}
@@ -601,28 +632,50 @@ export const FullInformationsTabComponent: React.FC<
 
                         {currentPath === PATH_LABEL_ORGANIZATION && (
                             <PivotItem headerText="Stagiaires">
-                                <TrainingOrgTraineesDisplayComponent
-                                    openPanel={openPanel}
-                                />
-                                <div>
-                                    <br />
-                                    <br />
-                                    <Panel
-                                        isLightDismiss
-                                        isOpen={isOpen}
-                                        onDismiss={dismissPanel}
-                                        closeButtonAriaLabel="Close"
-                                        headerText="Détails Stagaire"
-                                    >
-                                        <p>
-                                            'This panel uses "light dismiss"
-                                            behavior: it can be closed by
-                                            clicking or tapping ' + 'the area
-                                            outside the panel (or using the
-                                            close button as usual).';
-                                        </p>
-                                    </Panel>
-                                </div>
+                                {traineesOrg
+                                    ? traineesOrg.map((_) => (
+                                          <div key={_.id}>
+                                              <TrainingOrgTraineesDisplayComponent
+                                                  openPanel={openPanel}
+                                                  trainee={_}
+                                                  key={_.id}
+                                              />
+                                              <Panel
+                                                  isLightDismiss
+                                                  isOpen={isOpen}
+                                                  onDismiss={dismissPanel}
+                                                  closeButtonAriaLabel="Close"
+                                                  headerText="Détails Stagaire"
+                                              >
+                                                  <br />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire ID"
+                                                      valueWord={_.id}
+                                                  />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire Prénom"
+                                                      valueWord={_.first_name}
+                                                  />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire Nom"
+                                                      valueWord={_.username}
+                                                  />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire Email"
+                                                      valueWord={_.email}
+                                                  />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire Tel"
+                                                      valueWord={_.phone_number}
+                                                  />
+                                                  <AttributeDisplayComponent
+                                                      keyWord="Stagiaire Adresse"
+                                                      valueWord={_.adress}
+                                                  />
+                                              </Panel>
+                                          </div>
+                                      ))
+                                    : null}
                             </PivotItem>
                         )}
                         {currentPath === PATH_LABEL_COMPANY && (
@@ -633,27 +686,15 @@ export const FullInformationsTabComponent: React.FC<
                                         underlined={true}
                                         className="item_organisation_searcbar"
                                     />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
+                                    {orgsCompant
+                                        ? orgsCompant.map((_) => (
+                                              <SmallCompanyCardComponent
+                                                  openPanel={openPanel}
+                                                  org={_}
+                                                  key={_.id}
+                                              />
+                                          ))
+                                        : null}
                                 </div>
                                 <div>
                                     <br />

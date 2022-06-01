@@ -20,6 +20,8 @@ export const userUls = {
     GET_USER_BY_ID: (id: string) => `${prefixer}/auth/DetailUser/${id}`,
     GET_FORMER_BY_TRAINING_ID: (id: string) =>
         `${prefixer}/auth/GetFormateurByFormation/${id}`,
+    GET_TRAINEE_BY_ORG_ID: (id: string) =>
+        `${prefixer}/auth/GetStagaireByOrg/${id}`,
 };
 
 export const trainingUrls = {
@@ -47,4 +49,6 @@ export const companyUrls = {
     NEW_ORGANISATION: `${prefixer}/auth/create/organisme/`,
     GET_ALL_SOCIETE: `${prefixer}/auth/GetAllSociete`,
     GET_ALL_ORGANISATION: `${prefixer}/auth/GetAllOrganisme`,
+    GET_ORG_BY_COMPANY_ID: (id: string) =>
+        `${prefixer}/auth/GetOrganismeBySoc/${id}`,
 };
