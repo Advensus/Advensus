@@ -494,10 +494,11 @@ def updateorganisme(request,pk):
 	serializer_class = CrudOrganisme
 	donnee =  OrganismeFormation.objects.filter(id=pk)
 
-	serializer = serializer_class(donnee,data=request.data)
+	serializer = serializer_class(donnee,data=request.data,many=True)
 
 	if serializer.is_valid():
 		serializer.save()
+		return Response(serializer.data)
 @api_view(['DELETE'])
 @csrf_exempt
 # @permission_classes([IsAuthenticated])	
