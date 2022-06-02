@@ -470,17 +470,13 @@ class crudreservation(serializers.ModelSerializer):
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
 
-class crudcertificate(serializers.ModelSerializer):
-    allouer = FormationData(read_only=True,many=True)
-    class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
-class createcertificate(serializers.ModelSerializer):
+class createprogramme(serializers.ModelSerializer):
+ 
    
     class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+        model = programme
+        fields = ['id','intitule','description','attribue']
 
 class crudprogramme(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
@@ -488,3 +484,18 @@ class crudprogramme(serializers.ModelSerializer):
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
+class crudcertificate(serializers.ModelSerializer):
+    allouer = FormationData(read_only=True,many=True)
+    programmes = crudprogramme(many=True,read_only=True)
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
+
+
+class createcertificate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
+
