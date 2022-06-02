@@ -468,7 +468,7 @@ def deletedocument(request, pk):
 class CreateOrganisme(generics.GenericAPIView):
    
 	# permission_classes = (IsAuthenticated,IsAdminUser)
-	serializer_class = AddSociete
+	serializer_class = CreateOrganisme
 	def post(self,request):
 		organisme= request.data
 		serializer = self.serializer_class(data=organisme)
