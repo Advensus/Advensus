@@ -680,7 +680,7 @@ def viewallprogramme(request):
 
 	serializer = serializer_class(donnee,many=True)
 
-	return Response({'programme':serializer.data})
+	return Response(serializer.data)
 
 @api_view(['GET'])
 def getprogrammebycert(request,pk):
@@ -711,7 +711,7 @@ def viewallcertificate(request):
 
 	serializer = serializer_class(donnee,many=True)
 
-	return Response({'certificate':serializer.data})
+	return Response(serializer.data)
 
 @api_view(['GET'])
 def getcertificationbyform(request,pk):
