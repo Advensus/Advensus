@@ -465,19 +465,17 @@ def deletedocument(request, pk):
 # FIN CRUD OPERATION FOR DOCUMENTS
 
 #CRUD ORGANISME
-class CreateOrganisme(CreateAPIView):
-    serializer_class =  CreateOrganisme
-    queryset =  OrganismeFormation.objects.all()
-    # permission_classes = (permissions.IsAuthenticated,autorisation)
-
-    # def perform_create(self, serializer):
-    #     return serializer.save()
-
-    # def get_queryset(self):
-    #     return self.queryset.filter()
-
-    # def get_queryset(self):
-    #     return self.queryset.filter()
+class CreateOrganisme(generics.GenericAPIView):
+   
+	# permission_classes = (IsAuthenticated,IsAdminUser)
+	serializer_class = AddSociete
+	def post(self,request):
+		organisme= request.data
+		serializer = self.serializer_class(data=organisme)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		societe_data = serializer.data
+		return Response(societe_data,status=status.HTTP_201_CREATED)
 
 #FIN CRUD ORGANISME
 @api_view(['GET'])

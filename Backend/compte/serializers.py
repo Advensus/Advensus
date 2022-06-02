@@ -396,7 +396,7 @@ class cruduser(serializers.ModelSerializer):
 class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-    # societe_formation = SocieteData()
+    
     
     class Meta:
         model = OrganismeFormation 
