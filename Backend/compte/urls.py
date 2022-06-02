@@ -76,6 +76,8 @@ urlpatterns = [
     path('GetFormateurByFormation/<str:pk>/',views.getformateurbyformation),
     path('GetAdminBySociete/<str:pk>/',views.getadminbysociete),
 
+    path('GetAllSouscription/', views.viewallsouscription),
+
 
 ]
 

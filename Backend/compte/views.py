@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -722,3 +722,14 @@ def getcertificationbyform(request,pk):
 
 	return Response(serializer.data)
 
+#END P AND C
+
+#SOUSCRIR CRUD
+@api_view(['GET'])
+def viewallsouscription(request):
+	serializer_class = crudsouscrir
+	donnee = souscrir.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)

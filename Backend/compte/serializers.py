@@ -440,18 +440,18 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
 
 
 class crudsouscrir(serializers.ModelSerializer):
     stagiaire = Stagiaredata(many=True,read_only=True)
     formation = FormationData(many=True,read_only=True)
     programme_formation = ProgrammeData(read_only=True)
-    certification = CertificatData(read_only=True)
+   
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
 class CrudCourses(serializers.ModelSerializer):
 
     class Meta:
