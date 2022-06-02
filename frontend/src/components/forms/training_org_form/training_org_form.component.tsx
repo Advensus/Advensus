@@ -14,12 +14,12 @@ import {
     NewCompanyDtoOut,
     NewOrganizationDtoOut,
 } from "../../../lib/dto/company.dto";
-import { ICompany } from "../../../lib/interfaces/Company";
+import { ICompany, IOrg } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
 
 export interface ITrainingOrganizationFormProps {
     default_props?: boolean;
-    onCreate: (data: NewCompanyDtoIn) => void;
+    onCreate: (data: IOrg) => void;
     cancel?: () => void;
 }
 
@@ -57,7 +57,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                 }
                 return response.json();
             })
-            .then((respCompanies: ICompany[]) => {
+            .then((respCompanies: IOrg[]) => {
                 console.log("the companies datas:", respCompanies);
                 const companies = respCompanies.map((_) => {
                     return { key: _.id, text: _.company_name };
@@ -89,7 +89,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                 if (response.status !== 200) {
                     console.log({ response });
                 }
-                const data = (await response.json()) as NewCompanyDtoIn;
+                const data = (await response.json()) as IOrg;
                 onCreate(data);
             })
             .catch((err) => {

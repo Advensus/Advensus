@@ -37,7 +37,7 @@ import { TrainingOrgTraineesDisplayComponent } from "../../training_org_componen
 import { UserDetailsComponent } from "../user-details/user_details.component";
 import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "@fluentui/react-hooks";
-import { ICompany } from "../../../lib/interfaces/Company";
+import { ICompany, IOrg } from "../../../lib/interfaces/Company";
 import { CompanyDetailsComponent } from "../../company_components/company_details/company_details.component";
 import { CertificateCardComponent } from "../../certificate_card/certificate_card.component";
 import { CertificateFormComponent } from "../../forms/certificate_form/certificateForm.component";
@@ -53,6 +53,7 @@ export interface IFullInformationsTabProps {
     trainings?: ITraining[];
     currentPath: string;
     company?: ICompany;
+    org?: IOrg;
 }
 
 const planIcon: IIconProps = { iconName: "PlanView" };
@@ -60,7 +61,7 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath, company, trainings, user }) => {
+> = ({ contentId, currentPath, company, trainings, user, org }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
     const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
@@ -78,6 +79,10 @@ export const FullInformationsTabComponent: React.FC<
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState<string>("");
     const [filteredCertif, setFilteredCertif] = useState<ICertificate[]>([]);
+    const [filteredCompanyOrg, setFilteredCompanyOrg] = useState<ICompany[]>(
+        []
+    );
+    const [filteredOrgTrainees, setFilteredOrgTrainees] = useState<IUser[]>([]);
     const [traineesOrg, setTraineesOrg] = useState<IUser[]>([]);
     const [orgsCompant, setOrgsCompant] = useState<ICompany[]>([]);
 
@@ -87,10 +92,11 @@ export const FullInformationsTabComponent: React.FC<
     ): void => {
         setSelectedBooking(item);
     };
+    const filterIcon: IIconProps = { iconName: "Filter" };
 
     useEffect(() => {
-        if (company && currentPath === PATH_LABEL_ORGANIZATION) {
-            getTraineeByOrgId(company.id);
+        if (org && currentPath === PATH_LABEL_ORGANIZATION) {
+            getTraineeByOrgId(org.id);
         }
         if (company && currentPath === PATH_LABEL_COMPANY) {
             getOrgByCompnanyId(company.id);
@@ -152,36 +158,77 @@ export const FullInformationsTabComponent: React.FC<
     //         });
     // };
 
+    const filterCertificates = (searchTerm: string) => {
+        return certificates.filter(
+            (_) =>
+                `${_.intitule} ${_.code} ${_.objectif}`.indexOf(searchTerm) !==
+                -1
+        );
+    };
+    const filterCompanyOrg = (searchTerm: string) => {
+        return orgsCompant.filter(
+            (_) =>
+                `${_.company_name} ${_.company_adress} ${_.company_phone_number}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+    const filterOrgTrainees = (searchTerm: string) => {
+        return traineesOrg.filter(
+            (_) =>
+                `${_.first_name} ${_.username} ${_.email} ${_.adress}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+
     const getTraineeByOrgId = (orgId: string) => {
+        if (filterOrgTrainees.length > 0) setLoading(true);
         UserService.get_trainee_by_org_id(orgId)
             .then((response) => {
                 if (response.status !== 200) {
                     return;
                 }
+                setLoading(false);
                 return response.json();
             })
             .then((resTrainee: IUser[]) => {
                 setTraineesOrg(resTrainee);
+
+                const searchByKeyWord = search
+                    ? filterOrgTrainees(search)
+                    : resTrainee;
+                setFilteredOrgTrainees(searchByKeyWord);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log("error while getting trainee by org id:", err);
+                setLoading(false);
             });
     };
 
     const getOrgByCompnanyId = (companyId: string) => {
+        if (filteredCompanyOrg.length > 0) setLoading(true);
         CompanyService.get_org_by_compnany_id(companyId)
             .then((response) => {
                 if (response.status !== 200) {
                     return;
                 }
+                setLoading(false);
                 return response.json();
             })
             .then((respOrg: ICompany[]) => {
                 setOrgsCompant(respOrg);
-                console.log({ respOrg });
+
+                const searchByKeyWord = search
+                    ? filterCompanyOrg(search)
+                    : respOrg;
+                setFilteredCompanyOrg(searchByKeyWord);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log("error while getting org by company id:", err);
+                setLoading(false);
             });
     };
 
@@ -201,16 +248,8 @@ export const FullInformationsTabComponent: React.FC<
             });
     };
 
-    const filterCertificates = (searchTerm: string) => {
-        return certificates.filter(
-            (_) =>
-                `${_.intitule} ${_.code} ${_.objectif}`.indexOf(searchTerm) !==
-                -1
-        );
-    };
-
     const getCertificateByTrainingId = (id: string) => {
-        setLoading(true);
+        if (filterCertificates.length > 0) setLoading(true);
         TrainingService.get_certificate_by_training_id(id)
             .then((response) => {
                 if (response.status !== 200) {
@@ -297,10 +336,14 @@ export const FullInformationsTabComponent: React.FC<
                             </TooltipHost>
                         </>
                     )}
-                    {(currentPath === PATH_LABEL_ORGANIZATION ||
-                        currentPath === PATH_LABEL_COMPANY) && (
+                    {currentPath === PATH_LABEL_COMPANY && (
                         <Text style={{ fontWeight: "bold" }}>
                             {company?.company_name}
+                        </Text>
+                    )}
+                    {currentPath === PATH_LABEL_ORGANIZATION && (
+                        <Text style={{ fontWeight: "bold" }}>
+                            {org?.company_name}
                         </Text>
                     )}
                 </div>
@@ -444,6 +487,7 @@ export const FullInformationsTabComponent: React.FC<
                               currentPath === PATH_LABEL_ORGANIZATION ? (
                                 <CompanyDetailsComponent
                                     company={company}
+                                    org={org}
                                     currentPath={currentPath}
                                 />
                             ) : (
@@ -543,7 +587,10 @@ export const FullInformationsTabComponent: React.FC<
                                 {user &&
                                     user.competence &&
                                     user.competence.map((_) => (
-                                        <div className="display_serv_item">
+                                        <div
+                                            className="display_serv_item"
+                                            key={_.id}
+                                        >
                                             <Text
                                                 variant="small"
                                                 style={{ fontWeight: "bolder" }}
@@ -632,50 +679,68 @@ export const FullInformationsTabComponent: React.FC<
 
                         {currentPath === PATH_LABEL_ORGANIZATION && (
                             <PivotItem headerText="Stagiaires">
-                                {traineesOrg
-                                    ? traineesOrg.map((_) => (
-                                          <div key={_.id}>
-                                              <TrainingOrgTraineesDisplayComponent
-                                                  openPanel={openPanel}
-                                                  trainee={_}
-                                                  key={_.id}
-                                              />
-                                              <Panel
-                                                  isLightDismiss
-                                                  isOpen={isOpen}
-                                                  onDismiss={dismissPanel}
-                                                  closeButtonAriaLabel="Close"
-                                                  headerText="Détails Stagaire"
-                                              >
-                                                  <br />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire ID"
-                                                      valueWord={_.id}
-                                                  />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire Prénom"
-                                                      valueWord={_.first_name}
-                                                  />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire Nom"
-                                                      valueWord={_.username}
-                                                  />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire Email"
-                                                      valueWord={_.email}
-                                                  />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire Tel"
-                                                      valueWord={_.phone_number}
-                                                  />
-                                                  <AttributeDisplayComponent
-                                                      keyWord="Stagiaire Adresse"
-                                                      valueWord={_.adress}
-                                                  />
-                                              </Panel>
-                                          </div>
-                                      ))
-                                    : null}
+                                <SearchBox
+                                    placeholder="Filtrer"
+                                    iconProps={filterIcon}
+                                    onEscape={(ev) => {
+                                        setSearch("");
+                                    }}
+                                    onClear={(ev) => {
+                                        setSearch("");
+                                    }}
+                                    onChange={(_, newValue) =>
+                                        setSearch(newValue || "")
+                                    }
+                                    className="label_trainee_tab_search"
+                                />
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : filteredOrgTrainees.length ? (
+                                    filteredOrgTrainees.map((_) => (
+                                        <div key={_.id}>
+                                            <TrainingOrgTraineesDisplayComponent
+                                                openPanel={openPanel}
+                                                trainee={_}
+                                                key={_.id}
+                                            />
+                                            <Panel
+                                                isLightDismiss
+                                                isOpen={isOpen}
+                                                onDismiss={dismissPanel}
+                                                closeButtonAriaLabel="Close"
+                                                headerText="Détails Stagaire"
+                                            >
+                                                <br />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire ID"
+                                                    valueWord={_.id}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire Prénom"
+                                                    valueWord={_.first_name}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire Nom"
+                                                    valueWord={_.username}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire Email"
+                                                    valueWord={_.email}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire Tel"
+                                                    valueWord={_.phone_number}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Stagiaire Adresse"
+                                                    valueWord={_.adress}
+                                                />
+                                            </Panel>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucun Stagiaire trouvé" />
+                                )}
                             </PivotItem>
                         )}
                         {currentPath === PATH_LABEL_COMPANY && (
@@ -684,17 +749,30 @@ export const FullInformationsTabComponent: React.FC<
                                     <SearchBox
                                         placeholder="Search"
                                         underlined={true}
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
+                                        }
                                         className="item_organisation_searcbar"
                                     />
-                                    {orgsCompant
-                                        ? orgsCompant.map((_) => (
-                                              <SmallCompanyCardComponent
-                                                  openPanel={openPanel}
-                                                  org={_}
-                                                  key={_.id}
-                                              />
-                                          ))
-                                        : null}
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : filteredCompanyOrg.length ? (
+                                        filteredCompanyOrg.map((_) => (
+                                            <SmallCompanyCardComponent
+                                                openPanel={openPanel}
+                                                org={_}
+                                                key={_.id}
+                                            />
+                                        ))
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun O-F trouvée" />
+                                    )}
                                 </div>
                                 <div>
                                     <br />

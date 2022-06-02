@@ -26,6 +26,7 @@ export interface NewCompanyDtoIn {
     // societe?: string;
     company_stamp: string;
     company_logo: string;
+    // societe_formation?: string;
 }
 
 export interface TrainingCompanyDtoIn {

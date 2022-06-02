@@ -24,7 +24,7 @@ import {
     ORGANIZATION_FORM,
 } from "../../../../lib";
 import CompanyService from "../../../../services/company.service";
-import { ICompany } from "../../../../lib/interfaces/Company";
+import { ICompany, IOrg } from "../../../../lib/interfaces/Company";
 import {
     NewCompanyDtoIn,
     TrainingOrganizationDtoIn,
@@ -50,9 +50,9 @@ export const TrainingOrganisationPage: React.FC<
     const [showForm, setShowForm] = useState<Boolean>(false);
     const [formToDisplay, setFormToDisplay] = useState<string>("");
     const [pathLabel, setPathLabel] = useState<string>("");
-    const [theOrganization, setTheOrganization] = useState<ICompany>();
+    const [theOrganization, setTheOrganization] = useState<IOrg>();
 
-    const [organization, setOrganization] = useState<ICompany[]>([]);
+    const [organization, setOrganization] = useState<IOrg[]>([]);
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -96,7 +96,7 @@ export const TrainingOrganisationPage: React.FC<
                 }
                 return response.json();
             })
-            .then((respOrganisations: ICompany[]) => {
+            .then((respOrganisations: IOrg[]) => {
                 console.log("the Organisations datas:", respOrganisations);
                 setOrganization(respOrganisations);
             })
@@ -129,7 +129,7 @@ export const TrainingOrganisationPage: React.FC<
         }
     };
 
-    const toggleFullInfosTab = (org: ICompany) => {
+    const toggleFullInfosTab = (org: IOrg) => {
         // console.log({ id });
         setTheOrganization(org);
         var hint = document.getElementById(
@@ -166,7 +166,7 @@ export const TrainingOrganisationPage: React.FC<
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
-    const handleOnCreate = (data: NewCompanyDtoIn) => {
+    const handleOnCreate = (data: IOrg) => {
         setOrganization([data, ...organization]);
         setShowForm(false);
     };
@@ -270,7 +270,7 @@ export const TrainingOrganisationPage: React.FC<
                 <FullInformationsTabComponent
                     contentId={theOrganization?.id}
                     currentPath={pathLabel}
-                    company={theOrganization}
+                    org={theOrganization}
                 />
             </div>
         </div>

@@ -9,8 +9,6 @@ export interface ITrainingOrgTraineesDisplayProps {
     trainee: IUser;
 }
 
-const filterIcon: IIconProps = { iconName: "Filter" };
-
 export const TrainingOrgTraineesDisplayComponent: React.FC<
     ITrainingOrgTraineesDisplayProps
 > = ({ openPanel, trainee }) => {
@@ -20,11 +18,6 @@ export const TrainingOrgTraineesDisplayComponent: React.FC<
             onClick={openPanel}
             className="training_org_trainees_display_container"
         >
-            <SearchBox
-                placeholder="Filter"
-                iconProps={filterIcon}
-                className="training_org_trainees_display_searchbar"
-            />
             <div className="training_org_trainees_display_content">
                 <div
                     // onClick={() => toggleTab(detailsInfosTrainee.id)}

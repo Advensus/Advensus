@@ -1,7 +1,7 @@
 import { IconButton, IIconProps, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { AttributeDisplayComponent } from "../../";
-import { IUser, PATH_LABEL_CUSTOMER } from "../../../lib";
+import { IUser, PATH_LABEL_CUSTOMER, TRAINEE } from "../../../lib";
 import { TrainingFolderCardComponent } from "../../trainings_components/training_folder_card/training_folder_card.component";
 
 import { DefaultButton } from "@fluentui/react/lib/Button";
@@ -37,16 +37,33 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                 </Text>
             </div>
             <hr />
+            {contentToDetail?.user_type === TRAINEE ? (
+                <AttributeDisplayComponent
+                    keyWord="O-F"
+                    valueWord={
+                        contentToDetail?.organisme_formation &&
+                        contentToDetail?.organisme_formation[0].company_name
+                    }
+                />
+            ) : (
+                <AttributeDisplayComponent
+                    keyWord="Société"
+                    valueWord={
+                        contentToDetail?.appartenir_societe &&
+                        contentToDetail?.appartenir_societe[0].company_name
+                    }
+                />
+            )}
             <AttributeDisplayComponent
-                keyWord="User ID"
+                keyWord="Stagiaire ID"
                 valueWord={contentToDetail?.id}
             />
             <AttributeDisplayComponent
-                keyWord="Firstname"
+                keyWord="Prénom"
                 valueWord={contentToDetail?.first_name}
             />
             <AttributeDisplayComponent
-                keyWord="Lastname"
+                keyWord="Nom"
                 valueWord={contentToDetail?.username}
             />
             <AttributeDisplayComponent
@@ -56,6 +73,10 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
             <AttributeDisplayComponent
                 keyWord="Téléphone"
                 valueWord={contentToDetail?.phone_number}
+            />
+            <AttributeDisplayComponent
+                keyWord="Adress postale"
+                valueWord={contentToDetail?.adress}
             />
             {currentPath === PATH_LABEL_CUSTOMER && (
                 <div className="user_details_training_folder">

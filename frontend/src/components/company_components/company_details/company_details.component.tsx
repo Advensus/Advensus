@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AttributeDisplayComponent } from "../..";
-import { ICompany } from "../../../lib/interfaces/Company";
+import { ICompany, IOrg } from "../../../lib/interfaces/Company";
 import { Image, IImageProps, ImageFit } from "@fluentui/react/lib/Image";
 import { prefixer } from "../../../services/urls";
 import { PATH_LABEL_COMPANY, PATH_LABEL_ORGANIZATION } from "../../../lib";
@@ -8,6 +8,7 @@ import { PATH_LABEL_COMPANY, PATH_LABEL_ORGANIZATION } from "../../../lib";
 export interface ICompanyDetailsProps {
     default_props?: boolean;
     company?: ICompany;
+    org?: IOrg;
     currentPath: string;
 }
 
@@ -23,6 +24,7 @@ const imageProps: IImageProps = {
 
 export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
     company,
+    org,
     currentPath,
 }) => {
     return (
@@ -35,6 +37,8 @@ export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
                         src={
                             company?.company_logo
                                 ? prefixer + company.company_logo
+                                : org?.company_logo
+                                ? prefixer + org.company_logo
                                 : "https://images.unsplash.com/photo-1555596899-d634257b55bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGxvZ298ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
                         }
                         alt='Example of the image fit value "center" on an image larger than the frame.'
@@ -72,25 +76,29 @@ export const CompanyDetailsComponent: React.FC<ICompanyDetailsProps> = ({
             {currentPath === PATH_LABEL_ORGANIZATION && (
                 <div className="company_details_infos">
                     <AttributeDisplayComponent
+                        keyWord="Société"
+                        valueWord={org?.societe_formation.company_name}
+                    />
+                    <AttributeDisplayComponent
                         keyWord="Organisation ID"
-                        valueWord={company?.id}
+                        valueWord={org?.id}
                     />
                     <AttributeDisplayComponent
                         keyWord="Nom Organisation"
-                        valueWord={company?.company_name}
+                        valueWord={org?.company_name}
                     />
                     <AttributeDisplayComponent
                         keyWord="Addresse Organisation"
-                        valueWord={company?.company_adress}
+                        valueWord={org?.company_adress}
                     />
                     <AttributeDisplayComponent
                         keyWord="Numéro de Téléphone"
-                        valueWord={company?.company_phone_number}
+                        valueWord={org?.company_phone_number}
                     />
-                    {company?.fix_number && (
+                    {org?.fix_number && (
                         <AttributeDisplayComponent
                             keyWord="Fix"
-                            valueWord={company?.fix_number}
+                            valueWord={org?.fix_number}
                         />
                     )}
                 </div>

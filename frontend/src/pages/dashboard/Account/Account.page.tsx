@@ -100,10 +100,12 @@ export const AccountPage: React.FC<IAccountProps> = () => {
                                         keyWord="Email"
                                         valueWord={user.email}
                                     />
-                                    <AttributeDisplayComponent
-                                        keyWord="Nom OF"
-                                        valueWord={user.organisme}
-                                    />
+                                    {user.organisme && (
+                                        <AttributeDisplayComponent
+                                            keyWord="Nom OF"
+                                            valueWord={user.organisme}
+                                        />
+                                    )}
                                 </PivotItem>
                             </Pivot>
                         </div>
