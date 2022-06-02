@@ -410,6 +410,7 @@ class CreateOrganisme(serializers.ModelSerializer):
         # organisme.password_messagerie = make_password('password_messagerie')
         organisme.save()
         return organisme
+       
 
 class CrudOrganisme(serializers.ModelSerializer):
    
