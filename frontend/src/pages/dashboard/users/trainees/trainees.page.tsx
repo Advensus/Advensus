@@ -16,7 +16,9 @@ import {
     TraineeDisplayComponent,
     TraineeFormComponent,
     FullInformationsTabComponent,
+    EmptyComponent,
 } from "../../../../components";
+import { LoadingComponent } from "../../../../components/loading_component/Loading.component";
 import {
     IUser,
     ITraining,
@@ -34,6 +36,9 @@ import {
     TRAINEE_FORM,
     SERVICES_FORM,
 } from "../../../../lib";
+import { IOrg } from "../../../../lib/interfaces/Company";
+import CompanyService from "../../../../services/company.service";
+import TrainingService from "../../../../services/training.service";
 import UserService from "../../../../services/user.service";
 
 export interface ITraineesPageProps {
@@ -43,6 +48,8 @@ export interface ITraineesPageProps {
 interface IPath {
     label: string;
 }
+const ALL_TRAINEES_KEY = "all";
+const ALL_TRAINEES_TXT = "Tout";
 
 const filterIcon: IIconProps = { iconName: "Filter" };
 const addIcon: IIconProps = { iconName: "Add" };
@@ -61,6 +68,10 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
         React.useState<IDropdownOption>();
     const [selectedFilteredItem, setSelectedFiltererItem] =
         React.useState<IDropdownOption>();
+    const [organizations, setOrganizations] = useState<IDropdownOption[]>([]);
+    const [filteredTrainees, setFilteredTrainees] = useState<IUser[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [search, setSearch] = useState<string>("");
 
     const onChangeSorted = (
         event: React.FormEvent<HTMLDivElement>,
@@ -74,6 +85,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
         item?: IDropdownOption
     ): void => {
         setSelectedFiltererItem(item);
+        console.log({ item });
     };
 
     useEffect(() => {
@@ -91,9 +103,38 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        getAllUser();
         toggleTraineesContent();
+        getOrganizations();
+        // getAllUser();
     }, []);
+
+    useEffect(() => {
+        getAllUser();
+    }, [search]);
+    useEffect(() => {
+        const filterTraineeByOf =
+            selectedFilteredItem && selectedFilteredItem.key != ALL_TRAINEES_KEY
+                ? search
+                    ? filterTtraineesByTerm(search)
+                    : trainees.filter(
+                          (_) =>
+                              _.organisme_formation &&
+                              _.organisme_formation[0].id ===
+                                  selectedFilteredItem?.key
+                      )
+                : search
+                ? selectedFilteredItem &&
+                  selectedFilteredItem.key != ALL_TRAINEES_KEY
+                    ? trainees.filter(
+                          (_) =>
+                              _.organisme_formation &&
+                              _.organisme_formation[0].id ===
+                                  selectedFilteredItem?.key
+                      )
+                    : filterTtraineesByTerm(search)
+                : trainees;
+        setFilteredTrainees(filterTraineeByOf);
+    }, [selectedFilteredItem, search, trainees]);
 
     // users_content_display_trainees;
     const toggleTraineesContent = () => {
@@ -156,7 +197,17 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
+    const filterTtraineesByTerm = (searchTerm: string) => {
+        return filteredTrainees.filter(
+            (_) =>
+                `${_.first_name} ${_.username} ${_.email} ${_.phone_number}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+
     const getAllUser = async () => {
+        if (filteredTrainees.length > 0) setLoading(true);
         await UserService.get_all_users()
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -164,6 +215,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                         "Error resp while gettind all users:",
                         response
                     );
+                    setLoading(false);
                     return [];
                 }
                 const datas = (await response.json()) as UserDtoIn;
@@ -173,11 +225,36 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                     (_) => _.user_type === TRAINEE
                 );
                 setTrainees(trainee);
+                setLoading(false);
 
                 return datas;
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
+                setLoading(false);
+            });
+    };
+
+    const getOrganizations = async () => {
+        await CompanyService.get_all_organization()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((respOrganisations: IOrg[]) => {
+                const orgs = respOrganisations.map((_) => {
+                    return { key: _.id, text: _.company_name };
+                });
+                orgs.push({ key: ALL_TRAINEES_KEY, text: ALL_TRAINEES_TXT });
+                setOrganizations(orgs);
+            })
+            .catch((err) => {
+                console.log("error while getting tainings organisations");
             });
     };
 
@@ -215,9 +292,15 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                             <>
                                 <div className="tab_header_content">
                                     <SearchBox
-                                        placeholder="Search"
-                                        onSearch={(newValue) =>
-                                            console.log("value is " + newValue)
+                                        placeholder="Rechercher par nom, téléphone, email"
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
                                         }
                                     />
                                     <div className="filter_box">
@@ -242,7 +325,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                                             }
                                             onChange={onChangeFiltered}
                                             placeholder="Filtrer par OF"
-                                            options={dropdownControlledFilterBy}
+                                            options={organizations}
                                             styles={dropdownStyles}
                                         />
                                     </div>
@@ -269,18 +352,22 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                                         : "tab_content_trainee"
                                 }
                             >
-                                {trainees.length &&
-                                pathLabel === PATH_LABEL_CUSTOMER
-                                    ? trainees.map((_) => (
-                                          <TraineeDisplayComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_)
-                                              }
-                                              detailsInfosTrainee={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : filteredTrainees.length > 0 &&
+                                  pathLabel === PATH_LABEL_CUSTOMER ? (
+                                    filteredTrainees.map((_) => (
+                                        <TraineeDisplayComponent
+                                            toggleTab={() =>
+                                                toggleFullInfosTab(_)
+                                            }
+                                            detailsInfosTrainee={_}
+                                            key={_.id}
+                                        />
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucun Stagiaire trouvé" />
+                                )}
                             </div>
                         </div>
                     ) : (
@@ -309,11 +396,4 @@ const dropdownControlledSortByStatut = [
     { key: "date_added", text: "En Formation" },
     { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
     { key: "most_booking", text: "Expiré" },
-];
-const dropdownControlledFilterBy = [
-    { key: "OF1", text: "OF1" },
-    { key: "divid3", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF2", text: "OF2" },
-    { key: "divid4", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF3", text: "OF3" },
 ];

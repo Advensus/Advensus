@@ -16,6 +16,7 @@ import {
     TrainingOrganizationCardComponent,
     TrainingOrganizationFormComponent,
     FullInformationsTabComponent,
+    EmptyComponent,
 } from "../../../../components";
 import {
     PATH_LABEL_RESOURCES,
@@ -29,6 +30,7 @@ import {
     NewCompanyDtoIn,
     TrainingOrganizationDtoIn,
 } from "../../../../lib/dto/company.dto";
+import { LoadingComponent } from "../../../../components/loading_component/Loading.component";
 
 export interface ITrainingOrganisationPageProps {
     default_props?: boolean;
@@ -37,6 +39,8 @@ export interface ITrainingOrganisationPageProps {
 interface IPath {
     label: string;
 }
+const ALL_ORG_KEY = "all";
+const ALL_ORG_TXT = "Tout";
 
 const filterIcon: IIconProps = { iconName: "Filter" };
 const addIcon: IIconProps = { iconName: "Add" };
@@ -56,8 +60,14 @@ export const TrainingOrganisationPage: React.FC<
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
-    const [selectedFilteredItem, setSelectedFiltererItem] =
+    const [selectedFilteredSte, setSelectedFiltererSte] =
         React.useState<IDropdownOption>();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [trainingsCompanies, setTrainingsCompanies] = useState<
+        IDropdownOption[]
+    >([]);
+    const [filteredOrgs, setFilteredOrgs] = useState<IOrg[]>([]);
+    const [search, setSearch] = useState<string>("");
 
     const onChangeSorted = (
         event: React.FormEvent<HTMLDivElement>,
@@ -70,7 +80,7 @@ export const TrainingOrganisationPage: React.FC<
         event: React.FormEvent<HTMLDivElement>,
         item?: IDropdownOption
     ): void => {
-        setSelectedFiltererItem(item);
+        setSelectedFiltererSte(item);
     };
 
     useEffect(() => {
@@ -82,8 +92,20 @@ export const TrainingOrganisationPage: React.FC<
 
     useEffect(() => {
         toggleOrganizationsContent();
-        getOrganization();
+        getSociete();
     }, []);
+    useEffect(() => {
+        getOrganization();
+    }, [selectedFilteredSte, search]);
+
+    const filterOrgsByTerm = (searchTerm: string) => {
+        return filteredOrgs.filter(
+            (_) =>
+                `${_.company_name} ${_.company_phone_number} ${_.company_adress}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
 
     const getOrganization = async () => {
         await CompanyService.get_all_organization()
@@ -94,14 +116,68 @@ export const TrainingOrganisationPage: React.FC<
                     console.log("the error resp", response);
                     return [];
                 }
+                setLoading(false);
                 return response.json();
             })
             .then((respOrganisations: IOrg[]) => {
                 console.log("the Organisations datas:", respOrganisations);
                 setOrganization(respOrganisations);
+
+                const filterOrgBySte =
+                    selectedFilteredSte &&
+                    selectedFilteredSte.key != ALL_ORG_KEY
+                        ? search
+                            ? filterOrgsByTerm(search)
+                            : respOrganisations.filter(
+                                  (_) =>
+                                      _.societe_formation.id ===
+                                      selectedFilteredSte.key
+                              )
+                        : search
+                        ? selectedFilteredSte &&
+                          selectedFilteredSte.key != ALL_ORG_KEY
+                            ? respOrganisations.filter(
+                                  (_) =>
+                                      _.societe_formation.id ===
+                                      selectedFilteredSte.key
+                              )
+                            : filterOrgsByTerm(search)
+                        : respOrganisations;
+                console.log({ filterOrgBySte });
+                setFilteredOrgs(filterOrgBySte);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log("error while getting tainings organisations");
+                setLoading(false);
+            });
+    };
+
+    const getSociete = async () => {
+        // setLoading(true);
+        await CompanyService.get_all_societe()
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    setLoading(false);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((respCompanies: ICompany[]) => {
+                console.log("the companies datas:", respCompanies);
+                const comps = respCompanies.map((_) => {
+                    return { key: _.id, text: _.company_name };
+                });
+                comps.push({ key: ALL_ORG_KEY, text: ALL_ORG_TXT });
+                setTrainingsCompanies(comps);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log("error while getting tainings companies");
+                setLoading(false);
             });
     };
 
@@ -206,8 +282,14 @@ export const TrainingOrganisationPage: React.FC<
                                 >
                                     <SearchBox
                                         placeholder="Search"
-                                        onSearch={(newValue) =>
-                                            console.log("value is " + newValue)
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
                                         }
                                     />
                                     <div className="filter_box">
@@ -224,13 +306,13 @@ export const TrainingOrganisationPage: React.FC<
                                         />
                                         <Dropdown
                                             selectedKey={
-                                                selectedFilteredItem
-                                                    ? selectedFilteredItem.key
+                                                selectedFilteredSte
+                                                    ? selectedFilteredSte.key
                                                     : undefined
                                             }
                                             onChange={onChangeFiltered}
-                                            placeholder="Filtrer par OF"
-                                            options={dropdownControlledFilterBy}
+                                            placeholder="Filtrer par Société"
+                                            options={trainingsCompanies}
                                             styles={dropdownStyles}
                                         />
                                     </div>
@@ -241,21 +323,28 @@ export const TrainingOrganisationPage: React.FC<
                     {!showForm ? (
                         <div className="tab_content_scroll">
                             <div>
-                                <Text>My "tab name" or allusersnumber()</Text>
+                                <Text>
+                                    Total(
+                                    {filteredOrgs.length})
+                                </Text>
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
-                                {organization
-                                    ? organization.map((_) => (
-                                          <TrainingOrganizationCardComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_)
-                                              }
-                                              company={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : filteredOrgs.length ? (
+                                    filteredOrgs.map((_) => (
+                                        <TrainingOrganizationCardComponent
+                                            toggleTab={() =>
+                                                toggleFullInfosTab(_)
+                                            }
+                                            company={_}
+                                            key={_.id}
+                                        />
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucune Organisation" />
+                                )}
                             </div>
                         </div>
                     ) : (
@@ -285,11 +374,4 @@ const dropdownControlledSortBy = [
     { key: "date_added", text: "Date ajoute" },
     { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
     { key: "most_booking", text: "Réservations" },
-];
-const dropdownControlledFilterBy = [
-    { key: "OF1", text: "OF1" },
-    { key: "divid3", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF2", text: "OF2" },
-    { key: "divid4", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF3", text: "OF3" },
 ];

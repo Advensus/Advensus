@@ -15,6 +15,7 @@ import {
     TrainingOrganizationCardComponent,
     CompanyFormComponent,
     FullInformationsTabComponent,
+    EmptyComponent,
 } from "../../../../components";
 import {
     NewUserDtoIn,
@@ -55,6 +56,9 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         React.useState<IDropdownOption>();
     const [selectedFilteredItem, setSelectedFiltererItem] =
         React.useState<IDropdownOption>();
+    const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
+
+    const [search, setSearch] = useState<string>("");
 
     const onChangeSorted = (
         event: React.FormEvent<HTMLDivElement>,
@@ -80,11 +84,23 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
 
     useEffect(() => {
         toggleCompaniesContent();
-        getSociete();
     }, []);
 
+    useEffect(() => {
+        getSociete();
+    }, [search]);
+
+    const filterCompaniesByTerm = (searchTerm: string) => {
+        return filteredCompanies.filter(
+            (_) =>
+                `${_.company_name} ${_.company_phone_number} ${_.company_adress}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+
     const getSociete = async () => {
-        // setLoading(true);
+        if (filteredCompanies.length > 0) setLoading(true);
         await CompanyService.get_all_societe()
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -99,6 +115,12 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
             .then((respCompanies: ICompany[]) => {
                 console.log("the companies datas:", respCompanies);
                 setTrainingsCompanies(respCompanies);
+                setLoading(false);
+
+                const searchByKeyWord = search
+                    ? filterCompaniesByTerm(search)
+                    : respCompanies;
+                setFilteredCompanies(searchByKeyWord);
                 setLoading(false);
             })
             .catch((err) => {
@@ -203,8 +225,14 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 <div className="tab_header_content">
                                     <SearchBox
                                         placeholder="Search"
-                                        onSearch={(newValue) =>
-                                            console.log("value is " + newValue)
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
                                         }
                                     />
                                     <div className="filter_box">
@@ -238,14 +266,17 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                     {!showForm ? (
                         <div className="tab_content_scroll">
                             <div>
-                                <Text>My "tab name" or allusersnumber()</Text>
+                                <Text>
+                                    Total(
+                                    {filteredCompanies.length})
+                                </Text>
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainee">
                                 {loading ? (
                                     <LoadingComponent />
-                                ) : trainingsCompanies.length ? (
-                                    trainingsCompanies.map((_) => (
+                                ) : filteredCompanies.length ? (
+                                    filteredCompanies.map((_) => (
                                         <TrainingOrganizationCardComponent
                                             toggleTab={(i) =>
                                                 toggleFullInfosTab(i)
@@ -254,7 +285,9 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                             key={_.id}
                                         />
                                     ))
-                                ) : null}
+                                ) : (
+                                    <EmptyComponent messageText="Aucune société trouvée" />
+                                )}
                             </div>
                         </div>
                     ) : (
