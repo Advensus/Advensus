@@ -43,8 +43,25 @@ class CertificatData(serializers.ModelSerializer):
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
-        
 
+class RpData(serializers.ModelSerializer):
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    class Meta:
+        model = User
+        
+        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
+class Stagiaredata(serializers.ModelSerializer):
+    Rp_Stagiaire = RpData(many=True,read_only=True)
+    organisme_formation = OrganismeData(many=True,read_only=True)
+    class Meta:
+        model = User
+        fields = ['username','first_name','email','phone_number','adress','password','id','organisme_formation','Rp_Stagiaire','user_type']
+
+class ProgrammeData(serializers.ModelSerializer):
+    attribue= CertificatData(read_only=True)
+    class Meta:
+        model = programme
+        fields = ['id','intitule','description','attribue']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -425,7 +442,16 @@ class AddSouscrir(serializers.ModelSerializer):
 
         fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 
-   
+
+class crudsouscrir(serializers.ModelSerializer):
+    stagiaire = Stagiaredata(many=True,read_only=True)
+    formation = FormationData(many=True,read_only=True)
+    programme_formation = ProgrammeData(read_only=True)
+    certification = CertificatData(read_only=True)
+    class Meta:
+        model = souscrir
+
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
 class CrudCourses(serializers.ModelSerializer):
 
     class Meta:
