@@ -191,7 +191,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     };
 
     const handleOnCreate = (data: NewCompanyDtoIn) => {
-        setTrainingsCompanies([data, ...trainingsCompanies]);
+        setFilteredCompanies([data, ...filteredCompanies]);
         setShowForm(false);
     };
 

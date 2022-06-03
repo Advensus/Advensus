@@ -712,27 +712,27 @@ export const FullInformationsTabComponent: React.FC<
                                             >
                                                 <br />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire ID"
+                                                    keyWord="ID"
                                                     valueWord={_.id}
                                                 />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire Prénom"
+                                                    keyWord="Prénom"
                                                     valueWord={_.first_name}
                                                 />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire Nom"
+                                                    keyWord="Nom"
                                                     valueWord={_.username}
                                                 />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire Email"
+                                                    keyWord="Email"
                                                     valueWord={_.email}
                                                 />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire Tel"
+                                                    keyWord="Tel"
                                                     valueWord={_.phone_number}
                                                 />
                                                 <AttributeDisplayComponent
-                                                    keyWord="Stagiaire Adresse"
+                                                    keyWord="Adresse"
                                                     valueWord={_.adress}
                                                 />
                                             </Panel>

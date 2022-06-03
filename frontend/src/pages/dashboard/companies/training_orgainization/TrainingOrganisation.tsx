@@ -243,7 +243,7 @@ export const TrainingOrganisationPage: React.FC<
     };
 
     const handleOnCreate = (data: IOrg) => {
-        setOrganization([data, ...organization]);
+        setFilteredOrgs([data, ...filteredOrgs]);
         setShowForm(false);
     };
 
