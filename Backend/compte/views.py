@@ -4,7 +4,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
+<<<<<<< HEAD
 from .serializers import createprogramme,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+=======
+from .serializers import createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+>>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -34,6 +38,7 @@ from django.shortcuts import get_object_or_404
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -313,7 +318,7 @@ class login_org(generics.GenericAPIView):
 # @permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
-	org = OrganismeFormation.objects.all()
+	# org = OrganismeFormation.objects.all()
 	donnee = User.objects.all()
     
 	serializer = serializer_class(donnee, many=True)
@@ -464,19 +469,17 @@ def deletedocument(request, pk):
 # FIN CRUD OPERATION FOR DOCUMENTS
 
 #CRUD ORGANISME
-class CreateOrganisme(CreateAPIView):
-    serializer_class =  CreateOrganisme
-    queryset =  OrganismeFormation.objects.all()
-    # permission_classes = (permissions.IsAuthenticated,autorisation)
-
-    # def perform_create(self, serializer):
-    #     return serializer.save()
-
-    # def get_queryset(self):
-    #     return self.queryset.filter()
-
-    # def get_queryset(self):
-    #     return self.queryset.filter()
+class CreateOrganisme(generics.GenericAPIView):
+   
+	# permission_classes = (IsAuthenticated,IsAdminUser)
+	serializer_class = CreateOrganisme
+	def post(self,request):
+		organisme= request.data
+		serializer = self.serializer_class(data=organisme)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		societe_data = serializer.data
+		return Response(societe_data,status=status.HTTP_201_CREATED)
 
 #FIN CRUD ORGANISME
 @api_view(['GET'])
@@ -486,6 +489,24 @@ def getallorganisme(request):
 
 	serializer = serializer_class(donnee, many=True)
 	return Response(serializer.data)
+
+@api_view(['POST'])
+@csrf_exempt
+def updateorganisme(request,pk):
+	serializer_class = CrudOrganisme
+	donnee =  OrganismeFormation.objects.filter(id=pk)
+
+	serializer = serializer_class(donnee,data=request.data,many=True)
+
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data)
+@api_view(['DELETE'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])	
+def deleteorganisme(request, pk):
+	donnee = OrganismeFormation.objects.get(id=pk)
+	donnee.delete()
 
 #FIN CRUD ORGANISME
 class LogoutUser(generics.GenericAPIView):
@@ -703,3 +724,14 @@ def getcertificationbyform(request,pk):
 
 	return Response(serializer.data)
 
+#END P AND C
+
+#SOUSCRIR CRUD
+@api_view(['GET'])
+def viewallsouscription(request):
+	serializer_class = crudsouscrir
+	donnee = souscrir.objects.all()
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)

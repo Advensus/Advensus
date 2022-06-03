@@ -43,8 +43,28 @@ class CertificatData(serializers.ModelSerializer):
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
-        
+<<<<<<< HEAD
+=======
 
+class RpData(serializers.ModelSerializer):
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    class Meta:
+        model = User
+>>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c
+        
+        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
+class Stagiaredata(serializers.ModelSerializer):
+    Rp_Stagiaire = RpData(many=True,read_only=True)
+    organisme_formation = OrganismeData(many=True,read_only=True)
+    class Meta:
+        model = User
+        fields = ['username','first_name','email','phone_number','adress','password','id','organisme_formation','Rp_Stagiaire','user_type']
+
+class ProgrammeData(serializers.ModelSerializer):
+    attribue= CertificatData(read_only=True)
+    class Meta:
+        model = programme
+        fields = ['id','intitule','description','attribue']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -290,6 +310,7 @@ class loginuser(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=20, write_only=True)
     username = serializers.CharField(max_length=60, min_length=8,read_only=True)
+    first_name = serializers.CharField(max_length=100,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
     user_type = serializers.CharField(max_length=60,read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
@@ -308,7 +329,7 @@ class loginuser(serializers.ModelSerializer):
             'competence',
             'societe'
         ]
-        read_only_fields = ()
+        
 
     def validate(self,attrs):
         email = attrs.get('email','')
@@ -330,6 +351,7 @@ class loginorg(serializers.ModelSerializer):
     company_phone_number = serializers.CharField(max_length=50,read_only=True)
     fix_number = serializers.CharField(max_length=50,read_only=True)
     tokens = serializers.CharField(max_length=60,read_only=True)
+    # societe_formation = SocieteData(many=True,read_only=True)
     id = serializers.UUIDField(read_only=True)
     
     class Meta:
@@ -338,25 +360,37 @@ class loginorg(serializers.ModelSerializer):
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
+            user = auth.authenticate(email=email,password=password_connexion)
 
-            organisme = auth.authenticate(email=email,password_connexion=password_connexion)
-
-            if not organisme:
-                raise AuthenticationFailed('Donnée incorrecte')
-            else:
-                print("je suis connecté")
-            return organisme
+            if not user:
+                raise AuthenticationFailed('donnée incorrecte...')
+            if not user.is_active:
+                raise AuthenticationFailed('compte non activé...')
+            return user
+            # return organisme
 # CRUD Operations
+class crudsouscrir(serializers.ModelSerializer):
+    # stagiaire = Stagiaredata(read_only=True)
+    formation = FormationData(read_only=True)
+   
+   
+    class Meta:
+        model = souscrir
+
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','formation','level_start','level_end','lieu_formation']
 class cruduser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
     appartenir_societe = SocieteData(many=True,read_only=True)
     societe = SocieteData(read_only=True)
     competence = FormationData(many=True,read_only=True)
+    # id = serializers.UUIDField(read_only=True)
+    souscrirs = crudsouscrir(many=True,read_only=True)
+   
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation",'societe','appartenir_societe'
+                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs"
                  ]
 
         
@@ -365,7 +399,10 @@ class cruduser(serializers.ModelSerializer):
 class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
+<<<<<<< HEAD
     # donnee_formation = SocieteData(read_only=True)
+=======
+>>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c
     
     
     class Meta:
@@ -380,6 +417,7 @@ class CreateOrganisme(serializers.ModelSerializer):
         # organisme.password_messagerie = make_password('password_messagerie')
         organisme.save()
         return organisme
+       
 
 class CrudOrganisme(serializers.ModelSerializer):
    
@@ -422,9 +460,10 @@ class AddSouscrir(serializers.ModelSerializer):
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','certification','programme_formation','objectifs_formation','level_start','level_end','lieu_formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
 
-   
+
+
 class CrudCourses(serializers.ModelSerializer):
 
     class Meta:
@@ -439,11 +478,13 @@ class crudreservation(serializers.ModelSerializer):
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
 
-class crudcertificate(serializers.ModelSerializer):
-    allouer = FormationData(read_only=True,many=True)
+
+class createprogramme(serializers.ModelSerializer):
+ 
+   
     class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+        model = programme
+        fields = ['id','intitule','description','attribue']
 
 class createcertificate(serializers.ModelSerializer):
     
@@ -453,12 +494,31 @@ class createcertificate(serializers.ModelSerializer):
 
 class crudprogramme(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
+   
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
+<<<<<<< HEAD
 
 class createprogramme(serializers.ModelSerializer):
     
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
+=======
+class crudcertificate(serializers.ModelSerializer):
+    allouer = FormationData(read_only=True,many=True)
+    programmes = crudprogramme(many=True,read_only=True)
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
+
+
+class createcertificate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
+
+>>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c

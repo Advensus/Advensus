@@ -134,11 +134,9 @@ class souscrir(models.Model):
     start_session = models.DateField(auto_now_add=False)
     end_session = models.DateField(auto_now_add=False)
     test_oral = models.BooleanField(default=False)
-    stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE)
+    stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,related_name='souscrirs',on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
-    certification = models.CharField(max_length=255)
-    programme_formation = models.CharField(max_length=255)
-    objectifs_formation = models.CharField(max_length = 100)
+   
     level_start = models.CharField(max_length=50)
     level_end = models.CharField(max_length=50)
     lieu_formation = models.CharField(max_length=100)

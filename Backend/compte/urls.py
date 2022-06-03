@@ -63,6 +63,8 @@ urlpatterns = [
    #CRUDORGANISME
     path('GetAllOrganisme/',views.getallorganisme),
     path('create/organisme/', CreateOrganisme.as_view()),
+    path('UpdateOrganisme/<str:pk>/', views.updateorganisme),
+    path('DeleteOrganisme/<str:pk>/', views.deleteorganisme),
    #LOGOUT URL
    # path('Logout/',LogoutUser.as_view()),
 
@@ -73,6 +75,8 @@ urlpatterns = [
 
     path('GetFormateurByFormation/<str:pk>/',views.getformateurbyformation),
     path('GetAdminBySociete/<str:pk>/',views.getadminbysociete),
+
+    path('GetAllSouscription/', views.viewallsouscription),
 
 
 ]
