@@ -394,15 +394,17 @@ class cruduser(serializers.ModelSerializer):
             
 
 class CreateOrganisme(serializers.ModelSerializer):
+     
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
+   
     
     
     class Meta:
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo','connected']
    
     def create(self,validate_data):
         organisme = super(CreateOrganisme,self).create(validate_data) 
