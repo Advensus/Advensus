@@ -58,7 +58,6 @@ export const TrainingOrganizationFormComponent: React.FC<
                 return response.json();
             })
             .then((respCompanies: IOrg[]) => {
-                console.log("the companies datas:", respCompanies);
                 const companies = respCompanies.map((_) => {
                     return { key: _.id, text: _.company_name };
                 });

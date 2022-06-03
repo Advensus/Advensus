@@ -51,6 +51,7 @@ export interface IFullInformationsTabProps {
     contentId?: string;
     user?: IUser;
     trainings?: ITraining[];
+    training?: ITraining;
     currentPath: string;
     company?: ICompany;
     org?: IOrg;
@@ -61,9 +62,9 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath, company, trainings, user, org }) => {
+> = ({ contentId, currentPath, company, trainings, user, org, training }) => {
     const [content, setContent] = useState<IUser>();
-    const [training, setTraining] = useState<ITraining>();
+    // const [training, setTraining] = useState<ITraining>();
     const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
     const [currentTab, setCurrentTab] = useState<PivotItem>();
     const tooltipId = useId("toolt!p");
@@ -95,22 +96,28 @@ export const FullInformationsTabComponent: React.FC<
     const filterIcon: IIconProps = { iconName: "Filter" };
 
     useEffect(() => {
+        console.log({ training });
+        console.log({ currentPath });
         if (org && currentPath === PATH_LABEL_ORGANIZATION) {
             getTraineeByOrgId(org.id);
         }
         if (company && currentPath === PATH_LABEL_COMPANY) {
             getOrgByCompnanyId(company.id);
         }
+        if (training && currentPath === PATH_LABEL_SERVICES) {
+            getFormerByTrainingId(training.id);
+            getCertificateByTrainingId(training.id);
+        }
         if (contentId) {
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
                 setContent(emptyContent);
-                getFormerByTrainingId(contentId);
-                getCertificateByTrainingId(contentId);
-            } else {
-                const emptyTraining = {} as ITraining;
-                setTraining(emptyTraining);
+                // getCertificateByTrainingId(contentId);
             }
+            // else {
+            //     const emptyTraining = {} as ITraining;
+            //     setTraining(emptyTraining);
+            // }
             if (
                 currentPath === PATH_LABEL_RESOURCES ||
                 currentPath === PATH_LABEL_SERVICES ||
@@ -123,7 +130,7 @@ export const FullInformationsTabComponent: React.FC<
                 console.log({ company });
             }
         }
-    }, [contentId, currentTab, search]);
+    }, [contentId, currentTab, search, training]);
 
     useEffect(() => {
         console.log("the tab current:", selectedBooking);
@@ -238,13 +245,17 @@ export const FullInformationsTabComponent: React.FC<
                 if (response.status !== 200) {
                     return;
                 }
+                setLoading(false);
                 return response.json();
             })
             .then((respFormer: IUser[]) => {
+                console.log({ respFormer });
                 setFormersTrainings(respFormer);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log("error while getting former by training id:", err);
+                setLoading(false);
             });
     };
 
@@ -259,7 +270,7 @@ export const FullInformationsTabComponent: React.FC<
                 return response.json();
             })
             .then((respCertif: ICertificate[]) => {
-                console.log({ respCertif });
+                console.log("response in get certif:", respCertif);
                 setCertificates(respCertif);
                 setLoading(false);
 
@@ -560,6 +571,47 @@ export const FullInformationsTabComponent: React.FC<
                                                             _.modalite_evaluation
                                                         }
                                                     />
+                                                    <br />
+                                                    <Text
+                                                        variant="large"
+                                                        style={{
+                                                            fontWeight:
+                                                                "bolder",
+                                                            marginLeft: "20px",
+                                                        }}
+                                                    >
+                                                        Programme
+                                                    </Text>
+                                                    <hr className="certif_hr_solid" />
+                                                    {/* <br /> */}
+                                                    {_.programmes.length > 0 ? (
+                                                        <div>
+                                                            {_.programmes.map(
+                                                                (program) => (
+                                                                    <div
+                                                                        key={
+                                                                            program.id
+                                                                        }
+                                                                    >
+                                                                        <AttributeDisplayComponent
+                                                                            keyWord="Libellé"
+                                                                            valueWord={
+                                                                                program.intitule
+                                                                            }
+                                                                        />
+                                                                        <AttributeDisplayComponent
+                                                                            keyWord="Description"
+                                                                            valueWord={
+                                                                                program.description
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <EmptyComponent messageText="Pas encore de programme pour cette Certification" />
+                                                    )}
                                                 </Panel>
                                             </div>
                                         ))

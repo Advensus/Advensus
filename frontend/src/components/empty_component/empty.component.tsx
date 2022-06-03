@@ -9,7 +9,7 @@ export interface IEmptyProps {
 export const EmptyComponent: React.FC<IEmptyProps> = ({ messageText }) => {
     return (
         <div className="empty_component_container">
-            <Text variant="large">{messageText}</Text>
+            <Text variant="medium">{messageText}</Text>
         </div>
     );
 };

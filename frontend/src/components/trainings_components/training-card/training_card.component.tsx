@@ -7,7 +7,7 @@ import { ITraining } from "../../../lib";
 export interface ITrainingCardProps {
     default_props?: boolean;
     trainingDetails: ITraining;
-    toggleTab: (id: string) => void;
+    toggleTab: (id: ITraining) => void;
 }
 
 export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
@@ -17,7 +17,7 @@ export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
     return (
         <Link
             to="#"
-            onClick={() => toggleTab(trainingDetails.id)}
+            onClick={() => toggleTab(trainingDetails)}
             className="training_card_container"
         >
             <div className="training_card_subtitle">

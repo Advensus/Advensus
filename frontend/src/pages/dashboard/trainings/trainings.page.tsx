@@ -51,7 +51,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
-    const [contentId, setContentId] = useState<string>("");
+    const [trainingToDisplay, setTrainingToDisplay] = useState<ITraining>();
     const [search, setSearch] = useState<string>("");
     const [filteredTraining, setFilteredTraining] = useState<ITraining[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -154,9 +154,9 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
         }
     };
 
-    const toggleFullInfosTab = (id: string) => {
-        // console.log({ id });
-        setContentId(id);
+    const toggleFullInfosTab = (traing: ITraining) => {
+        // console.log({ traing });
+        setTrainingToDisplay(traing);
         var hint = document.getElementById(
             "display_tab_ii"
         ) as HTMLInputElement;
@@ -289,7 +289,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                                     filteredTraining.map((_) => (
                                         <TrainingCardComponent
                                             toggleTab={() =>
-                                                toggleFullInfosTab(_.id)
+                                                toggleFullInfosTab(_)
                                             }
                                             trainingDetails={_}
                                             key={_.id}
@@ -309,7 +309,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
             </div>
             <div id="display_tab_ii">
                 <FullInformationsTabComponent
-                    contentId={contentId}
+                    training={trainingToDisplay}
                     trainings={trainings}
                     currentPath={pathLabel}
                 />

@@ -1,4 +1,4 @@
-import { ITraining } from "./Training";
+import { IProgram, ITraining } from "./Training";
 
 export interface ICertificate {
     id: string;
@@ -8,4 +8,5 @@ export interface ICertificate {
     competence_atteste: string;
     modalite_evaluation: string;
     allouer: ITraining[];
+    programmes: IProgram[];
 }

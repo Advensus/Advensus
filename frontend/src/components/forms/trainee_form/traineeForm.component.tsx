@@ -247,9 +247,9 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             end_session: new Date(),
             formation: "",
             stagiaire: "",
-            certification: "",
-            programme_formation: "",
-            objectifs_formation: "",
+            // certification: "",
+            // programme_formation: "",
+            // objectifs_formation: "",
             level_start: "",
             level_end: "",
             lieu_formation: "",
@@ -401,7 +401,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     name="duration"
                 />
                 {/* new fields */}
-                <TextField
+                {/* <TextField
                     type="text"
                     value={values.certification}
                     onChange={handleChange}
@@ -424,7 +424,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Objectifs de la formation"
                     label="Objectifs de la formation"
                     name="objectifs_formation"
-                />
+                /> */}
                 <TextField
                     type="text"
                     value={values.lieu_formation}

@@ -17,9 +17,9 @@ export interface NewTraineeDto {
     formation: string | number | undefined;
     stagiaire: string;
 
-    certification: string;
-    programme_formation: string;
-    objectifs_formation: string;
+    // certification: string;
+    // programme_formation: string;
+    // objectifs_formation: string;
     level_start: string;
     level_end: string;
     lieu_formation: string;
