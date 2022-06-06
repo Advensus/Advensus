@@ -478,14 +478,14 @@ class createprogramme(serializers.ModelSerializer):
    
     class Meta:
         model = programme
-        fields = ['id','intitule','description','attribue']
+        fields = ['id','libelle','description','attribue']
 
 class crudprogramme(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
    
     class Meta:
         model = programme
-        fields = ['id','intitule','description','attribue']
+        fields = ['id','libelle','description','attribue']
 class crudcertificate(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
     programmes = crudprogramme(many=True,read_only=True)
