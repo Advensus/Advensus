@@ -134,7 +134,7 @@ class AddSouscrir(generics.GenericAPIView):
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
-		my_canvas = canvas.Canvas("stagiaire.pdf", pagesize=letter)
+		my_canvas = canvas.Canvas("media/user.pdf", pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
 		my_canvas.drawString(30, 750, 'Documents')
