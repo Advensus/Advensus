@@ -404,7 +404,7 @@ class CreateOrganisme(serializers.ModelSerializer):
         model = OrganismeFormation 
 
 
-        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo','connected']
+        fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
    
     def create(self,validate_data):
         organisme = super(CreateOrganisme,self).create(validate_data) 
@@ -413,7 +413,6 @@ class CreateOrganisme(serializers.ModelSerializer):
         organisme.save()
         return organisme
        
-
 class CrudOrganisme(serializers.ModelSerializer):
    
     societe_formation = SocieteData(read_only=True)
