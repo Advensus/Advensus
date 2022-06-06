@@ -29,7 +29,7 @@ class OrganismeData(serializers.ModelSerializer):
      
     class Meta:
         model = OrganismeFormation 
-        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','societe_formation']
+        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','company_logo','societe_formation']
 
 class FormationData(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
