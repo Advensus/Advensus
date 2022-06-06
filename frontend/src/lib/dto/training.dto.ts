@@ -11,3 +11,7 @@ export interface NewTrainingDtoIn {
 export interface NewTrainingDtoOut {
     training: ITraining;
 }
+
+export interface TrainingDtoIn {
+    training: ITraining[];
+}

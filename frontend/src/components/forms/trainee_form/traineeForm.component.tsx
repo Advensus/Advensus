@@ -23,7 +23,7 @@ import {
     SUPER_RP,
     UserDtoIn,
 } from "../../../lib";
-import { NewTraineeDto } from "../../../lib/dto/trainee";
+import { NewTraineeDto } from "../../../lib/dto/trainee.dto";
 import { ICompany } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
 import TrainingFolderService from "../../../services/training-folder.service";

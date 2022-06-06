@@ -16,7 +16,6 @@ export const useUsersStore = create<UsersStore>((set: SetState<UsersStore>) => {
 
         updateCurrentUsers: (users): void => {
             set({ users });
-            console.log("le users dans useUsers store:", users);
         },
     };
 });

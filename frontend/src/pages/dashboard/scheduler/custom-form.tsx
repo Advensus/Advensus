@@ -20,17 +20,17 @@ export const FormWithCustomEditor = (props: SchedulerFormProps) => {
     const formValidator = (_dataItem: any, formValueGetter: any) => {
         let result: any = {};
 
-        result.Former = [requiredValidator(formValueGetter("Former"))]
+        result.superviser = [requiredValidator(formValueGetter("superviser"))]
             .filter(Boolean)
             .reduce((current, acc) => current || acc, "");
 
-        result.Trainee = [requiredValidator(formValueGetter("Trainee"))]
+        result.assister = [requiredValidator(formValueGetter("assister"))]
             .filter(Boolean)
             .reduce((current, acc) => current || acc, "");
 
-        result.Training = [requiredValidator(formValueGetter("Training"))]
-            .filter(Boolean)
-            .reduce((current, acc) => current || acc, "");
+        // result.lier = [requiredValidator(formValueGetter("lier"))]
+        //     .filter(Boolean)
+        //     .reduce((current, acc) => current || acc, "");
 
         return result;
     };

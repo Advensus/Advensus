@@ -8,9 +8,17 @@ import { FieldProps } from "@progress/kendo-react-form";
 
 import { treatments, rooms, therapists } from "./data";
 import UserService from "../../../services/user.service";
-import { ITraining, IUser, TEACHEAR, TRAINEE, UserDtoIn } from "../../../lib";
+import {
+    ISubscription,
+    ITraining,
+    IUser,
+    TEACHEAR,
+    TRAINEE,
+    UserDtoIn,
+} from "../../../lib";
 import { useUsersStore } from "../../../stores/users.store";
 import TrainingService from "../../../services/training.service";
+import { useTrainingsStore } from "../../../stores/trainings.store";
 
 interface IItemDropDown {
     id: string;
@@ -72,7 +80,7 @@ export const TraineesList = (props: FieldProps) => {
 
     const handleChange = (event: DropDownListChangeEvent) => {
         if (props.onChange) {
-            props.onChange.call(undefined, { value: event.value.id });
+            props.onChange.call(undefined, { value: [event.value.id] });
         }
     };
 
@@ -87,15 +95,27 @@ export const TraineesList = (props: FieldProps) => {
     );
 };
 
+// TRAINING
 export const CoursesEditor = (props: FieldProps) => {
-    const [trainings, setTrainings] = React.useState<IItemDropDown[]>([]);
+    const [trainingsDrop, setTrainingsDrop] = React.useState<IItemDropDown[]>(
+        []
+    );
+    const { trainings } = useTrainingsStore();
 
     React.useEffect(() => {
         getTrainings();
-    }, []);
+        // console.log({ trainings });
+        // if (trainings) {
+        //     const theTrainings = trainings.training.map((_) => {
+        //         return { id: _.id, name: _.intitule };
+        //     });
+        //     setTrainingsDrop(theTrainings);
+        // }
+    }, [trainings]);
     const handleChange = (event: DropDownListChangeEvent) => {
         if (props.onChange) {
-            props.onChange.call(undefined, { value: event.value.value });
+            props.onChange.call(undefined, { value: event.value.id });
+            console.log({ event });
         }
     };
 
@@ -113,7 +133,7 @@ export const CoursesEditor = (props: FieldProps) => {
                 const theTrainings = trainingsResp.map((_) => {
                     return { id: _.id, name: _.intitule };
                 });
-                setTrainings(theTrainings);
+                setTrainingsDrop(theTrainings);
             })
             .catch((err) => {
                 console.log(
@@ -126,8 +146,58 @@ export const CoursesEditor = (props: FieldProps) => {
     return (
         <DropDownList
             onChange={handleChange}
-            value={trainings.find((t: any) => t.id === props.value)}
-            data={trainings}
+            value={trainingsDrop.find((t: any) => t.id === props.value)}
+            data={trainingsDrop}
+            dataItemKey={"id"}
+            textField={"name"}
+        />
+    );
+};
+
+// EDOF
+export const EdofList = (props: FieldProps) => {
+    const [subscription, setSubscription] = React.useState<IItemDropDown[]>([]);
+
+    React.useEffect(() => {
+        getSubscriptions();
+    }, []);
+
+    const getSubscriptions = async () => {
+        await TrainingService.get_all_subscription()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((subscriptionResp: ISubscription[]) => {
+                console.log("the all subscription", subscriptionResp);
+                const theSubscritions = subscriptionResp.map((_) => {
+                    return { id: _.level_end, name: _.training_status };
+                });
+                setSubscription(theSubscritions);
+            })
+            .catch((err) => {
+                console.log(
+                    "error while gettting all trainings in editors:",
+                    err
+                );
+            });
+    };
+
+    const handleChange = (event: DropDownListChangeEvent) => {
+        console.log({ event });
+        if (props.onChange) {
+            props.onChange.call(undefined, { value: event.value });
+        }
+    };
+
+    return (
+        <DropDownList
+            onChange={handleChange}
+            value={subscription.find((p: any) => p.id === props.value)}
+            data={subscription}
             dataItemKey={"id"}
             textField={"name"}
         />

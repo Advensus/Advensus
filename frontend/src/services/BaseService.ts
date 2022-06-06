@@ -3,7 +3,6 @@ import { LoginDtoOut } from "../lib";
 // require('isomorphic-fetch');
 class BaseService {
     static getHeaders = (isFile?: boolean) => {
-        console.log("on entre bien dans le getHeaders!!!!!");
         const headers = new Headers();
         if (!isFile) {
             headers.append("Content-Type", "application/json");
@@ -20,17 +19,6 @@ class BaseService {
         const token = localStorage.getItem("access_token")
             ? localStorage.getItem("access_token") || ""
             : "";
-        console.log("voyons voir:", token);
-        // console.log(
-        //     "nous sommes bien dans le getHeadersAuth",
-        //     `Bearer ${JSON.parse(token)}`
-        // );
-        // let convertTok = JSON.parse(token) as LoginDtoOut["tokens"];
-        // let convertTok = token.split("'");
-        // console.log("the convert tok:", { convertTok });
-        // const testt = convertTok[7];
-        // console.log("the tesst", `'${testt}'`);
-
         headers.append("Authorization", `Bearer ${JSON.parse(token)}`);
         return headers;
     };

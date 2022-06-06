@@ -39,6 +39,9 @@ export const certificateUrls = {
 export const trainingProgramUrls = {
     NEW_TRAINING_PROGRAMM: `${prefixer}/auth/create/programme/`,
 };
+export const subscriptionUrls = {
+    GET_ALL_SUBSCRIPTION: `${prefixer}/auth/GetAllSouscription/`,
+};
 
 export const trainingFolderUrls = {
     NEW_TRAINING_FOLDER: `${prefixer}/auth/create/souscrir/`,
@@ -51,4 +54,13 @@ export const companyUrls = {
     GET_ALL_ORGANISATION: `${prefixer}/auth/GetAllOrganisme`,
     GET_ORG_BY_COMPANY_ID: (id: string) =>
         `${prefixer}/auth/GetOrganismeBySoc/${id}`,
+};
+
+export const bookingUrls = {
+    NEW_BOOKING: `${prefixer}/auth/create/reservation/`,
+    GET_ALL_BOOKING: `${prefixer}/auth/GetAllReservation/`,
+};
+
+export const coursesUrls = {
+    NEW_COURSES: `${prefixer}/auth/create/courses/`,
 };

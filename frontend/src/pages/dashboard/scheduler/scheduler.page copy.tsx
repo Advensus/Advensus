@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Scheduler,
     AgendaView,
@@ -20,6 +20,8 @@ import products from "./products.json";
 import { CustomFooter } from "./custom-footer";
 import { CustomHeader } from "./custom-header";
 import { FormWithCustomEditor } from "./custom-form";
+import { NewBookingDto } from "../../../lib";
+import BookingService from "../../../services/booking.service";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -82,6 +84,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [slotDivision, setSlotDivision] = React.useState(2);
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
     const [formerDisplay, setFormerDisplay] = React.useState("former");
+    const [newBookingVal, setNewBookingVal] = useState<NewBookingDto>();
 
     const handleDataChange = ({
         created,
@@ -89,29 +92,39 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         deleted,
     }: SchedulerDataChangeEvent) => {
         console.log({ updated, created, deleted });
-        setData((old) =>
-            old
-                // Filter the deleted items
-                .filter(
-                    (item) =>
-                        deleted.find((current) => current.id === item.id) ===
-                        undefined
-                )
-                // Find and replace the updated items
-                .map(
-                    (item) =>
-                        updated.find((current) => current.id === item.id) ||
-                        item
-                )
-                // Add the newly created items and assign an `id`.
-                .concat(
-                    created.map((booking) =>
-                        // Object.assign({}, item, { id: guid() })
-                        console.log({ booking })
-                    )
-                )
-        );
+        console.log("le created en action :", created);
+        if (created) {
+        }
+        // setData((old) =>
+        //     old
+        //         // Filter the deleted items
+        //         .filter(
+        //             (item) =>
+        //                 deleted.find((current) => current.id === item.id) ===
+        //                 undefined
+        //         )
+        //         // Find and replace the updated items
+        //         .map(
+        //             (item) =>
+        //                 updated.find((current) => current.id === item.id) ||
+        //                 item
+        //         )
+        //         // Add the newly created items and assign an `id`.
+        //         .concat(
+        //             created.map((booking) => {
+        //                 // setNewBookingVal(booking);
+
+        //                 Object.assign({}, booking, { id: guid() });
+        //                 // console.log("the new booking:", booking);
+        //             })
+        //         )
+        // );
     };
+
+    useEffect(() => {
+        console.log({ newBookingVal });
+        if (newBookingVal) addNewBooking(newBookingVal);
+    }, [newBookingVal]);
 
     const filterByResources = (perso: string) => {
         const filterData = sampleDataWithResources.filter(
@@ -119,6 +132,22 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         );
         setFilteredData(filterData);
         console.log({ perso });
+    };
+
+    const addNewBooking = (val: NewBookingDto) => {
+        console.log({ val });
+        // BookingService.add_new_booking(val)
+        //     .then(async (response) => {
+        //         if (response.status !== 200) {
+        //             console.log({ response });
+        //         }
+        //         const data = (await response.json()) as NewBookingDto;
+        //         console.log("the current adding booking:", data);
+        //         // onCreate(data);
+        //     })
+        //     .catch((err) => {
+        //         console.log("error while adding new booking:", err);
+        //     });
     };
 
     return (

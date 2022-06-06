@@ -11,6 +11,7 @@ import {
     FormerList,
     TraineesList,
     CoursesEditor,
+    EdofList,
 } from "./editors";
 
 export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
@@ -23,30 +24,39 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                 </div>
             </div>
             <div className="k-form-field">
-                <Label>Formateur</Label>
+                <Label>Formateur(s)</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Former"} component={FormerList} />
-                    {props.errors.Former && (
-                        <Error>{props.errors.Former}</Error>
+                    <Field name={"superviser"} component={FormerList} />
+                    {props.errors.superviser && (
+                        <Error>{props.errors.superviser}</Error>
                     )}
                 </div>
             </div>
             <div className="k-form-field">
-                <Label>Stagiaire</Label>
+                <Label>Stagiaire(s)</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Trainee"} component={TraineesList} />
-                    {props.errors.Trainee && (
-                        <Error>{props.errors.Trainee}</Error>
+                    <Field name={"assister"} component={TraineesList} />
+                    {props.errors.assister && (
+                        <Error>{props.errors.assister}</Error>
                     )}
                 </div>
             </div>
             <div className="k-form-field">
-                <Label>Cours</Label>
+                <Label>Formation(s)</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"Training"} component={TraineesList} />
-                    {props.errors.Training && (
+                    <Field name={"lier"} component={CoursesEditor} />
+                    {/* {props.errors.Training && (
                         <Error>{props.errors.Training}</Error>
-                    )}
+                    )} */}
+                </div>
+            </div>
+            <div className="k-form-field">
+                <Label>EDOF(s)</Label>
+                <div className="k-form-field-wrap">
+                    <Field name={"proposer"} component={FormerList} />
+                    {/* {props.errors.Training && (
+                        <Error>{props.errors.Training}</Error>
+                    )} */}
                 </div>
             </div>
 
@@ -56,27 +66,16 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                     <Field name={"description"} component={Input} rows={1} />
                 </div>
             </div>
+            <div className="k-form-field">
+                <Label>Status de la Réservation</Label>
+                <div className="k-form-field-wrap">
+                    <Field name={"status"} component={Input} rows={1} />
+                </div>
+            </div>
             {/* <div className="k-form-field">
                 <Label>Début</Label>
-                <Field
-                    name={"Start"}
-                    component={props.startEditor || DatePicker}
-                    as={DateTimePicker}
-                    rows={1} 
-                    // width={"140px"}
-                    // format="t"
-                />
-            </div> */}
-            <div className="k-form-field">
-                <Label>Début</Label>
                 <div className="k-form-field-wrap">
-                    <div
-                    // style={{
-                    //     width: "100%",
-                    //     display: "flex",
-                    //     alignItems: "center",
-                    // }}
-                    >
+                    <div>
                         <Field
                             name={"Start"}
                             component={props.startEditor || DatePicker}
@@ -92,11 +91,11 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                             as={DateTimePicker}
                             rows={1}
                             // width={"140px"}
-                            // format=""
+                            // format="t"
                         />
                     </div>
                 </div>
-            </div>
+            </div> */}
         </FormElement>
     );
 };

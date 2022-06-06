@@ -11,9 +11,18 @@ import {
     ToolbarSpacer,
 } from "@progress/kendo-react-buttons";
 import { ToolbarDropdown } from "./toolbar-dropdown";
-import { IUser, TEACHEAR, TRAINEE, UserDtoIn } from "../../../lib";
+import {
+    ITraining,
+    IUser,
+    TEACHEAR,
+    TRAINEE,
+    TrainingDtoIn,
+    UserDtoIn,
+} from "../../../lib";
 import UserService from "../../../services/user.service";
 import { useUsersStore } from "../../../stores/users.store";
+import TrainingService from "../../../services/training.service";
+import { useTrainingsStore } from "../../../stores/trainings.store";
 
 export interface ICutomHeaderProps {
     default_props?: boolean;
@@ -27,10 +36,11 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
     const { updateCurrentUsers } = useUsersStore();
+    const { updateCurrentTrainings } = useTrainingsStore();
 
     useEffect(() => {
         getAllUser();
-        console.log({ displayEventByResource });
+        getAllTraining();
     }, []);
 
     // FOR HEADER
@@ -62,7 +72,6 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                     return [];
                 }
                 const datas = (await response.json()) as UserDtoIn;
-                console.log("the users in scheduler:", datas.user);
                 const trainer = datas.user.filter(
                     (_) => _.user_type === TEACHEAR
                 );
@@ -76,6 +85,26 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
             })
             .catch((err) => {
                 console.log("error while getting users in scheduler:", err);
+            });
+    };
+
+    const getAllTraining = async () => {
+        await TrainingService.get_all_trainings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((trainingsResp: TrainingDtoIn) => {
+                updateCurrentTrainings(trainingsResp);
+            })
+            .catch((err) => {
+                console.log(
+                    "error while gettting all trainings scheduler:",
+                    err
+                );
             });
     };
 
