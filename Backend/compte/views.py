@@ -720,7 +720,7 @@ def getcertificationbyform(request,pk):
 
 	return Response(serializer.data)
 
-#END P AND C
+#END PROGRAMME AND CERTIFICAT
 
 #SOUSCRIR CRUD
 @api_view(['GET'])
