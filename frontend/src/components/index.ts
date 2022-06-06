@@ -39,3 +39,4 @@ export * from "./custom_dropdown_component/custom_dropdown.component";
 export * from "./company_components/company_details/company_details.component";
 export * from "./company_components/small_company_card/small_company_card.component";
 export * from "./certificate_card/certificate_card.component";
+export * from "./empty_component/empty.component";

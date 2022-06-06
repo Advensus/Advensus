@@ -15,7 +15,12 @@ import {
     IDropdownStyles,
 } from "@fluentui/react/lib/Dropdown";
 import React, { FormEvent, useEffect, useState } from "react";
-import { SmallCompanyCardComponent, TrainingDetailsComponent } from "../..";
+import {
+    AttributeDisplayComponent,
+    SmallCompanyCardComponent,
+    TrainingDetailsComponent,
+    EmptyComponent,
+} from "../..";
 import {
     ITraining,
     IUser,
@@ -32,18 +37,23 @@ import { TrainingOrgTraineesDisplayComponent } from "../../training_org_componen
 import { UserDetailsComponent } from "../user-details/user_details.component";
 import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "@fluentui/react-hooks";
-import { ICompany } from "../../../lib/interfaces/Company";
+import { ICompany, IOrg } from "../../../lib/interfaces/Company";
 import { CompanyDetailsComponent } from "../../company_components/company_details/company_details.component";
 import { CertificateCardComponent } from "../../certificate_card/certificate_card.component";
 import { CertificateFormComponent } from "../../forms/certificate_form/certificateForm.component";
 import { TrainingProgramFormComponent } from "../../forms/training_program_form/trainingProgramForm.component";
+import { ICertificate } from "../../../lib/interfaces/Certificate";
+import { LoadingComponent } from "../../loading_component/Loading.component";
+import CompanyService from "../../../services/company.service";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
     contentId?: string;
+    user?: IUser;
     trainings?: ITraining[];
     currentPath: string;
     company?: ICompany;
+    org?: IOrg;
 }
 
 const planIcon: IIconProps = { iconName: "PlanView" };
@@ -51,9 +61,10 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath, company, trainings }) => {
+> = ({ contentId, currentPath, company, trainings, user, org }) => {
     const [content, setContent] = useState<IUser>();
     const [training, setTraining] = useState<ITraining>();
+    const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
     const [currentTab, setCurrentTab] = useState<PivotItem>();
     const tooltipId = useId("toolt!p");
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
@@ -62,9 +73,18 @@ export const FullInformationsTabComponent: React.FC<
         useState<Boolean>(false);
     const [showTrainingProgramForm, setShowTrainingProgramForm] =
         useState<Boolean>(false);
-
     const [selectedBooking, setSelectedBooking] =
         React.useState<IDropdownOption>();
+    const [certificates, setCertificates] = useState<ICertificate[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [search, setSearch] = useState<string>("");
+    const [filteredCertif, setFilteredCertif] = useState<ICertificate[]>([]);
+    const [filteredCompanyOrg, setFilteredCompanyOrg] = useState<ICompany[]>(
+        []
+    );
+    const [filteredOrgTrainees, setFilteredOrgTrainees] = useState<IUser[]>([]);
+    const [traineesOrg, setTraineesOrg] = useState<IUser[]>([]);
+    const [orgsCompant, setOrgsCompant] = useState<ICompany[]>([]);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -72,13 +92,21 @@ export const FullInformationsTabComponent: React.FC<
     ): void => {
         setSelectedBooking(item);
     };
+    const filterIcon: IIconProps = { iconName: "Filter" };
 
     useEffect(() => {
-        console.log({ trainings });
+        if (org && currentPath === PATH_LABEL_ORGANIZATION) {
+            getTraineeByOrgId(org.id);
+        }
+        if (company && currentPath === PATH_LABEL_COMPANY) {
+            getOrgByCompnanyId(company.id);
+        }
         if (contentId) {
             if (currentPath === PATH_LABEL_SERVICES) {
                 const emptyContent = {} as IUser;
                 setContent(emptyContent);
+                getFormerByTrainingId(contentId);
+                getCertificateByTrainingId(contentId);
             } else {
                 const emptyTraining = {} as ITraining;
                 setTraining(emptyTraining);
@@ -88,46 +116,161 @@ export const FullInformationsTabComponent: React.FC<
                 currentPath === PATH_LABEL_SERVICES ||
                 currentPath === PATH_LABEL_CUSTOMER
             ) {
-                getContentById(contentId);
+                // getContentById(contentId);
             }
             if (currentPath === PATH_LABEL_COMPANY) {
                 console.log("on lance ge getCompanyById ici");
                 console.log({ company });
             }
         }
-    }, [contentId, currentTab]);
+    }, [contentId, currentTab, search]);
 
     useEffect(() => {
         console.log("the tab current:", selectedBooking);
     }, [selectedBooking]);
 
-    const getContentById = (id: string) => {
-        const serviceToCall =
-            currentPath === PATH_LABEL_SERVICES
-                ? TrainingService.get_training_by_id(id)
-                : UserService.get_user_by_id(id);
+    // const getContentById = (id: string) => {
+    //     const serviceToCall =
+    //         currentPath === PATH_LABEL_SERVICES
+    //             ? TrainingService.get_training_by_id(id)
+    //             : UserService.get_user_by_id(id);
 
-        serviceToCall
+    //     serviceToCall
+    //         .then((response) => {
+    //             if (response.status !== 200) {
+    //                 return;
+    //             }
+
+    //             return response.json();
+    //         })
+    //         .then(
+    //             currentPath === PATH_LABEL_SERVICES
+    //                 ? (resp: ITraining) => {
+    //                       setTraining(resp);
+    //                   }
+    //                 : (resp: IUser) => {
+    //                       console.log({ resp });
+    //                       setContent(resp);
+    //                   }
+    //         )
+    //         .catch((err) => {
+    //             console.log("error while getting content by his id:", err);
+    //         });
+    // };
+
+    const filterCertificates = (searchTerm: string) => {
+        return certificates.filter(
+            (_) =>
+                `${_.intitule} ${_.code} ${_.objectif}`.indexOf(searchTerm) !==
+                -1
+        );
+    };
+    const filterCompanyOrg = (searchTerm: string) => {
+        return orgsCompant.filter(
+            (_) =>
+                `${_.company_name} ${_.company_adress} ${_.company_phone_number}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+    const filterOrgTrainees = (searchTerm: string) => {
+        return traineesOrg.filter(
+            (_) =>
+                `${_.first_name} ${_.username} ${_.email} ${_.adress}`.indexOf(
+                    searchTerm
+                ) !== -1
+        );
+    };
+
+    const getTraineeByOrgId = (orgId: string) => {
+        if (filterOrgTrainees.length > 0) setLoading(true);
+        UserService.get_trainee_by_org_id(orgId)
             .then((response) => {
                 if (response.status !== 200) {
                     return;
                 }
-
+                setLoading(false);
                 return response.json();
             })
-            .then(
-                currentPath === PATH_LABEL_SERVICES
-                    ? (resp: ITraining) => {
-                          console.log({ resp });
-                          setTraining(resp);
-                      }
-                    : (resp: IUser) => {
-                          console.log({ resp });
-                          setContent(resp);
-                      }
-            )
+            .then((resTrainee: IUser[]) => {
+                setTraineesOrg(resTrainee);
+
+                const searchByKeyWord = search
+                    ? filterOrgTrainees(search)
+                    : resTrainee;
+                setFilteredOrgTrainees(searchByKeyWord);
+                setLoading(false);
+            })
             .catch((err) => {
-                console.log("error while getting content by his id:", err);
+                console.log("error while getting trainee by org id:", err);
+                setLoading(false);
+            });
+    };
+
+    const getOrgByCompnanyId = (companyId: string) => {
+        if (filteredCompanyOrg.length > 0) setLoading(true);
+        CompanyService.get_org_by_compnany_id(companyId)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                setLoading(false);
+                return response.json();
+            })
+            .then((respOrg: ICompany[]) => {
+                setOrgsCompant(respOrg);
+
+                const searchByKeyWord = search
+                    ? filterCompanyOrg(search)
+                    : respOrg;
+                setFilteredCompanyOrg(searchByKeyWord);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log("error while getting org by company id:", err);
+                setLoading(false);
+            });
+    };
+
+    const getFormerByTrainingId = (idTraining: string) => {
+        UserService.get_former_by_training_id(idTraining)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respFormer: IUser[]) => {
+                setFormersTrainings(respFormer);
+            })
+            .catch((err) => {
+                console.log("error while getting former by training id:", err);
+            });
+    };
+
+    const getCertificateByTrainingId = (id: string) => {
+        if (filterCertificates.length > 0) setLoading(true);
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                setLoading(false);
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log({ respCertif });
+                setCertificates(respCertif);
+                setLoading(false);
+
+                const searchByKeyWord = search
+                    ? filterCertificates(search)
+                    : respCertif;
+                setFilteredCertif(searchByKeyWord);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+                setLoading(false);
             });
     };
 
@@ -193,10 +336,14 @@ export const FullInformationsTabComponent: React.FC<
                             </TooltipHost>
                         </>
                     )}
-                    {(currentPath === PATH_LABEL_ORGANIZATION ||
-                        currentPath === PATH_LABEL_COMPANY) && (
+                    {currentPath === PATH_LABEL_COMPANY && (
                         <Text style={{ fontWeight: "bold" }}>
                             {company?.company_name}
+                        </Text>
+                    )}
+                    {currentPath === PATH_LABEL_ORGANIZATION && (
+                        <Text style={{ fontWeight: "bold" }}>
+                            {org?.company_name}
                         </Text>
                     )}
                 </div>
@@ -232,60 +379,120 @@ export const FullInformationsTabComponent: React.FC<
                                     {/* JUST FOR SERVICES */}
                                     <div className="full_infos_resources_own">
                                         <Text variant="large">
-                                            {" "}
                                             Mes Ressources
                                         </Text>
                                         <hr className="full_infos_hr_solid" />
-                                        <div className="resources_own_small_card_container">
-                                            <div className="resources_own_start">
-                                                <div className="res_cycle">
-                                                    <Text
-                                                        variant="small"
-                                                        style={{
-                                                            color: "#fff",
-                                                            fontWeight: "bold",
+                                        {loading ? (
+                                            <LoadingComponent />
+                                        ) : formersTrainings.length ? (
+                                            formersTrainings.map((_) => (
+                                                <div
+                                                    className="resources_own_small_card_container"
+                                                    key={_.id}
+                                                >
+                                                    <div className="resources_own_start">
+                                                        <div className="res_cycle">
+                                                            <Text
+                                                                variant="small"
+                                                                style={{
+                                                                    color: "#fff",
+                                                                    fontWeight:
+                                                                        "bold",
+                                                                }}
+                                                            >
+                                                                RES
+                                                            </Text>
+                                                        </div>
+                                                        <div className="res_info">
+                                                            <Text
+                                                                variant="large"
+                                                                style={{
+                                                                    fontWeight:
+                                                                        "lighter",
+                                                                }}
+                                                            >
+                                                                {_.first_name +
+                                                                    " " +
+                                                                    _.username}
+                                                            </Text>
+                                                            <Text
+                                                                className="tag_online"
+                                                                variant="tiny"
+                                                            >
+                                                                Online
+                                                            </Text>
+                                                        </div>
+                                                    </div>
+                                                    <Panel
+                                                        isLightDismiss
+                                                        isOpen={isOpen}
+                                                        onDismiss={dismissPanel}
+                                                        closeButtonAriaLabel="Close"
+                                                        headerText="Détails du formateur"
+                                                    >
+                                                        <br />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Formateur Id"
+                                                            valueWord={_.id}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Prénom"
+                                                            valueWord={
+                                                                _.first_name
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Nom"
+                                                            valueWord={
+                                                                _.username
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Email"
+                                                            valueWord={_.email}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Adress"
+                                                            valueWord={_.adress}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Sté Formateur"
+                                                            valueWord={
+                                                                _.appartenir_societe &&
+                                                                _
+                                                                    ?.appartenir_societe[0]
+                                                                    ?.company_name
+                                                            }
+                                                        />
+                                                    </Panel>
+                                                    <IconButton
+                                                        menuIconProps={{
+                                                            iconName:
+                                                                "ChevronRightSmall",
                                                         }}
-                                                    >
-                                                        RES
-                                                    </Text>
+                                                        className="res_action"
+                                                        onClick={openPanel}
+                                                    />
                                                 </div>
-                                                <div className="res_info">
-                                                    <Text
-                                                        variant="large"
-                                                        style={{
-                                                            fontWeight:
-                                                                "lighter",
-                                                        }}
-                                                    >
-                                                        Name blabla bla
-                                                    </Text>
-                                                    <Text
-                                                        className="tag_online"
-                                                        variant="tiny"
-                                                    >
-                                                        Online
-                                                    </Text>
-                                                </div>
-                                            </div>
-                                            <IconButton
-                                                menuIconProps={{
-                                                    iconName:
-                                                        "ChevronRightSmall",
-                                                }}
-                                                className="res_action"
+                                            ))
+                                        ) : (
+                                            <EmptyComponent
+                                                messageText="Pas de Formateur pour cette
+                                                    Formation"
                                             />
-                                        </div>
+                                        )}
                                     </div>
                                 </>
                             ) : currentPath === PATH_LABEL_COMPANY ||
                               currentPath === PATH_LABEL_ORGANIZATION ? (
                                 <CompanyDetailsComponent
                                     company={company}
+                                    org={org}
                                     currentPath={currentPath}
                                 />
                             ) : (
                                 <UserDetailsComponent
-                                    contentToDetail={content}
+                                    contentToDetail={user}
                                     currentPath={currentPath}
                                 />
                             )}
@@ -299,61 +506,66 @@ export const FullInformationsTabComponent: React.FC<
                                 <SearchBox
                                     placeholder="Search"
                                     onEscape={(ev) => {
-                                        console.log("Custom onEscape Called");
+                                        setSearch("");
                                     }}
                                     onClear={(ev) => {
-                                        console.log("Custom onClear Called");
+                                        setSearch("");
                                     }}
                                     onChange={(_, newValue) =>
-                                        console.log(
-                                            "SearchBox onChange fired: " +
-                                                newValue
-                                        )
-                                    }
-                                    onSearch={(newValue) =>
-                                        console.log(
-                                            "SearchBox onSearch fired: " +
-                                                newValue
-                                        )
+                                        setSearch(newValue || "")
                                     }
                                     className="label_service_tab_certif_search"
                                 />
                                 <hr className="certif_hr_solid" />
                                 <div className="label_certif_tab_display_card">
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <CertificateCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                </div>
-                                <div>
-                                    <br />
-                                    <br />
-                                    <Panel
-                                        isLightDismiss
-                                        isOpen={isOpen}
-                                        onDismiss={dismissPanel}
-                                        closeButtonAriaLabel="Close"
-                                        headerText="Détails de la certification"
-                                    >
-                                        <p>
-                                            'This panel uses "light dismiss"
-                                            behavior: it can be closed by
-                                            clicking or tapping ' + 'the area
-                                            outside the panel (or using the
-                                            close button as usual).';
-                                        </p>
-                                    </Panel>
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : filteredCertif.length > 0 ? (
+                                        filteredCertif.map((_) => (
+                                            <div key={_.id}>
+                                                <CertificateCardComponent
+                                                    openPanel={openPanel}
+                                                    key={_.id}
+                                                    certificate={_}
+                                                />
+                                                <Panel
+                                                    isLightDismiss
+                                                    isOpen={isOpen}
+                                                    onDismiss={dismissPanel}
+                                                    closeButtonAriaLabel="Close"
+                                                    headerText={
+                                                        "Certification" +
+                                                        " " +
+                                                        _.intitule
+                                                    }
+                                                >
+                                                    <br />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Code"
+                                                        valueWord={_.code}
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Objectifs"
+                                                        valueWord={_.objectif}
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Compétences à tester"
+                                                        valueWord={
+                                                            _.competence_atteste
+                                                        }
+                                                    />
+                                                    <AttributeDisplayComponent
+                                                        keyWord="Modalités d'évaluation"
+                                                        valueWord={
+                                                            _.modalite_evaluation
+                                                        }
+                                                    />
+                                                </Panel>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun élément" />
+                                    )}
                                 </div>
                             </PivotItem>
                         )}
@@ -372,30 +584,21 @@ export const FullInformationsTabComponent: React.FC<
                                     Par défaut
                                 </Text>
                                 <hr className="full_infos_hr_solid" />
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
-                                <div className="display_serv_item">
-                                    <Text
-                                        variant="small"
-                                        style={{ fontWeight: "bolder" }}
-                                    >
-                                        Service name
-                                    </Text>
-                                </div>
+                                {user &&
+                                    user.competence &&
+                                    user.competence.map((_) => (
+                                        <div
+                                            className="display_serv_item"
+                                            key={_.id}
+                                        >
+                                            <Text
+                                                variant="small"
+                                                style={{ fontWeight: "bolder" }}
+                                            >
+                                                {_.intitule}
+                                            </Text>
+                                        </div>
+                                    ))}
                             </PivotItem>
                         )}
                         {/* FOR BOOKING TAB */}
@@ -476,28 +679,68 @@ export const FullInformationsTabComponent: React.FC<
 
                         {currentPath === PATH_LABEL_ORGANIZATION && (
                             <PivotItem headerText="Stagiaires">
-                                <TrainingOrgTraineesDisplayComponent
-                                    openPanel={openPanel}
+                                <SearchBox
+                                    placeholder="Filtrer"
+                                    iconProps={filterIcon}
+                                    onEscape={(ev) => {
+                                        setSearch("");
+                                    }}
+                                    onClear={(ev) => {
+                                        setSearch("");
+                                    }}
+                                    onChange={(_, newValue) =>
+                                        setSearch(newValue || "")
+                                    }
+                                    className="label_trainee_tab_search"
                                 />
-                                <div>
-                                    <br />
-                                    <br />
-                                    <Panel
-                                        isLightDismiss
-                                        isOpen={isOpen}
-                                        onDismiss={dismissPanel}
-                                        closeButtonAriaLabel="Close"
-                                        headerText="Détails Stagaire"
-                                    >
-                                        <p>
-                                            'This panel uses "light dismiss"
-                                            behavior: it can be closed by
-                                            clicking or tapping ' + 'the area
-                                            outside the panel (or using the
-                                            close button as usual).';
-                                        </p>
-                                    </Panel>
-                                </div>
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : filteredOrgTrainees.length ? (
+                                    filteredOrgTrainees.map((_) => (
+                                        <div key={_.id}>
+                                            <TrainingOrgTraineesDisplayComponent
+                                                openPanel={openPanel}
+                                                trainee={_}
+                                                key={_.id}
+                                            />
+                                            <Panel
+                                                isLightDismiss
+                                                isOpen={isOpen}
+                                                onDismiss={dismissPanel}
+                                                closeButtonAriaLabel="Close"
+                                                headerText="Détails Stagaire"
+                                            >
+                                                <br />
+                                                <AttributeDisplayComponent
+                                                    keyWord="ID"
+                                                    valueWord={_.id}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Prénom"
+                                                    valueWord={_.first_name}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Nom"
+                                                    valueWord={_.username}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Email"
+                                                    valueWord={_.email}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Tel"
+                                                    valueWord={_.phone_number}
+                                                />
+                                                <AttributeDisplayComponent
+                                                    keyWord="Adresse"
+                                                    valueWord={_.adress}
+                                                />
+                                            </Panel>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucun Stagiaire trouvé" />
+                                )}
                             </PivotItem>
                         )}
                         {currentPath === PATH_LABEL_COMPANY && (
@@ -506,29 +749,30 @@ export const FullInformationsTabComponent: React.FC<
                                     <SearchBox
                                         placeholder="Search"
                                         underlined={true}
+                                        onEscape={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onClear={(ev) => {
+                                            setSearch("");
+                                        }}
+                                        onChange={(_, newValue) =>
+                                            setSearch(newValue || "")
+                                        }
                                         className="item_organisation_searcbar"
                                     />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
-                                    <SmallCompanyCardComponent
-                                        openPanel={openPanel}
-                                    />
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : filteredCompanyOrg.length ? (
+                                        filteredCompanyOrg.map((_) => (
+                                            <SmallCompanyCardComponent
+                                                openPanel={openPanel}
+                                                org={_}
+                                                key={_.id}
+                                            />
+                                        ))
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun O-F trouvée" />
+                                    )}
                                 </div>
                                 <div>
                                     <br />
@@ -566,7 +810,7 @@ export const FullInformationsTabComponent: React.FC<
             ) : showTrainingProgramForm ? (
                 <div className="full_infos_tab_display_form">
                     <TrainingProgramFormComponent
-                        trainings={trainings}
+                        certificates={certificates}
                         cancel={() => setShowTrainingProgramForm(false)}
                     />
                 </div>

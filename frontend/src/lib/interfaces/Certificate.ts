@@ -1,8 +1,11 @@
+import { ITraining } from "./Training";
+
 export interface ICertificate {
     id: string;
     intitule: string;
     code: string;
-    objectifs: string;
-    competences_tester: string;
-    modaliter_evaluation: string;
+    objectif: string;
+    competence_atteste: string;
+    modalite_evaluation: string;
+    allouer: ITraining[];
 }

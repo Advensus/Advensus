@@ -10,6 +10,9 @@ class CompanyService {
         BaseService.getRequest(companyUrls.GET_ALL_SOCIETE, false);
     static get_all_organization = () =>
         BaseService.getRequest(companyUrls.GET_ALL_ORGANISATION, false);
+
+    static get_org_by_compnany_id = (id: string) =>
+        BaseService.getRequest(companyUrls.GET_ORG_BY_COMPANY_ID(id), false);
 }
 
 export default CompanyService;
