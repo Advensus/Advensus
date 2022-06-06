@@ -357,13 +357,11 @@ class loginorg(serializers.ModelSerializer):
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
-            user = auth.authenticate(email=email,password=password_connexion)
+            org = auth.authenticate(email=email,password=password_connexion)
 
-            if not user:
+            if not org:
                 raise AuthenticationFailed('donnée incorrecte...')
-            if not user.is_active:
-                raise AuthenticationFailed('compte non activé...')
-            return user
+            return org
             # return organisme
 # CRUD Operations
 class crudsouscrir(serializers.ModelSerializer):
