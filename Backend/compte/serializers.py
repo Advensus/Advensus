@@ -29,7 +29,7 @@ class OrganismeData(serializers.ModelSerializer):
      
     class Meta:
         model = OrganismeFormation 
-        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','societe_formation']
+        fields=['id','company_name','company_adress','company_phone_number','fix_number','password_connexion','password_messagerie','company_logo','societe_formation']
 
 class FormationData(serializers.ModelSerializer):
     # test_oral = serializers.BooleanField()
@@ -43,14 +43,11 @@ class CertificatData(serializers.ModelSerializer):
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
-<<<<<<< HEAD
-=======
 
 class RpData(serializers.ModelSerializer):
     appartenir_societe = SocieteData(many=True,read_only=True)
     class Meta:
         model = User
->>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c
         
         fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
 class Stagiaredata(serializers.ModelSerializer):
@@ -399,10 +396,6 @@ class cruduser(serializers.ModelSerializer):
 class CreateOrganisme(serializers.ModelSerializer):
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-<<<<<<< HEAD
-    # donnee_formation = SocieteData(read_only=True)
-=======
->>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c
     
     
     class Meta:
@@ -498,14 +491,6 @@ class crudprogramme(serializers.ModelSerializer):
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
-<<<<<<< HEAD
-
-class createprogramme(serializers.ModelSerializer):
-    
-    class Meta:
-        model = programme
-        fields = ['id','intitule','description','attribue']
-=======
 class crudcertificate(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
     programmes = crudprogramme(many=True,read_only=True)
@@ -521,4 +506,3 @@ class createcertificate(serializers.ModelSerializer):
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
 
->>>>>>> 37d417797d0587b9fd04cf2d55a47e16691c009c

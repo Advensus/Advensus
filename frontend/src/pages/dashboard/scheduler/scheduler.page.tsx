@@ -105,8 +105,8 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     }, []);
 
     useEffect(() => {
-        console.log({ bookingData });
-    }, [allBookings]);
+        console.log(bookingData);
+    }, [bookingData]);
 
     useEffect(() => {
         if (allBookings.length > 0) {
@@ -246,6 +246,18 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             })
             .then((bookingsResp: IBooking[]) => {
                 console.log("the all bookings", bookingsResp);
+                // const sampleBooking = bookingsResp.map((dataItem) => {
+                //     return {
+                //         id: dataItem.id,
+                //         start: dataItem.start_date,
+                //         end: dataItem.end_date,
+                //         title: dataItem.title,
+                //         description: dataItem.description,
+                //         coursesId: dataItem.concerner,
+                //         personId: dataItem.proposer,
+                //     };
+                // });
+                // console.log({ sampleBooking });
                 setAllBookings(bookingsResp);
             })
             .catch((err) => {
