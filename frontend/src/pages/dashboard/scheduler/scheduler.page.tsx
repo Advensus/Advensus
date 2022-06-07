@@ -23,7 +23,6 @@ import { FormWithCustomEditor } from "./custom-form";
 import { NewBookingDto, NewCoursesDto, ICourses, IBooking } from "../../../lib";
 import { useAuthStore } from "../../../stores";
 import BookingService from "../../../services/booking.service";
-import { DateTimePicker } from "@progress/kendo-react-dateinputs";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -31,12 +30,20 @@ export interface ISchedulerPageProps {
 
 export interface finalBookingData {
     id: string;
-    start: string;
-    end: string;
+    start: Date | string;
+    end: Date | string;
     title: string;
     description: string;
     coursesId: string;
     personId: string;
+
+    startTimezone: string | Date | null;
+    endTimezone: string | Date | null;
+    isAllDay: boolean;
+    recurrenceRule: string;
+    recurrenceId: string | null;
+    recurrenceExceptions: string | null;
+    // ownerID: dataItem.proposer,
 }
 
 const group: SchedulerGroup = {
@@ -46,12 +53,25 @@ const group: SchedulerGroup = {
 
 const resources: SchedulerResource[] = [
     {
-        name: "Cours",
+        name: "Status",
         data: [
-            { text: "Meeting Room 101", value: 1, color: "#5392E4" },
-            { text: "Meeting Room 201", value: 2, color: "#FF7272" },
+            { text: "En cours", value: 0, color: "green" },
+            { text: "Annulé", value: 1, color: "green" },
+            { text: "Terminé", value: 2, color: "blue" },
+            { text: "Non effectué", value: 3, color: "blue" },
         ],
-        field: "roomId",
+        field: "status",
+        valueField: "value",
+        textField: "text",
+        colorField: "color",
+    },
+    {
+        name: "Tasks",
+        data: [
+            { text: "Meeting Room 101", value: 3, color: "green" },
+            { text: "Meeting Room 201", value: 4, color: "blue" },
+        ],
+        field: "taskId",
         valueField: "value",
         textField: "text",
         colorField: "color",
@@ -62,12 +82,12 @@ const resources: SchedulerResource[] = [
             {
                 text: "Peter",
                 value: 1,
-                color: "#5392E4",
+                color: "red",
             },
             {
                 text: "Alex",
                 value: 2,
-                color: "#54677B",
+                color: "yellow",
             },
         ],
         field: "personId",
@@ -96,8 +116,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
     const [formerDisplay, setFormerDisplay] = React.useState("former");
     const [bookingData, setBookingData] = useState<finalBookingData[]>([]);
-    const [fiteredData, setFilteredData] = React.useState<any[]>(bookingData);
-    const [allBookings, setAllBookings] = useState<IBooking[]>([]);
+
     const { user } = useAuthStore();
 
     useEffect(() => {
@@ -105,25 +124,8 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     }, []);
 
     useEffect(() => {
-        console.log(bookingData);
+        console.log({ bookingData });
     }, [bookingData]);
-
-    useEffect(() => {
-        if (allBookings.length > 0) {
-            const sampleBooking = allBookings.map((dataItem) => {
-                return {
-                    id: dataItem.id,
-                    start: dataItem.start_date,
-                    end: dataItem.end_date,
-                    title: dataItem.title,
-                    description: dataItem.description,
-                    coursesId: dataItem.concerner,
-                    personId: dataItem.proposer,
-                };
-            });
-            setBookingData(sampleBooking);
-        }
-    }, [allBookings]);
 
     const handleDataChange = ({
         created,
@@ -182,10 +184,12 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         );
     };
 
-    const filterByResources = (perso: string) => {
-        const filterData = bookingData.filter((_) => _.id === perso);
-        setFilteredData(filterData);
-        console.log({ perso });
+    const filterByResources = (idPerso: string) => {
+        const filterData = idPerso
+            ? bookingData.filter((_) => _.personId === idPerso)
+            : bookingData;
+        setBookingData(filterData);
+        console.log({ idPerso });
     };
 
     const addNewBooking = (
@@ -235,6 +239,16 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             });
     };
 
+    const currentYear = new Date().getFullYear();
+    const parseAdjust = (eventDate: any) => {
+        const date = new Date(eventDate);
+        date.setFullYear(currentYear);
+        return date;
+    };
+
+    const randomInt = (min: any, max: any) =>
+        Math.floor(Math.random() * (max - min + 1)) + min;
+
     const getAllBookings = () => {
         BookingService.get_all_bookings()
             .then(async (resp) => {
@@ -246,19 +260,28 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             })
             .then((bookingsResp: IBooking[]) => {
                 console.log("the all bookings", bookingsResp);
-                // const sampleBooking = bookingsResp.map((dataItem) => {
-                //     return {
-                //         id: dataItem.id,
-                //         start: dataItem.start_date,
-                //         end: dataItem.end_date,
-                //         title: dataItem.title,
-                //         description: dataItem.description,
-                //         coursesId: dataItem.concerner,
-                //         personId: dataItem.proposer,
-                //     };
-                // });
-                // console.log({ sampleBooking });
-                setAllBookings(bookingsResp);
+                const sampleBooking = bookingsResp.map((dataItem) => {
+                    return {
+                        id: dataItem.id,
+                        start: parseAdjust(dataItem.start_date),
+                        startTimezone: null,
+                        end: parseAdjust(dataItem.end_date),
+                        endTimezone: null,
+                        isAllDay: false,
+                        title: dataItem.title,
+                        description: dataItem.description,
+                        recurrenceRule: "",
+                        recurrenceId: null,
+                        recurrenceExceptions: null,
+                        coursesId: dataItem.concerner,
+                        // ownerID: dataItem.proposer,
+                        personId: randomInt(
+                            dataItem.concerner,
+                            dataItem.proposer
+                        ),
+                    };
+                });
+                setBookingData(sampleBooking);
             })
             .catch((err) => {
                 console.log("error while gettting all trainings:", err);
@@ -278,15 +301,16 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 <Scheduler
                     // group={group}
                     resources={resources}
-                    data={fiteredData ? fiteredData : bookingData}
+                    // data={sampleDataWithResources}
+                    data={bookingData}
                     defaultDate={displayDate}
                     form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}
-                            displayEventByResource={(id: string) =>
-                                filterByResources(id)
-                            }
+                            displayEventByResource={(id: string) => {
+                                filterByResources(id);
+                            }}
                         />
                     )}
                     // className="scheduler_body"

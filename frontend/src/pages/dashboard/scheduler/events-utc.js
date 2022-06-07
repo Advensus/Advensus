@@ -827,6 +827,7 @@ export const sampleDataWithResources = baseData.map((dataItem) => ({
     recurrenceExceptions: dataItem.RecurrenceException,
     coursesId: randomInt(1, 2),
     personId: randomInt(1, 2),
+    taskId: randomInt(3, 4),
 }));
 export const sampleDataWithCustomSchema = baseData.map((dataItem) => ({
     ...dataItem,

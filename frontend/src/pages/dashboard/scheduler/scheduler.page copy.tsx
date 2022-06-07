@@ -79,7 +79,7 @@ export const SchedulerConfigContext = React.createContext<{
 
 export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [data, setData] = React.useState<any[]>(sampleData);
-    const [fiteredData, setFilteredData] = React.useState<any[]>(sampleData);
+    const [filteredData, setFilteredData] = React.useState<any[]>(sampleData);
     const [slotDuration, setSlotDuration] = React.useState(60);
     const [slotDivision, setSlotDivision] = React.useState(2);
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
@@ -126,6 +126,10 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         if (newBookingVal) addNewBooking(newBookingVal);
     }, [newBookingVal]);
 
+    useEffect(() => {
+        console.log({ filteredData });
+    }, []);
+
     const filterByResources = (perso: string) => {
         const filterData = sampleDataWithResources.filter(
             (_) => _.personId === perso
@@ -163,7 +167,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 <Scheduler
                     // group={group}
                     resources={resources}
-                    data={fiteredData ? fiteredData : sampleDataWithResources}
+                    data={filteredData ? filteredData : sampleDataWithResources}
                     defaultDate={displayDate}
                     form={FormWithCustomEditor}
                     header={(props) => (

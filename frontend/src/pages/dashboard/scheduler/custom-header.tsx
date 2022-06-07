@@ -55,7 +55,7 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
         (event: DropDownListChangeEvent) => {
             setTraineeDisplay(event.target.value);
             console.log({ event });
-            // displayEventByResource(event.target.value);
+            displayEventByResource(event.target.value);
         },
 
         [traineeDisplay]
@@ -121,10 +121,9 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                 <ToolbarDropdown
                     text="Stagiaire"
                     value={traineeDisplay}
-                    data={trainees.map((_) => _.first_name)}
+                    data={trainees.map((_) => _.first_name + " " + _.username)}
                     onChange={(event) => {
                         handleTraineeDisplayChange(event);
-                        displayEventByResource(event.target.value);
                     }}
                     onFilterChange={() => {
                         console.log("filter was changed");
@@ -136,10 +135,10 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                 <ToolbarDropdown
                     text="Formateur"
                     value={formerDisplay}
-                    data={trainers.map((_) => _.first_name)}
+                    data={trainers.map((_) => _.first_name + " " + _.username)}
                     onChange={(event) => {
                         handleFormerDisplayChange(event);
-                        displayEventByResource("dksdjlkjklfkj");
+                        displayEventByResource(event.target.value);
                     }}
                 />
             </ToolbarItem>

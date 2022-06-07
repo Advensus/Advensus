@@ -20,8 +20,8 @@ export interface IBooking {
     title: string;
     description: string;
     status: string;
-    start_date: string;
-    end_date: string;
+    start_date: Date | string;
+    end_date: Date | string;
     reserver: string;
     proposer: string;
     concerner: string;
