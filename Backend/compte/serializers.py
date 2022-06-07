@@ -49,13 +49,13 @@ class RpData(serializers.ModelSerializer):
     class Meta:
         model = User
         
-        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
+        fields = ['id','username','first_name','email','phone_number','adress','password',,'user_type','appartenir_societe']
 class Stagiaredata(serializers.ModelSerializer):
     Rp_Stagiaire = RpData(many=True,read_only=True)
     organisme_formation = OrganismeData(many=True,read_only=True)
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','organisme_formation','Rp_Stagiaire','user_type']
+        fields = ['id','username','first_name','email','phone_number','adress','password','user_type','organisme_formation','Rp_Stagiaire']
 
 class ProgrammeData(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
