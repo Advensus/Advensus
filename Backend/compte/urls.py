@@ -35,6 +35,8 @@ urlpatterns = [
     #CRUD RESERVATION
     path('create/reservation/',CreateReservation.as_view()),
     path('GetAllReservation/',views.viewallreservations),
+    path('UpdateReservation/<str:pk>/', views.updatereservation),
+    path('DeleteReservation/<str:pk>/', views.deletereservation),
         
    #LOGIN URLS
 

@@ -477,7 +477,7 @@ class CreateOrganisme(generics.GenericAPIView):
 		societe_data = serializer.data
 		return Response(societe_data,status=status.HTTP_201_CREATED)
 
-#FIN CRUD ORGANISME
+
 @api_view(['GET'])
 def getallorganisme(request):
 	serializer_class = CrudOrganisme
@@ -592,6 +592,23 @@ def viewallreservations(request):
 
 	return Response({"reservation":serializer.data})
 
+@api_view(['POST'])
+@csrf_exempt
+def updatereservation(request,pk):
+	serializer_class = crudreservation
+	donnee =  reservation.objects.filter(id=pk)
+
+	serializer = serializer_class(donnee,data=request.data,many=True)
+
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data)
+@api_view(['DELETE'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])	
+def deletereservation(request, pk):
+	donnee = reservation.objects.get(id=pk)
+	donnee.delete()
 
 # ALL GET BY
 
