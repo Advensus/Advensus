@@ -65,6 +65,7 @@ class ProgrammeData(serializers.ModelSerializer):
 
 class CoursesData(serializers.ModelSerializer):
     lier = FormationData(read_only=True)
+    assister = Stagiaredata(many=True,read_only=True)
     class Meta:
         model = Courses
         fields = ['id','superviser','assister','lier']
