@@ -569,7 +569,6 @@ def viewallcourses(request):
 #END CRUD COURSES
 
 #CRUD RESERVATION
-
 class CreateReservation(CreateAPIView):
     serializer_class = createreservation
     queryset = reservation.objects.all()

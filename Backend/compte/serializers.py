@@ -407,7 +407,7 @@ class cruduser(serializers.ModelSerializer):
 #END CRUD USER     
             
 
-#CRUD ORGANISME 
+#CRUD AND CREATE ORGANISME 
 class CreateOrganisme(serializers.ModelSerializer):
      
     password_connexion = serializers.CharField(max_length=100)
@@ -436,13 +436,15 @@ class CrudOrganisme(serializers.ModelSerializer):
         model = OrganismeFormation 
         fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
 
-#END CRUD ORGANISME
+#END CRUD AND CREATE ORGANISME
+
+#CRUD DOCUMENTS
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
         fields = ['doc_content','doc_type','id']
-
+#END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()
@@ -526,13 +528,6 @@ class crudcertificate(serializers.ModelSerializer):
     class Meta:
         model = certificate
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
-
-
-class createcertificate(serializers.ModelSerializer):
-    
-    class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
 
 #END CRUD AND CREATE CERTIFICATE
