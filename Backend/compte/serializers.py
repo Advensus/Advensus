@@ -466,20 +466,30 @@ class AddSouscrir(serializers.ModelSerializer):
 
 
 class CrudCourses(serializers.ModelSerializer):
-
+    lier = FormationData(read_only=True)
+    assister = Stagiaredata(read_only=True,many=True)
     class Meta:
         model = Courses
         fields = ['id','superviser','assister','lier']
 
+class CreatCourses(serializers.ModelSerializer):
 
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','lier']
 
 class crudreservation(serializers.ModelSerializer):
     concerner = CoursesData(read_only=True)
     proposer = Stagiaredata(many=True,read_only=True)
     class Meta:
         model = reservation
-        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+        fields = ['id','title','description','status','start_date','end_date','proposer','concerner']
 
+class createreservation(serializers.ModelSerializer):
+  
+    class Meta:
+        model = reservation
+        fields = ['id','title','description','status','start_date','end_date','proposer','concerner']
 
 class createprogramme(serializers.ModelSerializer):
  

@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -518,7 +518,7 @@ class LogoutUser(generics.GenericAPIView):
 
 # CRUD COURSES
 class CreateCourses(CreateAPIView):
-    serializer_class = CrudCourses
+    serializer_class = CreatCourses
     queryset = Courses.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -571,7 +571,7 @@ def viewallcourses(request):
 #CRUD RESERVATION
 
 class CreateReservation(CreateAPIView):
-    serializer_class = crudreservation
+    serializer_class = createreservation
     queryset = reservation.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
