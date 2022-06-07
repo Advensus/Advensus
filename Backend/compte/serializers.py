@@ -62,6 +62,12 @@ class ProgrammeData(serializers.ModelSerializer):
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
+
+class CoursesData(serializers.ModelSerializer):
+    lier = FormationData(read_only=True)
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','lier']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -467,7 +473,7 @@ class CrudCourses(serializers.ModelSerializer):
 
 
 class crudreservation(serializers.ModelSerializer):
-
+    concerner = CoursesData(read_only=True)
     class Meta:
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
@@ -499,7 +505,7 @@ class createprogramme(serializers.ModelSerializer):
     
     class Meta:
         model = programme
-        fields = ['id','intitule','description','attribue']
+        fields = ['id','libelle','description','attribue']
 
 class crudcertificate(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
