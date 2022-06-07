@@ -590,7 +590,7 @@ def viewallreservations(request):
 
 	serializer = serializer_class(donnee,many=True)
 
-	return Response({"reservation":serializer.data})
+	return Response(serializer.data)
 
 @api_view(['POST'])
 @csrf_exempt
@@ -602,13 +602,15 @@ def updatereservation(request,pk):
 
 	if serializer.is_valid():
 		serializer.save()
-		return Response(serializer.data)
+		return Response(serializer.data,status=status.HTTP_200_OK)
+@csrf_exempt		
 @api_view(['DELETE'])
-@csrf_exempt
 # @permission_classes([IsAuthenticated])	
 def deletereservation(request, pk):
+	
 	donnee = reservation.objects.get(id=pk)
 	donnee.delete()
+	return Response(status=status.HTTP_200_OK)
 
 # ALL GET BY
 
