@@ -4,7 +4,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
+<<<<<<< HEAD
 from .serializers import createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+=======
+from .serializers import CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+>>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -129,12 +133,12 @@ class AddSouscrir(generics.GenericAPIView):
 		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
-		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
-		my_canvas = canvas.Canvas("stagiaire.pdf", pagesize=letter)
+		my_canvas = canvas.Canvas("media/user.pdf", pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
 		my_canvas.drawString(30, 750, 'Documents')
@@ -477,7 +481,7 @@ class CreateOrganisme(generics.GenericAPIView):
 		societe_data = serializer.data
 		return Response(societe_data,status=status.HTTP_201_CREATED)
 
-#FIN CRUD ORGANISME
+
 @api_view(['GET'])
 def getallorganisme(request):
 	serializer_class = CrudOrganisme
@@ -518,7 +522,7 @@ class LogoutUser(generics.GenericAPIView):
 
 # CRUD COURSES
 class CreateCourses(CreateAPIView):
-    serializer_class = CrudCourses
+    serializer_class = CreatCourses
     queryset = Courses.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -569,9 +573,8 @@ def viewallcourses(request):
 #END CRUD COURSES
 
 #CRUD RESERVATION
-
 class CreateReservation(CreateAPIView):
-    serializer_class = crudreservation
+    serializer_class = createreservation
     queryset = reservation.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -592,7 +595,29 @@ def viewallreservations(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
+<<<<<<< HEAD
+=======
 
+@api_view(['POST'])
+@csrf_exempt
+def updatereservation(request,pk):
+	serializer_class = crudreservation
+	donnee =  reservation.objects.filter(id=pk)
+
+	serializer = serializer_class(donnee,data=request.data,many=True)
+>>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
+
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data,status=status.HTTP_200_OK)
+@csrf_exempt		
+@api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])	
+def deletereservation(request, pk):
+	
+	donnee = reservation.objects.get(id=pk)
+	donnee.delete()
+	return Response(status=status.HTTP_200_OK)
 
 # ALL GET BY
 
@@ -720,7 +745,7 @@ def getcertificationbyform(request,pk):
 
 	return Response(serializer.data)
 
-#END P AND C
+#END PROGRAMME AND CERTIFICAT
 
 #SOUSCRIR CRUD
 @api_view(['GET'])

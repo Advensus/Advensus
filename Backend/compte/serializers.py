@@ -49,19 +49,26 @@ class RpData(serializers.ModelSerializer):
     class Meta:
         model = User
         
-        fields = ['username','first_name','email','phone_number','adress','password','appartenir_societe','id','user_type']
+        fields = ['id','username','first_name','email','phone_number','adress','password','user_type','appartenir_societe']
 class Stagiaredata(serializers.ModelSerializer):
     Rp_Stagiaire = RpData(many=True,read_only=True)
     organisme_formation = OrganismeData(many=True,read_only=True)
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','id','organisme_formation','Rp_Stagiaire','user_type']
+        fields = ['id','username','first_name','email','phone_number','adress','password','user_type','organisme_formation','Rp_Stagiaire']
 
 class ProgrammeData(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
     class Meta:
         model = programme
         fields = ['id','intitule','description','attribue']
+
+class CoursesData(serializers.ModelSerializer):
+    lier = FormationData(read_only=True)
+    assister = Stagiaredata(many=True,read_only=True)
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','lier']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -357,24 +364,32 @@ class loginorg(serializers.ModelSerializer):
         def validate(self,attrs):
             email = attrs.get('email','')
             password_connexion = attrs.get('password_connexion','')
-            user = auth.authenticate(email=email,password=password_connexion)
+            org = auth.authenticate(email=email,password=password_connexion)
 
-            if not user:
+            if not org:
                 raise AuthenticationFailed('donnée incorrecte...')
-            if not user.is_active:
-                raise AuthenticationFailed('compte non activé...')
-            return user
+            return org
             # return organisme
 # CRUD Operations
+
+#CRUD SOUSCRIR
 class crudsouscrir(serializers.ModelSerializer):
     # stagiaire = Stagiaredata(read_only=True)
     formation = FormationData(read_only=True)
-   
+    class Meta:
+        model = souscrir
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','level_start','level_end','lieu_formation','formation']
+
+class AddSouscrir(serializers.ModelSerializer):
    
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','formation','level_start','level_end','lieu_formation']
+        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
+
+#END CRUD SOUSCRIR
+
+#CRUD USER
 class cruduser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
     appartenir_societe = SocieteData(many=True,read_only=True)
@@ -389,15 +404,21 @@ class cruduser(serializers.ModelSerializer):
                  "avatar","phone_number","adress","horaire","signature_former","cv",
                  "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs"
                  ]
-
-        
+#END CRUD USER     
             
 
+#CRUD AND CREATE ORGANISME 
 class CreateOrganisme(serializers.ModelSerializer):
+     
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
+<<<<<<< HEAD
     
     
+=======
+
+    # donnee_formation = SocieteData(read_only=True)
+>>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
     class Meta:
         model = OrganismeFormation 
 
@@ -411,7 +432,6 @@ class CreateOrganisme(serializers.ModelSerializer):
         organisme.save()
         return organisme
        
-
 class CrudOrganisme(serializers.ModelSerializer):
    
     societe_formation = SocieteData(read_only=True)
@@ -419,15 +439,18 @@ class CrudOrganisme(serializers.ModelSerializer):
     
     class Meta:
         model = OrganismeFormation 
-
-
         fields = ['id','company_name','company_adress','company_phone_number','email','password_connexion','password_messagerie','societe_formation', 'fix_number','company_stamp','company_logo']
+
+#END CRUD AND CREATE ORGANISME
+
+#CRUD DOCUMENTS
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
         fields = ['doc_content','doc_type','id']
-
+#END CRUD DOCUMENTS
+#LOGOUT USER
 class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()
     default_error_message = {
@@ -445,52 +468,69 @@ class LogoutUse(serializers.Serializer):
         except TokenError:
             self.fail('Mauvais token')
 
+#END LOGOUT USER
 
-
-
-class AddSouscrir(serializers.ModelSerializer):
-   
-    class Meta:
-        model = souscrir
-
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
-
-
-
+#CRUD AND CREATE COURSES 
 class CrudCourses(serializers.ModelSerializer):
-
+    lier = FormationData(read_only=True)
+    assister = Stagiaredata(read_only=True,many=True)
     class Meta:
         model = Courses
         fields = ['id','superviser','assister','lier']
 
-
-
-class crudreservation(serializers.ModelSerializer):
+class CreatCourses(serializers.ModelSerializer):
 
     class Meta:
+        model = Courses
+        fields = ['id','superviser','assister','lier']
+#END CRUD AND CREATE COURSES 
+
+#CRUD AND CREATE RESERVATION
+class crudreservation(serializers.ModelSerializer):
+    concerner = CoursesData(read_only=True)
+    proposer = Stagiaredata(many=True,read_only=True)
+    class Meta:
         model = reservation
-        fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
+        fields = ['id','title','description','status','start_date','end_date','proposer','concerner']
 
+class createreservation(serializers.ModelSerializer):
+  
+    class Meta:
+        model = reservation
+        fields = ['id','title','description','status','start_date','end_date','proposer','concerner']
+#END CRUD AND CREATE RESERVATION
 
+#CRUD AND CREATE PROGRAMME
 class createprogramme(serializers.ModelSerializer):
  
    
     class Meta:
         model = programme
-        fields = ['id','intitule','description','attribue']
-
-class createcertificate(serializers.ModelSerializer):
-    
-    class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+        fields = ['id','libelle','description','attribue']
 
 class crudprogramme(serializers.ModelSerializer):
     attribue= CertificatData(read_only=True)
    
     class Meta:
         model = programme
+<<<<<<< HEAD
         fields = ['id','intitule','description','attribue']
+=======
+
+        fields = ['id','libelle','description','attribue']
+
+#END CRUD AND CREATE PROGRAMME
+
+#CRUD AND CREATE CERTIFICATE
+class createcertificate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = certificate
+        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
+
+
+
+>>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
 class crudcertificate(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
     programmes = crudprogramme(many=True,read_only=True)
@@ -499,6 +539,7 @@ class crudcertificate(serializers.ModelSerializer):
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
 
 
+<<<<<<< HEAD
 class createcertificate(serializers.ModelSerializer):
     
     class Meta:
@@ -506,3 +547,6 @@ class createcertificate(serializers.ModelSerializer):
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
 
 
+=======
+#END CRUD AND CREATE CERTIFICATE
+>>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a

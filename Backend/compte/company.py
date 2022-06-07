@@ -5,6 +5,7 @@ from django.db import models
 # from django.dispatch import receiver
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 class Company(models.Model):
 
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -51,7 +52,7 @@ class OrganismeFormation(Company):
     password_connexion = models.CharField(max_length=100)
     password_messagerie = models.CharField(max_length=100)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
-  
+    # connected = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default="connected")
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         return {
