@@ -475,6 +475,7 @@ class CrudCourses(serializers.ModelSerializer):
 
 class crudreservation(serializers.ModelSerializer):
     concerner = CoursesData(read_only=True)
+    proposer = Stagiaredata(many=True,read_only=True)
     class Meta:
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','reserver','proposer','concerner']
