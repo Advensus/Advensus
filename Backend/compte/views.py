@@ -4,11 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-<<<<<<< HEAD
-from .serializers import createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
-=======
 from .serializers import CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -38,6 +34,7 @@ from django.shortcuts import get_object_or_404
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from django.http.response import JsonResponse
 
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
@@ -595,29 +592,29 @@ def viewallreservations(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
-<<<<<<< HEAD
-=======
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @csrf_exempt
 def updatereservation(request,pk):
+
 	serializer_class = crudreservation
-	donnee =  reservation.objects.filter(id=pk)
+	if request.method == "PUT":
+		donnee =  reservation.objects.filter(id=pk)
 
-	serializer = serializer_class(donnee,data=request.data,many=True)
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
-
-	if serializer.is_valid():
-		serializer.save()
-		return Response(serializer.data,status=status.HTTP_200_OK)
+		serializer = serializer_class(donnee,data=request.data,many=True)
+	
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data,status=status.HTTP_200_OK)
 @csrf_exempt		
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])	
 def deletereservation(request, pk):
 	
-	donnee = reservation.objects.get(id=pk)
-	donnee.delete()
-	return Response(status=status.HTTP_200_OK)
+	if request.method == "DELETE":
+		donnee = reservation.objects.get(id=pk)
+		donnee.delete()
+		return JsonResponse({'message': 'Reservation was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 # ALL GET BY
 

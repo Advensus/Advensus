@@ -412,13 +412,8 @@ class CreateOrganisme(serializers.ModelSerializer):
      
     password_connexion = serializers.CharField(max_length=100)
     password_messagerie = serializers.CharField(max_length=100)
-<<<<<<< HEAD
-    
-    
-=======
 
     # donnee_formation = SocieteData(read_only=True)
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
     class Meta:
         model = OrganismeFormation 
 
@@ -488,7 +483,7 @@ class CreatCourses(serializers.ModelSerializer):
 #CRUD AND CREATE RESERVATION
 class crudreservation(serializers.ModelSerializer):
     concerner = CoursesData(read_only=True)
-    proposer = Stagiaredata(many=True,read_only=True)
+    proposer = Stagiaredata(read_only=True)
     class Meta:
         model = reservation
         fields = ['id','title','description','status','start_date','end_date','proposer','concerner']
@@ -513,9 +508,6 @@ class crudprogramme(serializers.ModelSerializer):
    
     class Meta:
         model = programme
-<<<<<<< HEAD
-        fields = ['id','intitule','description','attribue']
-=======
 
         fields = ['id','libelle','description','attribue']
 
@@ -530,7 +522,6 @@ class createcertificate(serializers.ModelSerializer):
 
 
 
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
 class crudcertificate(serializers.ModelSerializer):
     allouer = FormationData(read_only=True,many=True)
     programmes = crudprogramme(many=True,read_only=True)
@@ -539,14 +530,4 @@ class crudcertificate(serializers.ModelSerializer):
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
 
 
-<<<<<<< HEAD
-class createcertificate(serializers.ModelSerializer):
-    
-    class Meta:
-        model = certificate
-        fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer']
-
-
-=======
 #END CRUD AND CREATE CERTIFICATE
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
