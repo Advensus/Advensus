@@ -20,7 +20,13 @@ import products from "./products.json";
 import { CustomFooter } from "./custom-footer";
 import { CustomHeader } from "./custom-header";
 import { FormWithCustomEditor } from "./custom-form";
-import { NewBookingDto, NewCoursesDto, ICourses, IBooking } from "../../../lib";
+import {
+    NewBookingDto,
+    NewCoursesDto,
+    ICourses,
+    IBooking,
+    IUser,
+} from "../../../lib";
 import { useAuthStore } from "../../../stores";
 import BookingService from "../../../services/booking.service";
 
@@ -35,7 +41,7 @@ export interface finalBookingData {
     title: string;
     description: string;
     coursesId: string;
-    personId: string;
+    personId: IUser;
 
     startTimezone: string | Date | null;
     endTimezone: string | Date | null;
@@ -43,7 +49,7 @@ export interface finalBookingData {
     recurrenceRule: string;
     recurrenceId: string | null;
     recurrenceExceptions: string | null;
-    // ownerID: dataItem.proposer,
+    ownerID: IUser;
 }
 
 const group: SchedulerGroup = {
@@ -105,8 +111,8 @@ export const SchedulerConfigContext = React.createContext<{
 }>({
     slotDuration: [60, (_: any) => {}],
     slotDivision: [2, (_: any) => {}],
-    traineeDisplay: ["Client2", (_: any) => {}],
-    formerDisplay: ["Former2", (_: any) => {}],
+    traineeDisplay: ["Client2", (_: IUser) => {}],
+    formerDisplay: ["Former2", (_: IUser) => {}],
 });
 
 export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
@@ -116,16 +122,140 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
     const [formerDisplay, setFormerDisplay] = React.useState("former");
     const [bookingData, setBookingData] = useState<finalBookingData[]>([]);
+    const [filteredDataBooking, setFilteredDataBooking] =
+        useState<finalBookingData[]>(bookingData);
+    const [incomingBooking, setIncomingBooking] = useState<IBooking>();
+    const [searchPerson, setSearchPerson] = useState<string>("");
 
     const { user } = useAuthStore();
 
     useEffect(() => {
         getAllBookings();
-    }, []);
+    }, [incomingBooking]);
 
     useEffect(() => {
         console.log({ bookingData });
     }, [bookingData]);
+
+    useEffect(() => {
+        const getEventByUser = searchPerson
+            ? filterEventByUser(searchPerson)
+            : bookingData;
+        setFilteredDataBooking(getEventByUser);
+    }, [bookingData, searchPerson]);
+
+    const filterEventByUser = (searchTerm: string) => {
+        console.log({ searchTerm });
+        return bookingData.filter(
+            (_) =>
+                `${_.ownerID.first_name} ${_.ownerID.username}`.indexOf(
+                    searchTerm
+                ) !== -1 ||
+                (_.personId != null &&
+                    `${_.personId.first_name} ${_.personId.username}`.indexOf(
+                        searchTerm
+                    ) !== -1)
+        );
+    };
+
+    const currentYear = new Date().getFullYear();
+    const parseAdjust = (eventDate: any) => {
+        const date = new Date(eventDate);
+        date.setFullYear(currentYear);
+        return date;
+    };
+
+    const randomInt = (min: any, max: any) =>
+        Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const getAllBookings = () => {
+        BookingService.get_all_bookings()
+            .then(async (resp) => {
+                if (resp.status !== 200) {
+                    console.log({ resp });
+                    return [];
+                }
+                return resp.json();
+            })
+            .then((bookingsResp: IBooking[]) => {
+                console.log("the all bookings", bookingsResp);
+                const sampleBooking = bookingsResp.map((dataItem) => {
+                    return {
+                        id: dataItem.id,
+                        start: parseAdjust(dataItem.start_date),
+                        startTimezone: null,
+                        end: parseAdjust(dataItem.end_date),
+                        endTimezone: null,
+                        isAllDay: false,
+                        title: dataItem.title,
+                        description: dataItem.description,
+                        recurrenceRule: "",
+                        recurrenceId: null,
+                        recurrenceExceptions: null,
+                        coursesId: dataItem.concerner.id,
+                        ownerID: dataItem.concerner.superviser,
+                        personId: dataItem.concerner.assister,
+                        // personId: randomInt(
+                        //     dataItem.concerner,
+                        //     dataItem.proposer
+                        // ),
+                    };
+                });
+                setBookingData(sampleBooking);
+            })
+            .catch((err) => {
+                console.log("error while gettting all trainings:", err);
+            });
+    };
+
+    const addNewBooking = (
+        val: NewBookingDto,
+        dateStart: string,
+        dateEnd: string
+    ) => {
+        console.log({ dateStart });
+        console.log({ dateEnd });
+        val.reserver = [user.id];
+
+        val.start_date = dateStart;
+        val.end_date = dateEnd;
+        console.log({ val });
+        BookingService.add_new_booking(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as IBooking;
+                console.log("the current adding booking:", data);
+                setIncomingBooking(data);
+                // onCreate(data);
+            })
+            .catch((err) => {
+                console.log("error while adding new booking:", err);
+            });
+    };
+
+    const addNewCourses = (
+        value: NewBookingDto,
+        start: string,
+        end: string
+    ) => {
+        console.log({ value });
+        BookingService.create_new_courses(value)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as ICourses;
+                console.log("the current adding courses:", data);
+                value.concerner = data.id;
+                addNewBooking(value, start, end);
+                // onCreate(data);
+            })
+            .catch((err) => {
+                console.log("error while adding new courses:", err);
+            });
+    };
 
     const handleDataChange = ({
         created,
@@ -184,110 +314,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         );
     };
 
-    const filterByResources = (idPerso: string) => {
-        const filterData = idPerso
-            ? bookingData.filter((_) => _.personId === idPerso)
-            : bookingData;
-        setBookingData(filterData);
-        console.log({ idPerso });
-    };
-
-    const addNewBooking = (
-        val: NewBookingDto,
-        dateStart: string,
-        dateEnd: string
-    ) => {
-        console.log({ dateStart });
-        console.log({ dateEnd });
-        val.reserver = [user.id];
-
-        val.start_date = dateStart;
-        val.end_date = dateEnd;
-        console.log({ val });
-        BookingService.add_new_booking(val)
-            .then(async (response) => {
-                if (response.status !== 200) {
-                    console.log({ response });
-                }
-                const data = (await response.json()) as NewBookingDto;
-                console.log("the current adding booking:", data);
-                // onCreate(data);
-            })
-            .catch((err) => {
-                console.log("error while adding new booking:", err);
-            });
-    };
-
-    const addNewCourses = (
-        value: NewBookingDto,
-        start: string,
-        end: string
-    ) => {
-        BookingService.create_new_courses(value)
-            .then(async (response) => {
-                if (response.status !== 200) {
-                    console.log({ response });
-                }
-                const data = (await response.json()) as ICourses;
-                console.log("the current adding courses:", data);
-                value.concerner = data.id;
-                addNewBooking(value, start, end);
-                // onCreate(data);
-            })
-            .catch((err) => {
-                console.log("error while adding new courses:", err);
-            });
-    };
-
-    const currentYear = new Date().getFullYear();
-    const parseAdjust = (eventDate: any) => {
-        const date = new Date(eventDate);
-        date.setFullYear(currentYear);
-        return date;
-    };
-
-    const randomInt = (min: any, max: any) =>
-        Math.floor(Math.random() * (max - min + 1)) + min;
-
-    const getAllBookings = () => {
-        BookingService.get_all_bookings()
-            .then(async (resp) => {
-                if (resp.status !== 200) {
-                    console.log({ resp });
-                    return [];
-                }
-                return resp.json();
-            })
-            .then((bookingsResp: IBooking[]) => {
-                console.log("the all bookings", bookingsResp);
-                const sampleBooking = bookingsResp.map((dataItem) => {
-                    return {
-                        id: dataItem.id,
-                        start: parseAdjust(dataItem.start_date),
-                        startTimezone: null,
-                        end: parseAdjust(dataItem.end_date),
-                        endTimezone: null,
-                        isAllDay: false,
-                        title: dataItem.title,
-                        description: dataItem.description,
-                        recurrenceRule: "",
-                        recurrenceId: null,
-                        recurrenceExceptions: null,
-                        coursesId: dataItem.concerner,
-                        // ownerID: dataItem.proposer,
-                        personId: randomInt(
-                            dataItem.concerner,
-                            dataItem.proposer
-                        ),
-                    };
-                });
-                setBookingData(sampleBooking);
-            })
-            .catch((err) => {
-                console.log("error while gettting all trainings:", err);
-            });
-    };
-
     return (
         <div className="scheduler_container">
             <SchedulerConfigContext.Provider
@@ -302,14 +328,15 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     // group={group}
                     resources={resources}
                     // data={sampleDataWithResources}
-                    data={bookingData}
+                    data={filteredDataBooking}
                     defaultDate={displayDate}
                     form={FormWithCustomEditor}
                     header={(props) => (
                         <CustomHeader
                             {...props}
                             displayEventByResource={(id: string) => {
-                                filterByResources(id);
+                                // filterByResources(id);
+                                setSearchPerson(id);
                             }}
                         />
                     )}

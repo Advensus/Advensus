@@ -40,6 +40,8 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
                 >
                     {detailsInfos &&
                         detailsInfos.first_name.toLocaleUpperCase()}
+                    {/* {detailsInfos &&
+                        detailsInfos.first_name.toLocaleUpperCase()} */}
                 </Text>
             </div>
             <div className="users_display_text">

@@ -9,7 +9,7 @@ export interface NewBookingDto {
     concerner: string;
 
     superviser?: string;
-    assister?: string[];
+    assister?: string;
     lier?: string;
 }
 

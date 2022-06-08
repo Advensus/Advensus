@@ -15,6 +15,9 @@
 //     isAllDay: string;
 // }
 
+import { ICourses } from "./Courses";
+import { IUser } from "./User";
+
 export interface IBooking {
     id: string;
     title: string;
@@ -22,7 +25,7 @@ export interface IBooking {
     status: string;
     start_date: Date | string;
     end_date: Date | string;
-    reserver: string;
-    proposer: string;
-    concerner: string;
+    reserver: IUser;
+    proposer: IUser;
+    concerner: ICourses;
 }

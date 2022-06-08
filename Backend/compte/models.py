@@ -22,7 +22,7 @@ class Presence(models.Model):
 class Courses(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser_content_type')
-    assister = models.ManyToManyField(User,related_name='assister_content_type')
+    assister = models.ForeignKey(User,related_name='assister_content_type',on_delete=models.CASCADE,null=True)
     # etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
 
@@ -35,15 +35,9 @@ class reservation(models.Model):
     # reserver = models.ManyToManyField(User,related_name='reservation_content_type')
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)
-<<<<<<< HEAD
     start_date = models.DateTimeField(auto_now_add=False)
     end_date = models.DateTimeField(auto_now_add=False)
-    proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type')
-=======
-    start_date = models.DateField(auto_now_add=False)
-    end_date = models.DateField(auto_now_add=False)
     proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type',null=True,default=False)
->>>>>>> dec1aac98aa277fdc8b32b4488e0f0f5dbb7293a
     concerner = models.OneToOneField(Courses,on_delete=models.CASCADE)
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
    

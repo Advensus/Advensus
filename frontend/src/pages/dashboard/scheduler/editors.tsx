@@ -80,7 +80,7 @@ export const TraineesList = (props: FieldProps) => {
 
     const handleChange = (event: DropDownListChangeEvent) => {
         if (props.onChange) {
-            props.onChange.call(undefined, { value: [event.value.id] });
+            props.onChange.call(undefined, { value: event.value.id });
         }
     };
 
