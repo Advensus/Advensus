@@ -593,15 +593,15 @@ def viewallreservations(request):
 
 	return Response(serializer.data)
 
-@api_view(['POST'])
+
 @csrf_exempt
+@api_view(['PUT'])
 def updatereservation(request,pk):
-	serializer_class = crudreservation
 	donnee =  reservation.objects.get(id=pk)
 	
-	if request.method == "POST":
+	if request.method == "PUT":
 		reservation_data = JSONParser().parse(request)
-		serializer = serializer_class(donnee,data=reservation_data)
+		serializer = crudreservation(donnee,data=reservation_data)
 	
 		if serializer.is_valid():
 			serializer.save()
