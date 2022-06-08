@@ -24,7 +24,7 @@ from .models import Document,Courses, reservation
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
-
+from rest_framework.parsers import JSONParser 
 from .mixin import ReadWriteSerializerMixin
 from django.template.loader import render_to_string
 
@@ -593,19 +593,20 @@ def viewallreservations(request):
 
 	return Response(serializer.data)
 
-@api_view(['PUT'])
+@api_view(['POST'])
 @csrf_exempt
 def updatereservation(request,pk):
-
 	serializer_class = crudreservation
-	if request.method == "PUT":
-		donnee =  reservation.objects.filter(id=pk)
-
-		serializer = serializer_class(donnee,data=request.data,many=True)
+	donnee =  reservation.objects.get(id=pk)
+	
+	if request.method == "POST":
+		reservation_data = JSONParser().parse(request)
+		serializer = serializer_class(donnee,data=reservation_data)
 	
 		if serializer.is_valid():
 			serializer.save()
-			return Response(serializer.data,status=status.HTTP_200_OK)
+			return JsonResponse(serializer.data) 
+		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 @csrf_exempt		
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])	
