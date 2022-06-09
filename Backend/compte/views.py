@@ -605,7 +605,7 @@ def updatereservation(request,pk):
 	
 		if serializer.is_valid():
 			serializer.save()
-			return JsonResponse(serializer.data) 
+			return Response(serializer.data) 
 		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 @csrf_exempt		
 @api_view(['DELETE'])
