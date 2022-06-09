@@ -443,7 +443,7 @@ class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type','id']
+        fields = ['doc_content','doc_type','id','administrer','emarger','partager']
 #END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
