@@ -4,6 +4,8 @@ import { bookingUrls, coursesUrls } from "./urls";
 class BookingService {
     static add_new_booking = (info: unknown) =>
         BaseService.postRequest(bookingUrls.NEW_BOOKING, info, false);
+    static edit_booking = (id: string, info: unknown) =>
+        BaseService.patchRequest(bookingUrls.EDIT_BOOKING(id), info, false);
 
     // COURSES
     static create_new_courses = (info: unknown) =>

@@ -132,7 +132,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     // users_content_display_companies;
     const toggleCompaniesContent = () => {
         var hint_companies = document.getElementById(
-            "users_content_display_company"
+            "training_company_content_display_company"
         ) as HTMLInputElement;
 
         hint_companies.className =
@@ -158,10 +158,10 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
         console.log({ pathLabel });
         setTheCompany(comp);
         var hint = document.getElementById(
-            "display_tab_ii"
+            "training_company_display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
-            "users_content_display_company"
+            "training_company_content_display_company"
         ) as HTMLInputElement;
 
         hint.className = hint.className !== "show" ? "show" : "hide";
@@ -196,11 +196,11 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
     };
 
     return (
-        <div className="user_page_container">
-            <div id="users_content_display_company">
-                <div className="display_tab">
-                    <div className="tab_header">
-                        <div className="tab_title">
+        <div className="training_company_page_container">
+            <div id="training_company_content_display_company">
+                <div className="training_company_display_tab">
+                    <div className="training_company_tab_header">
+                        <div className="training_company_tab_title">
                             {!showForm ? (
                                 // LIST TITLE
                                 <Text>Société de Formation</Text>
@@ -219,10 +219,10 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 />
                             </TooltipHost>
                         </div>
-                        <hr className="hr_dashed" />
+                        <hr className="training_company_hr_dashed" />
                         {!showForm ? (
                             <>
-                                <div className="tab_header_content">
+                                <div className="training_company_tab_header_content">
                                     <SearchBox
                                         placeholder="Search"
                                         onEscape={(ev) => {
@@ -235,8 +235,8 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                             setSearch(newValue || "")
                                         }
                                     />
-                                    <div className="filter_box">
-                                        <Dropdown
+                                    {/* <div className="training_company_filter_box"> */}
+                                    {/* <Dropdown
                                             selectedKey={
                                                 selectedSortedItem
                                                     ? selectedSortedItem.key
@@ -246,8 +246,8 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                             placeholder="Trier par"
                                             options={dropdownControlledSortBy}
                                             styles={dropdownStyles}
-                                        />
-                                        <Dropdown
+                                        /> */}
+                                    {/* <Dropdown
                                             selectedKey={
                                                 selectedFilteredItem
                                                     ? selectedFilteredItem.key
@@ -257,22 +257,22 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                             placeholder="Filtrer par OF"
                                             options={dropdownControlledFilterBy}
                                             styles={dropdownStyles}
-                                        />
-                                    </div>
+                                        /> */}
+                                    {/* </div> */}
                                 </div>
                             </>
                         ) : null}
                     </div>
                     {!showForm ? (
-                        <div className="tab_content_scroll">
+                        <div className="training_company_tab_content_scroll">
                             <div>
                                 <Text>
                                     Total(
                                     {filteredCompanies.length})
                                 </Text>
-                                <hr className="hr_solid" />
+                                <hr className="training_company_hr_solid" />
                             </div>
-                            <div className="tab_content_trainee">
+                            <div className="training_company_tab_content_trainee">
                                 {loading ? (
                                     <LoadingComponent />
                                 ) : filteredCompanies.length ? (
@@ -295,7 +295,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                     )}
                 </div>
             </div>
-            <div id="display_tab_ii">
+            <div id="training_company_display_tab_ii">
                 <FullInformationsTabComponent
                     contentId={theCompany?.id}
                     currentPath={pathLabel}

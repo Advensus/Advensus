@@ -16,6 +16,7 @@
 // }
 
 import { ICourses } from "./Courses";
+import { ITraining } from "./Training";
 import { IUser } from "./User";
 
 export interface IBooking {

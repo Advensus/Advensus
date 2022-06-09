@@ -10,6 +10,12 @@ import {
     SchedulerResource,
     SchedulerGroup,
     SchedulerHeader,
+    SchedulerSlotProps,
+    SchedulerSlot,
+    SchedulerViewSlotProps,
+    SchedulerViewSlot,
+    SchedulerViewItemProps,
+    SchedulerViewItem,
 } from "@progress/kendo-react-scheduler";
 import "@progress/kendo-theme-default/dist/all.css";
 import { guid } from "@progress/kendo-react-common";
@@ -42,6 +48,8 @@ export interface finalBookingData {
     description: string;
     coursesId: string;
     personId: IUser;
+    state: string;
+    training: string;
 
     startTimezone: string | Date | null;
     endTimezone: string | Date | null;
@@ -116,7 +124,6 @@ export const SchedulerConfigContext = React.createContext<{
 });
 
 export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
-    const [data, setData] = React.useState<any[]>(sampleData);
     const [slotDuration, setSlotDuration] = React.useState(60);
     const [slotDivision, setSlotDivision] = React.useState(2);
     const [traineeDisplay, setTraineeDisplay] = React.useState("client");
@@ -126,6 +133,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         useState<finalBookingData[]>(bookingData);
     const [incomingBooking, setIncomingBooking] = useState<IBooking>();
     const [searchPerson, setSearchPerson] = useState<string>("");
+    const [data, setData] = React.useState<any[]>(bookingData);
 
     const { user } = useAuthStore();
 
@@ -155,6 +163,22 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     `${_.personId.first_name} ${_.personId.username}`.indexOf(
                         searchTerm
                     ) !== -1)
+        );
+    };
+
+    const formattingDate = (fullDate: Date) => {
+        return (
+            fullDate.getFullYear() +
+            "-" +
+            (fullDate.getMonth() + 1) +
+            "-" +
+            fullDate.getDate() +
+            " " +
+            fullDate.getHours() +
+            ":" +
+            fullDate.getMinutes() +
+            ":" +
+            fullDate.getSeconds()
         );
     };
 
@@ -195,6 +219,8 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                         coursesId: dataItem.concerner.id,
                         ownerID: dataItem.concerner.superviser,
                         personId: dataItem.concerner.assister,
+                        state: dataItem.status,
+                        training: dataItem.concerner.lier.id,
                         // personId: randomInt(
                         //     dataItem.concerner,
                         //     dataItem.proposer
@@ -257,12 +283,53 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             });
     };
 
+    const editBooking = (id: string, val: NewBookingDto) => {
+        console.log("the booking id to edit:", id);
+        console.log({ val });
+        BookingService.edit_booking(id, val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert("Error editing product");
+                    return;
+                }
+                const booking = (await response.json()) as IBooking;
+                console.log("The modif:", booking);
+                // props.onCreate(product);
+                setIncomingBooking(booking);
+                return booking;
+            })
+            .catch((err) => {
+                //@TODO #4
+                console.log("Error while editing booking:", err);
+            });
+    };
+
     const handleDataChange = ({
         created,
         updated,
         deleted,
     }: SchedulerDataChangeEvent) => {
         console.log({ updated, created, deleted });
+        console.log({ deleted });
+        // console.log("deleted:", updated[0].recurrenceExceptions[0]);
+        if (updated.length > 0 && updated[0].recurrenceExceptions === null) {
+            const Start_Date = formattingDate(updated[0].start);
+            const End_Date = formattingDate(updated[0].end);
+            const updatedDataBooking: NewBookingDto = {
+                title: updated[0].title,
+                description: updated[0].description,
+                status: updated[0].state,
+                start_date: Start_Date,
+                end_date: End_Date,
+                reserver: [user.id],
+                concerner: updated[0].coursesId,
+                superviser: updated[0].ownerID.id,
+                // assister: updated[0].personId != null && updated[0].personId.id,
+            };
+            console.log("the update go on:", updated[0]);
+            editBooking(updated[0].id, updatedDataBooking);
+        }
         setData((old) =>
             old
                 // Filter the deleted items
@@ -270,6 +337,8 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     (item) =>
                         deleted.find((current) => current.id === item.id) ===
                         undefined
+                    // deleted.find((current) => current.id === item.id) ===
+                    // undefined
                 )
                 // Find and replace the updated items
                 .map(
@@ -344,15 +413,19 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     id="scheduler_body"
                     height={"100%"}
                     onDataChange={handleDataChange}
-                    editable={{
-                        add: true,
-                        remove: true,
-                        drag: true,
-                        resize: true,
-                        select: true,
-                        edit: true,
-                    }}
+                    // editable={{
+                    //     add: true,
+                    //     remove: true,
+                    //     drag: true,
+                    //     resize: true,
+                    //     select: true,
+                    //     edit: true,
+                    // }}
+                    editable={true}
                     footer={(props) => <CustomFooter {...props} />}
+                    // slot={CustomSlot}
+                    viewSlot={CustomViewSlot}
+                    // viewItem={CustomViewItem}
                 >
                     <AgendaView
                         slotDivisions={slotDivision}
@@ -377,5 +450,44 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 </Scheduler>
             </SchedulerConfigContext.Provider>
         </div>
+    );
+};
+
+const CustomSlot = (props: SchedulerSlotProps) => (
+    <SchedulerSlot
+        {...props}
+        style={{
+            ...props.style,
+            // backgroundColor:
+            //     props.isAllDay || !props.isWorkHour || !props.isWorkDay
+            //         ? "#ffddcc"
+            //         : "#ccff99",
+            height: "60px",
+        }}
+    />
+);
+
+export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
+    return (
+        <SchedulerViewSlot
+            {...props}
+            style={{
+                ...props.style,
+                minHeight: 50,
+                maxHeight: 120,
+            }}
+        />
+    );
+};
+
+export const CustomViewItem = (props: SchedulerViewItemProps) => {
+    return (
+        <SchedulerViewItem
+            {...props}
+            style={{
+                ...props.style,
+                height: "auto",
+            }}
+        />
     );
 };

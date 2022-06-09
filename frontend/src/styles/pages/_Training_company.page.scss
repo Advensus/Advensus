@@ -1,4 +1,11 @@
-#users_content_display_company {
+.training_company_page_container {
+    // background-color: rgb(88, 51, 51);
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    overflow: hidden;
+}
+#training_company_content_display_company {
     position: relative;
     background-color: #f4f3f3;
     min-width: 300px;
@@ -12,3 +19,95 @@
     flex-direction: row;
     overflow: hidden;
 }
+
+.training_company_display_tab {
+    // background-color: yellow;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.training_company_tab_header {
+    // background-color: #fff;
+}
+.training_company_tab_title {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.training_company_hr_dashed {
+    border-top: 0.1em dashed black;
+    border-bottom: 0;
+    margin-top: 0;
+}
+.training_company_hr_solid {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 0;
+}
+
+.training_company_tab_header_content {
+    padding: 12px 0;
+    // display: flex;
+    // grid-template-rows: 1fr 1fr;
+    // gap: 12px;
+}
+.training_company_filter_box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.tab_content {
+    overflow: auto;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+.training_company_tab_content_scroll {
+    overflow: auto;
+    padding-right: 10px;
+}
+.tab_content_trainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px 0 40px 0;
+}
+.tab_content_rps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    margin-bottom: 30px;
+}
+.training_company_tab_content_trainee {
+    overflow: auto;
+}
+.tab_sections_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#training_company_display_tab_ii {
+    position: relative;
+    background: #fff;
+    transform: scale(0);
+    transition: 1s ease opacity, 0.6s ease transform;
+    padding: 15px 15px 0 15px;
+    color: #000;
+    overflow: auto;
+    width: 60%;
+}
+
+// #hint {
+//     background: yellow;
+//     color: red;
+//     padding: 16px;
+//     margin-bottom: 10px;
+//     opacity: 0;
+//     transform: scale(0);
+//     transition: 0.6s ease opacity, 0.6s ease transform;
+// }

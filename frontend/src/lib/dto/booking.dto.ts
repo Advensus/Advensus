@@ -5,7 +5,7 @@ export interface NewBookingDto {
     start_date: Date | null | undefined | string;
     end_date: Date | null | undefined | string;
     reserver: string[];
-    proposer: string;
+    proposer?: string;
     concerner: string;
 
     superviser?: string;

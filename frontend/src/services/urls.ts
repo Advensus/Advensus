@@ -59,6 +59,7 @@ export const companyUrls = {
 export const bookingUrls = {
     NEW_BOOKING: `${prefixer}/auth/create/reservation/`,
     GET_ALL_BOOKING: `${prefixer}/auth/GetAllReservation/`,
+    EDIT_BOOKING: (id: string) => `${prefixer}/auth/UpdateReservation/${id}/`,
 };
 
 export const coursesUrls = {
