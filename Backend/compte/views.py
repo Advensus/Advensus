@@ -451,8 +451,9 @@ def detaildocument(request, pk):
 # 		donnee.save()
 # 	return Response(donnee.data)
 
-@api_view(['POST'])
+
 @csrf_exempt
+@api_view(['PUT','PATCH'])
 # @permission_classes([IsAuthenticated])	
 def updatedocument(request, pk):
 	serializer_class = cruddocuments
@@ -460,6 +461,7 @@ def updatedocument(request, pk):
 	serializer = serializer_class(instance=donnee, data=request.data)
 	if serializer.is_valid():
 		serializer.save()
+	return Response(serializer.data)
 
 @api_view(['DELETE'])
 @csrf_exempt
