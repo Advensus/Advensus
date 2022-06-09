@@ -380,8 +380,8 @@ def detailformation(request, pk):
 #     serializer_class = crudformation	
 	
 
-@api_view(['POST'])
 @csrf_exempt
+@api_view(['PUT','PATCH'])
 # @permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
@@ -391,12 +391,17 @@ def updateformation(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
-@api_view(['DELETE'])
+
 @csrf_exempt
+@api_view(['DELETE'])
 # @permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
-	donnee = formation.objects.get(id=pk)
-	donnee.delete()
+
+	if request.method == "DELETE":
+		donnee = formation.objects.get(id=pk)
+		donnee.delete()
+		return JsonResponse({'message':'Formation supprimé avec succès'},status=status.HTTP_204_NO_CONTENT)
+	return JsonResponse({'message':'Formation DoesNotExist'},status=status.HTTP_500_NO_CONTENT)
 # FIN CRUD OPERATION FOR FORMATION
 
 # CRUD OPERATION DOCUMENTS
