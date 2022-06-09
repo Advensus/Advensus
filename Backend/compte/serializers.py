@@ -69,6 +69,17 @@ class CoursesData(serializers.ModelSerializer):
     class Meta:
         model = Courses
         fields = ['id','superviser','assister','lier']
+
+class FormateurData(serializers.ModelSerializer):
+   
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    competence = FormationData(many=True,read_only=True)
+   
+  
+    
+    class Meta:
+        model = User
+        fields = ['id','username','first_name','email','phone_number','adress','password','horaire','cv','user_type','competence','appartenir_societe']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -439,8 +450,16 @@ class CrudOrganisme(serializers.ModelSerializer):
 #END CRUD AND CREATE ORGANISME
 
 #CRUD DOCUMENTS
+class createocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    class Meta:
+        model = Document
+        fields = ['doc_content','doc_type','id','administrer','emarger','partager']
+
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
+    emarger = Stagiaredata(read_only=True)
+    partager = FormateurData(read_only=True)
     class Meta:
         model = Document
         fields = ['doc_content','doc_type','id','administrer','emarger','partager']
