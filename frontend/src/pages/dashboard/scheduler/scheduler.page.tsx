@@ -16,6 +16,7 @@ import {
     SchedulerViewSlot,
     SchedulerViewItemProps,
     SchedulerViewItem,
+    SchedulerHeaderProps,
 } from "@progress/kendo-react-scheduler";
 import "@progress/kendo-theme-default/dist/all.css";
 import { guid } from "@progress/kendo-react-common";
@@ -32,6 +33,9 @@ import {
     ICourses,
     IBooking,
     IUser,
+    SUPER_USER,
+    TRAINEE,
+    TEACHEAR,
 } from "../../../lib";
 import { useAuthStore } from "../../../stores";
 import BookingService from "../../../services/booking.service";
@@ -227,7 +231,26 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                         // ),
                     };
                 });
-                setBookingData(sampleBooking);
+                if (user.user_type === TRAINEE) {
+                    const traineeBooking = sampleBooking.filter(
+                        (_) =>
+                            _.personId != null &&
+                            `${_.personId.first_name} ${_.personId.username}`.indexOf(
+                                user.first_name
+                            ) !== -1
+                    );
+                    setBookingData(traineeBooking);
+                } else if (user.user_type === TEACHEAR) {
+                    const formerBooking = sampleBooking.filter(
+                        (_) =>
+                            `${_.ownerID.first_name} ${_.ownerID.username}`.indexOf(
+                                user.first_name
+                            ) !== -1
+                    );
+                    setBookingData(formerBooking);
+                } else {
+                    setBookingData(sampleBooking);
+                }
             })
             .catch((err) => {
                 console.log("error while gettting all trainings:", err);
@@ -328,7 +351,9 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 // assister: updated[0].personId != null && updated[0].personId.id,
             };
             console.log("the update go on:", updated[0]);
-            editBooking(updated[0].id, updatedDataBooking);
+            if (user.user_type != TRAINEE && user.user_type != TEACHEAR) {
+                editBooking(updated[0].id, updatedDataBooking);
+            }
         }
         setData((old) =>
             old
@@ -383,6 +408,25 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         );
     };
 
+    const displayCustomHeader =
+        user.user_type === SUPER_USER
+            ? (props: React.PropsWithChildren<SchedulerHeaderProps>) => (
+                  <CustomHeader
+                      {...props}
+                      displayEventByResource={(id: string) => {
+                          // filterByResources(id);
+                          setSearchPerson(id);
+                      }}
+                  />
+              )
+            : undefined;
+
+    const editableHandle =
+        user.user_type === TEACHEAR || user.user_type === TRAINEE
+            ? false
+            : true;
+    console.log({ editableHandle });
+
     return (
         <div className="scheduler_container">
             <SchedulerConfigContext.Provider
@@ -400,28 +444,19 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     data={filteredDataBooking}
                     defaultDate={displayDate}
                     form={FormWithCustomEditor}
-                    header={(props) => (
-                        <CustomHeader
-                            {...props}
-                            displayEventByResource={(id: string) => {
-                                // filterByResources(id);
-                                setSearchPerson(id);
-                            }}
-                        />
-                    )}
+                    header={displayCustomHeader}
                     // className="scheduler_body"
                     id="scheduler_body"
                     height={"100%"}
                     onDataChange={handleDataChange}
-                    // editable={{
-                    //     add: true,
-                    //     remove: true,
-                    //     drag: true,
-                    //     resize: true,
-                    //     select: true,
-                    //     edit: true,
-                    // }}
-                    editable={true}
+                    editable={{
+                        add: true,
+                        remove: editableHandle,
+                        drag: editableHandle,
+                        resize: editableHandle,
+                        select: editableHandle,
+                        edit: editableHandle,
+                    }}
                     footer={(props) => <CustomFooter {...props} />}
                     // slot={CustomSlot}
                     viewSlot={CustomViewSlot}

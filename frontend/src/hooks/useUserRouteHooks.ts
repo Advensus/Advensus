@@ -164,7 +164,8 @@ export function useUserRouteHooks() {
             path: `reserv`,
             label: "Réservation de cours",
             icon: "la-id-badge",
-            component: LessonBookingPage,
+            component: SchedulerPage,
+            // component: LessonBookingPage,
             roles: [TRAINEE],
         },
         {
