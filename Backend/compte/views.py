@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -143,11 +143,31 @@ class AddSouscrir(generics.GenericAPIView):
 
 		my_canvas.save()
 		
-
+       
 	
 		return Response(user_data,
             status=status.HTTP_201_CREATED)
-	
+
+class CreateDocumentsStagiaire(generics.GenericAPIView):
+	serializer_class = CreateGenerate
+	def post(self,request):
+		data = request.data
+		data['path'] = "user.pdf"
+		user = User.objects.get(id=data['appartenir'])
+		# user_org = user.organisme_formation.all().get()
+		# rp_stagiaire = user.Rp_Stagiaire.all().get()
+		serializer = self.serializer_class(data=data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		generate_data = serializer.data
+		my_canvas = canvas.Canvas(data['path'], pagesize=letter)
+		my_canvas.setLineWidth(.3)
+		my_canvas.setFont('Helvetica', 12)
+		my_canvas.drawString(30, 750, 'Documents')
+		my_canvas.drawString(30, 735, user.username)
+
+		my_canvas.save()
+		return Response(generate_data,status=status.HTTP_201_CREATED)
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
