@@ -52,11 +52,16 @@ class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     doc_type = models.FileField(upload_to="doc_type/")
     doc_content = models.CharField(max_length=255)
-    administrer = models.ManyToManyField(User,related_name='administrer_content_type')
     partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type')
-    emarger = models.ForeignKey(User,on_delete=models.CASCADE,related_name='emarger_content_type')
+   
 
-
+   
+class GenerateDocument(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    path = models.FileField(upload_to="doc_type/")
+    doc_categorie = models.CharField(max_length=255)
+    appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
+        
 class Opinion(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     rapporter = models.ForeignKey(Courses,on_delete=models.CASCADE)

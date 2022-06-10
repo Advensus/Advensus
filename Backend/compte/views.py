@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import createocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -130,17 +130,19 @@ class AddSouscrir(generics.GenericAPIView):
 		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
-		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = u'<img src="user_org.company_logo.url">' + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
-		my_canvas = canvas.Canvas("media/user.pdf", pagesize=letter)
+		my_canvas = canvas.Canvas("doc_type/user.pdf", pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
 		my_canvas.drawString(30, 750, 'Documents')
 		my_canvas.drawString(30, 735, user.username)
+
 		my_canvas.save()
+		
 
 	
 		return Response(user_data,
@@ -407,7 +409,7 @@ def deleteformation(request, pk):
 # CRUD OPERATION DOCUMENTS
 
 class CreateDocument(CreateAPIView):
-    serializer_class = createocuments
+    serializer_class = createdocuments
     queryset = Document.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -453,15 +455,18 @@ def detaildocument(request, pk):
 
 
 @csrf_exempt
-@api_view(['PUT','PATCH'])
-# @permission_classes([IsAuthenticated])	
-def updatedocument(request, pk):
-	serializer_class = cruddocuments
-	donnee = Document.objects.get(id=pk)
-	serializer = serializer_class(instance=donnee, data=request.data)
-	if serializer.is_valid():
-		serializer.save()
-	return Response(serializer.data)
+@api_view(['PUT'])
+def updatedocument(request,pk):
+	donnee =  Document.objects.get(id=pk)
+	
+	if request.method == "PUT":
+		document_data = JSONParser().parse(request)
+		serializer = cruddocuments(donnee,data=document_data)
+	
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data) 
+		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['DELETE'])
 @csrf_exempt
