@@ -77,9 +77,6 @@ class CoursesData(serializers.ModelSerializer):
         model = Courses
         fields = ['id','superviser','assister','lier']
 
-<<<<<<< HEAD
-
-=======
 class FormateurData(serializers.ModelSerializer):
    
     appartenir_societe = SocieteData(many=True,read_only=True)
@@ -90,7 +87,6 @@ class FormateurData(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','username','first_name','email','phone_number','adress','password','horaire','cv','user_type','competence','appartenir_societe']
->>>>>>> backend
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -564,8 +560,6 @@ class crudcertificate(serializers.ModelSerializer):
 
 
 #END CRUD AND CREATE CERTIFICATE
-<<<<<<< HEAD
-=======
 
 
 #GENERATE DOCUMENTS STAGIAIRE
@@ -582,4 +576,3 @@ class CrudGenerate(serializers.ModelSerializer):
     class Meta:
         model = GenerateDocument
         fields = ['id','path','doc_categorie','appartenir']
->>>>>>> backend
