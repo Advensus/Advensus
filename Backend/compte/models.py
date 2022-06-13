@@ -5,6 +5,8 @@ from .utilisateur import User
 from .training import formation
 import uuid
 from django.conf import settings
+
+
 # class souscriptionliaison(models.Model):
    
 #     utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -58,7 +60,7 @@ class Document(models.Model):
    
 class GenerateDocument(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    path = models.FileField(upload_to="doc_type/")
+    path = models.FileField(upload_to="doc_generate/",default="None")
     doc_categorie = models.CharField(max_length=255)
     appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
         

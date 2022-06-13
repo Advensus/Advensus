@@ -453,19 +453,17 @@ class createdocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type','id','administrer','emarger','partager']
+        fields = ['doc_content','doc_type','id','partager']
 
 
 
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    emarger = Stagiaredata(read_only=True)
     partager = FormateurData(read_only=True)
-    administrer = RpData(read_only=True,many=True)
     doc_type = serializers.ImageField()
     class Meta:
         model = Document
-        fields = ['id','doc_content','doc_type','administrer','emarger','partager']
+        fields = ['id','doc_content','doc_type','partager']
 #END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
@@ -561,7 +559,7 @@ class CreateGenerate(serializers.ModelSerializer):
    
     class Meta:
         model = GenerateDocument
-        fields = ['id','path','doc_categorie','appartenir']
+        fields = ['id','doc_categorie','appartenir']
 
 class CrudGenerate(serializers.ModelSerializer):
     appartenir = Stagiaredata(read_only=True)

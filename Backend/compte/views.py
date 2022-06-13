@@ -20,7 +20,7 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .training import formation,certificate,programme
-from .models import Document,Courses, reservation
+from .models import Document,Courses, reservation,GenerateDocument
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
@@ -135,39 +135,9 @@ class AddSouscrir(generics.GenericAPIView):
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
-		my_canvas = canvas.Canvas("doc_type/user.pdf", pagesize=letter)
-		my_canvas.setLineWidth(.3)
-		my_canvas.setFont('Helvetica', 12)
-		my_canvas.drawString(30, 750, 'Documents')
-		my_canvas.drawString(30, 735, user.username)
-
-		my_canvas.save()
-		
-       
-	
 		return Response(user_data,
             status=status.HTTP_201_CREATED)
 
-class CreateDocumentsStagiaire(generics.GenericAPIView):
-	serializer_class = CreateGenerate
-	def post(self,request):
-		data = request.data
-		data['path'] = "user.pdf"
-		user = User.objects.get(id=data['appartenir'])
-		# user_org = user.organisme_formation.all().get()
-		# rp_stagiaire = user.Rp_Stagiaire.all().get()
-		serializer = self.serializer_class(data=data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		generate_data = serializer.data
-		my_canvas = canvas.Canvas(data['path'], pagesize=letter)
-		my_canvas.setLineWidth(.3)
-		my_canvas.setFont('Helvetica', 12)
-		my_canvas.drawString(30, 750, 'Documents')
-		my_canvas.drawString(30, 735, user.username)
-
-		my_canvas.save()
-		return Response(generate_data,status=status.HTTP_201_CREATED)
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
@@ -786,3 +756,38 @@ def viewallsouscription(request):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
+
+
+#CRUD DOCUMENT 
+class CreateDocumentsStagiaire(generics.GenericAPIView):
+	serializer_class = CreateGenerate
+	def post(self,request):
+		# path_generatedocument = request.path
+		data = request.data
+
+		# print('path')
+		paths = "media/doc_generate/userss.pdf"
+		sauvegarde = GenerateDocument(
+			path=paths,
+			
+		)
+	  
+		user = User.objects.get(id=data['appartenir'])
+		
+		# user_org = user.organisme_formation.all().get()
+		# rp_stagiaire = user.Rp_Stagiaire.all().get()
+		serializer = self.serializer_class(sauvegarde,data=data)
+		serializer.is_valid(raise_exception=True)
+		
+		serializer.save()
+		generate_data = serializer.data
+		
+		my_canvas = canvas.Canvas(paths, pagesize=letter)
+		my_canvas.setLineWidth(.3)
+		my_canvas.setFont('Helvetica', 12)
+		my_canvas.drawString(30, 750, 'Documents')
+		my_canvas.drawString(30, 735, user.username)
+		
+		my_canvas.save()
+		
+		return Response(generate_data,status=status.HTTP_201_CREATED)
