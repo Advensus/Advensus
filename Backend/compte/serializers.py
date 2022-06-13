@@ -469,7 +469,7 @@ class CreateGenerate(serializers.ModelSerializer):
    
     class Meta:
         model = Document
-        fields = ['id','doc_categorie','appartenir']
+        fields = ['id','doc_categorie','appartenir', 'sign']
 
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
@@ -478,7 +478,7 @@ class cruddocuments(serializers.ModelSerializer):
     
     class Meta:
         model = Document
-        fields = ['id','path','doc_categorie','appartenir','partager']
+        fields = ['id','path','doc_categorie','appartenir','partager', 'sign']
 
 
 
