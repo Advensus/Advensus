@@ -9,9 +9,8 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document,Courses,reservation
+from .models import Document,Courses,reservation,GenerateDocument
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
-
 
 
 
@@ -78,7 +77,20 @@ class CoursesData(serializers.ModelSerializer):
         model = Courses
         fields = ['id','superviser','assister','lier']
 
+<<<<<<< HEAD
 
+=======
+class FormateurData(serializers.ModelSerializer):
+   
+    appartenir_societe = SocieteData(many=True,read_only=True)
+    competence = FormationData(many=True,read_only=True)
+   
+  
+    
+    class Meta:
+        model = User
+        fields = ['id','username','first_name','email','phone_number','adress','password','horaire','cv','user_type','competence','appartenir_societe']
+>>>>>>> backend
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData(read_only=True,many=True)
@@ -449,11 +461,21 @@ class CrudOrganisme(serializers.ModelSerializer):
 #END CRUD AND CREATE ORGANISME
 
 #CRUD DOCUMENTS
-class cruddocuments(serializers.ModelSerializer):
+class createdocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type','id']
+        fields = ['doc_content','doc_type','id','partager']
+
+
+
+class cruddocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    partager = FormateurData(read_only=True)
+    doc_type = serializers.ImageField()
+    class Meta:
+        model = Document
+        fields = ['id','doc_content','doc_type','partager']
 #END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
@@ -542,3 +564,22 @@ class crudcertificate(serializers.ModelSerializer):
 
 
 #END CRUD AND CREATE CERTIFICATE
+<<<<<<< HEAD
+=======
+
+
+#GENERATE DOCUMENTS STAGIAIRE
+class CreateGenerate(serializers.ModelSerializer):
+   
+   
+    class Meta:
+        model = GenerateDocument
+        fields = ['id','doc_categorie','appartenir']
+
+class CrudGenerate(serializers.ModelSerializer):
+    appartenir = Stagiaredata(read_only=True)
+   
+    class Meta:
+        model = GenerateDocument
+        fields = ['id','path','doc_categorie','appartenir']
+>>>>>>> backend

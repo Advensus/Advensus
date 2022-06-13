@@ -5,6 +5,8 @@ from .utilisateur import User
 from .training import formation
 import uuid
 from django.conf import settings
+
+
 # class souscriptionliaison(models.Model):
    
 #     utilisateur = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -35,8 +37,13 @@ class reservation(models.Model):
     # reserver = models.ManyToManyField(User,related_name='reservation_content_type')
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)
+<<<<<<< HEAD
     start_date = models.DateTimeField(auto_now_add=False)
     end_date = models.DateTimeField(auto_now_add=False)
+=======
+    start_date = models.DateField(auto_now_add=False)
+    end_date = models.DateField(auto_now_add=False)
+>>>>>>> backend
     proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type',null=True,default=False)
     concerner = models.OneToOneField(Courses,on_delete=models.CASCADE)
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
@@ -52,11 +59,16 @@ class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     doc_type = models.FileField(upload_to="doc_type/")
     doc_content = models.CharField(max_length=255)
-    administrer = models.ManyToManyField(User,related_name='administrer_content_type')
     partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type')
-    emarger = models.ForeignKey(User,on_delete=models.CASCADE,related_name='emarger_content_type')
+   
 
-
+   
+class GenerateDocument(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    path = models.FileField(upload_to="doc_generate/",default="None")
+    doc_categorie = models.CharField(max_length=255)
+    appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
+        
 class Opinion(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     rapporter = models.ForeignKey(Courses,on_delete=models.CASCADE)

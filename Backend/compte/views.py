@@ -4,7 +4,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
+<<<<<<< HEAD
 from .serializers import CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+=======
+from .serializers import CrudGenerate,CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+>>>>>>> backend
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -20,11 +24,11 @@ from drf_yasg import openapi
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from .training import formation,certificate,programme
-from .models import Document,Courses, reservation
+from .models import Document,Courses, reservation,GenerateDocument
 from django.views.decorators.csrf import csrf_exempt
 from .permissions import autorisation
 from django.http import JsonResponse
-
+from rest_framework.parsers import JSONParser 
 from .mixin import ReadWriteSerializerMixin
 from django.template.loader import render_to_string
 
@@ -34,7 +38,10 @@ from django.shortcuts import get_object_or_404
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+<<<<<<< HEAD
 from rest_framework.parsers import JSONParser
+=======
+>>>>>>> backend
 from django.http.response import JsonResponse
 
 def home(request):
@@ -131,22 +138,14 @@ class AddSouscrir(generics.GenericAPIView):
 		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
-		email_body = user_org.company_logo.url + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = u'<img src="user_org.company_logo.url">' + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
-		my_canvas = canvas.Canvas("media/user.pdf", pagesize=letter)
-		my_canvas.setLineWidth(.3)
-		my_canvas.setFont('Helvetica', 12)
-		my_canvas.drawString(30, 750, 'Documents')
-		my_canvas.drawString(30, 735, user.username)
-		my_canvas.save()
-
-	
 		return Response(user_data,
             status=status.HTTP_201_CREATED)
-	
+
 
 class RegisterFormateur(generics.GenericAPIView):
 	serializer_class = AddFormateur
@@ -381,8 +380,8 @@ def detailformation(request, pk):
 #     serializer_class = crudformation	
 	
 
-@api_view(['POST'])
 @csrf_exempt
+@api_view(['PUT','PATCH'])
 # @permission_classes([IsAuthenticated,autorisation])	
 def updateformation(request, pk):
 	serializer_class = crudformation
@@ -392,18 +391,23 @@ def updateformation(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
-@api_view(['DELETE'])
+
 @csrf_exempt
+@api_view(['DELETE'])
 # @permission_classes([IsAuthenticated,autorisation])	
 def deleteformation(request, pk):
-	donnee = formation.objects.get(id=pk)
-	donnee.delete()
+
+	if request.method == "DELETE":
+		donnee = formation.objects.get(id=pk)
+		donnee.delete()
+		return JsonResponse({'message':'Formation supprimé avec succès'},status=status.HTTP_204_NO_CONTENT)
+	return JsonResponse({'message':'Formation DoesNotExist'},status=status.HTTP_500_NO_CONTENT)
 # FIN CRUD OPERATION FOR FORMATION
 
 # CRUD OPERATION DOCUMENTS
 
 class CreateDocument(CreateAPIView):
-    serializer_class = cruddocuments
+    serializer_class = createdocuments
     queryset = Document.objects.all()
     # permission_classes = (permissions.IsAuthenticated,autorisation)
 
@@ -447,15 +451,20 @@ def detaildocument(request, pk):
 # 		donnee.save()
 # 	return Response(donnee.data)
 
-@api_view(['POST'])
+
 @csrf_exempt
-# @permission_classes([IsAuthenticated])	
-def updatedocument(request, pk):
-	serializer_class = cruddocuments
-	donnee = Document.objects.get(id=pk)
-	serializer = serializer_class(instance=donnee, data=request.data)
-	if serializer.is_valid():
-		serializer.save()
+@api_view(['PUT'])
+def updatedocument(request,pk):
+	donnee =  Document.objects.get(id=pk)
+	
+	if request.method == "PUT":
+		document_data = JSONParser().parse(request)
+		serializer = cruddocuments(donnee,data=document_data)
+	
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data) 
+		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['DELETE'])
 @csrf_exempt
@@ -594,6 +603,7 @@ def viewallreservations(request):
 
 	return Response(serializer.data)
 
+<<<<<<< HEAD
 @csrf_exempt
 @api_view(['PATCH'])
 
@@ -610,15 +620,38 @@ def updatereservation(request,pk):
 		return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
 		
+=======
+
+@csrf_exempt
+@api_view(['PUT'])
+def updatereservation(request,pk):
+	donnee =  reservation.objects.get(id=pk)
+	
+	if request.method == "PUT":
+		reservation_data = JSONParser().parse(request)
+		serializer = crudreservation(donnee,data=reservation_data)
+	
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data) 
+		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+>>>>>>> backend
 @csrf_exempt		
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])	
 def deletereservation(request, pk):
 	
+<<<<<<< HEAD
 	if request.method == 'DELETE':
 		donnee = reservation.objects.get(id=pk)
 		donnee.delete()
 		return JsonResponse({'message:reservation a été supprimé avec succès'},status=status.HTTP_200_OK)
+=======
+	if request.method == "DELETE":
+		donnee = reservation.objects.get(id=pk)
+		donnee.delete()
+		return JsonResponse({'message': 'Reservation was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+>>>>>>> backend
 
 # ALL GET BY
 
@@ -754,6 +787,51 @@ def viewallsouscription(request):
 	serializer_class = crudsouscrir
 	donnee = souscrir.objects.all()
 
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
+
+#CRUD DOCUMENT 
+class CreateDocumentsStagiaire(generics.GenericAPIView):
+	serializer_class = CreateGenerate
+	def post(self,request):
+		# path_generatedocument = request.path
+		data = request.data
+
+		# print('path')
+		paths = "media/doc_generate/userss.pdf"
+		sauvegarde = GenerateDocument(
+			path=paths,
+			
+		)
+	  
+		user = User.objects.get(id=data['appartenir'])
+		
+		# user_org = user.organisme_formation.all().get()
+		# rp_stagiaire = user.Rp_Stagiaire.all().get()
+		serializer = self.serializer_class(sauvegarde,data=data)
+		serializer.is_valid(raise_exception=True)
+		
+		serializer.save()
+		generate_data = serializer.data
+		
+		my_canvas = canvas.Canvas(paths, pagesize=letter)
+		my_canvas.setLineWidth(.3)
+		my_canvas.setFont('Helvetica', 12)
+		my_canvas.drawString(30, 750, 'Documents')
+		my_canvas.drawString(30, 735, user.username)
+		
+		my_canvas.save()
+		
+		return Response(generate_data,status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])
+def viewalldocumentgenerate(request):
+	serializer_class = CrudGenerate
+	donnee = GenerateDocument.objects.all()
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)

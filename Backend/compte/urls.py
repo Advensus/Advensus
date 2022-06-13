@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import CreateCertificate,CreateProgramme,CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument, viewallreservations
+from .views import CreateDocumentsStagiaire,CreateCertificate,CreateProgramme,CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument, viewallreservations
 
 from . import views
 
@@ -56,8 +56,11 @@ urlpatterns = [
     path('DeleteFormation/<str:pk>/', views.deleteformation),
 
    #CRUD DOCUMENT URLS
+  
     path('GetAllDocument/', views.viewalldocument),
     path('DetailDocument/<str:pk>/', views.detaildocument),
+    path('GenerateDocument/',  CreateDocumentsStagiaire.as_view()),
+    path('GetAllDocumentGenerate/', views.viewalldocumentgenerate),
 
     path('CreateDocument/', views.CreateDocument.as_view()),
     path('UpdateDocument/<str:pk>/', views.updatedocument),
