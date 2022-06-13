@@ -52,17 +52,13 @@ class reservation(models.Model):
 
 class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    doc_type = models.FileField(upload_to="doc_type/")
-    doc_content = models.CharField(max_length=255)
-    partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type')
-   
-
-   
-class GenerateDocument(models.Model):
-    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    path = models.FileField(upload_to="doc_generate/",default="None")
+    path = models.FileField(upload_to="doc_generate/")
     doc_categorie = models.CharField(max_length=255)
     appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
+    partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type',null=True)
+   
+
+
         
 class Opinion(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

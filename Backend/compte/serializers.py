@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document,Courses,reservation,GenerateDocument
+from .models import Document,Courses,reservation
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -459,19 +459,30 @@ class CrudOrganisme(serializers.ModelSerializer):
 #CRUD DOCUMENTS
 class createdocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
+  
     class Meta:
         model = Document
-        fields = ['doc_content','doc_type','id','partager']
+        fields = ['id','path','doc_categorie','partager', 'appartenir']
 
-
+class CreateGenerate(serializers.ModelSerializer):
+   
+   
+    class Meta:
+        model = Document
+        fields = ['id','doc_categorie','appartenir']
 
 class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     partager = FormateurData(read_only=True)
-    doc_type = serializers.ImageField()
+    appartenir = Stagiaredata(read_only=True)
+    
     class Meta:
         model = Document
-        fields = ['id','doc_content','doc_type','partager']
+        fields = ['id','path','doc_categorie','appartenir','partager']
+
+
+
+
 #END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
@@ -563,16 +574,3 @@ class crudcertificate(serializers.ModelSerializer):
 
 
 #GENERATE DOCUMENTS STAGIAIRE
-class CreateGenerate(serializers.ModelSerializer):
-   
-   
-    class Meta:
-        model = GenerateDocument
-        fields = ['id','doc_categorie','appartenir']
-
-class CrudGenerate(serializers.ModelSerializer):
-    appartenir = Stagiaredata(read_only=True)
-   
-    class Meta:
-        model = GenerateDocument
-        fields = ['id','path','doc_categorie','appartenir']

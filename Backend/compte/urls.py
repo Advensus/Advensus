@@ -60,7 +60,7 @@ urlpatterns = [
     path('GetAllDocument/', views.viewalldocument),
     path('DetailDocument/<str:pk>/', views.detaildocument),
     path('GenerateDocument/',  CreateDocumentsStagiaire.as_view()),
-    path('GetAllDocumentGenerate/', views.viewalldocumentgenerate),
+  
 
     path('CreateDocument/', views.CreateDocument.as_view()),
     path('UpdateDocument/<str:pk>/', views.updatedocument),
