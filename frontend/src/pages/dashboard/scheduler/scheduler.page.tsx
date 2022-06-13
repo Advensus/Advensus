@@ -448,6 +448,8 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     // className="scheduler_body"
                     id="scheduler_body"
                     height={"100%"}
+                    timezone={"Etc/UTC"}
+                    viewItem={ProportionalViewItem}
                     onDataChange={handleDataChange}
                     editable={{
                         add: true,
@@ -523,6 +525,23 @@ export const CustomViewItem = (props: SchedulerViewItemProps) => {
                 ...props.style,
                 height: "auto",
             }}
+        />
+    );
+};
+
+export const ProportionalViewItem = (props: any) => {
+    //You can use props.dataItem for getting additional information to set as "title"
+    let myCustomTitle = props.dataItem.title;
+    // let trainee = "Stagiaire: " + props.dataItem.concerner.assister.first_name;
+    let trainer = "Formateur: " + props.dataItem.ownerID.username;
+    console.log({ props });
+    return (
+        <SchedulerViewItem
+            {...props}
+            title={myCustomTitle}
+            ownerId={trainer}
+            // trainee={trainee}
+            // trainer={trainer}
         />
     );
 };

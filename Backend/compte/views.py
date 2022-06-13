@@ -34,6 +34,8 @@ from django.shortcuts import get_object_or_404
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from rest_framework.parsers import JSONParser
+from django.http.response import JsonResponse
 
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
@@ -592,25 +594,31 @@ def viewallreservations(request):
 
 	return Response(serializer.data)
 
-@api_view(['POST'])
 @csrf_exempt
+@api_view(['PATCH'])
+
 def updatereservation(request,pk):
-	serializer_class = crudreservation
-	donnee =  reservation.objects.filter(id=pk)
+	
+	donnee =  reservation.objects.get(id=pk)
+	if request.method == 'PATCH':
+		reservation_data = JSONParser().parse(request)
+		serializer = crudreservation(donnee,data=reservation_data)
 
-	serializer = serializer_class(donnee,data=request.data,many=True)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
-	if serializer.is_valid():
-		serializer.save()
-		return Response(serializer.data,status=status.HTTP_200_OK)
+		
 @csrf_exempt		
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])	
 def deletereservation(request, pk):
 	
-	donnee = reservation.objects.get(id=pk)
-	donnee.delete()
-	return Response(status=status.HTTP_200_OK)
+	if request.method == 'DELETE':
+		donnee = reservation.objects.get(id=pk)
+		donnee.delete()
+		return JsonResponse({'message:reservation a été supprimé avec succès'},status=status.HTTP_200_OK)
 
 # ALL GET BY
 
