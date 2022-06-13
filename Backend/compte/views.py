@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import CrudGenerate,CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -791,3 +791,13 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.save()
 		
 		return Response(generate_data,status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])
+def viewalldocumentgenerate(request):
+	serializer_class = CrudGenerate
+	donnee = GenerateDocument.objects.all()
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
