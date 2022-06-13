@@ -37,13 +37,8 @@ class reservation(models.Model):
     # reserver = models.ManyToManyField(User,related_name='reservation_content_type')
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)
-<<<<<<< HEAD
     start_date = models.DateTimeField(auto_now_add=False)
     end_date = models.DateTimeField(auto_now_add=False)
-=======
-    start_date = models.DateField(auto_now_add=False)
-    end_date = models.DateField(auto_now_add=False)
->>>>>>> backend
     proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type',null=True,default=False)
     concerner = models.OneToOneField(Courses,on_delete=models.CASCADE)
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
