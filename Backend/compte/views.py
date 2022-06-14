@@ -130,7 +130,7 @@ class AddSouscrir(generics.GenericAPIView):
 		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
-		email_body = u'<img src="user_org.company_logo.url">' + "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = u'<img src="{{user_org.company_logo.url}}">'+ "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 
 			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
@@ -419,22 +419,12 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		data = request.data
       
 		# print('path')
+<<<<<<< HEAD
 		paths = "userss.pdf"
-		sauvegarde = Document(
-			path=paths,		
-		)
-		print(sauvegarde)
-	  
+=======
 		user = User.objects.get(id=data['appartenir'])
-		
-		# user_org = user.organisme_formation.all().get()
-		# rp_stagiaire = user.Rp_Stagiaire.all().get()
-		serializer = self.serializer_class(sauvegarde,data=data)
-		serializer.is_valid(raise_exception=True)
-		
-		serializer.save()
-		generate_data = serializer.data
-		
+		# url = settings.MEDIA_ROOT+'doc_generate'
+		paths = "document/"+user.username+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
@@ -442,6 +432,36 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.drawString(30, 735, user.username)
 		
 		my_canvas.save()
+		
+
+		print(paths)
+>>>>>>> 68346ff6d984aa3c58000fc6addd2befb23e7fd7
+		sauvegarde = Document(
+			path=paths,		
+		)
+<<<<<<< HEAD
+		print(sauvegarde)
+=======
+	
+		print(sauvegarde.path)
+		
+>>>>>>> 68346ff6d984aa3c58000fc6addd2befb23e7fd7
+	  
+		
+		
+		# user_org = user.organisme_formation.all().get()
+		# rp_stagiaire = user.Rp_Stagiaire.all().get()
+		serializer = self.serializer_class(sauvegarde,data=data)
+		serializer.is_valid(raise_exception=True)
+		
+		serializer.save()
+		org = Document.objects.all()
+		for d in org:
+			print(d.path.url +"-"+ d.doc_categorie)
+			print(d.sign.url)
+		generate_data = serializer.data
+		
+		
 		
 		return Response(generate_data,status=status.HTTP_201_CREATED)
 
