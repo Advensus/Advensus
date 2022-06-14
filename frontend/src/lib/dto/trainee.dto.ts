@@ -1,3 +1,5 @@
+import { IUser } from "../interfaces/User";
+
 export interface NewTraineeDto {
     username: string;
     first_name: string;
@@ -23,4 +25,8 @@ export interface NewTraineeDto {
     level_start: string;
     level_end: string;
     lieu_formation: string;
+
+    // For docs
+    doc_categorie: string;
+    appartenir: string;
 }

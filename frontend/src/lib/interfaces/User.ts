@@ -1,4 +1,5 @@
 import { ICompany } from "./Company";
+import { IDocument } from "./Doc";
 import { ITraining } from "./Training";
 
 export interface IUser {
@@ -24,4 +25,5 @@ export interface IUser {
     organisme_formation?: ICompany[];
     is_superuser?: string;
     tokens: string;
+    appartenir_content_type: IDocument[];
 }

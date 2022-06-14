@@ -417,13 +417,13 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 	def post(self,request):
 		# path_generatedocument = request.path
 		data = request.data
-
+      
 		# print('path')
-		paths = "media/doc_generate/userss.pdf"
+		paths = "userss.pdf"
 		sauvegarde = Document(
-			path=paths,
-			
+			path=paths,		
 		)
+		print(sauvegarde)
 	  
 		user = User.objects.get(id=data['appartenir'])
 		

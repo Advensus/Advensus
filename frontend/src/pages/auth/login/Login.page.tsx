@@ -37,15 +37,17 @@ export const LoginPage: React.FC<ILoginPageProps> = () => {
             .then(async (resp) => {
                 if ([200, 201].includes(resp.status)) {
                     const { user } = (await resp.json()) as LoginDtoOut;
-                    console.log("le token dans login:", user);
+                    console.log("the current login user:", user);
                     if (!user.is_active) {
                         //TODO: do nothing
                         return;
                     }
 
-                    routeToAppropriatePagePerRole(user);
+                    // if (user) {
                     updateToken(user.tokens);
                     updateCurrentUser(user);
+                    routeToAppropriatePagePerRole(user);
+                    // }
                 } else if ([404, 401].includes(resp.status)) {
                     const { message } = await resp.json();
                     console.log("the error:", resp.status);

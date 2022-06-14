@@ -8,6 +8,7 @@ export * from "./dto/certificate.dto";
 export * from "./dto/booking.dto";
 export * from "./dto/company.dto";
 export * from "./dto/trainee.dto";
+export * from "./dto/docs.dto";
 
 export * from "./interfaces/User";
 export * from "./interfaces/Training";
@@ -16,3 +17,4 @@ export * from "./interfaces/Booking";
 export * from "./interfaces/Company";
 export * from "./interfaces/TrainingProgram";
 export * from "./interfaces/Courses";
+export * from "./interfaces/Doc";
