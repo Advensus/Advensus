@@ -48,7 +48,7 @@ class OrganismeFormation(Company):
     #     on_delete=models.CASCADE,
     
     # )
-    email = models.EmailField(max_length=40)
+    email = models.EmailField(max_length=150)
     password_connexion = models.CharField(max_length=100)
     password_messagerie = models.CharField(max_length=100)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
