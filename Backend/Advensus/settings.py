@@ -206,7 +206,10 @@ EMAIL_USE_TLS: True
 STATIC_URL = '/static/'
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'')
+MEDIA_URL = ''
+
+# MEDIA_ROOT_2 = os.path.join(BASE_DIR,'')
+# MEDIA_URL_2 = ''
 COURSES = "compte.Courses"
 

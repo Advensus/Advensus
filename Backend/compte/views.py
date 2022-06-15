@@ -414,7 +414,7 @@ class CreateDocument(CreateAPIView):
 
 class CreateDocumentsStagiaire(generics.GenericAPIView):
 	serializer_class = CreateGenerate
-	def post(self,request):
+	def post(self,request): 
 		# path_generatedocument = request.path
 		data = request.data
 
