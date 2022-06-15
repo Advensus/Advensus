@@ -36,7 +36,7 @@ export const ReactPdfCustomComponent: React.FC<IReactPdfCustomProps> = ({
                 <Page pageNumber={pageNumber} />
             </Document>
             <p>
-                Page {pageNumber} of {prefixer + pdfDoc.sign}
+                Page {pageNumber} of {prefixer + pdfDoc.path}
             </p>
         </div>
     );

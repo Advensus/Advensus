@@ -4,6 +4,7 @@ import { ReactPdfCustomComponent } from "../../../../components";
 import { IDocument } from "../../../../lib";
 import { prefixer } from "../../../../services/urls";
 import { useAuthStore } from "../../../../stores";
+import { Viewer } from "@react-pdf-viewer/core";
 
 export interface ITraineeDocsPageProps {
     default_props?: boolean;
@@ -45,8 +46,8 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                                         // />
                                         <div key={_.id}>
                                             <div>{_.doc_categorie}</div>
-                                            <div>{_.path}</div>
-                                            <div>{_.sign}</div>
+                                            <div>{prefixer + _.path}</div>
+                                            <div>{prefixer + _.sign}</div>
                                             {/* <embed
                                                 src={prefixer + _.sign}
                                                 type="application/pdf"
@@ -54,29 +55,42 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                                                 height="500"
                                             /> */}
                                             {/* <embed
-                                                 src={
-                                                     prefixer  + _.path
-                                                 }
-                                                 type="application/pdf"
-                                                 // width="800"
-                                                 // height="500"
-                                             /> */}
+                                                src={prefixer + _.path}
+                                                type="application/pdf"
+                                                // width="800"
+                                                // height="500"
+                                            /> */}
+                                            {/* <embed
+                                                // src="files/Brochure.pdf"
+                                                src={
+                                                    "files/" + prefixer + _.path
+                                                }
+                                                type="application/pdf"
+                                                width="100%"
+                                                height="600px"
+                                            /> */}
                                             {/* <iframe
-                                                src={prefixer + _.sign}
+                                                src={
+                                                    "files" + prefixer + _.path
+                                                }
                                                 // type="application/pdf"
                                                 frameBorder="0"
                                                 allowFullScreen
                                             ></iframe> */}
-                                            <object
-                                                data={prefixer + _.sign}
+                                            <Viewer
+                                                fileUrl={prefixer + _.path}
+                                            />
+                                            {/* <object
+                                                data={prefixer + _.path}
                                                 type="application/pdf"
                                             >
                                                 <iframe
-                                                    src={`https://docs.google.com/viewer?url=${
-                                                        prefixer + _.sign
-                                                    }&embedded=true`}
+                                                    // src={`https://docs.google.com/viewer?url=${
+                                                    // //     prefixer + _.sign
+                                                    // }&embedded=true`}
+                                                    src={prefixer + _.path}
                                                 ></iframe>
-                                            </object>
+                                            </object> */}
                                         </div>
                                     ))}
                                 <div onClick={() => setShowAdminDocs(false)}>
