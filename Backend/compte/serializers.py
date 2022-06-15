@@ -326,6 +326,34 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         fields = ['token']
 
 
+#CRUD DOCUMENTS
+class createdocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+  
+    class Meta:
+        model = Document
+        fields = ['id','path','doc_categorie','partager', 'appartenir']
+
+class CreateGenerate(serializers.ModelSerializer):
+   
+   
+    class Meta:
+        model = Document
+        fields = ['id','doc_categorie','appartenir', 'sign']
+
+class cruddocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    partager = FormateurData(read_only=True)
+    appartenir = Stagiaredata(read_only=True)
+    
+    class Meta:
+        model = Document
+        fields = ['id','path','doc_categorie','appartenir','partager', 'sign']
+
+
+
+
+#END CRUD DOCUMENTS
 # Login Users
 
 class loginuser(serializers.ModelSerializer): 
@@ -342,6 +370,7 @@ class loginuser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
     competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    appartenir_content_type = cruddocuments(many=True,read_only=True)
     class Meta:
         model = User
         fields = ['username','first_name','email','password','tokens','user_type','is_superuser',
@@ -349,7 +378,8 @@ class loginuser(serializers.ModelSerializer):
             'organisme_formation',
             'appartenir_societe',
             'competence',
-            'societe'
+            'societe',
+            'appartenir_content_type'
         ]
         
 
@@ -456,34 +486,7 @@ class CrudOrganisme(serializers.ModelSerializer):
 
 #END CRUD AND CREATE ORGANISME
 
-#CRUD DOCUMENTS
-class createdocuments(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True)
-  
-    class Meta:
-        model = Document
-        fields = ['id','path','doc_categorie','partager', 'appartenir']
 
-class CreateGenerate(serializers.ModelSerializer):
-   
-   
-    class Meta:
-        model = Document
-        fields = ['id','doc_categorie','appartenir', 'sign']
-
-class cruddocuments(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True)
-    partager = FormateurData(read_only=True)
-    appartenir = Stagiaredata(read_only=True)
-    
-    class Meta:
-        model = Document
-        fields = ['id','path','doc_categorie','appartenir','partager', 'sign']
-
-
-
-
-#END CRUD DOCUMENTS
 #LOGOUT USER
 class LogoutUse(serializers.Serializer):
     refresh = serializers.CharField()
