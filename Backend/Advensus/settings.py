@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+z2h$-7tdrh5esp7#xo@_8lw&h$=txq9n_+7(_h5(40h$jnzi1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 # ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['185.215.180.164']
@@ -129,7 +129,7 @@ AUTH_USER_MODEL = "compte.User"
 
 
 # CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ['http://185.215.180.164', '127.0.0.1']
+CORS_ALLOWED_ORIGINS = ['http://185.215.180.164:3000', '127.0.0.1']
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
