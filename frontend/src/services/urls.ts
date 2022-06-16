@@ -1,6 +1,7 @@
 // import config from 'config'
 // /*Urls for the application */
-export const prefixer = "http://localhost:8000";
+// export const prefixer = "http://127.0.0.1:8000";
+export const prefixer = "http://185.215.180.164/:8000";
 
 export const authUrls = {
     LOGIN_USER: `${prefixer}/auth/login/`,
@@ -64,4 +65,9 @@ export const bookingUrls = {
 
 export const coursesUrls = {
     NEW_COURSES: `${prefixer}/auth/create/courses/`,
+};
+
+export const documentsUrls = {
+    GENERATE_NEW_DOCUMENT: `${prefixer}/auth/GenerateDocument/`,
+    CREATE_NEW_DOCUMENT: `${prefixer}/auth/CreateDocument/`,
 };

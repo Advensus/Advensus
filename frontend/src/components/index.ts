@@ -40,3 +40,4 @@ export * from "./company_components/company_details/company_details.component";
 export * from "./company_components/small_company_card/small_company_card.component";
 export * from "./certificate_card/certificate_card.component";
 export * from "./empty_component/empty.component";
+export * from "./react_pdf_custom_component/react_pdf_custome.component";

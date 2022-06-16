@@ -119,7 +119,7 @@ export const HeaderDashboardComponent: React.FC<IHeaderDashboardProps> = () => {
                         variant="xLargePlus"
                         style={{ fontWeight: "bold", color: "#fff" }}
                     >
-                        {user.organisme_formation &&
+                        {user?.organisme_formation &&
                             user.organisme_formation[0] != undefined &&
                             user.organisme_formation[0].company_name}
                         {user.appartenir_societe &&

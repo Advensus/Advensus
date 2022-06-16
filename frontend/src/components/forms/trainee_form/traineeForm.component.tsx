@@ -16,6 +16,8 @@ import React, { useEffect, useState } from "react";
 import {
     ITraining,
     IUser,
+    NewDocDto,
+    NewDocDtoIn,
     NewUserDto,
     NewUserDtoIn,
     NewUserDtoOut,
@@ -26,6 +28,7 @@ import {
 import { NewTraineeDto } from "../../../lib/dto/trainee.dto";
 import { ICompany } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
+import DocumentsService from "../../../services/documents.service";
 import TrainingFolderService from "../../../services/training-folder.service";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
@@ -203,8 +206,14 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                 console.log("the current adding trainee:", data);
                 console.log("tranee id:", data.id);
                 if (data) {
+                    // For Training folder
                     value.stagiaire = data.id;
                     newTrainingFolder(value);
+
+                    // For Doc
+                    value.doc_categorie = "Admin_doc";
+                    value.appartenir = data.id;
+                    generateNewDocument(value);
                 }
                 onCreate(data);
             })
@@ -226,6 +235,22 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             })
             .catch((err) => {
                 console.log("error while adding new training folder:", err);
+            });
+    };
+
+    const generateNewDocument = (val: NewTraineeDto) => {
+        console.log({ val });
+        DocumentsService.generate_new_adm_document(val)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as NewDocDtoIn;
+                console.log("the current generated doc:", data);
+                // onCreate(data);
+            })
+            .catch((err) => {
+                console.log("error while generate new doc:", err);
             });
     };
 
@@ -253,6 +278,9 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             level_start: "",
             level_end: "",
             lieu_formation: "",
+
+            doc_categorie: "",
+            appartenir: "",
         },
         onSubmit,
     });
