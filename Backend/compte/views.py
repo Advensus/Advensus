@@ -640,11 +640,11 @@ def viewallreservations(request):
 
 
 @csrf_exempt
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def updatereservation(request,pk):
 	donnee =  reservation.objects.get(id=pk)
 	
-	if request.method == "PUT":
+	if request.method == "PATCH":
 		reservation_data = JSONParser().parse(request)
 		serializer = crudreservation(donnee,data=reservation_data)
 	
