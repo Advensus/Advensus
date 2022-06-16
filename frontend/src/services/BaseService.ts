@@ -42,7 +42,6 @@ class BaseService {
             headers: head,
             mode: "cors" as RequestMode,
             cache: "default" as RequestCache,
-            "Content-Type": "application/json;charset=utf-8",
             body: JSON.stringify(body),
         };
 
