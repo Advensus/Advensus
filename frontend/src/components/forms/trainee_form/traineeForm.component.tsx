@@ -59,9 +59,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         React.useState<IDropdownOption>();
     const [rps, setRps] = useState<IDropdownOption[]>([]);
     const [selectedRp, setSelectedRp] = React.useState<IDropdownOption>();
-    const [selectedFolderState, setSelectedFolderState] =
-        useState<IDropdownOption>();
-
     const [endDate, setEndDate] = useState<Date | null | undefined>();
     const [startDate, setStartDate] = useState<Date | null | undefined>();
 
@@ -91,13 +88,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         item?: IDropdownOption
     ): void => {
         setSelectedRp(item);
-    };
-
-    const onChangeFolderState = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedFolderState(item);
     };
 
     const getOrganization = async () => {
@@ -176,7 +166,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
 
     const onSubmit = (value: NewTraineeDto) => {
         value.formation = selectedTraining?.key;
-        value.training_status = selectedFolderState?.key;
         value.organisme_formation = selectedOrg?.key;
         value.Rp_Stagiaire = selectedRp?.key;
         // value.end_session = endDate;
@@ -254,7 +243,13 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             });
     };
 
-    const { values, handleChange, handleSubmit } = useFormik<NewTraineeDto>({
+    const {
+        values,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        setFieldTouched,
+    } = useFormik<NewTraineeDto>({
         initialValues: {
             username: "",
             first_name: "",
@@ -272,10 +267,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             end_session: new Date(),
             formation: "",
             stagiaire: "",
-            // certification: "",
-            // programme_formation: "",
-            // objectifs_formation: "",
-            level_start: "",
+            level_start: "Débutant, Intermédiare, Avancée",
             level_end: "",
             lieu_formation: "",
 
@@ -350,21 +342,27 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                         canRevealPassword
                         revealPasswordAriaLabel="Show password"
                     />
-                    <TextField
-                        type="text"
-                        value={values.level_start}
-                        onChange={handleChange}
+                    <Dropdown
+                        selectedKey={values.level_start}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("level_start", item?.key);
+                        }}
                         placeholder="Niveau actuel du stagiaire"
-                        // label="Niveau actuel du stagiaire"
-                        name="level_start"
+                        options={CurrentTraineeState}
                     />
-                    <TextField
-                        type="text"
-                        value={values.level_end}
-                        onChange={handleChange}
-                        placeholder="Niveau final du stagiaire"
-                        // label="Niveau final du stagiaire"
-                        name="level_end"
+                    <Dropdown
+                        selectedKey={values.level_end}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("level_end", item?.key);
+                        }}
+                        placeholder="Niveau visé par le stagiaire"
+                        options={CurrentTraineeState}
                     />
                     <Dropdown
                         selectedKey={selectedOrg ? selectedOrg.key : undefined}
@@ -428,38 +426,18 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Durée de la formation"
                     name="duration"
                 />
-                {/* new fields */}
-                {/* <TextField
-                    type="text"
-                    value={values.certification}
-                    onChange={handleChange}
-                    placeholder="Certification"
-                    label="Certification"
-                    name="certification"
-                />
-                <TextField
-                    type="text"
-                    value={values.programme_formation}
-                    onChange={handleChange}
-                    placeholder="Programme de formation"
-                    label="Programme de formation"
-                    name="programme_formation"
-                />
-                <TextField
-                    type="text"
-                    value={values.objectifs_formation}
-                    onChange={handleChange}
-                    placeholder="Objectifs de la formation"
-                    label="Objectifs de la formation"
-                    name="objectifs_formation"
-                /> */}
-                <TextField
-                    type="text"
-                    value={values.lieu_formation}
-                    onChange={handleChange}
-                    placeholder="Lieu de la formation"
+
+                <Dropdown
+                    selectedKey={values.lieu_formation}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("lieu_formation", item?.key);
+                    }}
                     label="Lieu"
-                    name="lieu_formation"
+                    placeholder="Lieu de la formation"
+                    options={LocationTraining}
                 />
 
                 <TextField
@@ -492,13 +470,13 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     label="Date de fin de session"
                 />
                 <Dropdown
-                    selectedKey={
-                        selectedFolderState
-                            ? selectedFolderState.key
-                            : undefined
-                    }
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={onChangeFolderState}
+                    selectedKey={values.training_status}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("training_status", item?.key);
+                    }}
                     placeholder="Status du dossier"
                     options={FolderState}
                     label="Status du dossier"
@@ -540,14 +518,13 @@ const FolderState = [
     { key: "State5", text: "Reporté" },
     { key: "State6", text: "EXPIRÉ" },
 ];
-const Training = [
-    { key: "Training1", text: "Français" },
-    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "Training2", text: "Anglais" },
-    { key: "Training3", text: "Web" },
+const CurrentTraineeState = [
+    { key: "Débutant", text: "Débutant" },
+    { key: "Intermédiaire", text: "Intermédiaire" },
+    { key: "Avancé", text: "Avancé" },
 ];
-const Civility = [
-    { key: "Male", text: "Mr" },
-    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "Female", text: "Mme" },
+const LocationTraining = [
+    { key: "Sur site", text: "Sur site" },
+    { key: "Distentiel", text: "Distentiel" },
+    { key: "E-Learning", text: "E-Larning" },
 ];
