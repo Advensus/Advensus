@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'django.contrib.staticfiles',
+    'django.contrib.staticfiles',
     "corsheaders", 
     'compte',
     'drf_yasg',
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -213,8 +213,13 @@ EMAIL_USE_TLS: True
 
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
