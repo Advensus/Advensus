@@ -25,15 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+z2h$-7tdrh5esp7#xo@_8lw&h$=txq9n_+7(_h5(40h$jnzi1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 # DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-# ALLOWED_HOSTS = ['http://185.215.180.164', '127.0.0.1:8000', 'localhost']
-
 # ALLOWED_HOSTS = ['185.215.180.164']
-
 
 
 # Application definition
@@ -59,6 +55,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -134,12 +132,7 @@ AUTH_USER_MODEL = "compte.User"
 
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-# CORS_ORIGIN_WHITELIST = [
-#    'http://185.215.180.164:3000',
-# ]
-# CORS_ALLOWED_ORIGINS = []
-
+# CORS_ALLOW_ALL_ORIGINS = False
 # CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
 # CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
 
@@ -218,7 +211,7 @@ EMAIL_USE_TLS: True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
 
@@ -228,8 +221,11 @@ STATIC_URL = '/static/'
 # MEDIA_ROOT_2 = os.path.join(BASE_DIR,'')
 # MEDIA_URL_2 = ''
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = ''
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 

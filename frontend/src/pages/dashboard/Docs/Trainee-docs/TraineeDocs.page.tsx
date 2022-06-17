@@ -5,6 +5,7 @@ import { IDocument } from "../../../../lib";
 import { prefixer } from "../../../../services/urls";
 import { useAuthStore } from "../../../../stores";
 import { Viewer } from "@react-pdf-viewer/core";
+// import signiiing from '../../../../../../Backend/signing/Cv_Rolk.pdf'
 
 export interface ITraineeDocsPageProps {
     default_props?: boolean;
@@ -49,37 +50,18 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                                             <div>{prefixer + _.path}</div>
                                             <div>{prefixer + _.sign}</div>
                                             {/* <embed
-                                                src={prefixer + _.sign}
-                                                type="application/pdf"
-                                                width="800"
-                                                height="500"
-                                            /> */}
-                                            {/* <embed
                                                 src={prefixer + _.path}
                                                 type="application/pdf"
                                                 // width="800"
                                                 // height="500"
                                             /> */}
-                                            {/* <embed
-                                                // src="files/Brochure.pdf"
-                                                src={
-                                                    "files/" + prefixer + _.path
-                                                }
-                                                type="application/pdf"
-                                                width="100%"
-                                                height="600px"
-                                            /> */}
-                                            {/* <iframe
-                                                src={
-                                                    "files" + prefixer + _.path
-                                                }
-                                                // type="application/pdf"
-                                                frameBorder="0"
-                                                allowFullScreen
-                                            ></iframe> */}
-                                            <Viewer
-                                                fileUrl={prefixer + _.path}
-                                            />
+                                            {/* <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik">
+                                                Loading pdf
+                                            </iframe> */}
+                                            <iframe src={prefixer + _.path}>
+                                                Loading pdf
+                                            </iframe>
+
                                             {/* <object
                                                 data={prefixer + _.path}
                                                 type="application/pdf"
