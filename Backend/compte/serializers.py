@@ -370,11 +370,7 @@ class loginuser(serializers.ModelSerializer):
     organisme_formation = OrganismeData(many=True,read_only=True)
     competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
-<<<<<<< HEAD
-    appartenir_content_type = cruddocuments(many=True,read_only=True)
-=======
     appartenir_content_type = cruddocuments(read_only=True,many=True)
->>>>>>> a9d59163169563c04346b15bd37c404bfd158044
     class Meta:
         model = User
         fields = ['username','first_name','email','password','tokens','user_type','is_superuser',

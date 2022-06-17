@@ -28,8 +28,12 @@ SECRET_KEY = 'django-insecure-+z2h$-7tdrh5esp7#xo@_8lw&h$=txq9n_+7(_h5(40h$jnzi1
 DEBUG = False
 # DEBUG = False
 
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['http://185.215.180.164', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['*']
+
+# ALLOWED_HOSTS = ['http://185.215.180.164', '127.0.0.1:8000', 'localhost']
+
+# ALLOWED_HOSTS = ['185.215.180.164']
+
 
 
 # Application definition
@@ -129,11 +133,16 @@ AUTH_USER_MODEL = "compte.User"
 
 
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ORIGIN_WHITELIST = [
-   'http://185.215.180.164:3000',
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ORIGIN_WHITELIST = [
+#    'http://185.215.180.164:3000',
+# ]
 # CORS_ALLOWED_ORIGINS = []
+
+# CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
+# CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
@@ -213,8 +222,8 @@ STATIC_URL = '/static/'
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'')
-MEDIA_URL = ''
+# MEDIA_ROOT = os.path.join(BASE_DIR,'')
+# MEDIA_URL = ''
 
 # MEDIA_ROOT_2 = os.path.join(BASE_DIR,'')
 # MEDIA_URL_2 = ''
