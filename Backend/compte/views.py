@@ -422,7 +422,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		user = User.objects.get(id=data['appartenir'])
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
-		paths = "document/"+user.username+"contrat"+".pdf"
+		paths = "media/doc_generate/"+user.username+"contrat"+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
@@ -454,9 +454,9 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		doc = Document.objects.all()
 
 		for d in doc:
-			print("")
-		print(d.path)
-		print(d.sign)
+			print("url")
+			print(d.path.url)
+			print(d.sign.url)
 
 		#fiche information
 		# paths2 = "document/"+user.username+"_information"+".pdf"

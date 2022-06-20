@@ -77,6 +77,19 @@ class CoursesData(serializers.ModelSerializer):
         model = Courses
         fields = ['id','superviser','assister','lier']
 
+class ReservationData(serializers.ModelSerializer):
+    # concerner = CoursesData(read_only=True)
+    # proposer = Stagiaredata(read_only=True)
+    class Meta:
+        model = reservation
+        fields = ['id','title','description','status','start_date','end_date']
+class CoursesData2(serializers.ModelSerializer):
+    lier = FormationData(read_only=True)
+    superviser = FormateurData(read_only=True)
+    concerner_courses = ReservationData(read_only=True)
+    class Meta:
+        model = Courses
+        fields = ['id','superviser','lier','concerner_courses']
 class FormateurData(serializers.ModelSerializer):
    
     appartenir_societe = SocieteData(many=True,read_only=True)
@@ -426,14 +439,14 @@ class crudsouscrir(serializers.ModelSerializer):
     formation = FormationData(read_only=True)
     class Meta:
         model = souscrir
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','level_start','level_end','lieu_formation','formation']
+        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','level_start','level_end','lieu_formation','formation']
 
 class AddSouscrir(serializers.ModelSerializer):
    
     class Meta:
         model = souscrir
 
-        fields = ['edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
+        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
 
 #END CRUD SOUSCRIR
 
@@ -445,12 +458,13 @@ class cruduser(serializers.ModelSerializer):
     competence = FormationData(many=True,read_only=True)
     # id = serializers.UUIDField(read_only=True)
     souscrirs = crudsouscrir(many=True,read_only=True)
+    assister_courses = CoursesData2(many=True,read_only=True)
    
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs"
+                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister_courses"
                  ]
 #END CRUD USER     
             
