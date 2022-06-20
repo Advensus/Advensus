@@ -214,7 +214,6 @@ EMAIL_USE_TLS: True
 
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
-<<<<<<< HEAD
 
 # MEDIA_ROOT = os.path.join(BASE_DIR,'')
 # MEDIA_URL = ''
@@ -225,15 +224,6 @@ EMAIL_USE_TLS: True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-=======
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
->>>>>>> 7f39aa863e80ccec3e81960ab6f94001d9ca0917
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
