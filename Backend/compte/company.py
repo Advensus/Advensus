@@ -53,6 +53,9 @@ class OrganismeFormation(Company):
     password_messagerie = models.CharField(max_length=100)
     societe_formation = models.ForeignKey(SocieteFormation, on_delete=models.CASCADE)
     # connected = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default="connected")
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    delete_at = models.DateTimeField(auto_now=True)
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         return {

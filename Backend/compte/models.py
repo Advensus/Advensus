@@ -55,7 +55,7 @@ class reservation(models.Model):
 
 class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    path = models.FileField(upload_to="doc_generate/")
+    path = models.FileField()
     sign = models.FileField(upload_to="signing/", null=True)
     doc_categorie = models.CharField(max_length=255)
     appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
