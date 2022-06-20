@@ -1,7 +1,7 @@
 // import config from 'config'
 // /*Urls for the application */
-// export const prefixer = "http://127.0.0.1:8000";
-export const prefixer = "http://185.215.180.164:8000";
+export const prefixer = "http://127.0.0.1:8000";
+// export const prefixer = "http://185.215.180.164:8000";
 
 export const authUrls = {
     LOGIN_USER: `${prefixer}/auth/login/`,
@@ -12,7 +12,7 @@ export const authUrls = {
 };
 
 export const userUls = {
-    GET_ALL_USERS: `${prefixer}/auth/ViewAllUser/`,
+    GET_ALL_USERS: `${prefixer}/auth/GetAllUser/`,
     NEW_TRAINER: `${prefixer}/auth/register/formateur/`,
     NEW_TRAINEE: `${prefixer}/auth/register/stagiaire/`,
     NEW_SUPER_RP: `${prefixer}/auth/register/Srp/`,

@@ -22,6 +22,7 @@ import {
     EmptyComponent,
 } from "../..";
 import {
+    ICourses,
     ITraining,
     IUser,
     PATH_LABEL_COMPANY,
@@ -29,6 +30,7 @@ import {
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
+    TRAINEE,
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
@@ -45,6 +47,7 @@ import { TrainingProgramFormComponent } from "../../forms/training_program_form/
 import { ICertificate } from "../../../lib/interfaces/Certificate";
 import { LoadingComponent } from "../../loading_component/Loading.component";
 import CompanyService from "../../../services/company.service";
+import { useNavigate } from "react-router-dom";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
@@ -63,6 +66,8 @@ const addIcon: IIconProps = { iconName: "Add" };
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
 > = ({ contentId, currentPath, company, trainings, user, org, training }) => {
+    const navigate = useNavigate();
+
     const [content, setContent] = useState<IUser>();
     // const [training, setTraining] = useState<ITraining>();
     const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
@@ -86,6 +91,7 @@ export const FullInformationsTabComponent: React.FC<
     const [filteredOrgTrainees, setFilteredOrgTrainees] = useState<IUser[]>([]);
     const [traineesOrg, setTraineesOrg] = useState<IUser[]>([]);
     const [orgsCompant, setOrgsCompant] = useState<ICompany[]>([]);
+    const [userIsBooking, setUserIsBooking] = useState<ICourses[]>([]);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -94,6 +100,14 @@ export const FullInformationsTabComponent: React.FC<
         setSelectedBooking(item);
     };
     const filterIcon: IIconProps = { iconName: "Filter" };
+
+    useEffect(() => {
+        if (user) {
+            user.user_type === TRAINEE
+                ? setUserIsBooking(user.assister)
+                : setUserIsBooking(user.superviser);
+        }
+    }, [user]);
 
     useEffect(() => {
         console.log({ training });
@@ -313,11 +327,21 @@ export const FullInformationsTabComponent: React.FC<
                             {content?.first_name}
                         </Text>
                     )}
-                    {currentPath === PATH_LABEL_CUSTOMER && (
-                        <TooltipHost content="Planifier" id={tooltipId}>
-                            <IconButton iconProps={planIcon} ariaLabel="add" />
-                        </TooltipHost>
-                    )}
+                    {currentPath === PATH_LABEL_CUSTOMER &&
+                        user?.user_type === TRAINEE && (
+                            <TooltipHost content="Planifier" id={tooltipId}>
+                                <IconButton
+                                    iconProps={planIcon}
+                                    ariaLabel="add"
+                                    onClick={() => {
+                                        console.log("on fait le navigate ici");
+                                        navigate("/dashboard/planne", {
+                                            state: { userInfos: user },
+                                        });
+                                    }}
+                                />
+                            </TooltipHost>
+                        )}
                     {currentPath === PATH_LABEL_SERVICES &&
                         !showCertificateForm &&
                         !showTrainingProgramForm && (
@@ -694,15 +718,17 @@ export const FullInformationsTabComponent: React.FC<
                                     </Text>
                                     <hr className="booking_result_hr_solid" />
                                     <div className="booking_list">
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
+                                        {userIsBooking.length > 0 ? (
+                                            userIsBooking.map((_) => (
+                                                <BookingCardComponent
+                                                    openPanel={openPanel}
+                                                    BookingInfos={_}
+                                                    key={_.id}
+                                                />
+                                            ))
+                                        ) : (
+                                            <EmptyComponent messageText="Aucune Réservation trouvée" />
+                                        )}
                                         <div>
                                             <br />
                                             <br />

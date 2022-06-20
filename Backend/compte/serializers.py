@@ -86,10 +86,17 @@ class ReservationData(serializers.ModelSerializer):
 class CoursesData2(serializers.ModelSerializer):
     lier = FormationData(read_only=True)
     superviser = FormateurData(read_only=True)
-    concerner_courses = ReservationData(read_only=True)
+    reservation = ReservationData(read_only=True)
     class Meta:
         model = Courses
-        fields = ['id','superviser','lier','concerner_courses']
+        fields = ['id','superviser','lier','reservation']
+
+class CoursesData3(serializers.ModelSerializer):
+    lier = FormationData(read_only=True)
+    reservation = ReservationData(read_only=True)
+    class Meta:
+        model = Courses
+        fields = ['id','reservation','lier']
 class FormateurData(serializers.ModelSerializer):
    
     appartenir_societe = SocieteData(many=True,read_only=True)
@@ -458,13 +465,14 @@ class cruduser(serializers.ModelSerializer):
     competence = FormationData(many=True,read_only=True)
     # id = serializers.UUIDField(read_only=True)
     souscrirs = crudsouscrir(many=True,read_only=True)
-    assister_courses = CoursesData2(many=True,read_only=True)
+    assister = CoursesData2(many=True,read_only=True)
+    superviser = CoursesData3(many=True, read_only=True)
    
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister_courses"
+                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister", "superviser"
                  ]
 #END CRUD USER     
             

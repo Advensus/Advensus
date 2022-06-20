@@ -39,6 +39,7 @@ export const UsersDisplayComponent: React.FC<IUsersDisplayProps> = ({
                     }}
                 >
                     {detailsInfos &&
+                        detailsInfos.first_name &&
                         detailsInfos.first_name.toLocaleUpperCase()}
                     {/* {detailsInfos &&
                         detailsInfos.first_name.toLocaleUpperCase()} */}
