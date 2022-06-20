@@ -33,11 +33,13 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
 
     useEffect(() => {
         console.log({ contentToDetail });
-        console.log("infos souscription:", contentToDetail?.souscrirs);
+        console.log("infos souscription:", contentToDetail?.assister);
         if (contentToDetail) {
             // contentToDetail.souscrirs
             if (contentToDetail.souscrirs)
                 setSubscriptionInfos(contentToDetail.souscrirs);
+            // if (contentToDetail.assister_courses)
+            //     setUserIsBooking(contentToDetail.assister_courses);
             // : null;
         }
     }, [contentToDetail]);

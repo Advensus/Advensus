@@ -12,7 +12,7 @@ export const authUrls = {
 };
 
 export const userUls = {
-    GET_ALL_USERS: `${prefixer}/auth/ViewAllUser/`,
+    GET_ALL_USERS: `${prefixer}/auth/GetAllUser/`,
     NEW_TRAINER: `${prefixer}/auth/register/formateur/`,
     NEW_TRAINEE: `${prefixer}/auth/register/stagiaire/`,
     NEW_SUPER_RP: `${prefixer}/auth/register/Srp/`,

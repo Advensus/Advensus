@@ -24,8 +24,8 @@ class Presence(models.Model):
 
 class Courses(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser_content_type')
-    assister = models.ForeignKey(User,related_name='assister_courses',on_delete=models.CASCADE,null=True)
+    superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser')
+    assister = models.ForeignKey(User,related_name='assister',on_delete=models.CASCADE,null=True)
     # etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
 
@@ -41,7 +41,7 @@ class reservation(models.Model):
     start_date = models.DateTimeField(auto_now_add=False)
     end_date = models.DateTimeField(auto_now_add=False)
     proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type',null=True,default=False)
-    concerner = models.OneToOneField(Courses,on_delete=models.CASCADE,related_name='concerner_courses')
+    concerner = models.OneToOneField(Courses,on_delete=models.CASCADE,related_name='reservation')
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
    
 

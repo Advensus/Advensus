@@ -153,9 +153,10 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
 
     useEffect(() => {
         if (state) {
-            setSearchPerson(
-                state.userInfos.first_name + " " + state.userInfos.username
-            );
+            state.userInfos &&
+                setSearchPerson(
+                    state.userInfos.first_name + " " + state.userInfos.username
+                );
         }
     }, [state]);
 

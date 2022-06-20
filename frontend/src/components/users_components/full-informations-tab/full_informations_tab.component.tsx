@@ -22,6 +22,7 @@ import {
     EmptyComponent,
 } from "../..";
 import {
+    ICourses,
     ITraining,
     IUser,
     PATH_LABEL_COMPANY,
@@ -90,6 +91,7 @@ export const FullInformationsTabComponent: React.FC<
     const [filteredOrgTrainees, setFilteredOrgTrainees] = useState<IUser[]>([]);
     const [traineesOrg, setTraineesOrg] = useState<IUser[]>([]);
     const [orgsCompant, setOrgsCompant] = useState<ICompany[]>([]);
+    const [userIsBooking, setUserIsBooking] = useState<ICourses[]>([]);
 
     const onChange = (
         event: FormEvent<HTMLDivElement>,
@@ -98,6 +100,14 @@ export const FullInformationsTabComponent: React.FC<
         setSelectedBooking(item);
     };
     const filterIcon: IIconProps = { iconName: "Filter" };
+
+    useEffect(() => {
+        if (user) {
+            user.user_type === TRAINEE
+                ? setUserIsBooking(user.assister)
+                : setUserIsBooking(user.superviser);
+        }
+    }, [user]);
 
     useEffect(() => {
         console.log({ training });
@@ -708,15 +718,17 @@ export const FullInformationsTabComponent: React.FC<
                                     </Text>
                                     <hr className="booking_result_hr_solid" />
                                     <div className="booking_list">
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
-                                        <BookingCardComponent
-                                            openPanel={openPanel}
-                                        />
+                                        {userIsBooking.length > 0 ? (
+                                            userIsBooking.map((_) => (
+                                                <BookingCardComponent
+                                                    openPanel={openPanel}
+                                                    BookingInfos={_}
+                                                    key={_.id}
+                                                />
+                                            ))
+                                        ) : (
+                                            <EmptyComponent messageText="Aucune Réservation trouvée" />
+                                        )}
                                         <div>
                                             <br />
                                             <br />

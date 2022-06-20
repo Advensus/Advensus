@@ -1,4 +1,5 @@
 import { ICompany } from "./Company";
+import { ICourses } from "./Courses";
 import { IDocument } from "./Doc";
 import { ISubscription, ITraining } from "./Training";
 
@@ -27,4 +28,6 @@ export interface IUser {
     tokens: string;
     appartenir_content_type: IDocument[];
     souscrirs?: ISubscription[];
+    assister: ICourses[];
+    superviser: ICourses[];
 }

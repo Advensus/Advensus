@@ -1,16 +1,36 @@
 import { IconButton, ITextStyles, Text } from "@fluentui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon, IIconStyles } from "@fluentui/react/lib/Icon";
 import { Link } from "react-router-dom";
+import { ICourses } from "../../../lib";
 
 export interface IBookingCardProps {
     default_props?: boolean;
     openPanel: () => void;
+    BookingInfos: ICourses;
 }
 
 export const BookingCardComponent: React.FC<IBookingCardProps> = ({
     openPanel,
+    BookingInfos,
 }) => {
+    const [startDay, setStartDay] = useState<string>("");
+    const [startTime, setStartTime] = useState<string>("");
+
+    useEffect(() => {
+        console.log("the time:", BookingInfos.reservation);
+
+        const indexOfT = `${BookingInfos.reservation.start_date}`.lastIndexOf(
+            "T"
+        );
+        const bookingStartDay =
+            `${BookingInfos.reservation.start_date}`.substring(0, indexOfT);
+        const bookingStartTime =
+            `${BookingInfos.reservation.start_date}`.substring(indexOfT + 1);
+        setStartDay(bookingStartDay);
+        setStartTime(bookingStartTime);
+    }, []);
+
     return (
         <Link to="#" onClick={openPanel} className="booking_card_container">
             <div className="booking_card_avatar">
@@ -23,7 +43,9 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
             </div>
             <div className="booking_card_infos">
                 <div className="booing_card_infos_header">
-                    <Text variant="mediumPlus">Inititulé</Text>
+                    <Text variant="mediumPlus">
+                        {BookingInfos.reservation.title}
+                    </Text>
                     <div className="booking_card_container_hide">
                         <IconButton
                             menuIconProps={{ iconName: "Cancel" }}
@@ -47,7 +69,7 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                             styles={bookingCardDurationIconStyles}
                         />
                         <Text variant="tiny" style={{ margin: "0 5px" }}>
-                            17/02/2022
+                            {startDay}
                         </Text>
                     </>
                     {/* BOOKING STARTER HOUR */}
@@ -57,23 +79,13 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                             styles={bookingCardDurationIconStyles}
                         />
                         <Text variant="tiny" style={{ margin: "0 5px" }}>
-                            14:00
-                        </Text>
-                    </>
-                    {/* BOOKING STARTER MINUTES */}
-                    <>
-                        <Icon
-                            iconName="HourGlass"
-                            styles={bookingCardDurationIconStyles}
-                        />
-                        <Text variant="tiny" style={{ margin: "0 5px" }}>
-                            45 minute(s)
+                            {startTime}
                         </Text>
                     </>
                 </div>
                 <div className="booking_card_creation">
                     {/* CREATION AUTOR */}
-                    <>
+                    {/* <>
                         <Text variant="tiny">crée par </Text>
                         <Text
                             variant="tiny"
@@ -81,9 +93,9 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                         >
                             TEST
                         </Text>
-                    </>
+                    </> */}
                     {/* CREATION DAY */}
-                    <>
+                    {/* <>
                         <Text variant="tiny"> le</Text>
                         <Text
                             variant="tiny"
@@ -91,9 +103,9 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                         >
                             03/02/2022
                         </Text>
-                    </>
+                    </> */}
                     {/* CREATION HOUR */}
-                    <>
+                    {/* <>
                         <Text variant="tiny">à</Text>
                         <Text
                             variant="tiny"
@@ -101,7 +113,7 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                         >
                             15:52
                         </Text>
-                    </>
+                    </> */}
                 </div>
             </div>
         </Link>
