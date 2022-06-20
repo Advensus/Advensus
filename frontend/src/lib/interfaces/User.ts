@@ -1,6 +1,6 @@
 import { ICompany } from "./Company";
 import { IDocument } from "./Doc";
-import { ITraining } from "./Training";
+import { ISubscription, ITraining } from "./Training";
 
 export interface IUser {
     id: string;
@@ -26,4 +26,5 @@ export interface IUser {
     is_superuser?: string;
     tokens: string;
     appartenir_content_type: IDocument[];
+    souscrirs?: ISubscription[];
 }

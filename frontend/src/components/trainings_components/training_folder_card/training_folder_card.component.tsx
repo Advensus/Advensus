@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Text } from "@fluentui/react";
 import { Link } from "react-router-dom";
+import { ISubscription } from "../../../lib";
 
 export interface ITrainingFolderCardProps {
     default_props?: boolean;
     openPanel: () => void;
+    subscriptionDetails: ISubscription;
 }
 
 export const TrainingFolderCardComponent: React.FC<
     ITrainingFolderCardProps
-> = ({ openPanel }) => {
+> = ({ openPanel, subscriptionDetails }) => {
     return (
         <Link
             to="#"
@@ -19,15 +21,19 @@ export const TrainingFolderCardComponent: React.FC<
             <div className="training_folder_card_body">
                 <div className="training_folder_card_body_infos">
                     <Text variant="small" style={{ fontWeight: "bold" }}>
-                        EDOF
+                        EDOF: {subscriptionDetails.edof}
                     </Text>
-                    <Text variant="tiny">Session Start</Text>
-                    <Text variant="tiny">Session End</Text>
+                    <Text variant="tiny">
+                        Début: {subscriptionDetails.start_session}
+                    </Text>
+                    <Text variant="tiny">
+                        Fin: {subscriptionDetails.end_session}
+                    </Text>
                 </div>
                 <div className="training_folder_card_body_squares">
                     <div className="training_folder_card_body_squares_item">
                         <Text variant="small" style={{ fontWeight: "bold" }}>
-                            9
+                            {subscriptionDetails.hour_worked}
                         </Text>
                         <Text variant="tiny">Réalisé</Text>
                     </div>
@@ -47,7 +53,7 @@ export const TrainingFolderCardComponent: React.FC<
             </div>
             <div className="training_folder_card_footer">
                 <Text variant="tiny" style={{ fontWeight: "bold" }}>
-                    Statut
+                    {subscriptionDetails.training_status}
                 </Text>
             </div>
         </Link>

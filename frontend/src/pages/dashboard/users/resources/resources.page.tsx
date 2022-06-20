@@ -213,10 +213,16 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
     const handleOnCreate = (data: IUser) => {
         console.log({ data });
         if (data.user_type === TEACHEAR) {
+            console.log("dant le if du teacher");
             setTrainers([data, ...trainers]);
-        } else if (data.user_type === SUPER_RP) {
+        }
+        console.log("le user type:", data.user_type);
+        if (data.user_type === SUPER_RP) {
+            console.log("dant le if du super rp");
             setSrps([data, ...srps]);
-        } else {
+        }
+        if (data.user_type === RP) {
+            console.log("dant le if du rp");
             setRps([data, ...rps]);
         }
         setShowForm(false);

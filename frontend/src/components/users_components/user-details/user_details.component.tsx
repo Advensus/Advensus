@@ -1,7 +1,12 @@
 import { IconButton, IIconProps, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { AttributeDisplayComponent } from "../../";
-import { IUser, PATH_LABEL_CUSTOMER, TRAINEE } from "../../../lib";
+import {
+    ISubscription,
+    IUser,
+    PATH_LABEL_CUSTOMER,
+    TRAINEE,
+} from "../../../lib";
 import { TrainingFolderCardComponent } from "../../trainings_components/training_folder_card/training_folder_card.component";
 
 import { DefaultButton } from "@fluentui/react/lib/Button";
@@ -22,9 +27,19 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
 }) => {
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
         useBoolean(false);
+    const [subscriptionInfos, setSubscriptionInfos] = useState<ISubscription[]>(
+        []
+    );
 
     useEffect(() => {
         console.log({ contentToDetail });
+        console.log("infos souscription:", contentToDetail?.souscrirs);
+        if (contentToDetail) {
+            // contentToDetail.souscrirs
+            if (contentToDetail.souscrirs)
+                setSubscriptionInfos(contentToDetail.souscrirs);
+            // : null;
+        }
     }, [contentToDetail]);
 
     return (
@@ -90,25 +105,66 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                         />
                     </div>
                     <hr className="hr_user_details_training_folder" />
-                    <TrainingFolderCardComponent openPanel={openPanel} />
-                    <TrainingFolderCardComponent openPanel={openPanel} />
-                    <TrainingFolderCardComponent openPanel={openPanel} />
-                    <div style={{ backgroundColor: "yellow" }}>
-                        <Panel
-                            isLightDismiss
-                            isOpen={isOpen}
-                            onDismiss={dismissPanel}
-                            closeButtonAriaLabel="Close"
-                            headerText="Détails du Dossier de Formation"
-                        >
-                            <p>
-                                'This panel uses "light dismiss" behavior: it
-                                can be closed by clicking or tapping ' + "the
-                                area outside the panel (or using the close
-                                button as usual).";
-                            </p>
-                        </Panel>
-                    </div>
+                    {subscriptionInfos.length > 0
+                        ? subscriptionInfos.map((_) => (
+                              <div key={_.edof}>
+                                  <TrainingFolderCardComponent
+                                      openPanel={openPanel}
+                                      key={_.edof}
+                                      subscriptionDetails={_}
+                                  />
+                                  <div style={{ backgroundColor: "yellow" }}>
+                                      <Panel
+                                          isLightDismiss
+                                          isOpen={isOpen}
+                                          onDismiss={dismissPanel}
+                                          closeButtonAriaLabel="Close"
+                                          headerText="Détails du Dossier de Formation"
+                                      >
+                                          <br />
+                                          <div>
+                                              <AttributeDisplayComponent
+                                                  keyWord="Edof"
+                                                  valueWord={_.edof}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Status du dossier"
+                                                  valueWord={_.training_status}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Début prévus"
+                                                  valueWord={_.start_session}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Fin prévus"
+                                                  valueWord={_.end_session}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Lieu de formation"
+                                                  valueWord={_.lieu_formation}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Niveau actuel du stagiaire"
+                                                  valueWord={_.level_start}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Niveau visé"
+                                                  valueWord={_.level_end}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Durée de la formation"
+                                                  valueWord={_.duration + "H"}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Heure(s) réalisée(s)"
+                                                  valueWord={_.hour_worked}
+                                              />
+                                          </div>
+                                      </Panel>
+                                  </div>
+                              </div>
+                          ))
+                        : null}
                 </div>
             )}
         </div>

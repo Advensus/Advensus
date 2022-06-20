@@ -39,6 +39,7 @@ import {
 } from "../../../lib";
 import { useAuthStore } from "../../../stores";
 import BookingService from "../../../services/booking.service";
+import { useLocation } from "react-router-dom";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -140,6 +141,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     const [data, setData] = React.useState<any[]>(bookingData);
 
     const { user } = useAuthStore();
+    const { state }: any = useLocation();
 
     useEffect(() => {
         getAllBookings();
@@ -148,6 +150,14 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     useEffect(() => {
         console.log({ bookingData });
     }, [bookingData]);
+
+    useEffect(() => {
+        if (state) {
+            setSearchPerson(
+                state.userInfos.first_name + " " + state.userInfos.username
+            );
+        }
+    }, [state]);
 
     useEffect(() => {
         const getEventByUser = searchPerson

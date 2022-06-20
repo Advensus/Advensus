@@ -29,6 +29,7 @@ import {
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
+    TRAINEE,
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
@@ -45,6 +46,7 @@ import { TrainingProgramFormComponent } from "../../forms/training_program_form/
 import { ICertificate } from "../../../lib/interfaces/Certificate";
 import { LoadingComponent } from "../../loading_component/Loading.component";
 import CompanyService from "../../../services/company.service";
+import { useNavigate } from "react-router-dom";
 
 export interface IFullInformationsTabProps {
     default_props?: boolean;
@@ -63,6 +65,8 @@ const addIcon: IIconProps = { iconName: "Add" };
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
 > = ({ contentId, currentPath, company, trainings, user, org, training }) => {
+    const navigate = useNavigate();
+
     const [content, setContent] = useState<IUser>();
     // const [training, setTraining] = useState<ITraining>();
     const [formersTrainings, setFormersTrainings] = useState<IUser[]>([]);
@@ -313,11 +317,21 @@ export const FullInformationsTabComponent: React.FC<
                             {content?.first_name}
                         </Text>
                     )}
-                    {currentPath === PATH_LABEL_CUSTOMER && (
-                        <TooltipHost content="Planifier" id={tooltipId}>
-                            <IconButton iconProps={planIcon} ariaLabel="add" />
-                        </TooltipHost>
-                    )}
+                    {currentPath === PATH_LABEL_CUSTOMER &&
+                        user?.user_type === TRAINEE && (
+                            <TooltipHost content="Planifier" id={tooltipId}>
+                                <IconButton
+                                    iconProps={planIcon}
+                                    ariaLabel="add"
+                                    onClick={() => {
+                                        console.log("on fait le navigate ici");
+                                        navigate("/dashboard/planne", {
+                                            state: { userInfos: user },
+                                        });
+                                    }}
+                                />
+                            </TooltipHost>
+                        )}
                     {currentPath === PATH_LABEL_SERVICES &&
                         !showCertificateForm &&
                         !showTrainingProgramForm && (
