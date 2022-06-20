@@ -45,7 +45,7 @@ urlpatterns = [
     path('DetailUser/<str:pk>/', views.detailuser),
 
    #VIEW ALL USERS URLS
-    path('ViewAllUser/', views.viewalluser), 
+    path('GetAllUser/', views.viewalluser), 
 
    #CRUD FORMATION URLS
     path('CreateFormation/', views.CreateFormation.as_view()),
