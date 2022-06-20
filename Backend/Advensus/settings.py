@@ -135,6 +135,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_ALL_ORIGINS = False
 # CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
 # CORS_ORIGIN_WHITELIST = ['http://185.215.180.164:3000']
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
@@ -213,6 +214,18 @@ EMAIL_USE_TLS: True
 
 
 # MEDIA_ROOT =  BASE_DIR / 'media'
+<<<<<<< HEAD
+
+# MEDIA_ROOT = os.path.join(BASE_DIR,'')
+# MEDIA_URL = ''
+
+# MEDIA_ROOT_2 = os.path.join(BASE_DIR,'')
+# MEDIA_URL_2 = ''
+
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+=======
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -220,8 +233,10 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+>>>>>>> e7880beeaf27e862736521b48dd0a9c88fc24e95
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 COURSES = "compte.Courses"

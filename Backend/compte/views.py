@@ -414,14 +414,15 @@ class CreateDocument(CreateAPIView):
 
 class CreateDocumentsStagiaire(generics.GenericAPIView):
 	serializer_class = CreateGenerate
-	def post(self,request):
+	def post(self,request): 
 		# path_generatedocument = request.path
 		data = request.data
       
 		# print('path')
 		user = User.objects.get(id=data['appartenir'])
 		# url = settings.MEDIA_ROOT+'doc_generate'
-		paths = "document/"+user.username+".pdf"
+		#document_contrat
+		paths = "media/doc_generate/"+user.username+"contrat"+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
@@ -429,6 +430,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.drawString(30, 735, user.username)
 		
 		my_canvas.save()
+		#document_contrat
+
 		
 
 		print(paths)
@@ -441,17 +444,95 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 	  
 		
 		
-		# user_org = user.organisme_formation.all().get()
-		# rp_stagiaire = user.Rp_Stagiaire.all().get()
+		user_org = user.organisme_formation.all().get()
+		rp_stagiaire = user.Rp_Stagiaire.all().get()
 		serializer = self.serializer_class(sauvegarde,data=data)
 		serializer.is_valid(raise_exception=True)
 		
 		serializer.save()
+
+		# doc = Document.objects.all()
+
+		# for d in doc:
+		# 	print("url")
+		# 	print(d.path.url)
+		# 	print(d.sign.url)
+
+		#fiche information
+		# paths2 = "document/"+user.username+"_information"+".pdf"
+		# p = canvas.Canvas(paths2,pagesize=letter)
+
+    
+
+
+		# p.drawImage(user_org.company_logo.url,width=100,height=100)
+
+
+		# framh=Frame(70,600,500,50,showBoundary=1)
+		# flow_obj=[]
+		# p.setFontSize(30)
+		# table=Table([["Fiche Information"]])
+		# flow_obj.append(table)
+		# framh.addFromList(flow_obj,p)
+
+
+		# p.setFontSize(12)
+		# p.drawString(70, 570, "DATE DEBUT DE FORMATION : ")
+		# p.drawString(250, 570, "16/11/2021")
+		# p.drawString(350, 570, "DATE FIN FORMATION :")
+		# p.drawString(490, 570, "10/12/2022")
+
+
+		# p.drawString(70, 540, "RENDEZ-VOUS :")
+		# p.drawString(170, 540, "PHYSIQUE")
+
+
+		# p.drawString(350, 540, "TELEPHONIQUE :")
+		# p.drawString(453, 540, "+33 7 56 28 36 44")
+
+
+		# p.drawString(70, 510, "NOM : ")
+		# p.drawString(120, 510, "MEJHOUD")
+
+
+		# p.drawString(70, 480, "PRENOM :")
+		# p.drawString(140, 480, "Abdelkabir")
+
+		# p.drawString(70, 450, "STATUT :")
+		# p.drawString(140, 450, "Etudiant")
+
+
+
+		# p.drawString(70, 420, "NIVEAU ACTUEL : ")
+		# p.drawString(190, 420, "A1")
+
+		# p.drawString(350, 420, "NIVEAU VISE :")
+		# p.drawString(448, 420, "A2")
+
+
+		# p.drawString(70, 390, "OBJECTIFS DE LA FORMATION :")
+
+
+		# framh=Frame(70,260,500,120,showBoundary=1)
+		# flow_obj=[]
+		# p.setFontSize(30)
+		# tableo=Table([["\n\n\n"]])
+		# flow_obj.append(tableo)
+		# framh.addFromList(flow_obj,p)
+
 		
+
+
+
+		
+		# p.showPage()
+		# p.save()
+		#fin fiche information
+			
 		generate_data = serializer.data
-		
-		
-		
+			
+			
+			
 		return Response(generate_data,status=status.HTTP_201_CREATED)
 
 
