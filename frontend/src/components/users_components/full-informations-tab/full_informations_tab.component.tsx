@@ -718,7 +718,8 @@ export const FullInformationsTabComponent: React.FC<
                                     </Text>
                                     <hr className="booking_result_hr_solid" />
                                     <div className="booking_list">
-                                        {userIsBooking.length > 0 ? (
+                                        {userIsBooking &&
+                                        userIsBooking.length > 0 ? (
                                             userIsBooking.map((_) => (
                                                 <div key={_.id}>
                                                     <BookingCardComponent

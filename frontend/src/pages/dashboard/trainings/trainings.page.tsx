@@ -26,6 +26,7 @@ import {
     NewUserDtoIn,
     PATH_LABEL_COMPANY,
     SERVICES_FORM,
+    NewTrainingDtoOut,
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import { useId } from "@fluentui/react-hooks";
@@ -191,11 +192,12 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
         showForm ? setShowForm(!showForm) : setShowForm(!showForm);
     };
 
-    const handleOnCreate = (data: NewUserDtoIn) => {
+    const handleOnCreate = (data: ITraining) => {
         console.log({ data });
         // pathLabel === PATH_LABEL_RESOURCES
         //     ? setTrainers([data.user, ...trainers])
         //     : setTrainees([data.user, ...trainees]);
+        setFilteredTraining([data, ...filteredTraining]);
         setShowForm(false);
     };
 
@@ -303,6 +305,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                     ) : (
                         <TrainingFormComponent
                             cancel={() => setShowForm(false)}
+                            onCreated={handleOnCreate}
                         />
                     )}
                 </div>

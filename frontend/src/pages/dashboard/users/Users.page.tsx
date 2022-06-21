@@ -477,11 +477,10 @@ export const UsersPage: React.FC<IUsersPageProps> = () => {
                         />
                     ) : pathLabel === PATH_LABEL_COMPANY ? (
                         <CompanyFormComponent onCreate={handleOnCreate} />
-                    ) : (
-                        <TrainingFormComponent
-                            cancel={() => setShowForm(false)}
-                        />
-                    )}
+                    ) : // <TrainingFormComponent
+                    //     cancel={() => setShowForm(false)}
+                    // />
+                    null}
                 </div>
             </div>
             <div id="display_tab_ii">

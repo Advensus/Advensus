@@ -1,16 +1,18 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { NewTrainingDtoIn, NewTrainingDtoOut } from "../../../lib";
+import { ITraining, NewTrainingDtoIn, NewTrainingDtoOut } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 
 export interface ITrainingFormProps {
     default_props?: boolean;
     cancel?: () => void;
+    onCreated: (data: ITraining) => void;
 }
 
 export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
     cancel,
+    onCreated,
 }) => {
     const onSubmit = (val: NewTrainingDtoIn) => {
         console.log({ val });
@@ -19,8 +21,9 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
                 if (response.status !== 200) {
                     console.log({ response });
                 }
-                const data = (await response.json()) as NewTrainingDtoOut;
+                const data = (await response.json()) as ITraining;
                 console.log("the nes training", data);
+                onCreated(data);
             })
             .catch((err) => {
                 console.log("error while adding new training:", err);
