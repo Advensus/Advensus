@@ -720,36 +720,80 @@ export const FullInformationsTabComponent: React.FC<
                                     <div className="booking_list">
                                         {userIsBooking.length > 0 ? (
                                             userIsBooking.map((_) => (
-                                                <BookingCardComponent
-                                                    openPanel={openPanel}
-                                                    BookingInfos={_}
-                                                    key={_.id}
-                                                />
+                                                <div key={_.id}>
+                                                    <BookingCardComponent
+                                                        openPanel={openPanel}
+                                                        BookingInfos={_}
+                                                    />
+                                                    <div>
+                                                        <br />
+                                                        <Panel
+                                                            isLightDismiss
+                                                            isOpen={isOpen}
+                                                            onDismiss={
+                                                                dismissPanel
+                                                            }
+                                                            closeButtonAriaLabel="Close"
+                                                            headerText="Détails de la Réservation"
+                                                        >
+                                                            <br />
+                                                            <>
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Réservation ID"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .id
+                                                                    }
+                                                                />
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Titre Réservation"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .title
+                                                                    }
+                                                                />
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Status Réservation"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .status
+                                                                    }
+                                                                />
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Début"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .start_date
+                                                                    }
+                                                                />
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Fin"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .end_date
+                                                                    }
+                                                                />
+                                                                <AttributeDisplayComponent
+                                                                    keyWord="Description"
+                                                                    valueWord={
+                                                                        _
+                                                                            .reservation
+                                                                            .description
+                                                                    }
+                                                                />
+                                                            </>
+                                                        </Panel>
+                                                    </div>
+                                                </div>
                                             ))
                                         ) : (
                                             <EmptyComponent messageText="Aucune Réservation trouvée" />
                                         )}
-                                        <div>
-                                            <br />
-                                            <br />
-                                            <Panel
-                                                isLightDismiss
-                                                isOpen={isOpen}
-                                                onDismiss={dismissPanel}
-                                                closeButtonAriaLabel="Close"
-                                                headerText="Détails de la Réservation"
-                                            >
-                                                <p>
-                                                    'This panel uses "light
-                                                    dismiss" behavior: it can be
-                                                    closed by clicking or
-                                                    tapping ' + 'the area
-                                                    outside the panel (or using
-                                                    the close button as
-                                                    usual).';
-                                                </p>
-                                            </Panel>
-                                        </div>
                                     </div>
                                 </div>
                             </PivotItem>

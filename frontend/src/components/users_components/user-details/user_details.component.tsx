@@ -1,6 +1,6 @@
 import { IconButton, IIconProps, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import { AttributeDisplayComponent } from "../../";
+import { AttributeDisplayComponent, TrainingFolderFormComponent } from "../../";
 import {
     ISubscription,
     IUser,
@@ -27,13 +27,18 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
 }) => {
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
         useBoolean(false);
+    const [
+        isNewTrainingFileOpen,
+        {
+            setTrue: openPanelNewTrainingFile,
+            setFalse: dismissPanelNewTrainingFile,
+        },
+    ] = useBoolean(false);
     const [subscriptionInfos, setSubscriptionInfos] = useState<ISubscription[]>(
         []
     );
 
     useEffect(() => {
-        console.log({ contentToDetail });
-        console.log("infos souscription:", contentToDetail?.assister);
         if (contentToDetail) {
             // contentToDetail.souscrirs
             if (contentToDetail.souscrirs)
@@ -43,6 +48,11 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
             // : null;
         }
     }, [contentToDetail]);
+
+    const handleOnCreate = (data: ISubscription) => {
+        setSubscriptionInfos([data, ...subscriptionInfos]);
+        dismissPanelNewTrainingFile();
+    };
 
     return (
         <div className="user_details_container">
@@ -104,7 +114,26 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                             // menuIconProps={{ iconName: "ClipboardListAdd" }}
                             ariaLabel="add"
                             title="Nouvelle Formation"
+                            onClick={openPanelNewTrainingFile}
                         />
+                        <div>
+                            <Panel
+                                isLightDismiss
+                                isOpen={isNewTrainingFileOpen}
+                                onDismiss={dismissPanelNewTrainingFile}
+                                closeButtonAriaLabel="Close"
+                                headerText="Nouveau dossier"
+                            >
+                                <div>
+                                    {contentToDetail && (
+                                        <TrainingFolderFormComponent
+                                            trainee={contentToDetail}
+                                            onCreated={handleOnCreate}
+                                        />
+                                    )}
+                                </div>
+                            </Panel>
+                        </div>
                     </div>
                     <hr className="hr_user_details_training_folder" />
                     {subscriptionInfos.length > 0

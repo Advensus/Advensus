@@ -14,6 +14,7 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+    ISubscription,
     ITraining,
     IUser,
     NewDocDto,
@@ -218,7 +219,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                 if (response.status !== 200) {
                     console.log({ response });
                 }
-                const data = (await response.json()) as NewUserDtoIn;
+                const data = (await response.json()) as ISubscription;
                 console.log("the current adding training folder:", data);
                 // onCreate(data);
             })
