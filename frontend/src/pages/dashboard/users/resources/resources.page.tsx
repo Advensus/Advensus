@@ -241,7 +241,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                                 // FORM TITLE
                                 <Text> Ajouter Ressource</Text>
                             )}
-                            <TooltipHost
+                            {/* <TooltipHost
                                 content="Ajouter Formateur"
                                 id={tooltipId}
                             >
@@ -250,7 +250,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                                     ariaLabel="add"
                                     onClick={() => showAddForm(TEACHEAR_FORM)}
                                 />
-                            </TooltipHost>
+                            </TooltipHost> */}
                         </div>
                         <hr className="hr_dashed" />
                         {!showForm ? (
@@ -293,7 +293,21 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                     {!showForm ? (
                         <div className="tab_content">
                             <div>
-                                <Text>My "tab name" or allusersnumber()</Text>
+                                <div className="tab_sections_header">
+                                    <Text>Formateur ({trainers.length})</Text>
+                                    <TooltipHost
+                                        content="Ajouter Formateur"
+                                        id={tooltipId}
+                                    >
+                                        <IconButton
+                                            iconProps={addIcon}
+                                            ariaLabel="add"
+                                            onClick={() =>
+                                                showAddForm(TEACHEAR_FORM)
+                                            }
+                                        />
+                                    </TooltipHost>
+                                </div>
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainer">
@@ -313,7 +327,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>
                                     <div className="tab_sections_header">
-                                        <Text>Super R-P</Text>
+                                        <Text>Super R-P ({srps.length})</Text>
                                         <TooltipHost
                                             content="Ajouter super R-P"
                                             id={tooltipId}
@@ -348,7 +362,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>
                                     <div className="tab_sections_header">
-                                        <Text>R-P simple</Text>
+                                        <Text>R-P simple ({rps.length})</Text>
                                         <TooltipHost
                                             content="Ajouter R-P"
                                             id={tooltipId}

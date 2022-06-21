@@ -328,13 +328,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                         name="phone_number"
                     />
                     <TextField
-                        type="text"
-                        // value={values.competence}
-                        // onChange={handleChange}
-                        placeholder="Date de naissance"
-                        name="competence"
-                    />
-                    <TextField
                         type="password"
                         value={values.password}
                         onChange={handleChange}
@@ -518,6 +511,7 @@ const FolderState = [
     { key: "State4", text: "A débuté" },
     { key: "State5", text: "Reporté" },
     { key: "State6", text: "EXPIRÉ" },
+    { key: "State7", text: "Accepté" },
 ];
 const CurrentTraineeState = [
     { key: "Débutant", text: "Débutant" },
