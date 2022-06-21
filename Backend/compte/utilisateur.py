@@ -136,10 +136,12 @@ class souscrir(models.Model):
     test_oral = models.BooleanField(default=False)
     stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,related_name='souscrirs',on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
-   
     level_start = models.CharField(max_length=50)
     level_end = models.CharField(max_length=50)
     lieu_formation = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     
     # organisme_sous = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE)
 class User(AbstractBaseUser, PermissionsMixin):
@@ -157,7 +159,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     adress = models.CharField(max_length=100,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    
+    deleted_at = models.DateTimeField(auto_now=True)
     horaire = models.TimeField(auto_now_add=False,null=True)
     signature_former = models.FileField(upload_to="signature_former/")
     cv = models.FileField(upload_to="cv/",null=True)

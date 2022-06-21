@@ -21,14 +21,18 @@ import os
 class Presence(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     stagiaireform = models.ForeignKey(User,on_delete=models.CASCADE)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
 class Courses(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     superviser = models.ForeignKey(User,on_delete=models.CASCADE,related_name='superviser')
     assister = models.ForeignKey(User,related_name='assister',on_delete=models.CASCADE,null=True)
     # etablir = models.OneToOneField(Presence,on_delete=models.CASCADE)
     lier = models.ForeignKey(formation,on_delete=models.CASCADE)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.lier.intitule
 class reservation(models.Model):
@@ -43,7 +47,9 @@ class reservation(models.Model):
     proposer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='proposer_content_type',null=True,default=False)
     concerner = models.OneToOneField(Courses,on_delete=models.CASCADE,related_name='reservation')
     # concerner = models.OneToOneField(settings.COURSES,on_delete=models.CASCADE)
-   
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
 
 
     # formateur = models.ForeignKey(Formateur,on_delete=models.CASCADE)
@@ -55,9 +61,12 @@ class reservation(models.Model):
 
 class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    path = models.FileField(upload_to="doc_generate/")
+    path = models.FileField()
     sign = models.FileField(upload_to="signing/", null=True)
     doc_categorie = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     appartenir = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appartenir_content_type')
     partager = models.ForeignKey(User,on_delete=models.CASCADE,related_name='partager_content_type',null=True)
    
@@ -70,6 +79,9 @@ class Opinion(models.Model):
     donner = models.ForeignKey(User,on_delete=models.CASCADE)
     rate = models.IntegerField(default=0)
     mind = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     
 # class relationtable(models.Model):
 #     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

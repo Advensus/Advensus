@@ -22,7 +22,9 @@ class certificate(models.Model):
     competence_atteste = models.CharField(max_length=100)
     modalite_evaluation = models.CharField(max_length=100)
     allouer = models.ManyToManyField(formation)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.intitule
 
@@ -31,6 +33,8 @@ class programme(models.Model):
     libelle = models.CharField(max_length=100)
     description = models.TextField(max_length=255)
     attribue = models.ForeignKey(certificate,on_delete=models.CASCADE,related_name='programmes')
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.intitule
