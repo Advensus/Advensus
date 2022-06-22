@@ -452,12 +452,12 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		
 		serializer.save()
 
-		doc = Document.objects.all()
+		# doc = Document.objects.all()
 
-		for d in doc:
-			print("url")
-			print(d.path.url)
-			print(d.sign.url)
+		# for d in doc:
+		# 	print("url")
+		# 	print(d.path.url)
+		# 	print(d.sign.url)
 
 		#fiche information
 		# paths2 = "document/"+user.username+"_information"+".pdf"
