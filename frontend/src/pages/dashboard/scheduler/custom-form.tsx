@@ -20,6 +20,9 @@ export const FormWithCustomEditor = (props: SchedulerFormProps) => {
     const formValidator = (_dataItem: any, formValueGetter: any) => {
         let result: any = {};
 
+        result.title = [requiredValidator(formValueGetter("title"))]
+            .filter(Boolean)
+            .reduce((current, acc) => current || acc, "");
         result.superviser = [requiredValidator(formValueGetter("superviser"))]
             .filter(Boolean)
             .reduce((current, acc) => current || acc, "");

@@ -10,8 +10,9 @@ import {
     TreatmentEditor,
     FormerList,
     TraineesList,
-    CoursesEditor,
-    EdofList,
+    TrainingEditor,
+    EdofsList,
+    TitleList,
 } from "./editors";
 
 export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
@@ -20,16 +21,8 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
             <div className="k-form-field">
                 <Label>Titre</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"title"} component={Input} rows={1} />
-                </div>
-            </div>
-            <div className="k-form-field">
-                <Label>Formateur(s)</Label>
-                <div className="k-form-field-wrap">
-                    <Field name={"superviser"} component={FormerList} />
-                    {props.errors.superviser && (
-                        <Error>{props.errors.superviser}</Error>
-                    )}
+                    <Field name={"title"} component={TitleList} />
+                    {props.errors.title && <Error>{props.errors.title}</Error>}
                 </div>
             </div>
             <div className="k-form-field">
@@ -42,23 +35,39 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
                 </div>
             </div>
             <div className="k-form-field">
-                <Label>Formation(s)</Label>
+                <Label>EDOF(s) Subscribe</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"lier"} component={CoursesEditor} />
+                    <Field name={"proposer"} component={EdofsList} />
                     {/* {props.errors.Training && (
                         <Error>{props.errors.Training}</Error>
                     )} */}
                 </div>
             </div>
             <div className="k-form-field">
-                <Label>EDOF(s)</Label>
+                <Label>Formation(s)</Label>
                 <div className="k-form-field-wrap">
-                    <Field name={"proposer"} component={FormerList} />
+                    <Field name={"lier"} component={TrainingEditor} />
                     {/* {props.errors.Training && (
                         <Error>{props.errors.Training}</Error>
                     )} */}
                 </div>
             </div>
+            <div className="k-form-field">
+                <Label>Formateur(s)</Label>
+                <div className="k-form-field-wrap">
+                    <Field name={"superviser"} component={FormerList} />
+                    {props.errors.superviser && (
+                        <Error>{props.errors.superviser}</Error>
+                    )}
+                </div>
+            </div>
+
+            {/* <div className="k-form-field">
+                <Label>EDOF(s)</Label>
+                <div className="k-form-field-wrap">
+                    <Field name={"proposer"} component={FormerList} />
+                </div>
+            </div> */}
 
             <div className="k-form-field">
                 <Label>Description</Label>

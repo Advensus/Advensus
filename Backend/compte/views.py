@@ -35,7 +35,7 @@ from django.shortcuts import get_object_or_404
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.http.response import JsonResponse
-
+from django.core.files.base import ContentFile
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -422,7 +422,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		user = User.objects.get(id=data['appartenir'])
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
-		paths = "doc_generate/"+user.username+"contrat"+".pdf"
+		paths = "media/doc_generate/"+user.username+"_contrat"+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
@@ -438,7 +438,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		sauvegarde = Document(
 				
 		)
-		sauvegarde.path.name=paths 
+		sauvegarde.path.save(paths,ContentFile("test"),save=False)
+
 	
 		print(sauvegarde.path)
 		
