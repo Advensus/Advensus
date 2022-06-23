@@ -424,7 +424,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		user = User.objects.get(id=data['appartenir'])
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
-		paths = "media/doc_generate/"+user.username+"_contrat3"+".pdf"
+		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat3"+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
