@@ -37,6 +37,8 @@ from reportlab.pdfgen import canvas
 from django.http.response import JsonResponse
 from django.core.files.base import ContentFile
 import requests
+from reportlab.graphics.shapes import *
+from reportlab.lib.colors import HexColor 
 
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
@@ -423,35 +425,47 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# print('path')
 		user = User.objects.get(id=data['appartenir'])
 		user_org = user.organisme_formation.all().get()
+		# image_path = bytes(user_org.company_logo.url)
+		
 		rp_stagiaire = user.Rp_Stagiaire.all().get()
+		souscris_formation = souscrir.objects.get(stagiaire=user)
+	
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
 		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat3"+".pdf"
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
-		my_canvas.drawString(30, 750, 'Documents')
-		my_canvas.drawString(30, 735, user.username)
-		
+		# my_canvas.drawImage(image_path, 30, 690, width=100, height=100)
+		my_canvas.drawString(220,750, "Contrat de formation professionnelle")
+		my_canvas.drawString(190,720, "(Articles L. 6353-3 à L. 6353-7 du code du travail)")
+		my_canvas.drawString(15, 670, "Entre l'organisme de formation: "+ " " +user.username)
+		my_canvas.drawString(15, 640, "Et le bénéficiaire:"+ " "+ user.username)
+		my_canvas.drawString(15, 610, "Est conclue la convention suivante en application des dispositions du livre III de la sixième partie du code du")
+		my_canvas.drawString(15, 590, "travail portant sur l'organisation de la formation professionnelle.")
+		my_canvas.setFillColor(HexColor(0xff0800))
+		my_canvas.drawString(15, 540, "1. Objet, nature et durée de la formation")
+		my_canvas.setFillColor(HexColor(0x000000))
+		my_canvas.drawString(15, 510, "Le bénéficiaire entend participer à l’action de formation suivante organisée par l’organisme de formation")
+		my_canvas.drawString(15, 490, souscris_formation.formation.intitule+".")
+
 		my_canvas.save()
-		#document_contrat
+		# Fin document_contrat
 		# response = requests.get(settings.MEDIA_URL+paths, stream=True)
 		
-
-		print("path 1:" + paths)
-		sauvegarde = Document(
+		sauvegarde_contrat = Document(
 			
 		)
-		sauvegarde.path.save(paths,ContentFile("test"),save=False) 
+		sauvegarde_contrat.path.save(paths,ContentFile("test"),save=False) 
 	 
 	
-		print(sauvegarde.path)
+		print(sauvegarde_contrat.path)
 		
 	  
  		
 		
 		
-		serializer = self.serializer_class(sauvegarde,data=data)
+		serializer = self.serializer_class(sauvegarde_contrat,data=data)
 		serializer.is_valid(raise_exception=True)
 		
 		serializer.save()
