@@ -510,7 +510,6 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
 };
 
 export const CustomViewItem = (props: SchedulerViewItemProps) => {
-    const { state }: any = useLocation();
     let myCustomTitle = `${props.dataItem.title} | Formateur: ${props.dataItem.ownerID.username} | Stagiaire: ${props.dataItem.personId.username}`;
     // let myCustomTitle =
     //     props.dataItem.title +
@@ -521,9 +520,6 @@ export const CustomViewItem = (props: SchedulerViewItemProps) => {
     //     "| Stagiaire: " +
     //     props.dataItem.personId.username;
 
-    useEffect(() => {
-        console.log("state in customwiew item:", state);
-    }, [state]);
     return <SchedulerViewItem {...props} title={myCustomTitle} />;
 };
 

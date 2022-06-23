@@ -29,7 +29,8 @@ interface IItemDropDown {
 // TRAINEES
 export const TraineesList = (props: FieldProps) => {
     const [trainees, setTrainees] = React.useState<IItemDropDown[]>([]);
-    const { users } = useUsersStore();
+    const { users, trainee_schedule, updateViewTraineeSchedule } =
+        useUsersStore();
     const { updateCurrentSubscriptions } = useSubscriptionStore();
     const { updateCurrentEdofTraining } = useTrainingsStore();
 
@@ -44,7 +45,17 @@ export const TraineesList = (props: FieldProps) => {
             });
             setTrainees(traineesDropdown);
         }
-    }, [users]);
+        // Get schdulde by trainee
+        if (trainee_schedule) {
+            const theTrainee = users.user.filter(
+                (_) => _.username === trainee_schedule
+            );
+            const traineeDropdown = theTrainee.map((_) => {
+                return { id: _.id, name: _.first_name + " " + _.username };
+            });
+            setTrainees(traineeDropdown);
+        }
+    }, [users, trainee_schedule]);
 
     const handleChange = (event: DropDownListChangeEvent) => {
         if (props.onChange) {
@@ -61,9 +72,12 @@ export const TraineesList = (props: FieldProps) => {
                     (_) => _.formation
                 );
                 // let uniqueTrainings = [...new Set(subscribeIsTraining)];
-                let uniqueTrainings = subscribeIsTraining.filter((c, index) => {
-                    return subscribeIsTraining.indexOf(c) === index;
-                });
+                // let uniqueTrainings = subscribeIsTraining.filter(
+                //     (value, index) => {
+                //         return subscribeIsTraining.indexOf(value) === index;
+                //     }
+                // );
+                let uniqueTrainings = removeDuplicateItem(subscribeIsTraining);
                 console.log({ uniqueTrainings });
                 updateCurrentEdofTraining(subscribeIsTraining);
                 console.log({ subscribeIsTraining });
@@ -71,6 +85,12 @@ export const TraineesList = (props: FieldProps) => {
             }
         }
     };
+
+    function removeDuplicateItem(data: any) {
+        return data.filter(
+            (value: any, index: number) => data.indexOf(value) === index
+        );
+    }
 
     return (
         <DropDownList
@@ -124,7 +144,6 @@ export const TrainingEditor = (props: FieldProps) => {
     const { trainingByEdof } = useTrainingsStore();
 
     React.useEffect(() => {
-        console.log({ trainingByEdof });
         if (trainingByEdof) {
             // if(trainingByEdof.length > 1){
             //     const filteredTrainings = trainingByEdof.filter((_) => )
@@ -169,8 +188,6 @@ export const FormerList = (props: FieldProps) => {
     const { trainingByEdof } = useTrainingsStore();
 
     React.useEffect(() => {
-        console.log({ users });
-        console.log({ trainingByEdof });
         if (users && trainingByEdof) {
             const theFormers = users.user.filter(
                 (_) => _.user_type === TEACHEAR

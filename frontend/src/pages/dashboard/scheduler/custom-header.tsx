@@ -35,7 +35,7 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
 }) => {
     const [trainers, setTrainers] = useState<IUser[]>([]);
     const [trainees, setTrainees] = useState<IUser[]>([]);
-    const { updateCurrentUsers } = useUsersStore();
+    const { updateCurrentUsers, updateViewTraineeSchedule } = useUsersStore();
     const { updateCurrentTrainings } = useTrainingsStore();
 
     useEffect(() => {
@@ -56,6 +56,9 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
             setTraineeDisplay(event.target.value);
             console.log({ event });
             // displayEventByResource(event.target.value);
+            // updateCurrentUsers(event);
+            if (event.target.props.data)
+                updateViewTraineeSchedule(event.target.value);
         },
 
         [traineeDisplay]
@@ -121,7 +124,8 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                 <ToolbarDropdown
                     text="Stagiaire"
                     value={traineeDisplay}
-                    data={trainees.map((_) => _.first_name + " " + _.username)}
+                    data={trainees.map((_) => _.username)}
+                    // data={trainees.map((_) => _.first_name + " " + _.username)}
                     onChange={(event) => {
                         handleTraineeDisplayChange(event);
                         displayEventByResource(event.target.value);
@@ -134,6 +138,7 @@ export const CustomHeader: React.FC<ICutomHeaderProps> = ({
                     text="Formateur"
                     value={formerDisplay}
                     data={trainers.map((_) => _.first_name + " " + _.username)}
+                    // data={trainers.map((_) => _.first_name + " " + _.username)}
                     onChange={(event) => {
                         handleFormerDisplayChange(event);
                         displayEventByResource(event.target.value);

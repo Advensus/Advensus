@@ -19,7 +19,6 @@ export const useSubscriptionStore = create<SubscriptionStore>(
 
             updateCurrentSubscriptions: (subscriptions): void => {
                 set({ subscriptions });
-                console.log({ subscriptions });
             },
         };
     }
