@@ -441,7 +441,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     id="scheduler_body"
                     height={"100%"}
                     timezone={"Etc/UTC"}
-                    viewItem={ProportionalViewItem}
+                    viewItem={CustomViewItem}
                     onDataChange={handleDataChange}
                     editable={{
                         add: true,
@@ -502,7 +502,7 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
             {...props}
             style={{
                 ...props.style,
-                minHeight: 50,
+                minHeight: 80,
                 maxHeight: 120,
             }}
         />
@@ -510,15 +510,21 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
 };
 
 export const CustomViewItem = (props: SchedulerViewItemProps) => {
-    return (
-        <SchedulerViewItem
-            {...props}
-            style={{
-                ...props.style,
-                height: "auto",
-            }}
-        />
-    );
+    const { state }: any = useLocation();
+    let myCustomTitle = `${props.dataItem.title} | Formateur: ${props.dataItem.ownerID.username} | Stagiaire: ${props.dataItem.personId.username}`;
+    // let myCustomTitle =
+    //     props.dataItem.title +
+    //     " | Formateur: " +
+    //     " " +
+    //     props.dataItem.ownerID.username +
+    //     " " +
+    //     "| Stagiaire: " +
+    //     props.dataItem.personId.username;
+
+    useEffect(() => {
+        console.log("state in customwiew item:", state);
+    }, [state]);
+    return <SchedulerViewItem {...props} title={myCustomTitle} />;
 };
 
 export const ProportionalViewItem = (props: any) => {
