@@ -38,7 +38,8 @@ from django.http.response import JsonResponse
 from django.core.files.base import ContentFile
 import requests
 from reportlab.graphics.shapes import *
-from reportlab.lib.colors import HexColor 
+from reportlab.lib.colors import HexColor
+from reportlab.platypus import Frame,Table 
 
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
@@ -652,9 +653,9 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.setFillColor(HexColor(0xff0800))
 		my_canvas.drawString(15,105, "Programme des formations")
 		my_canvas.setFillColor(HexColor(0x000000))
-		my_canvas.drawString(15,95, "S’il le juge nécessaire, l’intervenant pourra modifier les contenus des formations suivant l’actualité,")
-		my_canvas.drawString(15,75, "la dynamique de groupe, ou le niveau des participants. Les contenus des programmes figurant sur les fiches")
-		my_canvas.drawString(15,55, "de présentation ne sont ainsi fournis qu’à titre indicatif.")
+		my_canvas.drawString(15,85, "S’il le juge nécessaire, l’intervenant pourra modifier les contenus des formations suivant l’actualité,")
+		my_canvas.drawString(15,65, "la dynamique de groupe, ou le niveau des participants. Les contenus des programmes figurant sur les fiches")
+		my_canvas.drawString(15,45, "de présentation ne sont ainsi fournis qu’à titre indicatif.")
 
 		my_canvas.showPage()
 		my_canvas.drawString(15,7500, "")
@@ -669,11 +670,11 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.setFillColor(HexColor(0xff0800))
 		my_canvas.drawString(15,640, "Informatique et libertés")
 		my_canvas.setFillColor(HexColor(0x000000))
-		my_canvas.drawString(15,620, "Les informations à caractère personnel communiquées par le client à la société" +user_org.comapny_name+ " sont utiles")
+		my_canvas.drawString(15,620, "Les informations à caractère personnel communiquées par le client à la société" +user_org.company_name+ " sont utiles")
 		my_canvas.drawString(15,600, "pour le traitement de l’inscription ainsi que pour la constitution d’un fichier clientèle pour des prospections")
 		my_canvas.drawString(15,580, "commerciales. Suivant la loi « informatique et libertés » du 6 janvier 1978, le client dispose d’un droit d’accès,")
 		my_canvas.drawString(15,560, "de rectification et d’opposition des données personnelles le concernant.")
-		my_canvas.drawString(15,540, "La société " +user_org.comapny_name+ " s’engage à appliquer les mesures administratives, physiques et techniques appropriées")
+		my_canvas.drawString(15,540, "La société " +user_org.company_name+ " s’engage à appliquer les mesures administratives, physiques et techniques appropriées")
 		my_canvas.drawString(15,520, "pour préserver la sécurité, la confidentialité et l’intégrité des données du client. Elle s’interdit de divulguer les")
 		my_canvas.drawString(15,500, "données du client,sauf en cas de contrainte légale.")
         
@@ -681,7 +682,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		my_canvas.drawString(15,470, "Loi applicable et attribution de compétence")
 		my_canvas.setFillColor(HexColor(0x000000))
 		my_canvas.drawString(15,450, "Les présentes Conditions Générales de Vente sont encadrées par la loi française. En cas de litige survenant entre")
-		my_canvas.drawString(15,430, "la société " +user_org.comapny_name+ " et le client, la recherche d’une solution à l’amiable sera privilégiée. À défaut, l’affaire")
+		my_canvas.drawString(15,430, "la société " +user_org.company_name+ " et le client, la recherche d’une solution à l’amiable sera privilégiée. À défaut, l’affaire")
 		my_canvas.drawString(15,410, "sera portée devant les tribunaux de Paris.")
 		my_canvas.save()
 		# Fin document_contrat
@@ -712,8 +713,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# 	print(d.sign.url)
 
 		#fiche information
-		# paths2 = "document/"+user.username+"_information"+".pdf"
-		# p = canvas.Canvas(paths2,pagesize=letter)
+		paths2 = "media/doc_generate/"+user.username.replace(" ", "")+"_formation"+".pdf"
+		p = canvas.Canvas(paths2,pagesize=letter)
 
     
 
@@ -721,65 +722,77 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# p.drawImage(user_org.company_logo.url,width=100,height=100)
 
 
-		# framh=Frame(70,600,500,50,showBoundary=1)
-		# flow_obj=[]
-		# p.setFontSize(30)
-		# table=Table([["Fiche Information"]])
-		# flow_obj.append(table)
-		# framh.addFromList(flow_obj,p)
+		framh=Frame(70,600,500,50,showBoundary=1)
+		flow_obj=[]
+		p.setFontSize(30)
+		table=Table([["Fiche Information"]])
+		flow_obj.append(table)
+		framh.addFromList(flow_obj,p)
 
 
-		# p.setFontSize(12)
-		# p.drawString(70, 570, "DATE DEBUT DE FORMATION : ")
-		# p.drawString(250, 570, "16/11/2021")
-		# p.drawString(350, 570, "DATE FIN FORMATION :")
-		# p.drawString(490, 570, "10/12/2022")
+		p.setFontSize(12)
+		p.drawString(70, 570, "DATE DEBUT DE FORMATION : ")
+		p.drawString(250, 570, str(souscris_formation.start_session))
+		p.drawString(350, 570, "DATE FIN FORMATION :")
+		p.drawString(490, 570, str(souscris_formation.end_session))
 
 
-		# p.drawString(70, 540, "RENDEZ-VOUS :")
-		# p.drawString(170, 540, "PHYSIQUE")
+		p.drawString(70, 540, "RENDEZ-VOUS :")
+		p.drawString(170, 540, "PHYSIQUE")
 
 
-		# p.drawString(350, 540, "TELEPHONIQUE :")
-		# p.drawString(453, 540, "+33 7 56 28 36 44")
+		p.drawString(350, 540, "TELEPHONIQUE :")
+		p.drawString(453, 540, user.phone_number)
 
 
-		# p.drawString(70, 510, "NOM : ")
-		# p.drawString(120, 510, "MEJHOUD")
+		p.drawString(70, 510, "NOM : ")
+		p.drawString(120, 510, user.username)
 
 
-		# p.drawString(70, 480, "PRENOM :")
-		# p.drawString(140, 480, "Abdelkabir")
+		p.drawString(70, 480, "PRENOM :")
+		p.drawString(140, 480, user.first_name)
 
-		# p.drawString(70, 450, "STATUT :")
-		# p.drawString(140, 450, "Etudiant")
-
-
-
-		# p.drawString(70, 420, "NIVEAU ACTUEL : ")
-		# p.drawString(190, 420, "A1")
-
-		# p.drawString(350, 420, "NIVEAU VISE :")
-		# p.drawString(448, 420, "A2")
+		p.drawString(70, 450, "STATUT :")
+		p.drawString(140, 450, "Etudiant")
 
 
-		# p.drawString(70, 390, "OBJECTIFS DE LA FORMATION :")
+
+		p.drawString(70, 420, "NIVEAU ACTUEL : ")
+		p.drawString(190, 420, souscris_formation.level_start)
+
+		p.drawString(350, 420, "NIVEAU VISE :")
+		p.drawString(448, 420, souscris_formation.level_end)
 
 
-		# framh=Frame(70,260,500,120,showBoundary=1)
-		# flow_obj=[]
-		# p.setFontSize(30)
-		# tableo=Table([["\n\n\n"]])
-		# flow_obj.append(tableo)
-		# framh.addFromList(flow_obj,p)
-
-		
+		p.drawString(70, 390, "OBJECTIFS DE LA FORMATION :")
 
 
+		framh=Frame(70,260,500,120,showBoundary=1)
+		flow_obj=[]
+		p.setFontSize(30)
+		tableo=Table([["\n\n\n"]])
+		flow_obj.append(tableo)
+		framh.addFromList(flow_obj,p)
 
 		
-		# p.showPage()
-		# p.save()
+
+
+
+		
+		p.showPage()
+		p.save()
+		sauvegarde_formation = Document(
+			
+		)
+		sauvegarde_formation.path.save(paths2,ContentFile("test"),save=False) 
+	 
+	
+		print(sauvegarde_formation.path)
+
+		serializer = self.serializer_class(sauvegarde_formation,data=data)
+		serializer.is_valid(raise_exception=True)
+		
+		serializer.save()
 		#fin fiche information
 			
 		generate_data = serializer.data
