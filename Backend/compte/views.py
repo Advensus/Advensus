@@ -422,6 +422,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
       
 		# print('path')
 		user = User.objects.get(id=data['appartenir'])
+		user_org = user.organisme_formation.all().get()
+		rp_stagiaire = user.Rp_Stagiaire.all().get()
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
 		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat3"+".pdf"
@@ -448,8 +450,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 	  
  		
 		
-		user_org = user.organisme_formation.all().get()
-		rp_stagiaire = user.Rp_Stagiaire.all().get()
+		
 		serializer = self.serializer_class(sauvegarde,data=data)
 		serializer.is_valid(raise_exception=True)
 		
