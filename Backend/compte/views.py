@@ -774,11 +774,6 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		flow_obj.append(tableo)
 		framh.addFromList(flow_obj,p)
 
-		
-
-
-
-		
 		p.showPage()
 		p.save()
 		sauvegarde_formation = Document(
@@ -794,6 +789,50 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		
 		serializer.save()
 		#fin fiche information
+
+		#Programme de formation
+		# paths3 = "media/doc_generate/"+user.username.replace(" ", "")+"_programme"+".pdf"
+		# p = canvas.Canvas(paths3,pagesize=letter)
+
+		# p.drawImage(image_path,30,680,width=100,height=100)
+
+		# p.setFontSize(13)
+		# p.setFont("Helvetica", 13)
+		# p.setFillColor(HexColor(0xff0800))
+		# p.drawString(200, 660, "Programme de formation individuelle")
+		# p.setFillColor(HexColor(0x000000))
+		
+		# p.setFontSize(12)
+		# p.setFillColor(HexColor(0xff0800))
+		# p.drawString(70, 620, "Destinataire :")
+		# p.setFillColor(HexColor(0x000000))
+		# p.setFontSize(10)
+		# p.drawString(70, 600, "Mr"+ user.username+ " souhaite :")
+		# p.drawString(75, 580, "progresser en " + souscris_formation.formation.intitule)
+		# p.drawString(75, 560, "atteindre un niveau" + " " +souscris_formation.level_end)
+		# p.drawString(75, 520, "Compréhension orale.")
+		# p.drawString(75, 500, "Expression écrite.")
+
+
+		# p.drawString(75, 480, "Evaluation des compétences dans le cadre de mises en situation communicatives. ")
+		# p.setFontSize(12)
+		# p.setFillColor(HexColor(0xff0800))
+		# p.drawString(70, 460, "Prérequis :")
+		# p.setFillColor(HexColor(0x000000))
+		# p.setFontSize(10)
+
+		# p.setFontSize(12)
+		# p.setFillColor(HexColor(0xff0800))
+		# p.drawString(70, 540, "Objectifs :")
+		# p.setFillColor(HexColor(0x000000))
+		# p.setFontSize(10)
+		# p.drawString(70, 440, "Réalisation d’une évaluation du niveau initial d’après le barème européen du « Cadre Européen")
+		# p.drawString(70, 420, "Commun de Référence pour les Langues » pour déterminer les objectifs de formation.")
+
+		# p.drawString(80, 400, "Date de début :"+ souscris_formation.start_session)
+		# p.drawString(80, 380, "Niveau d’admission suite au test de positionnement : "+ souscris_formation.level_start+".")
+
+		#Fin programme de formation
 			
 		generate_data = serializer.data
 			
