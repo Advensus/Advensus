@@ -446,14 +446,15 @@ class crudsouscrir(serializers.ModelSerializer):
     formation = FormationData(read_only=True)
     class Meta:
         model = souscrir
-        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','level_start','level_end','lieu_formation','formation']
+        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','level_start','level_end','lieu_formation','formation', 'montant_formation','solde']
 
 class AddSouscrir(serializers.ModelSerializer):
    
     class Meta:
         model = souscrir
 
-        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation']
+        fields = ['id','edof','training_status','hour_worked','duration','start_session','end_session','stagiaire','formation','level_start','level_end','lieu_formation', 'montant_formation',
+                'solde']
 
 #END CRUD SOUSCRIR
 

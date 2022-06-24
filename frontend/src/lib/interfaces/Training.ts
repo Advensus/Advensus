@@ -21,4 +21,6 @@ export interface ISubscription {
     level_start: string;
     level_end: string;
     lieu_formation: string;
+    solde: string;
+    montant_formation: string;
 }

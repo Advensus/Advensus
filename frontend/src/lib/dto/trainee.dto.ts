@@ -25,6 +25,8 @@ export interface NewTraineeDto {
     level_start: string;
     level_end: string;
     lieu_formation: string;
+    montant_formation: string;
+    solde: string;
 
     // For docs
     doc_categorie: string;
@@ -43,4 +45,6 @@ export interface NewTrainingFolderDto {
     level_start: string;
     level_end: string;
     lieu_formation: string;
+    montant_formation: string;
+    solde: string;
 }

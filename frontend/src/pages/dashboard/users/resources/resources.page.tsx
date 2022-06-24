@@ -14,6 +14,7 @@ import {
     UsersDisplayComponent,
     TrainerFormComponent,
     FullInformationsTabComponent,
+    EmptyComponent,
 } from "../../../../components";
 import {
     IUser,
@@ -35,6 +36,7 @@ import UserService from "../../../../services/user.service";
 import { Text } from "@fluentui/react";
 import { useId } from "@fluentui/react-hooks";
 import TrainingService from "../../../../services/training.service";
+import { LoadingComponent } from "../../../../components/loading_component/Loading.component";
 
 export interface IResourcesPageProps {
     default_props?: boolean;
@@ -63,6 +65,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
     const [trainings, setTrainings] = useState<ITraining[]>([]);
     const [pathLabel, setPathLabel] = useState<string>("");
     const [resource, setResource] = useState<IUser>();
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [selectedSortedItem, setSelectedSortedItem] =
         React.useState<IDropdownOption>();
@@ -172,6 +175,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                         "Error resp while gettind all users:",
                         response
                     );
+                    setLoading(false);
                     return [];
                 }
                 const datas = (await response.json()) as UserDtoIn;
@@ -185,10 +189,12 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                 setTrainers(trainer);
                 setSrps(srp);
                 setRps(rp);
+                setLoading(false);
                 return datas;
             })
             .catch((err) => {
                 console.log("error while getting users:", err);
+                setLoading(false);
             });
     };
 
@@ -281,7 +287,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                                                     : undefined
                                             }
                                             onChange={onChangeFiltered}
-                                            placeholder="Filtrer par OF"
+                                            placeholder="Filtrer par Catégorie"
                                             options={dropdownControlledFilterBy}
                                             styles={dropdownStyles}
                                         />
@@ -311,18 +317,22 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                                 <hr className="hr_solid" />
                             </div>
                             <div className="tab_content_trainer">
-                                {trainers.length &&
-                                pathLabel === PATH_LABEL_RESOURCES
-                                    ? trainers.map((_) => (
-                                          <UsersDisplayComponent
-                                              toggleTab={() =>
-                                                  toggleFullInfosTab(_)
-                                              }
-                                              detailsInfos={_}
-                                              key={_.id}
-                                          />
-                                      ))
-                                    : null}
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : trainers.length > 0 &&
+                                  pathLabel === PATH_LABEL_RESOURCES ? (
+                                    trainers.map((_) => (
+                                        <UsersDisplayComponent
+                                            toggleTab={() =>
+                                                toggleFullInfosTab(_)
+                                            }
+                                            detailsInfos={_}
+                                            key={_.id}
+                                        />
+                                    ))
+                                ) : (
+                                    <EmptyComponent messageText="Aucun Formateur trouvé" />
+                                )}
                             </div>
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div>
@@ -346,17 +356,21 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {srps.length
-                                        ? srps.map((_) => (
-                                              <UsersDisplayComponent
-                                                  toggleTab={() =>
-                                                      toggleFullInfosTab(_)
-                                                  }
-                                                  detailsInfos={_}
-                                                  key={_.id}
-                                              />
-                                          ))
-                                        : null}
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : srps.length > 0 ? (
+                                        srps.map((_) => (
+                                            <UsersDisplayComponent
+                                                toggleTab={() =>
+                                                    toggleFullInfosTab(_)
+                                                }
+                                                detailsInfos={_}
+                                                key={_.id}
+                                            />
+                                        ))
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun super rp trouvé" />
+                                    )}
                                 </div>
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
@@ -381,17 +395,21 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                             )}
                             {pathLabel === PATH_LABEL_RESOURCES && (
                                 <div className="tab_content_rps">
-                                    {rps.length
-                                        ? rps.map((_) => (
-                                              <UsersDisplayComponent
-                                                  toggleTab={() =>
-                                                      toggleFullInfosTab(_)
-                                                  }
-                                                  detailsInfos={_}
-                                                  key={_.id}
-                                              />
-                                          ))
-                                        : null}
+                                    {loading ? (
+                                        <LoadingComponent />
+                                    ) : rps.length ? (
+                                        rps.map((_) => (
+                                            <UsersDisplayComponent
+                                                toggleTab={() =>
+                                                    toggleFullInfosTab(_)
+                                                }
+                                                detailsInfos={_}
+                                                key={_.id}
+                                            />
+                                        ))
+                                    ) : (
+                                        <EmptyComponent messageText="Aucun rp trouvé" />
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -425,9 +443,9 @@ const dropdownControlledSortBy = [
     { key: "most_booking", text: "Réservations" },
 ];
 const dropdownControlledFilterBy = [
-    { key: "OF1", text: "OF1" },
+    { key: "Formateur", text: "Formateur" },
     { key: "divid3", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF2", text: "OF2" },
+    { key: "Super Rp", text: "Super Rp" },
     { key: "divid4", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "OF3", text: "OF3" },
+    { key: "Rp", text: "Rp" },
 ];

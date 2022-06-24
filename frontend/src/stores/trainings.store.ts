@@ -29,7 +29,6 @@ export const useTrainingsStore = create<TrainingsStore>(
 
             updateCurrentEdofTraining: (trainingByEdof): void => {
                 set({ trainingByEdof });
-                console.log({ trainingByEdof });
             },
         };
     }
