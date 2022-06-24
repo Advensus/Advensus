@@ -24,7 +24,7 @@ import TrainingFolderService from "../../../services/training-folder.service";
 export interface ITrainingFolderFormProps {
     default_props?: boolean;
     trainee: IUser;
-    onCreated: (data: ISubscription) => void;
+    onCreated: (data: ISubscription, user: IUser) => void;
 }
 
 export const TrainingFolderFormComponent: React.FC<
@@ -52,16 +52,23 @@ export const TrainingFolderFormComponent: React.FC<
     };
 
     const onSubmit = (val: NewTrainingFolderDto) => {
+        if (parseInt(val.duration) >= 4) {
+            val.solde = `${parseInt(val.duration) + 1}`;
+        } else {
+            val.solde = val.duration;
+        }
+        val.training_status = "Accepté";
         val.stagiaire = trainee.id;
         val.end_session = !endDate ? " " : formattingDate(endDate);
         val.start_session = !startDate ? " " : formattingDate(startDate);
+        console.log({ val });
         TrainingFolderService.new_training_folder(val)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
                 }
                 const data = (await response.json()) as ISubscription;
-                onCreated(data);
+                onCreated(data, trainee);
             })
             .catch((err) => {
                 console.log("error while adding new training folder:", err);
@@ -87,6 +94,8 @@ export const TrainingFolderFormComponent: React.FC<
             level_start: "",
             level_end: "",
             lieu_formation: "",
+            montant_formation: "",
+            solde: "",
         },
         onSubmit,
     });
@@ -163,14 +172,14 @@ export const TrainingFolderFormComponent: React.FC<
                     options={CurrentTraineeState}
                     label="Niveau visé par le stagiaire"
                 />
-                <TextField
+                {/* <TextField
                     type="text"
                     value={values.hour_worked}
                     onChange={handleChange}
                     placeholder="Heure(s) réalisé(s)"
                     name="hour_worked"
                     label="Heure(s) réalisée(s)"
-                />
+                /> */}
                 <TextField
                     type="text"
                     value={values.duration}
@@ -195,10 +204,10 @@ export const TrainingFolderFormComponent: React.FC<
 
                 <TextField
                     type="text"
-                    // value={values.horaire}
-                    // onChange={handleChange}
+                    value={values.montant_formation}
+                    onChange={handleChange}
                     placeholder="Montant de la formation"
-                    // name="horaire"
+                    name="montant_formation"
                     label="Montant de la formation"
                 />
                 <DatePicker
@@ -222,7 +231,7 @@ export const TrainingFolderFormComponent: React.FC<
                     value={endDate ? endDate : undefined}
                     label="Date de fin de session"
                 />
-                <Dropdown
+                {/* <Dropdown
                     selectedKey={values.training_status}
                     onChange={(
                         event: React.FormEvent<HTMLDivElement>,
@@ -233,7 +242,7 @@ export const TrainingFolderFormComponent: React.FC<
                     placeholder="Status du dossier"
                     options={FolderState}
                     label="Status du dossier"
-                />
+                /> */}
             </div>
             <div className="trainee_form_btns">
                 {/* <DefaultButton text="Annuler" onClick={cancel} /> */}
