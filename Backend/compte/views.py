@@ -440,7 +440,6 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		)
 		sauvegarde.path.save(paths,ContentFile("test"),save=False)
 
-	
 		print(sauvegarde.path)
 		
 	  

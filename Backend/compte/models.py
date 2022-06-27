@@ -38,7 +38,7 @@ class Courses(models.Model):
 class reservation(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=120)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True)
     # reserver = models.ManyToManyField(User,related_name='reservation_content_type')
     status = models.CharField(max_length=30)
     annuler = models.BooleanField(default=False)

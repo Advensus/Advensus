@@ -281,6 +281,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             val.proposer = null;
         }
         val.reserver = [user.id];
+        val.status = "En cours";
 
         val.start_date = dateStart;
         val.end_date = dateEnd;

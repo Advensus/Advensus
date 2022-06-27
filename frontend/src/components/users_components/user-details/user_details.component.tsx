@@ -209,6 +209,13 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                                                       _.montant_formation
                                                   }
                                               />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Matière concerné"
+                                                  valueWord={
+                                                      _.formation &&
+                                                      _.formation.intitule
+                                                  }
+                                              />
                                           </div>
                                       </Panel>
                                   </div>

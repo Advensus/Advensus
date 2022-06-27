@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "@fluentui/react";
+import { Separator, Text } from "@fluentui/react";
 import { Link } from "react-router-dom";
 import { ICourses, ISubscription } from "../../../lib";
 
@@ -13,10 +13,24 @@ export interface ITrainingFolderCardProps {
 export const TrainingFolderCardComponent: React.FC<
     ITrainingFolderCardProps
 > = ({ openPanel, subscriptionDetails, userIsBooking }) => {
+    const [bookingIsTrainings, setBookingIsTrainings] = useState<ICourses[]>(
+        []
+    );
+
     useEffect(() => {
-        console.log({ subscriptionDetails });
-        console.log({ userIsBooking });
-    }, []);
+        console.log("la souscription:", subscriptionDetails.formation.intitule);
+        console.log(
+            "le cours qui est en mm temps la réservation",
+            userIsBooking
+        );
+        const bookingRelatedToTraining = userIsBooking.filter(
+            (_) =>
+                // console.log("dans la réservation mm", _.lier.intitule)
+                _.lier.intitule === subscriptionDetails.formation.intitule
+        );
+        console.log({ bookingRelatedToTraining });
+        setBookingIsTrainings(bookingRelatedToTraining);
+    }, [userIsBooking]);
 
     return (
         <Link
@@ -45,7 +59,7 @@ export const TrainingFolderCardComponent: React.FC<
                     </div>
                     <div className="training_folder_card_body_squares_item">
                         <Text variant="small" style={{ fontWeight: "bold" }}>
-                            {userIsBooking && userIsBooking.length}
+                            {bookingIsTrainings && bookingIsTrainings.length}
                         </Text>
                         <Text variant="tiny">Réservé</Text>
                     </div>
@@ -58,6 +72,10 @@ export const TrainingFolderCardComponent: React.FC<
                 </div>
             </div>
             <div className="training_folder_card_footer">
+                <Text variant="tiny" style={{ fontWeight: "bold" }}>
+                    {subscriptionDetails.formation.intitule}
+                </Text>
+                <Separator vertical={true} />
                 <Text variant="tiny" style={{ fontWeight: "bold" }}>
                     {subscriptionDetails.training_status}
                 </Text>
