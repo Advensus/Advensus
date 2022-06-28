@@ -3,7 +3,9 @@ export interface NewBookingDto {
     description: string;
     status: string;
     start_date: Date | null | undefined | string;
+    start?: Date;
     end_date: Date | null | undefined | string;
+    end?: Date;
     reserver: string[];
     proposer?: string | null;
     concerner: string;

@@ -56,6 +56,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -130,6 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "compte.User"
 
 
+# X_FRAME_OPTIONS = 'ALLOWALL'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_ALL_ORIGINS = False

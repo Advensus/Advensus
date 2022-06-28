@@ -40,12 +40,14 @@ export const certificateUrls = {
 export const trainingProgramUrls = {
     NEW_TRAINING_PROGRAMM: `${prefixer}/auth/create/programme/`,
 };
-export const subscriptionUrls = {
-    GET_ALL_SUBSCRIPTION: `${prefixer}/auth/GetAllSouscription/`,
-};
 
 export const trainingFolderUrls = {
     NEW_TRAINING_FOLDER: `${prefixer}/auth/create/souscrir/`,
+    GET_ALL_SUBSCRIPTION: `${prefixer}/auth/GetAllSouscription/`,
+    GET_TRAINING_FOLDER_BY_ID: (id: string) =>
+        `${prefixer}/auth/GetSouscriptionById/${id}`,
+    EDIT_TRAINING_FOLDER_BALANCE: (id: string) =>
+        `${prefixer}/auth/UpdateSouscription/${id}/`,
 };
 
 export const companyUrls = {

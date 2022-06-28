@@ -1,10 +1,5 @@
 import BaseService from "./BaseService";
-import {
-    certificateUrls,
-    subscriptionUrls,
-    trainingProgramUrls,
-    trainingUrls,
-} from "./urls";
+import { certificateUrls, trainingProgramUrls, trainingUrls } from "./urls";
 
 class TrainingService {
     static new_training = (info: unknown) =>
@@ -32,10 +27,6 @@ class TrainingService {
             info,
             false
         );
-
-    // For Subscription
-    static get_all_subscription = () =>
-        BaseService.getRequest(subscriptionUrls.GET_ALL_SUBSCRIPTION, false);
 }
 
 export default TrainingService;

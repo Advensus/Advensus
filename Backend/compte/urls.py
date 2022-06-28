@@ -80,8 +80,11 @@ urlpatterns = [
 
     path('GetFormateurByFormation/<str:pk>/',views.getformateurbyformation),
     path('GetAdminBySociete/<str:pk>/',views.getadminbysociete),
-
+    
+    #Souscription
     path('GetAllSouscription/', views.viewallsouscription),
+    path('GetSouscriptionById/<str:pk>/', views.GetSouscriptionById),
+    path('UpdateSouscription/<str:pk>/', views.UpdateSouscription),
 
 
 ]
