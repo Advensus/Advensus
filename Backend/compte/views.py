@@ -436,11 +436,9 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 	
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
-<<<<<<< HEAD
+
 		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat3"+".pdf"
-=======
-		paths = "media/doc_generate/"+user.username+"_contrat"+".pdf"
->>>>>>> 134a6a957638a9f1235662f952762d176ddad27a
+
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
 		my_canvas.setFont('Helvetica', 12)
@@ -698,13 +696,10 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		sauvegarde_contrat = Document(
 			
 		)
-<<<<<<< HEAD
-		sauvegarde_contrat.path.save(paths,ContentFile("test"),save=False) 
-	 
-=======
+
 		sauvegarde.path.save(paths,ContentFile("test"),save=False)
 
->>>>>>> 134a6a957638a9f1235662f952762d176ddad27a
+
 	
 		print(sauvegarde_contrat.path)
 		
