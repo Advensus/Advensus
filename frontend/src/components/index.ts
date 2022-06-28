@@ -22,6 +22,7 @@ export * from "./forms/training_form/trainingForm.component";
 export * from "./forms/training_org_form/training_org_form.component";
 export * from "./forms/certificate_form/certificateForm.component";
 export * from "./forms/training_program_form/trainingProgramForm.component";
+export * from "./forms/training_folder_form/training_folder_form.component";
 
 export * from "./trainings_components/training-card/training_card.component";
 export * from "./trainings_components/training-details/training_details.component";

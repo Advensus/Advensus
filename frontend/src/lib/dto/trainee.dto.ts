@@ -25,8 +25,26 @@ export interface NewTraineeDto {
     level_start: string;
     level_end: string;
     lieu_formation: string;
+    montant_formation: string;
+    solde: string;
 
     // For docs
     doc_categorie: string;
     appartenir: string;
+}
+
+export interface NewTrainingFolderDto {
+    edof: string;
+    training_status: string | number | undefined;
+    hour_worked: string;
+    duration: string;
+    start_session: Date | null | undefined | string;
+    end_session: Date | null | undefined | string;
+    formation: string | number | undefined;
+    stagiaire: string;
+    level_start: string;
+    level_end: string;
+    lieu_formation: string;
+    montant_formation: string;
+    solde: string;
 }

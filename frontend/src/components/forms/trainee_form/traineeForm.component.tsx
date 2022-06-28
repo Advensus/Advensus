@@ -14,6 +14,7 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+    ISubscription,
     ITraining,
     IUser,
     NewDocDto,
@@ -212,13 +213,19 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     };
 
     const newTrainingFolder = (val: NewTraineeDto) => {
+        if (parseInt(val.duration) >= 4) {
+            val.solde = `${parseInt(val.duration) + 1}`;
+        } else {
+            val.solde = val.duration;
+        }
+        val.training_status = "Accepté";
         console.log({ val });
         TrainingFolderService.new_training_folder(val)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
                 }
-                const data = (await response.json()) as NewUserDtoIn;
+                const data = (await response.json()) as ISubscription;
                 console.log("the current adding training folder:", data);
                 // onCreate(data);
             })
@@ -270,6 +277,8 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             level_start: "Débutant, Intermédiare, Avancée",
             level_end: "",
             lieu_formation: "",
+            montant_formation: "",
+            solde: "",
 
             doc_categorie: "",
             appartenir: "",
@@ -325,13 +334,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                         onChange={handleChange}
                         placeholder="Phonenumber"
                         name="phone_number"
-                    />
-                    <TextField
-                        type="text"
-                        // value={values.competence}
-                        // onChange={handleChange}
-                        placeholder="Date de naissance"
-                        name="competence"
                     />
                     <TextField
                         type="password"
@@ -402,6 +404,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onChange={handleChange}
                     placeholder="EDOF"
                     name="edof"
+                    label="Numéro Edof"
                 />
                 <Dropdown
                     selectedKey={
@@ -411,13 +414,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onChange={onChangeTraining}
                     placeholder="Formtion(s)"
                     options={trainings}
-                />
-                <TextField
-                    type="text"
-                    value={values.hour_worked}
-                    onChange={handleChange}
-                    placeholder="Heure(s) réalisé(s)"
-                    name="hour_worked"
+                    label="Formation"
                 />
                 <TextField
                     type="text"
@@ -425,6 +422,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onChange={handleChange}
                     placeholder="Durée de la formation"
                     name="duration"
+                    label="Durée de la formation"
                 />
 
                 <Dropdown
@@ -442,10 +440,10 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
 
                 <TextField
                     type="text"
-                    // value={values.horaire}
-                    // onChange={handleChange}
+                    value={values.montant_formation}
+                    onChange={handleChange}
                     placeholder="Montant de la formation"
-                    // name="horaire"
+                    name="montant_formation"
                     label="Montant de la formation"
                 />
                 <DatePicker
@@ -468,18 +466,6 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onSelectDate={(d) => setEndDate(d)}
                     value={endDate ? endDate : undefined}
                     label="Date de fin de session"
-                />
-                <Dropdown
-                    selectedKey={values.training_status}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("training_status", item?.key);
-                    }}
-                    placeholder="Status du dossier"
-                    options={FolderState}
-                    label="Status du dossier"
                 />
                 <Dropdown
                     // selectedKey={selectedRp ? selectedRp.key : undefined}
@@ -517,6 +503,7 @@ const FolderState = [
     { key: "State4", text: "A débuté" },
     { key: "State5", text: "Reporté" },
     { key: "State6", text: "EXPIRÉ" },
+    { key: "State7", text: "Accepté" },
 ];
 const CurrentTraineeState = [
     { key: "Débutant", text: "Débutant" },

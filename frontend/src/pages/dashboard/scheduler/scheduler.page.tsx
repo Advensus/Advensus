@@ -275,6 +275,11 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     ) => {
         console.log({ dateStart });
         console.log({ dateEnd });
+        if (user.user_type === TRAINEE) {
+            val.proposer = val.assister;
+        } else {
+            val.proposer = null;
+        }
         val.reserver = [user.id];
 
         val.start_date = dateStart;
@@ -386,33 +391,11 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 .concat(
                     created.map((booking) => {
                         // Object.assign({}, item, { id: guid() })
-                        console.log({ booking });
-                        console.log("le test booiking:", booking.start);
-                        const theStart =
-                            booking.start.getFullYear() +
-                            "-" +
-                            (booking.start.getMonth() + 1) +
-                            "-" +
-                            booking.start.getDate() +
-                            " " +
-                            booking.start.getHours() +
-                            ":" +
-                            booking.start.getMinutes() +
-                            ":" +
-                            booking.start.getSeconds();
 
-                        const theEnd =
-                            booking.end.getFullYear() +
-                            "-" +
-                            (booking.end.getMonth() + 1) +
-                            "-" +
-                            booking.end.getDate() +
-                            " " +
-                            booking.end.getHours() +
-                            ":" +
-                            booking.end.getMinutes() +
-                            ":" +
-                            booking.end.getSeconds();
+                        console.log({ booking });
+                        const theStart = formattingDate(booking.start);
+
+                        const theEnd = formattingDate(booking.end);
                         addNewCourses(booking, theStart, theEnd);
                     })
                 )
@@ -436,8 +419,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         user.user_type === TEACHEAR || user.user_type === TRAINEE
             ? false
             : true;
-    console.log({ editableHandle });
-
     return (
         <div className="scheduler_container">
             <SchedulerConfigContext.Provider
@@ -460,7 +441,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     id="scheduler_body"
                     height={"100%"}
                     timezone={"Etc/UTC"}
-                    viewItem={ProportionalViewItem}
+                    viewItem={CustomViewItem}
                     onDataChange={handleDataChange}
                     editable={{
                         add: true,
@@ -521,7 +502,7 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
             {...props}
             style={{
                 ...props.style,
-                minHeight: 50,
+                minHeight: 80,
                 maxHeight: 120,
             }}
         />
@@ -529,15 +510,17 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
 };
 
 export const CustomViewItem = (props: SchedulerViewItemProps) => {
-    return (
-        <SchedulerViewItem
-            {...props}
-            style={{
-                ...props.style,
-                height: "auto",
-            }}
-        />
-    );
+    let myCustomTitle = `${props.dataItem.title} | Formateur: ${props.dataItem.ownerID.username} | Stagiaire: ${props.dataItem.personId.username}`;
+    // let myCustomTitle =
+    //     props.dataItem.title +
+    //     " | Formateur: " +
+    //     " " +
+    //     props.dataItem.ownerID.username +
+    //     " " +
+    //     "| Stagiaire: " +
+    //     props.dataItem.personId.username;
+
+    return <SchedulerViewItem {...props} title={myCustomTitle} />;
 };
 
 export const ProportionalViewItem = (props: any) => {
@@ -545,7 +528,7 @@ export const ProportionalViewItem = (props: any) => {
     let myCustomTitle = props.dataItem.title;
     // let trainee = "Stagiaire: " + props.dataItem.concerner.assister.first_name;
     let trainer = "Formateur: " + props.dataItem.ownerID.username;
-    console.log({ props });
+    // console.log({ props });
     return (
         <SchedulerViewItem
             {...props}

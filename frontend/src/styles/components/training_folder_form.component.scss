@@ -1,0 +1,25 @@
+.training_folder_form_container {
+    color: #000;
+    overflow: auto;
+    padding: 0 10px 0 0;
+}
+
+.training_folder_fields {
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.trainee_form_btns {
+    margin: 10px 5px;
+}
+
+// .trainee_form_input {
+//     border-radius: 20px;
+// }
+
+.training_folder_form_hr_solid {
+    border-top: 0.1em solid black;
+    border-bottom: 0;
+    margin-top: 2px;
+}

@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "@fluentui/react";
 import { Link } from "react-router-dom";
-import { ISubscription } from "../../../lib";
+import { ICourses, ISubscription } from "../../../lib";
 
 export interface ITrainingFolderCardProps {
     default_props?: boolean;
     openPanel: () => void;
     subscriptionDetails: ISubscription;
+    userIsBooking: ICourses[];
 }
 
 export const TrainingFolderCardComponent: React.FC<
     ITrainingFolderCardProps
-> = ({ openPanel, subscriptionDetails }) => {
+> = ({ openPanel, subscriptionDetails, userIsBooking }) => {
+    useEffect(() => {
+        console.log({ subscriptionDetails });
+        console.log({ userIsBooking });
+    }, []);
+
     return (
         <Link
             to="#"
@@ -39,13 +45,13 @@ export const TrainingFolderCardComponent: React.FC<
                     </div>
                     <div className="training_folder_card_body_squares_item">
                         <Text variant="small" style={{ fontWeight: "bold" }}>
-                            2
+                            {userIsBooking && userIsBooking.length}
                         </Text>
                         <Text variant="tiny">Réservé</Text>
                     </div>
                     <div className="training_folder_card_body_squares_item">
                         <Text variant="small" style={{ fontWeight: "bold" }}>
-                            7
+                            {subscriptionDetails.solde}
                         </Text>
                         <Text variant="tiny">Solde</Text>
                     </div>

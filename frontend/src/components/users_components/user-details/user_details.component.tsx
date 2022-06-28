@@ -1,7 +1,8 @@
 import { IconButton, IIconProps, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import { AttributeDisplayComponent } from "../../";
+import { AttributeDisplayComponent, TrainingFolderFormComponent } from "../../";
 import {
+    ICourses,
     ISubscription,
     IUser,
     PATH_LABEL_CUSTOMER,
@@ -12,6 +13,7 @@ import { TrainingFolderCardComponent } from "../../trainings_components/training
 import { DefaultButton } from "@fluentui/react/lib/Button";
 import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "@fluentui/react-hooks";
+import { useSubscriptionStore } from "../../../stores/subscription.store";
 
 export interface IUserDetailsProps {
     default_props?: boolean;
@@ -25,24 +27,40 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
     contentToDetail,
     currentPath,
 }) => {
+    const { getTraineeNewSubscription } = useSubscriptionStore();
     const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] =
         useBoolean(false);
+    const [
+        isNewTrainingFileOpen,
+        {
+            setTrue: openPanelNewTrainingFile,
+            setFalse: dismissPanelNewTrainingFile,
+        },
+    ] = useBoolean(false);
     const [subscriptionInfos, setSubscriptionInfos] = useState<ISubscription[]>(
         []
     );
+    const [bookingInfos, setBookingInfos] = useState<ICourses[]>([]);
 
     useEffect(() => {
         console.log({ contentToDetail });
-        console.log("infos souscription:", contentToDetail?.assister);
         if (contentToDetail) {
             // contentToDetail.souscrirs
             if (contentToDetail.souscrirs)
                 setSubscriptionInfos(contentToDetail.souscrirs);
+            if (contentToDetail.assister)
+                setBookingInfos(contentToDetail.assister);
             // if (contentToDetail.assister_courses)
             //     setUserIsBooking(contentToDetail.assister_courses);
             // : null;
         }
     }, [contentToDetail]);
+
+    const handleOnCreate = (data: ISubscription, traineeUser: IUser) => {
+        setSubscriptionInfos([data, ...subscriptionInfos]);
+        getTraineeNewSubscription(data, traineeUser);
+        dismissPanelNewTrainingFile();
+    };
 
     return (
         <div className="user_details_container">
@@ -104,7 +122,26 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                             // menuIconProps={{ iconName: "ClipboardListAdd" }}
                             ariaLabel="add"
                             title="Nouvelle Formation"
+                            onClick={openPanelNewTrainingFile}
                         />
+                        <div>
+                            <Panel
+                                isLightDismiss
+                                isOpen={isNewTrainingFileOpen}
+                                onDismiss={dismissPanelNewTrainingFile}
+                                closeButtonAriaLabel="Close"
+                                headerText="Nouveau dossier"
+                            >
+                                <div>
+                                    {contentToDetail && (
+                                        <TrainingFolderFormComponent
+                                            trainee={contentToDetail}
+                                            onCreated={handleOnCreate}
+                                        />
+                                    )}
+                                </div>
+                            </Panel>
+                        </div>
                     </div>
                     <hr className="hr_user_details_training_folder" />
                     {subscriptionInfos.length > 0
@@ -114,6 +151,7 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                                       openPanel={openPanel}
                                       key={_.edof}
                                       subscriptionDetails={_}
+                                      userIsBooking={bookingInfos}
                                   />
                                   <div style={{ backgroundColor: "yellow" }}>
                                       <Panel
@@ -158,8 +196,18 @@ export const UserDetailsComponent: React.FC<IUserDetailsProps> = ({
                                                   valueWord={_.duration + "H"}
                                               />
                                               <AttributeDisplayComponent
+                                                  keyWord="Solde"
+                                                  valueWord={_.solde + "H"}
+                                              />
+                                              <AttributeDisplayComponent
                                                   keyWord="Heure(s) réalisée(s)"
                                                   valueWord={_.hour_worked}
+                                              />
+                                              <AttributeDisplayComponent
+                                                  keyWord="Montant de la formation"
+                                                  valueWord={
+                                                      _.montant_formation
+                                                  }
                                               />
                                           </div>
                                       </Panel>

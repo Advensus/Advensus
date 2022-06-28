@@ -1,7 +1,7 @@
 // import config from 'config'
 // /*Urls for the application */
-export const prefixer = "http://127.0.0.1:8000";
-// export const prefixer = "http://185.215.180.164:8000";
+// export const prefixer = "http://127.0.0.1:8000";
+export const prefixer = "http://185.215.180.164:8000";
 
 export const authUrls = {
     LOGIN_USER: `${prefixer}/auth/login/`,
