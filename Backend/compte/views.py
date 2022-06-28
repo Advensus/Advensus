@@ -36,14 +36,12 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.http.response import JsonResponse
 from django.core.files.base import ContentFile
-<<<<<<< HEAD
 import requests
 from reportlab.graphics.shapes import *
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import Frame,Table 
 
-=======
->>>>>>> 134a6a957638a9f1235662f952762d176ddad27a
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
