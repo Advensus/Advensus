@@ -698,12 +698,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		sauvegarde_contrat.path.save(paths, ContentFile("test"), save=False)
 
 
-<<<<<<< HEAD
-		print(sauvegarde.path)
-=======
 	
 		print(sauvegarde_contrat.path)
->>>>>>> 004d4948bcf1580fcefa90091ee62c40e79fbd86
 		
 	  
  		
