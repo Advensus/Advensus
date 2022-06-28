@@ -721,7 +721,10 @@ export const FullInformationsTabComponent: React.FC<
                                         {userIsBooking &&
                                         userIsBooking.length > 0 ? (
                                             userIsBooking.map((_) => (
-                                                <div key={_.id}>
+                                                <div
+                                                    key={_.id}
+                                                    style={{ height: "75px" }}
+                                                >
                                                     <BookingCardComponent
                                                         openPanel={openPanel}
                                                         BookingInfos={_}
@@ -742,6 +745,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Réservation ID"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .id
@@ -750,6 +755,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Titre Réservation"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .title
@@ -758,6 +765,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Status Réservation"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .status
@@ -766,6 +775,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Début"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .start_date
@@ -774,6 +785,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Fin"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .end_date
@@ -782,6 +795,8 @@ export const FullInformationsTabComponent: React.FC<
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Description"
                                                                     valueWord={
+                                                                        _.reservation !=
+                                                                            null &&
                                                                         _
                                                                             .reservation
                                                                             .description
