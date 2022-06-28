@@ -692,10 +692,10 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# response = requests.get(settings.MEDIA_URL+paths, stream=True)
 		
 		sauvegarde_contrat = Document(
-			
+			path=paths
 		)
 	
-		sauvegarde_contrat.path.save(save=False)
+		sauvegarde_contrat.path.save(paths, ContentFile("test"), save=False)
 
 
 	
@@ -782,9 +782,9 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		p.showPage()
 		p.save()
 		sauvegarde_formation = Document(
-			
+			path=paths2
 		)
-		sauvegarde_formation.path.save(paths2,ContentFile("test"),save=False) 
+		sauvegarde_formation.path.save(paths2, ContentFile("test"),save=False) 
 	 
 	
 		print(sauvegarde_formation.path)
