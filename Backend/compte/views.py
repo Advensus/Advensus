@@ -694,8 +694,8 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		sauvegarde_contrat = Document(
 			
 		)
-
-		sauvegarde.path.save(paths,ContentFile("test"),save=False)
+	
+		sauvegarde_contrat.path.save(save=False)
 
 
 	
