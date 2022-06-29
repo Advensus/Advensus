@@ -184,19 +184,20 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     };
 
     const formattingDate = (fullDate: Date) => {
-        return (
-            fullDate.getFullYear() +
-            "-" +
-            (fullDate.getMonth() + 1) +
-            "-" +
-            fullDate.getDate() +
-            " " +
-            fullDate.getHours() +
-            ":" +
-            fullDate.getMinutes() +
-            ":" +
-            fullDate.getSeconds()
-        );
+        if (fullDate)
+            return (
+                fullDate.getFullYear() +
+                "-" +
+                (fullDate.getMonth() + 1) +
+                "-" +
+                fullDate.getDate() +
+                " " +
+                fullDate.getHours() +
+                ":" +
+                fullDate.getMinutes() +
+                ":" +
+                fullDate.getSeconds()
+            );
     };
 
     const currentYear = new Date().getFullYear();
@@ -282,26 +283,79 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 return response.json();
             })
             .then((folderResp: ISubscription) => {
-                console.log("the founded trainin folder is:", folderResp);
+                console.log("the founded trainin folder is:", folderResp.solde);
                 console.log("values dans get by id:", value);
 
-                console.log("le début:", value.start);
-                console.log("la fin:", value.end);
                 const startedHour = value.start?.getHours();
-                const startedMin = value.start?.getMinutes();
-                console.log({ startedHour });
-                console.log({ startedMin });
+                const startedMin = value.start ? value.start?.getMinutes() : 0;
 
                 const endedHour = value.end?.getHours();
-                const endedMin = value.end?.getMinutes();
-                console.log({ endedHour });
-                console.log({ endedMin });
-
+                const endedMin = value.end ? value.end.getMinutes() : 0;
                 const nberHour =
-                    endedHour && startedHour && endedHour - startedHour;
-                const nberMin = endedMin && startedMin && endedMin - startedMin;
-                console.log({ nberHour });
-                console.log({ nberMin });
+                    endedHour && startedHour ? endedHour - startedHour : 0;
+
+                const nberMin =
+                    startedMin > endedMin
+                        ? startedMin - endedMin
+                        : endedMin - startedMin;
+
+                if (nberHour === 0) {
+                    if (nberMin === 0) {
+                        console.log("Opération impossible!!!");
+                    } else {
+                        console.log("on soustrais des min de ancien solde");
+                        const newBalanceWithMinutes =
+                            parseInt(folderResp.solde) - 1 + ":" + nberMin;
+                        folderResp.solde = newBalanceWithMinutes;
+                    }
+                } else if (nberHour === 1) {
+                    if (nberMin === 0) {
+                        console.log("on soustrait juste 1h de ancine solde");
+                        const newBalance =
+                            parseInt(folderResp.solde) - nberHour;
+                        folderResp.solde = newBalance.toString();
+                    } else {
+                        console.log("on soustrait uniquement les minutes ");
+                        const newBalanceWithMinutes =
+                            parseInt(folderResp.solde) -
+                            nberHour +
+                            ":" +
+                            nberMin;
+                        folderResp.solde = newBalanceWithMinutes;
+                    }
+                } else {
+                    if (nberMin === 0) {
+                        console.log("on soustrait juste le nombre heure");
+                        const newBalance =
+                            parseInt(folderResp.solde) - nberHour;
+                        folderResp.solde = newBalance.toString();
+                    } else {
+                        console.log(
+                            "on soustrait heure et minute sur ancien solde "
+                        );
+                        const newBalance =
+                            parseInt(folderResp.solde) - nberHour;
+                        const newBalanceWithMinutes =
+                            newBalance - 1 + ":" + nberMin;
+                        folderResp.solde = newBalanceWithMinutes;
+                    }
+                }
+                console.log(
+                    "solde après soustraction:",
+                    parseInt(folderResp.solde)
+                );
+                if (parseInt(folderResp.solde) > 0) {
+                    const theStart = value.start && formattingDate(value.start);
+                    const theEnd = value.end && formattingDate(value.end);
+                    theStart &&
+                        theEnd &&
+                        addNewCourses(value, theStart, theEnd); // after vérification we can add new
+                    editTrainingFolderBalance(folderResp.id, folderResp);
+                } else {
+                    console.log(
+                        "Impossible d'ajouter une nouvelle réservation!!!"
+                    );
+                }
             })
             .catch((err) => {
                 console.log("error while getting taining folder by id", err);
@@ -309,6 +363,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     };
 
     const editTrainingFolderBalance = (id: string, values: ISubscription) => {
+        console.log({ values });
         TrainingFolderService.edit_training_folder_balance(id, values)
             .then(async (response) => {
                 if (response.status !== 200) {
@@ -318,7 +373,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 }
                 const editedFolder = (await response.json()) as ISubscription;
                 console.log("The modif made:", editedFolder);
-
                 return editedFolder;
             })
             .catch((err) => {
@@ -369,8 +423,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         end: string
     ) => {
         console.log({ value });
-        if (value.proposer) getTrainingFolderByIsId(value.proposer, value);
-        console.log("the training folder val:", value.proposer);
 
         BookingService.create_new_courses(value)
             .then(async (response) => {
@@ -418,51 +470,77 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         console.log({ updated, created, deleted });
         console.log({ deleted });
         // console.log("deleted:", updated[0].recurrenceExceptions[0]);
-        if (updated.length > 0 && updated[0].recurrenceExceptions === null) {
-            const Start_Date = formattingDate(updated[0].start);
-            const End_Date = formattingDate(updated[0].end);
-            const updatedDataBooking: NewBookingDto = {
-                title: updated[0].title,
-                description: updated[0].description,
-                status: updated[0].state,
-                start_date: Start_Date,
-                end_date: End_Date,
-                reserver: [user.id],
-                concerner: updated[0].coursesId,
-                superviser: updated[0].ownerID.id,
-                // assister: updated[0].personId != null && updated[0].personId.id,
-            };
-            console.log("the update go on:", updated[0]);
-            if (user.user_type != TRAINEE && user.user_type != TEACHEAR) {
-                editBooking(updated[0].id, updatedDataBooking);
-            }
-        }
+        // if (updated.length > 0 && updated[0].recurrenceExceptions === null) {
+        //     const Start_Date = formattingDate(updated[0].start);
+        //     const End_Date = formattingDate(updated[0].end);
+        //     const updatedDataBooking: NewBookingDto = {
+        //         title: updated[0].title,
+        //         description: updated[0].description,
+        //         status: updated[0].state,
+        //         start_date: Start_Date,
+        //         end_date: End_Date,
+        //         reserver: [user.id],
+        //         concerner: updated[0].coursesId,
+        //         superviser: updated[0].ownerID.id,
+        //         // assister: updated[0].personId != null && updated[0].personId.id,
+        //     };
+        //     console.log("the update go on:", updated[0]);
+        //     if (user.user_type != TRAINEE && user.user_type != TEACHEAR) {
+        //         editBooking(updated[0].id, updatedDataBooking);
+        //     }
+        // }
         setData((old) =>
             old
                 // Filter the deleted items
-                .filter(
-                    (item) =>
-                        deleted.find((current) => current.id === item.id) ===
-                        undefined
-                    // deleted.find((current) => current.id === item.id) ===
-                    // undefined
+                .filter((item) =>
+                    deleted.find((current) =>
+                        console.log("dand le deleted:", current)
+                    )
                 )
                 // Find and replace the updated items
-                .map(
-                    (item) =>
-                        updated.find((current) => current.id === item.id) ||
-                        item
+                .concat(
+                    // updated.find((current) => current.id === item.id) ||
+                    // item
+                    console.log({ updated }),
+                    updated.find((bookingToEdit) => {
+                        console.log("the bookin", bookingToEdit);
+
+                        const Start_Date = formattingDate(bookingToEdit.start);
+                        const End_Date = formattingDate(bookingToEdit.end);
+                        const updatedDataBooking: NewBookingDto = {
+                            title: bookingToEdit.title,
+                            description: bookingToEdit.description,
+                            status: bookingToEdit.state,
+                            start_date: Start_Date,
+                            end_date: End_Date,
+                            reserver: [user.id],
+                            concerner: bookingToEdit.coursesId,
+                            superviser:
+                                bookingToEdit.ownerID &&
+                                bookingToEdit.ownerID.id,
+                            // assister: bookingToEdit.personId != null && bookingToEdit.personId.id,
+                        };
+                        console.log("the update go on:", bookingToEdit);
+                        if (
+                            user.user_type != TRAINEE &&
+                            user.user_type != TEACHEAR
+                        ) {
+                            editBooking(bookingToEdit.id, updatedDataBooking);
+                        }
+                    })
                 )
                 // Add the newly created items and assign an `id`.
                 .concat(
-                    created.map((booking) => {
+                    created.map((booking: NewBookingDto) => {
                         // Object.assign({}, item, { id: guid() })
 
                         console.log({ booking });
-                        const theStart = formattingDate(booking.start);
 
-                        const theEnd = formattingDate(booking.end);
-                        addNewCourses(booking, theStart, theEnd);
+                        booking.proposer &&
+                            getTrainingFolderByIsId(booking.proposer, booking);
+                        // theStart &&
+                        //     theEnd &&
+                        //     addNewCourses(booking, theStart, theEnd);
                     })
                 )
         );
