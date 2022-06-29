@@ -435,7 +435,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
 
-		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat"+".pdf"
+		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_"+souscris_formation.formation.intitule+"_contrat"+".pdf"
 
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
@@ -692,10 +692,10 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# response = requests.get(settings.MEDIA_URL+paths, stream=True)
 		
 		sauvegarde_contrat = Document(
-			path=paths
+			
 		)
 	
-		sauvegarde_contrat.path.save("doc_generate/"+user.username.replace(" ", "")+"_contrat"+".pdf", ContentFile("test"), save=False)
+		sauvegarde_contrat.path.save(paths, ContentFile("test"), save=False)
 
 
 	
@@ -718,7 +718,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# 	print(d.sign.url)
 
 		#fiche information
-		paths2 = "media/doc_generate/"+user.username.replace(" ", "")+"_formation"+".pdf"
+		paths2 = "media/doc_generate/"+user.username.replace(" ", "")+"_"+souscris_formation.formation.intitule+"_formation"+".pdf"
 		p = canvas.Canvas(paths2,pagesize=letter)
 
     
@@ -781,10 +781,11 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 
 		p.showPage()
 		p.save()
+	
 		sauvegarde_formation = Document(
-			path=paths2
+			
 		)
-		sauvegarde_formation.path.save("doc_generate/"+user.username.replace(" ", "")+"_formation"+".pdf",ContentFile("test"),save=False) 
+		sauvegarde_formation.path.save(paths2,ContentFile("test"),save=False) 
 	 
 	
 		print(sauvegarde_formation.path)
