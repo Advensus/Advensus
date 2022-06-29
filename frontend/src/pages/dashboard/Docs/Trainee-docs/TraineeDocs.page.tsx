@@ -58,7 +58,15 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                                             {/* <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik">
                                                 Loading pdf
                                             </iframe> */}
-                                            <iframe src={prefixer + _.path}>
+                                            <iframe
+                                                src={
+                                                    "https://docs.google.com/gview?url=" +
+                                                    prefixer +
+                                                    _.path
+                                                }
+                                                height="700"
+                                                width="300"
+                                            >
                                                 Loading pdf
                                             </iframe>
 

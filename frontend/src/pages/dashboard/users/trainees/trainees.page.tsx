@@ -354,8 +354,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                             >
                                 {loading ? (
                                     <LoadingComponent />
-                                ) : filteredTrainees.length > 0 &&
-                                  pathLabel === PATH_LABEL_CUSTOMER ? (
+                                ) : filteredTrainees.length > 0 ? (
                                     filteredTrainees.map((_) => (
                                         <TraineeDisplayComponent
                                             toggleTab={() =>

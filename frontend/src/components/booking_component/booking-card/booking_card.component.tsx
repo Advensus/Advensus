@@ -20,13 +20,15 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
     useEffect(() => {
         console.log("the time:", BookingInfos.reservation);
 
-        const indexOfT = `${BookingInfos.reservation.start_date}`.lastIndexOf(
-            "T"
-        );
-        const bookingStartDay =
-            `${BookingInfos.reservation.start_date}`.substring(0, indexOfT);
-        const bookingStartTime =
-            `${BookingInfos.reservation.start_date}`.substring(indexOfT + 1);
+        const indexOfT = `${
+            BookingInfos.reservation && BookingInfos.reservation.start_date
+        }`.lastIndexOf("T");
+        const bookingStartDay = `${
+            BookingInfos.reservation && BookingInfos.reservation.start_date
+        }`.substring(0, indexOfT);
+        const bookingStartTime = `${
+            BookingInfos.reservation && BookingInfos.reservation.start_date
+        }`.substring(indexOfT + 1);
         setStartDay(bookingStartDay);
         setStartTime(bookingStartTime);
     }, []);
@@ -44,7 +46,8 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
             <div className="booking_card_infos">
                 <div className="booing_card_infos_header">
                     <Text variant="mediumPlus">
-                        {BookingInfos.reservation.title}
+                        {BookingInfos.reservation &&
+                            BookingInfos.reservation.title}
                     </Text>
                     <div className="booking_card_container_hide">
                         <IconButton

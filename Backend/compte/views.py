@@ -1191,6 +1191,30 @@ def viewallsouscription(request):
 
 	return Response(serializer.data)
 
+@csrf_exempt
+@api_view(['PATCH'])
+def UpdateSouscription(request,pk):
+	donnee =  souscrir.objects.get(id=pk)
+	
+	if request.method == "PATCH":
+		souscription_data = JSONParser().parse(request)
+		serializer = crudsouscrir(donnee,data=souscription_data)
+	
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data) 
+		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+
+@api_view(['GET'])
+@csrf_exempt
+# @permission_classes([IsAuthenticated])	
+def GetSouscriptionById(request, pk):
+	serializer_class = crudsouscrir
+	donnee = souscrir.objects.get(id=pk)
+	serializer = serializer_class(donnee, many=False)
+	return Response(serializer.data)
+
 
 #CRUD DOCUMENT 
 

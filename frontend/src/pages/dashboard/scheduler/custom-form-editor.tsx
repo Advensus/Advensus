@@ -70,17 +70,17 @@ export const CustomFormEditor = (props: SchedulerFormEditorProps) => {
             </div> */}
 
             <div className="k-form-field">
-                <Label>Description</Label>
+                <Label>Commentaire</Label>
                 <div className="k-form-field-wrap">
                     <Field name={"description"} component={Input} rows={1} />
                 </div>
             </div>
-            <div className="k-form-field">
+            {/* <div className="k-form-field">
                 <Label>Status de la Réservation</Label>
                 <div className="k-form-field-wrap">
                     <Field name={"status"} component={Input} rows={1} />
                 </div>
-            </div>
+            </div> */}
             {/* <div className="k-form-field">
                 <Label>Début</Label>
                 <div className="k-form-field-wrap">

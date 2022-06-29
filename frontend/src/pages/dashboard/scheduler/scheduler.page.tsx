@@ -36,10 +36,12 @@ import {
     SUPER_USER,
     TRAINEE,
     TEACHEAR,
+    ISubscription,
 } from "../../../lib";
 import { useAuthStore } from "../../../stores";
 import BookingService from "../../../services/booking.service";
 import { useLocation } from "react-router-dom";
+import TrainingFolderService from "../../../services/training-folder.service";
 
 export interface ISchedulerPageProps {
     default_props?: boolean;
@@ -268,6 +270,63 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             });
     };
 
+    const getTrainingFolderByIsId = (id: string, value: NewBookingDto) => {
+        TrainingFolderService.get_training_folder_by_id(id)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert('error getting users');
+                    console.log("the error resp", response);
+                    return [];
+                }
+                return response.json();
+            })
+            .then((folderResp: ISubscription) => {
+                console.log("the founded trainin folder is:", folderResp);
+                console.log("values dans get by id:", value);
+
+                console.log("le début:", value.start);
+                console.log("la fin:", value.end);
+                const startedHour = value.start?.getHours();
+                const startedMin = value.start?.getMinutes();
+                console.log({ startedHour });
+                console.log({ startedMin });
+
+                const endedHour = value.end?.getHours();
+                const endedMin = value.end?.getMinutes();
+                console.log({ endedHour });
+                console.log({ endedMin });
+
+                const nberHour =
+                    endedHour && startedHour && endedHour - startedHour;
+                const nberMin = endedMin && startedMin && endedMin - startedMin;
+                console.log({ nberHour });
+                console.log({ nberMin });
+            })
+            .catch((err) => {
+                console.log("error while getting taining folder by id", err);
+            });
+    };
+
+    const editTrainingFolderBalance = (id: string, values: ISubscription) => {
+        TrainingFolderService.edit_training_folder_balance(id, values)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    //@TODO #4
+                    // alert("Error editing product");
+                    return;
+                }
+                const editedFolder = (await response.json()) as ISubscription;
+                console.log("The modif made:", editedFolder);
+
+                return editedFolder;
+            })
+            .catch((err) => {
+                //@TODO #4
+                console.log("Error while editing training folder:", err);
+            });
+    };
+
     const addNewBooking = (
         val: NewBookingDto,
         dateStart: string,
@@ -281,6 +340,10 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             val.proposer = null;
         }
         val.reserver = [user.id];
+        val.status = "En cours";
+
+        console.log("a la recherche de edof", val.proposer);
+        // const theBooking = bookingData.find((_) => _.)
 
         val.start_date = dateStart;
         val.end_date = dateEnd;
@@ -306,6 +369,9 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
         end: string
     ) => {
         console.log({ value });
+        if (value.proposer) getTrainingFolderByIsId(value.proposer, value);
+        console.log("the training folder val:", value.proposer);
+
         BookingService.create_new_courses(value)
             .then(async (response) => {
                 if (response.status !== 200) {

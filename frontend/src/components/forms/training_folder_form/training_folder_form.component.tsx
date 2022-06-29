@@ -36,6 +36,7 @@ export const TrainingFolderFormComponent: React.FC<
     );
     const [startDate, setStartDate] = useState<Date | null | undefined>();
     const [trainings, setTrainings] = useState<IDropdownOption[]>([]);
+    const [allTheTrainings, setAllTheTrainings] = useState<ITraining[]>([]);
 
     useEffect(() => {
         getAllTraining();
@@ -57,12 +58,75 @@ export const TrainingFolderFormComponent: React.FC<
         } else {
             val.solde = val.duration;
         }
+
         val.training_status = "Accepté";
         val.stagiaire = trainee.id;
         val.end_session = !endDate ? " " : formattingDate(endDate);
         val.start_session = !startDate ? " " : formattingDate(startDate);
         console.log({ val });
-        TrainingFolderService.new_training_folder(val)
+        const currentTraining = allTheTrainings.find(
+            (_) => _.id === val.formation
+        );
+        // Handle unique subscription/training-level
+        if (trainee.souscrirs && val) {
+            console.log("infos du dossier mm mm:", trainee.souscrirs);
+            if (
+                trainee.souscrirs.find(
+                    (_) =>
+                        currentTraining &&
+                        _.formation.intitule === currentTraining.intitule
+                )
+            ) {
+                if (
+                    trainee.souscrirs.find(
+                        (_) => _.level_start === val.level_start
+                    )
+                ) {
+                    if (
+                        trainee.souscrirs.find(
+                            (_) => _.level_end === val.level_end
+                        )
+                    ) {
+                        // exist training folder
+                        console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
+                    } else {
+                        if (
+                            trainee.souscrirs.find(
+                                (_) => val.level_start === val.level_end
+                            )
+                        ) {
+                            // impossible to add
+                            console.log(
+                                "le level de départ doit être inférieur au level de fin!"
+                            );
+                        } else {
+                            // do add new folder
+                            doAddNewFolder(val);
+                            console.log("AJOUT 3");
+                        }
+                    }
+                } else {
+                    if (val.level_start === val.level_end) {
+                        // impossible to add
+                        console.log(
+                            "le level de départ doit être inférieur au level de fin!"
+                        );
+                    } else {
+                        // do add new folder
+                        doAddNewFolder(val);
+                        console.log("AJOUT 1");
+                    }
+                }
+            } else {
+                // do add new folder directly
+                doAddNewFolder(val);
+                console.log("AJOUT 2");
+            }
+        }
+    };
+
+    const doAddNewFolder = (all_values: NewTrainingFolderDto) =>
+        TrainingFolderService.new_training_folder(all_values)
             .then(async (response) => {
                 if (response.status !== 200) {
                     console.log({ response });
@@ -73,7 +137,6 @@ export const TrainingFolderFormComponent: React.FC<
             .catch((err) => {
                 console.log("error while adding new training folder:", err);
             });
-    };
 
     const {
         values,
@@ -115,6 +178,7 @@ export const TrainingFolderFormComponent: React.FC<
                     return { key: _.id, text: _.intitule };
                 });
                 setTrainings(dropTraining);
+                setAllTheTrainings(trainingsResp);
             })
             .catch((err) => {
                 console.log("error while gettting all trainings:", err);
