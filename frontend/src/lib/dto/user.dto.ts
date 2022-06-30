@@ -1,6 +1,17 @@
 import { IDropdownOption } from "@fluentui/react";
 import { IUser } from "../interfaces/User";
 
+interface IFromUntil {
+    from: string | number;
+    until: string | number;
+    break?: IBreakOfDay[];
+}
+
+interface IBreakOfDay {
+    from: string;
+    to: string;
+}
+
 export interface NewUserDto {
     username: string;
     first_name: string;
@@ -13,6 +24,26 @@ export interface NewUserDto {
     appartenir_societe?: string | number | undefined;
     cv?: string | Blob;
     organisme_formation?: string | number | undefined;
+
+    daysOfWeek?: {
+        monday: IFromUntil;
+        tuesday: IFromUntil;
+        wednesday: IFromUntil;
+        thursday: IFromUntil;
+        friday: IFromUntil;
+        saturday: IFromUntil;
+        sunday: IFromUntil;
+        attached: string;
+    };
+    // daysOfWeekToStok?: {
+    //     monday: string;
+    //     tuesday: string;
+    //     wednesday: string;
+    //     thursday: string;
+    //     friday: string;
+    //     saturday: string;
+    //     sonday: string;
+    // };
 }
 
 export interface NewUserDtoOut {

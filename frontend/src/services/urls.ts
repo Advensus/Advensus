@@ -23,6 +23,7 @@ export const userUls = {
         `${prefixer}/auth/GetFormateurByFormation/${id}`,
     GET_TRAINEE_BY_ORG_ID: (id: string) =>
         `${prefixer}/auth/GetStagaireByOrg/${id}`,
+    ADD_FORMER_SCHEDULE: `${prefixer}/auth/CreateFormerSchedule/`,
 };
 
 export const trainingUrls = {

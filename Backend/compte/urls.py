@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import CreateDocumentsStagiaire,CreateCertificate,CreateProgramme,CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument, viewallreservations
+from .views import CreateDocumentsStagiaire,CreateCertificate,CreateProgramme,CreateCourses,CreateReservation,login_org,CreateSociete,AddSouscrir,RegisterStagiaire,CreateOrganisme,VerifyEmail,RegisterFormateur,CreateSociete,RegisterResponsableP,RegisterSupResponsableP,RegisteradminOrg,login,LogoutUser,CreateFormation,CreateDocument,CreateFormerSchedule
 
 from . import views
 
@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('register/stagiaire/', RegisterStagiaire.as_view()),
     path('register/formateur/', RegisterFormateur.as_view()),
+    path('CreateFormerSchedule/', views.CreateFormerSchedule.as_view()),
     path('register/Rp/', RegisterResponsableP.as_view()),
     path('register/Srp/', RegisterSupResponsableP.as_view()),
     path('register/admin_societe/',RegisteradminOrg.as_view()),

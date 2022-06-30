@@ -88,5 +88,14 @@ class Opinion(models.Model):
 #     formateur = models.ForeignKey(User,on_delete=models.CASCADE)
 #     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
 
-
+class WeekleSchedule(models.Model):
+    id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    monday = models.CharField(max_length=250, null= True)
+    tuesday = models.CharField(max_length=250, null= True)
+    wednesday = models.CharField(max_length=250, null= True)
+    thursday = models.CharField(max_length=250, null= True)
+    friday = models.CharField(max_length=250, null= True)
+    saturday = models.CharField(max_length=250, null= True)
+    sunday = models.CharField(max_length=250,null= True)
+    attached = models.OneToOneField(User,on_delete=models.CASCADE,related_name='trainer_related_schedule')
 # Create your models here.

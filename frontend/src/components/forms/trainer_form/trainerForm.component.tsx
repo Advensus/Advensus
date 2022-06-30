@@ -1,14 +1,17 @@
 import {
     DefaultButton,
     Dropdown,
+    DropdownMenuItemType,
     IDropdownOption,
     Text,
     TextField,
 } from "@fluentui/react";
 import { Field, Form, Formik, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { Checkbox } from "@fluentui/react/lib/Checkbox";
 import {
     BASIC_RP_FORM,
+    IFormerSchedule,
     ITraining,
     IUser,
     NewUserDto,
@@ -20,6 +23,7 @@ import {
 import { ICompany } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
 import UserService from "../../../services/user.service";
+import { TrainerTimeTableComponent } from "./trainer_time_table/trainerTimeTable.component";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
@@ -39,6 +43,21 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         IDropdownOption[]
     >([]);
     const [societies, setSocieties] = useState<IDropdownOption[]>([]);
+
+    const [isChecked, setIsChecked] = React.useState(false);
+    const onChange = React.useCallback(
+        (
+            ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
+            checked?: boolean
+        ): void => {
+            setIsChecked(!!checked);
+        },
+        []
+    );
+
+    useEffect(() => {
+        console.log({ isChecked });
+    }, [isChecked]);
 
     useEffect(() => {
         if (trainings) {
@@ -108,6 +127,12 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     }
                     const data = (await response.json()) as IUser;
                     console.log("the user just added:", data);
+                    // value.daysOfWeek && value.daysOfWeek.attached = data.id;
+                    if (data.id && value.daysOfWeek) {
+                        value.daysOfWeek.attached = data.id;
+                        // value.daysOfWeekToStok.sunday = `${value.daysOfWeek?.monday.from} / ${value.daysOfWeek?.monday.until}`;
+                        addFormerIsSchedule(value);
+                    }
                     onCreate(data);
                 })
                 .catch((err) => {
@@ -142,6 +167,55 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         }
     };
 
+    const addFormerIsSchedule = (theVal: NewUserDto) => {
+        console.log({ theVal });
+        const formData = new FormData();
+        formData.append(
+            "attached",
+            theVal.daysOfWeek ? theVal.daysOfWeek.attached : ""
+        );
+        formData.append(
+            "monday",
+            `${theVal.daysOfWeek?.monday.from} / ${theVal.daysOfWeek?.monday.until}`
+        );
+        formData.append(
+            "tuesday",
+            `${theVal.daysOfWeek?.tuesday.from} / ${theVal.daysOfWeek?.tuesday.until}`
+        );
+        formData.append(
+            "wednesday",
+            `${theVal.daysOfWeek?.wednesday.from} / ${theVal.daysOfWeek?.wednesday.until}`
+        );
+        formData.append(
+            "thursday",
+            `${theVal.daysOfWeek?.thursday.from} / ${theVal.daysOfWeek?.thursday.until}`
+        );
+        formData.append(
+            "friday",
+            `${theVal.daysOfWeek?.friday.from} / ${theVal.daysOfWeek?.friday.until}`
+        );
+        formData.append(
+            "saturday",
+            `${theVal.daysOfWeek?.saturday.from} / ${theVal.daysOfWeek?.saturday.until}`
+        );
+        formData.append(
+            "sunday",
+            `${theVal.daysOfWeek?.sunday.from} / ${theVal.daysOfWeek?.sunday.until}`
+        );
+        UserService.new_trainer_schedule(formData)
+            .then(async (response) => {
+                if (response.status !== 200) {
+                    console.log({ response });
+                }
+                const data = (await response.json()) as IFormerSchedule;
+                console.log("The current former schedule:", data);
+                // onCreated(data, trainee);
+            })
+            .catch((err) => {
+                console.log("error while adding new trainer schedule:", err);
+            });
+    };
+
     const {
         values,
         handleChange,
@@ -160,6 +234,25 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             competence: [],
             appartenir_societe: "",
             cv: "",
+            daysOfWeek: {
+                monday: { from: "", until: "" },
+                tuesday: { from: "", until: "" },
+                wednesday: { from: "", until: "" },
+                thursday: { from: "", until: "" },
+                friday: { from: "", until: "" },
+                saturday: { from: "", until: "" },
+                sunday: { from: "", until: "" },
+                attached: "",
+            },
+            // daysOfWeekToStok: {
+            //     monday: "",
+            //     tuesday: "",
+            //     wednesday: "",
+            //     thursday: "",
+            //     friday: "",
+            //     saturday: "",
+            //     sonday: "",
+            // },
         },
         onSubmit,
     });
@@ -241,6 +334,193 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     onChange={handleChange}
                 />
             </div>
+            {/* TRAINER'S SCHEDULER */}
+            {formToDisplay === TEACHEAR_FORM && (
+                <>
+                    <Text className="trainer_txt_divide_mov">Horraires</Text>{" "}
+                    <hr className="trainer_hr_solid" />
+                    <div className="trainer_is_scheduler_container">
+                        <TextField
+                            type="text"
+                            id="horaire"
+                            placeholder="Horaire"
+                            name="horaire"
+                            value={values.horaire}
+                            onChange={handleChange}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Lun"
+                            fromKeySelected={values.daysOfWeek?.monday.from}
+                            untilKeySelected={values.daysOfWeek?.monday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.monday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.monday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Mar"
+                            fromKeySelected={values.daysOfWeek?.tuesday.from}
+                            untilKeySelected={values.daysOfWeek?.tuesday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.tuesday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.tuesday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Mer"
+                            fromKeySelected={values.daysOfWeek?.wednesday.from}
+                            untilKeySelected={
+                                values.daysOfWeek?.wednesday.until
+                            }
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.wednesday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.wednesday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Jeu"
+                            fromKeySelected={values.daysOfWeek?.thursday.from}
+                            untilKeySelected={values.daysOfWeek?.thursday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.thursday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.thursday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Ven"
+                            fromKeySelected={values.daysOfWeek?.friday.from}
+                            untilKeySelected={values.daysOfWeek?.friday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.friday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.friday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Sam"
+                            fromKeySelected={values.daysOfWeek?.saturday.from}
+                            untilKeySelected={values.daysOfWeek?.saturday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.saturday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.saturday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                        <TrainerTimeTableComponent
+                            labelChecbox="Dim"
+                            fromKeySelected={values.daysOfWeek?.sunday.from}
+                            untilKeySelected={values.daysOfWeek?.sunday.until}
+                            valuesDropdown={workingHours}
+                            theChangeOfFrom={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.sunday.from",
+                                    item?.key
+                                );
+                            }}
+                            theChangeOfUntil={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue(
+                                    "daysOfWeek.sunday.until",
+                                    item?.key
+                                );
+                            }}
+                        />
+                    </div>
+                </>
+            )}
             <Text className="trainer_txt_divide_mov">Other</Text>{" "}
             <hr className="trainer_hr_solid" />
             <div className="oth_trainer">
@@ -269,15 +549,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Competences"
                             multiSelect
                             options={trainingAvailable}
-                        />
-
-                        <TextField
-                            type="text"
-                            id="horaire"
-                            placeholder="Horaire"
-                            name="horaire"
-                            value={values.horaire}
-                            onChange={handleChange}
                         />
                     </>
                 )}
@@ -327,8 +598,33 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     );
 };
 
-const Civility = [
-    { key: "Male", text: "Mr" },
-    // { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
-    { key: "Female", text: "Mme" },
+const workingHours = [
+    { key: "07:00", text: "07:00" },
+    { key: "divider_1", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "08:00", text: "08:00" },
+    { key: "divider_2", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "09:00", text: "09:00" },
+    { key: "divider_3", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "10:00", text: "10:00" },
+    { key: "divider_4", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "11:00", text: "11:00" },
+    { key: "divider_5", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "12:00", text: "12:00" },
+    { key: "divider_6", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "13:00", text: "13:00" },
+    { key: "divider_7", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "14:00", text: "14:00" },
+    { key: "divider_8", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "15:00", text: "15:00" },
+    { key: "divider_9", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "16:00", text: "16:00" },
+    { key: "divider_10", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "17:00", text: "17:00" },
+    { key: "divider_11", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "18:00", text: "18:00" },
+    { key: "divider_12", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "19:00", text: "19:00" },
+    { key: "divider_13", text: "-", itemType: DropdownMenuItemType.Divider },
+    { key: "20:00", text: "20:00" },
+    { key: "divider_14", text: "-", itemType: DropdownMenuItemType.Divider },
 ];

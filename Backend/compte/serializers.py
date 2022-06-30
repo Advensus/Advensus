@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .utilisateur import User,souscrir
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Document,Courses,reservation
+from .models import Document,Courses, WeekleSchedule,reservation
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
 
 
@@ -97,6 +97,11 @@ class CoursesData3(serializers.ModelSerializer):
     class Meta:
         model = Courses
         fields = ['id','reservation','lier']
+
+class createnewscheduledata(serializers.ModelSerializer):
+    class Meta:
+        model = WeekleSchedule
+        fields = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday','attached']
 class FormateurData(serializers.ModelSerializer):
    
     appartenir_societe = SocieteData(many=True,read_only=True)
@@ -391,6 +396,7 @@ class loginuser(serializers.ModelSerializer):
     competence = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     societe = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     appartenir_content_type = cruddocuments(read_only=True,many=True)
+    trainer_related_schedule = createnewscheduledata(read_only=True)
     class Meta:
         model = User
         fields = ['username','first_name','email','password','tokens','user_type','is_superuser',
@@ -399,7 +405,8 @@ class loginuser(serializers.ModelSerializer):
             'appartenir_societe',
             'competence',
             'societe',
-            'appartenir_content_type'
+            'appartenir_content_type',
+            "trainer_related_schedule"
         ]
         
 
@@ -468,12 +475,14 @@ class cruduser(serializers.ModelSerializer):
     souscrirs = crudsouscrir(many=True,read_only=True)
     assister = CoursesData2(many=True,read_only=True)
     superviser = CoursesData3(many=True, read_only=True)
+    trainer_related_schedule = createnewscheduledata(read_only=True)
    
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
                  "avatar","phone_number","adress","horaire","signature_former","cv",
-                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister", "superviser"
+                 "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister", "superviser",
+                 "trainer_related_schedule"
                  ]
 #END CRUD USER     
             
@@ -596,6 +605,10 @@ class crudcertificate(serializers.ModelSerializer):
         fields = ['id','intitule','objectif','code','competence_atteste','modalite_evaluation','allouer','programmes']
 
 
+class createnewscheduleserialize(serializers.ModelSerializer):
+    class Meta:
+        model = WeekleSchedule
+        fields = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday','attached']
 #END CRUD AND CREATE CERTIFICATE
 
 

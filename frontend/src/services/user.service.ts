@@ -8,6 +8,9 @@ class UserService {
     static new_trainer = (info: FormData) =>
         BaseService.postFileRequest(userUls.NEW_TRAINER, info, false);
 
+    static new_trainer_schedule = (info: FormData) =>
+        BaseService.postFileRequest(userUls.ADD_FORMER_SCHEDULE, info, false);
+
     static new_trainee = (info: unknown) =>
         BaseService.postRequest(userUls.NEW_TRAINEE, info, false);
 

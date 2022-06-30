@@ -18,3 +18,4 @@ export * from "./interfaces/Company";
 export * from "./interfaces/TrainingProgram";
 export * from "./interfaces/Courses";
 export * from "./interfaces/Doc";
+export * from "./interfaces/FormerSchedule";
