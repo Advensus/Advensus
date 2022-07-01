@@ -299,6 +299,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                         ? startedMin - endedMin
                         : endedMin - startedMin;
 
+                // MANAGEMENT OF THE BALANCE BEFORE ADD NEW SCHEDULE
                 if (nberHour === 0) {
                     if (nberMin === 0) {
                         console.log("Opération impossible!!!");
@@ -310,7 +311,7 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     }
                 } else if (nberHour === 1) {
                     if (nberMin === 0) {
-                        console.log("on soustrait juste 1h de ancine solde");
+                        console.log("on soustrait juste 1h de anciene solde");
                         const newBalance =
                             parseInt(folderResp.solde) - nberHour;
                         folderResp.solde = newBalance.toString();
@@ -340,10 +341,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                         folderResp.solde = newBalanceWithMinutes;
                     }
                 }
-                console.log(
-                    "solde après soustraction:",
-                    parseInt(folderResp.solde)
-                );
                 if (parseInt(folderResp.solde) > 0) {
                     const theStart = value.start && formattingDate(value.start);
                     const theEnd = value.end && formattingDate(value.end);
@@ -469,26 +466,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
     }: SchedulerDataChangeEvent) => {
         console.log({ updated, created, deleted });
         console.log({ deleted });
-        // console.log("deleted:", updated[0].recurrenceExceptions[0]);
-        // if (updated.length > 0 && updated[0].recurrenceExceptions === null) {
-        //     const Start_Date = formattingDate(updated[0].start);
-        //     const End_Date = formattingDate(updated[0].end);
-        //     const updatedDataBooking: NewBookingDto = {
-        //         title: updated[0].title,
-        //         description: updated[0].description,
-        //         status: updated[0].state,
-        //         start_date: Start_Date,
-        //         end_date: End_Date,
-        //         reserver: [user.id],
-        //         concerner: updated[0].coursesId,
-        //         superviser: updated[0].ownerID.id,
-        //         // assister: updated[0].personId != null && updated[0].personId.id,
-        //     };
-        //     console.log("the update go on:", updated[0]);
-        //     if (user.user_type != TRAINEE && user.user_type != TEACHEAR) {
-        //         editBooking(updated[0].id, updatedDataBooking);
-        //     }
-        // }
         setData((old) =>
             old
                 // Filter the deleted items
@@ -503,8 +480,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     // item
                     console.log({ updated }),
                     updated.find((bookingToEdit) => {
-                        console.log("the bookin", bookingToEdit);
-
                         const Start_Date = formattingDate(bookingToEdit.start);
                         const End_Date = formattingDate(bookingToEdit.end);
                         const updatedDataBooking: NewBookingDto = {
@@ -520,27 +495,147 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                                 bookingToEdit.ownerID.id,
                             // assister: bookingToEdit.personId != null && bookingToEdit.personId.id,
                         };
-                        console.log("the update go on:", bookingToEdit);
+
+                        const formerProgrammedTimeUpdated = bookingData.map(
+                            (_) => {
+                                if (
+                                    _.ownerID.id ===
+                                    `${updatedDataBooking.superviser}`
+                                ) {
+                                    const dateStart = formattingDate(
+                                        _.start as Date
+                                    );
+                                    const dateEnd = formattingDate(
+                                        _.end as Date
+                                    );
+                                    return `${dateStart}/${dateEnd}`;
+                                } else {
+                                    return null;
+                                }
+                            }
+                        );
+
+                        const rangeTimeUpdated = `${updatedDataBooking.start_date}/${updatedDataBooking.end_date}`;
+                        const formerAvailabilityUpdated =
+                            formerProgrammedTimeUpdated.includes(
+                                rangeTimeUpdated
+                            );
+
+                        // MANAGEMENT OF THE DISPONIBILITY OF TRAINEE
+                        const traineeProgrammedTimeUpdated = bookingData.map(
+                            (_) => {
+                                if (
+                                    _.personId.id ===
+                                    `${bookingToEdit.personId.id}`
+                                ) {
+                                    const dateStart = formattingDate(
+                                        _.start as Date
+                                    );
+                                    const dateEnd = formattingDate(
+                                        _.end as Date
+                                    );
+                                    return `${dateStart}/${dateEnd}`;
+                                } else {
+                                    return null;
+                                }
+                            }
+                        );
+
+                        const traineeAvailabilityUpdated =
+                            traineeProgrammedTimeUpdated.includes(
+                                rangeTimeUpdated
+                            );
+
                         if (
-                            user.user_type != TRAINEE &&
-                            user.user_type != TEACHEAR
+                            formerAvailabilityUpdated &&
+                            traineeAvailabilityUpdated
                         ) {
-                            editBooking(bookingToEdit.id, updatedDataBooking);
+                            // USERS ARE UNAVAILABLE
+                            console.log("USERS ARE UNAVAILABLE");
+                        } else if (formerAvailabilityUpdated) {
+                            // FORMER IS UNAVAILABLE
+                            console.log("FORMER IS UNAVAILABLE");
+                        } else if (traineeAvailabilityUpdated) {
+                            // TRAINEE IS UNAVAILABLE
+                            console.log("TRAINEE IS UNAVAILABLE");
+                        } else {
+                            // USERS ARE AVAILABLE
+                            console.log("USERS ARE AVAILABLE");
+                            if (
+                                user.user_type != TRAINEE &&
+                                user.user_type != TEACHEAR
+                            ) {
+                                editBooking(
+                                    bookingToEdit.id,
+                                    updatedDataBooking
+                                );
+                            }
                         }
                     })
                 )
                 // Add the newly created items and assign an `id`.
                 .concat(
                     created.map((booking: NewBookingDto) => {
-                        // Object.assign({}, item, { id: guid() })
+                        // MANAGEMENT OF THE DISPONIBILITY OF TRAINER
+                        console.log({ bookingData });
+                        console.log("id du superviseur", booking.superviser);
+                        const formerProgrammedTime = bookingData.map((_) => {
+                            if (_.ownerID.id === `${booking.superviser}`) {
+                                const dateStart = formattingDate(
+                                    _.start as Date
+                                );
+                                const dateEnd = formattingDate(_.end as Date);
+                                return `${dateStart}/${dateEnd}`;
+                            } else {
+                                return null;
+                            }
+                        });
+                        // Formating the dates
+                        const incomingBookingStart = formattingDate(
+                            booking.start as Date
+                        );
+                        const incomingBookingEnd = formattingDate(
+                            booking.end as Date
+                        );
+                        const rangeTime = `${incomingBookingStart}/${incomingBookingEnd}`;
+                        const formerAvailability =
+                            formerProgrammedTime.includes(rangeTime);
 
-                        console.log({ booking });
+                        // MANAGEMENT OF THE DISPONIBILITY OF TRAINEE
+                        const traineeProgrammedTime = bookingData.map((_) => {
+                            if (_.personId.id === `${booking.assister}`) {
+                                const dateStart = formattingDate(
+                                    _.start as Date
+                                );
+                                const dateEnd = formattingDate(_.end as Date);
+                                return `${dateStart}/${dateEnd}`;
+                            } else {
+                                return null;
+                            }
+                        });
 
-                        booking.proposer &&
-                            getTrainingFolderByIsId(booking.proposer, booking);
-                        // theStart &&
-                        //     theEnd &&
-                        //     addNewCourses(booking, theStart, theEnd);
+                        console.log({ traineeProgrammedTime });
+                        const traineeAvailability =
+                            traineeProgrammedTime.includes(rangeTime);
+                        console.log({ traineeAvailability });
+                        if (formerAvailability && traineeAvailability) {
+                            // USERS ARE UNAVAILABLE
+                            console.log("USERS ARE UNAVAILABLE");
+                        } else if (formerAvailability) {
+                            // FORMER IS UNAVAILABLE
+                            console.log("FORMER IS UNAVAILABLE");
+                        } else if (traineeAvailability) {
+                            // TRAINEE IS UNAVAILABLE
+                            console.log("TRAINEE IS UNAVAILABLE");
+                        } else {
+                            // USERS ARE AVAILABLE
+                            console.log("USERS ARE AVAILABLE");
+                            booking.proposer &&
+                                getTrainingFolderByIsId(
+                                    booking.proposer,
+                                    booking
+                                );
+                        }
                     })
                 )
         );
@@ -552,7 +647,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                   <CustomHeader
                       {...props}
                       displayEventByResource={(id: string) => {
-                          // filterByResources(id);
                           setSearchPerson(id);
                       }}
                   />
@@ -574,7 +668,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                 }}
             >
                 <Scheduler
-                    // group={group}
                     resources={resources}
                     // data={sampleDataWithResources}
                     data={filteredDataBooking}
@@ -598,7 +691,6 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
                     footer={(props) => <CustomFooter {...props} />}
                     // slot={CustomSlot}
                     viewSlot={CustomViewSlot}
-                    // viewItem={CustomViewItem}
                 >
                     <AgendaView
                         slotDivisions={slotDivision}
@@ -631,10 +723,6 @@ const CustomSlot = (props: SchedulerSlotProps) => (
         {...props}
         style={{
             ...props.style,
-            // backgroundColor:
-            //     props.isAllDay || !props.isWorkHour || !props.isWorkDay
-            //         ? "#ffddcc"
-            //         : "#ccff99",
             height: "60px",
         }}
     />
@@ -655,31 +743,6 @@ export const CustomViewSlot = (props: SchedulerViewSlotProps) => {
 
 export const CustomViewItem = (props: SchedulerViewItemProps) => {
     let myCustomTitle = `${props.dataItem.title} | Formateur: ${props.dataItem.ownerID.username} | Stagiaire: ${props.dataItem.personId.username}`;
-    // let myCustomTitle =
-    //     props.dataItem.title +
-    //     " | Formateur: " +
-    //     " " +
-    //     props.dataItem.ownerID.username +
-    //     " " +
-    //     "| Stagiaire: " +
-    //     props.dataItem.personId.username;
 
     return <SchedulerViewItem {...props} title={myCustomTitle} />;
-};
-
-export const ProportionalViewItem = (props: any) => {
-    //You can use props.dataItem for getting additional information to set as "title"
-    let myCustomTitle = props.dataItem.title;
-    // let trainee = "Stagiaire: " + props.dataItem.concerner.assister.first_name;
-    let trainer = "Formateur: " + props.dataItem.ownerID.username;
-    // console.log({ props });
-    return (
-        <SchedulerViewItem
-            {...props}
-            title={myCustomTitle}
-            ownerId={trainer}
-            // trainee={trainee}
-            // trainer={trainer}
-        />
-    );
 };
