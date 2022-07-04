@@ -459,120 +459,121 @@ export const SchedulerPage: React.FC<ISchedulerPageProps> = () => {
             });
     };
 
-    const handleDataChange = ({
-        created,
-        updated,
-        deleted,
-    }: SchedulerDataChangeEvent) => {
-        console.log({ updated, created, deleted });
-        console.log({ deleted });
+    const handleDataChange = ({ created, updated, deleted }: any) => {
+        // console.log({ updated, created, deleted });
+        // console.log({ deleted });
         setData((old) =>
             old
                 // Filter the deleted items
-                .filter((item) =>
-                    deleted.find((current) =>
-                        console.log("dand le deleted:", current)
-                    )
-                )
+                .filter((item) => {
+                    deleted.find((current: any) => {
+                        console.log("dand le deleted:", current);
+                    });
+                    console.log({ item });
+                })
                 // Find and replace the updated items
-                .concat(
-                    // updated.find((current) => current.id === item.id) ||
-                    // item
-                    console.log({ updated }),
-                    updated.find((bookingToEdit) => {
-                        const Start_Date = formattingDate(bookingToEdit.start);
-                        const End_Date = formattingDate(bookingToEdit.end);
-                        const updatedDataBooking: NewBookingDto = {
-                            title: bookingToEdit.title,
-                            description: bookingToEdit.description,
-                            status: bookingToEdit.state,
-                            start_date: Start_Date,
-                            end_date: End_Date,
-                            reserver: [user.id],
-                            concerner: bookingToEdit.coursesId,
-                            superviser:
-                                bookingToEdit.ownerID &&
-                                bookingToEdit.ownerID.id,
-                            // assister: bookingToEdit.personId != null && bookingToEdit.personId.id,
-                        };
+                .map((_) => {
+                    console.log({ _ });
+                    updated.find((current: any) => console.log({ current }));
+                })
+                // .concat(
+                //     // updated.find((current) => current.id === item.id) ||
+                //     // item
+                //     console.log({ updated }),
+                //     updated.find((bookingToEdit) => {
+                //         const Start_Date = formattingDate(bookingToEdit.start);
+                //         const End_Date = formattingDate(bookingToEdit.end);
+                //         const updatedDataBooking: NewBookingDto = {
+                //             title: bookingToEdit.title,
+                //             description: bookingToEdit.description,
+                //             status: bookingToEdit.state,
+                //             start_date: Start_Date,
+                //             end_date: End_Date,
+                //             reserver: [user.id],
+                //             concerner: bookingToEdit.coursesId,
+                //             superviser:
+                //                 bookingToEdit.ownerID &&
+                //                 bookingToEdit.ownerID.id,
+                //             // assister: bookingToEdit.personId != null && bookingToEdit.personId.id,
+                //         };
 
-                        const formerProgrammedTimeUpdated = bookingData.map(
-                            (_) => {
-                                if (
-                                    _.ownerID.id ===
-                                    `${updatedDataBooking.superviser}`
-                                ) {
-                                    const dateStart = formattingDate(
-                                        _.start as Date
-                                    );
-                                    const dateEnd = formattingDate(
-                                        _.end as Date
-                                    );
-                                    return `${dateStart}/${dateEnd}`;
-                                } else {
-                                    return null;
-                                }
-                            }
-                        );
+                //         const formerProgrammedTimeUpdated = bookingData.map(
+                //             (_) => {
+                //                 if (
+                //                     _.ownerID.id ===
+                //                     `${updatedDataBooking.superviser}`
+                //                 ) {
+                //                     const dateStart = formattingDate(
+                //                         _.start as Date
+                //                     );
+                //                     const dateEnd = formattingDate(
+                //                         _.end as Date
+                //                     );
+                //                     return `${dateStart}/${dateEnd}`;
+                //                 } else {
+                //                     return null;
+                //                 }
+                //             }
+                //         );
 
-                        const rangeTimeUpdated = `${updatedDataBooking.start_date}/${updatedDataBooking.end_date}`;
-                        const formerAvailabilityUpdated =
-                            formerProgrammedTimeUpdated.includes(
-                                rangeTimeUpdated
-                            );
+                //         const rangeTimeUpdated = `${updatedDataBooking.start_date}/${updatedDataBooking.end_date}`;
+                //         const formerAvailabilityUpdated =
+                //             formerProgrammedTimeUpdated.includes(
+                //                 rangeTimeUpdated
+                //             );
 
-                        // MANAGEMENT OF THE DISPONIBILITY OF TRAINEE
-                        const traineeProgrammedTimeUpdated = bookingData.map(
-                            (_) => {
-                                if (
-                                    _.personId.id ===
-                                    `${bookingToEdit.personId.id}`
-                                ) {
-                                    const dateStart = formattingDate(
-                                        _.start as Date
-                                    );
-                                    const dateEnd = formattingDate(
-                                        _.end as Date
-                                    );
-                                    return `${dateStart}/${dateEnd}`;
-                                } else {
-                                    return null;
-                                }
-                            }
-                        );
+                //         // MANAGEMENT OF THE DISPONIBILITY OF TRAINEE
+                //         const traineeProgrammedTimeUpdated = bookingData.map(
+                //             (_) => {
+                //                 if (
+                //                     _.personId.id ===
+                //                     `${bookingToEdit.personId.id}`
+                //                 ) {
+                //                     const dateStart = formattingDate(
+                //                         _.start as Date
+                //                     );
+                //                     const dateEnd = formattingDate(
+                //                         _.end as Date
+                //                     );
+                //                     return `${dateStart}/${dateEnd}`;
+                //                 } else {
+                //                     return null;
+                //                 }
+                //             }
+                //         );
 
-                        const traineeAvailabilityUpdated =
-                            traineeProgrammedTimeUpdated.includes(
-                                rangeTimeUpdated
-                            );
+                //         const traineeAvailabilityUpdated =
+                //             traineeProgrammedTimeUpdated.includes(
+                //                 rangeTimeUpdated
+                //             );
 
-                        if (
-                            formerAvailabilityUpdated &&
-                            traineeAvailabilityUpdated
-                        ) {
-                            // USERS ARE UNAVAILABLE
-                            console.log("USERS ARE UNAVAILABLE");
-                        } else if (formerAvailabilityUpdated) {
-                            // FORMER IS UNAVAILABLE
-                            console.log("FORMER IS UNAVAILABLE");
-                        } else if (traineeAvailabilityUpdated) {
-                            // TRAINEE IS UNAVAILABLE
-                            console.log("TRAINEE IS UNAVAILABLE");
-                        } else {
-                            // USERS ARE AVAILABLE
-                            console.log("USERS ARE AVAILABLE");
-                            if (
-                                user.user_type != TRAINEE &&
-                                user.user_type != TEACHEAR
-                            ) {
-                                editBooking(
-                                    bookingToEdit.id,
-                                    updatedDataBooking
-                                );
-                            }
-                        }
-                    })
-                )
+                //         if (
+                //             formerAvailabilityUpdated &&
+                //             traineeAvailabilityUpdated
+                //         ) {
+                //             // USERS ARE UNAVAILABLE
+                //             console.log("USERS ARE UNAVAILABLE");
+                //         } else if (formerAvailabilityUpdated) {
+                //             // FORMER IS UNAVAILABLE
+                //             console.log("FORMER IS UNAVAILABLE");
+                //         } else if (traineeAvailabilityUpdated) {
+                //             // TRAINEE IS UNAVAILABLE
+                //             console.log("TRAINEE IS UNAVAILABLE");
+                //         } else {
+                //             // USERS ARE AVAILABLE
+                //             console.log("USERS ARE AVAILABLE");
+                //             if (
+                //                 user.user_type != TRAINEE &&
+                //                 user.user_type != TEACHEAR
+                //             ) {
+                //                 editBooking(
+                //                     bookingToEdit.id,
+                //                     updatedDataBooking
+                //                 );
+                //             }
+                //         }
+                //     })
+                // )
                 // Add the newly created items and assign an `id`.
                 .concat(
                     created.map((booking: NewBookingDto) => {

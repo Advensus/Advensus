@@ -1564,10 +1564,24 @@
   dependencies:
     tslib "^1.7.0"
 
-"@progress/kendo-date-math@^1.4.0", "@progress/kendo-date-math@^1.5.6":
+"@progress/kendo-date-math@^1.4.0":
   version "1.5.6"
   resolved "https://registry.npmjs.org/@progress/kendo-date-math/-/kendo-date-math-1.5.6.tgz"
   integrity sha512-WM7ETmRX71whiIzceTFgoQLG40LPKixqWz12pflo3Ci3bfITfaaynQcR92d5BTV5H8WSlG1bIrvYHGfpfoYB3A==
+  dependencies:
+    tslib "^1.7.0"
+
+"@progress/kendo-date-math@^1.5.7":
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-date-math/-/kendo-date-math-1.5.7.tgz#f012ff2467851e027def0cf925fb5d5c49aec765"
+  integrity sha512-9amXMXqbipnEOXm5ptDjffdLYB1aRUjhqQLKaAjLu6JkRSoXngz7FMaZRu10mdvyb/TMbWtKjhxPYlC+mwFeyw==
+  dependencies:
+    tslib "^1.7.0"
+
+"@progress/kendo-draggable-common@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-draggable-common/-/kendo-draggable-common-0.2.1.tgz#728697d19234620de29b8fd495ad7e6bab3c9aa5"
+  integrity sha512-FMZl4kb4iUBkMNEQnLt5J35iCiDGqKb2VQ+aDJadDnlSPmjRt2pLR8iUHL3vq/7f2SIA5F+3bpUimhwQ8kmrkA==
   dependencies:
     tslib "^1.7.0"
 
@@ -1587,7 +1601,7 @@
 
 "@progress/kendo-licensing@^1.2.2":
   version "1.2.2"
-  resolved "https://registry.npmjs.org/@progress/kendo-licensing/-/kendo-licensing-1.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-licensing/-/kendo-licensing-1.2.2.tgz#25df2ac4eac7940f7ed64c6c44940285a40bedb6"
   integrity sha512-DUGwVHmaIFrGkKdO2NjajfNBrLc0Jo0o11WTmo9AkqWzMT+zAOu0D5aghnWGPkPg3e8+T5m9dEZvWPw4eJP4Sw==
   dependencies:
     jsonwebtoken "^8.5.1"
@@ -1606,13 +1620,13 @@
     prop-types "^15.6.0"
     react-transition-group "^4.4.2"
 
-"@progress/kendo-react-buttons@5.2.0", "@progress/kendo-react-buttons@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-buttons/-/kendo-react-buttons-5.2.0.tgz"
-  integrity sha512-hOGa4CeXpqxHjc7leNvykug1QDjCsQihfHUsBDzzmnYbL5Pl3hpY/KJC8Z/2hkMxVnVpjS+tsfJt5ZTJ3sDw3g==
+"@progress/kendo-react-buttons@5.5.0", "@progress/kendo-react-buttons@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-buttons/-/kendo-react-buttons-5.5.0.tgz#f43991df14f10c32bc1cb3a83931d003a395ee77"
+  integrity sha512-mojOvXKBD3x90NyHuWU8lzhepl87fCnUg8JsaAPDGW5jThb+vWWomsmCfm+JIB/XgK2csMunAw/RetsTKc9AJA==
   dependencies:
-    "@progress/kendo-react-common" "5.2.0"
-    "@progress/kendo-react-popup" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
+    "@progress/kendo-react-popup" "5.5.0"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-common@5.2.0":
@@ -1623,6 +1637,14 @@
     "@progress/kendo-draggable-common" dev
     prop-types "^15.6.0"
 
+"@progress/kendo-react-common@5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.5.0.tgz#473979ae900a8ed10a2067f522a0ac39e285056d"
+  integrity sha512-tA+zuchrXAJi6ssdyrUzLdPlZTqiWhTXboZ6aIzYi4u8dW/7X9MGv0kZ769YUejuG4hUEXehRXu/13psfjuJag==
+  dependencies:
+    "@progress/kendo-draggable-common" "^0.2.1"
+    prop-types "^15.6.0"
+
 "@progress/kendo-react-data-tools@^5.2.0":
   version "5.2.0"
   resolved "https://registry.npmjs.org/@progress/kendo-react-data-tools/-/kendo-react-data-tools-5.2.0.tgz"
@@ -1631,42 +1653,42 @@
     "@progress/kendo-react-common" "5.2.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-dateinputs@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-dateinputs/-/kendo-react-dateinputs-5.2.0.tgz"
-  integrity sha512-HnZJ4HpbSjpdT4Pkp5Pcs1lz48B1v/aXaoDIJkxgP/n4L6a01c70ZhCHW+2YhGycwa8CnlMhqiLpGkjGCpHHKQ==
+"@progress/kendo-react-dateinputs@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-dateinputs/-/kendo-react-dateinputs-5.5.0.tgz#510aba2c53b7ab609c4640e3e70c09a6bf849816"
+  integrity sha512-lmeZWKPYQJizBztrhE8CcLRcUwW0Wy3H8ds7O6NopO2I+WIr66kIn1ERvltmWpFhuWklwFtcXOO5V/C9rwQdCw==
   dependencies:
     "@progress/kendo-date-math" "^1.4.0"
-    "@progress/kendo-react-buttons" "5.2.0"
-    "@progress/kendo-react-common" "5.2.0"
-    "@progress/kendo-react-labels" "5.2.0"
-    "@progress/kendo-react-popup" "5.2.0"
+    "@progress/kendo-react-buttons" "5.5.0"
+    "@progress/kendo-react-common" "5.5.0"
+    "@progress/kendo-react-labels" "5.5.0"
+    "@progress/kendo-react-popup" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-dialogs@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-dialogs/-/kendo-react-dialogs-5.2.0.tgz"
-  integrity sha512-im1aFSM6oF3rlk5A7GefYulaC8/lHNic0JsqkWP4Mz/nSe3or8scKfhx/PXO8OugYLYPemJSItWjc22XdzhWHg==
+"@progress/kendo-react-dialogs@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-dialogs/-/kendo-react-dialogs-5.5.0.tgz#fbef9a08165cf567c235ab46a1ef15f694866bbe"
+  integrity sha512-E6orC6fgubl3DEoCOvAvQgZQ47YIh1w5EkLKVfp5Aqag50sxGI1pLF32bWi11YZLZLt475etTNh1AJjSX5AlCQ==
   dependencies:
-    "@progress/kendo-react-common" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-dropdowns@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-dropdowns/-/kendo-react-dropdowns-5.2.0.tgz"
-  integrity sha512-IceVbie4pL2Qpv/TuNE3AWJLTtDIfempTR3Be1ZvVZ0fRshXTho5zWA7gOyUVU25egEaLg+qvZ32pted4RJgjA==
+"@progress/kendo-react-dropdowns@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-dropdowns/-/kendo-react-dropdowns-5.5.0.tgz#e164c4056c259ee8573d7fdd411497d388a8fd7b"
+  integrity sha512-+lQLdhDMq6Oj6kaRxsDceTZyCwLtrvz4dEaXmio/WngGVAFZknJMFWlTDWSRJ1MdjeCLi0cT/IvvEfj1RTU3yA==
   dependencies:
-    "@progress/kendo-react-common" "5.2.0"
-    "@progress/kendo-react-labels" "5.2.0"
-    "@progress/kendo-react-popup" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
+    "@progress/kendo-react-labels" "5.5.0"
+    "@progress/kendo-react-popup" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-form@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-form/-/kendo-react-form-5.2.0.tgz"
-  integrity sha512-aUkGBlriCpdrHlRI7dJ19vKQLTOr50xAJrjirvYNHohPo7G7T0k7yQM/Tjd8mR3nh5S3dhT91rcFR2SvHIanYw==
+"@progress/kendo-react-form@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-form/-/kendo-react-form-5.5.0.tgz#17f8108869471a24f508acafc1cebde324838cd4"
+  integrity sha512-uss++xP0lWx1GH6c3HTig/hnMgWsyQxRD5/ZaQ/EHLEirUKO5I+cnjm8ficNRcVYcm876J6ttMSYLaJEnU0X2Q==
   dependencies:
-    "@progress/kendo-react-common" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-grid@^5.2.0":
@@ -1677,49 +1699,49 @@
     "@progress/kendo-react-common" "5.2.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-inputs@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-inputs/-/kendo-react-inputs-5.2.0.tgz"
-  integrity sha512-TmCy/NSZl5WhH76mh7CsL1IYObvhST2cbXjaCWIezE1C+buuyJGzAgLuEE0253fgboadNJCD8Saiy8477gIMiw==
+"@progress/kendo-react-inputs@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-inputs/-/kendo-react-inputs-5.5.0.tgz#0d499f78a113d7962272819bf5e908787a1b4061"
+  integrity sha512-QKbBA+HeKKX4qvwfaor4txzN7z32+33zfAruMPwGjA2EwRgaHJb1zGXUw8sLUgTz1gOFN+voMq2M9A8/JFFXQg==
   dependencies:
-    "@progress/kendo-react-buttons" "5.2.0"
-    "@progress/kendo-react-common" "5.2.0"
-    "@progress/kendo-react-labels" "5.2.0"
-    "@progress/kendo-react-popup" "5.2.0"
+    "@progress/kendo-react-buttons" "5.5.0"
+    "@progress/kendo-react-common" "5.5.0"
+    "@progress/kendo-react-labels" "5.5.0"
+    "@progress/kendo-react-popup" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-intl@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-intl/-/kendo-react-intl-5.2.0.tgz"
-  integrity sha512-NohwsxcA4PaWJANXGCk0nqkr9DvxbQNQY1z60GI9NaaTUasy5fG+kks37pFO/Z0v6r+9BgD9gn9kkoaJ+y/SMQ==
+"@progress/kendo-react-intl@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-intl/-/kendo-react-intl-5.5.0.tgz#4825e4f89447a7bde8d96d9251c7a4cee8f37da8"
+  integrity sha512-5tlvgfAar1WdtzRNXvW5SQmvnLa8atKuyBOIK2/3lCCkdknIXUPX1fgkpKIpvfj4HZKGTW05rFMvjPFJw1s40A==
   dependencies:
     "@telerik/kendo-intl" "^2.1.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-labels@5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-labels/-/kendo-react-labels-5.2.0.tgz"
-  integrity sha512-z/dRin2kEMbeCeoMCY+Na4djPH7DtuQFCjEr0LNPyP3ip80SivDynr929cWNvjnapP4ox/rBaKg846wIh6uCIA==
+"@progress/kendo-react-labels@5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-labels/-/kendo-react-labels-5.5.0.tgz#ddb019425e0da5c28ad710768a3cdf0f7d36f341"
+  integrity sha512-Kua4w2wgLEMyOMtQ5Y0JCbAxf5+VKDm2SPy2iWxFWFbg8ypYVDahfQ/Ik+Ze0lAQrWUmvyDmsnQAC1vJ3lHDTg==
   dependencies:
-    "@progress/kendo-react-common" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-popup@5.2.0", "@progress/kendo-react-popup@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-popup/-/kendo-react-popup-5.2.0.tgz"
-  integrity sha512-SXj2cjWUnW7k8UA07Hpqcy304vdd72LHWol9BmS9MUJ9Pi+70vrNrIBiA9dr04i7oLss2L+G/dxO+7Qg7fAruA==
+"@progress/kendo-react-popup@5.5.0", "@progress/kendo-react-popup@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-popup/-/kendo-react-popup-5.5.0.tgz#78068eaa7128490383b12634092205b5884541d6"
+  integrity sha512-ZIG2JDuqKJVHn8GGYoY4nFJEl7bMUOvrlslmnwdpeRHek5iUEuuThCEdLtcrbNOlGje9lwwNRg6g92tLz9kdUQ==
   dependencies:
     "@progress/kendo-popup-common" "1.9.0"
-    "@progress/kendo-react-common" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-scheduler@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-react-scheduler/-/kendo-react-scheduler-5.2.0.tgz"
-  integrity sha512-YH/6SZ6dM7W9QG6/SRMjsGyRqjROJVvlKxKYpx5WQWArDpUOq9m3uo6zGve8ra1ZbHl7vwbHUz6ktaCe0+WLkQ==
+"@progress/kendo-react-scheduler@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-scheduler/-/kendo-react-scheduler-5.5.0.tgz#e453adf054930b40eea25154e970a45252ed0fe9"
+  integrity sha512-AM+gNayruART8CVLNLNeibmBui+KQdSv8DVG2sBiLF+dKZ3LewNvHtE46ODSl9hd3IhQQ9h4lqbDq1U96eAE8A==
   dependencies:
     "@progress/kendo-data-query" "^1.5.1"
-    "@progress/kendo-react-common" "5.2.0"
+    "@progress/kendo-react-common" "5.5.0"
     "@progress/kendo-recurrence" "^1.0.1"
     "@telerik/kendo-draggable" "^2.2.1"
     prop-types "^15.6.0"
