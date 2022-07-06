@@ -1147,6 +1147,16 @@ def getprogrammebycert(request,pk):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
+
+@api_view(['GET'])
+def getprogrammebytrainingandcert(request,pk1,pk2):
+	serializer_class = crudprogramme
+	donnee = programme.objects.filter(attribue=pk1,training=pk2)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
 class CreateCertificate(CreateAPIView):
     serializer_class = createcertificate
     queryset = certificate.objects.all()

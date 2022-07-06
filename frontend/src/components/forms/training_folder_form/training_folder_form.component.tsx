@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import TrainingService from "../../../services/training.service";
 import {
+    ICertificate,
     ICompany,
     ISubscription,
     ITraining,
@@ -36,6 +37,7 @@ export const TrainingFolderFormComponent: React.FC<
     );
     const [startDate, setStartDate] = useState<Date | null | undefined>();
     const [trainings, setTrainings] = useState<IDropdownOption[]>([]);
+    const [certificates, setCertificates] = useState<IDropdownOption[]>([]);
     const [allTheTrainings, setAllTheTrainings] = useState<ITraining[]>([]);
 
     useEffect(() => {
@@ -159,6 +161,7 @@ export const TrainingFolderFormComponent: React.FC<
             lieu_formation: "",
             montant_formation: "",
             solde: "",
+            certification: "",
         },
         onSubmit,
     });
@@ -185,6 +188,26 @@ export const TrainingFolderFormComponent: React.FC<
             });
     };
 
+    const getCertificateByTrainingId = (id: string) => {
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log("response getting certif by:", respCertif);
+                const dropCertif = respCertif.map((_) => {
+                    return { key: _.id, text: _.intitule };
+                });
+                setCertificates(dropCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+            });
+    };
+
     return (
         <form
             onSubmit={handleSubmit}
@@ -207,10 +230,23 @@ export const TrainingFolderFormComponent: React.FC<
                         item?: IDropdownOption
                     ): void => {
                         setFieldValue("formation", item?.key);
+                        item && getCertificateByTrainingId(item.key as string);
                     }}
                     placeholder="Formtion(s)"
                     options={trainings}
                     label="Formation"
+                />
+                <Dropdown
+                    selectedKey={values.certification}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("certification", item?.key);
+                    }}
+                    placeholder="Certification(s)"
+                    options={certificates}
+                    style={{ margin: "10px 10px" }}
                 />
                 <Dropdown
                     selectedKey={values.level_start}

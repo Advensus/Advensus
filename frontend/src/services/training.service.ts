@@ -27,6 +27,23 @@ class TrainingService {
             info,
             false
         );
+    static get_program_by_certificate_id = (id: string) =>
+        BaseService.getRequest(
+            trainingProgramUrls.GET_PROGRAM_BY_CERTIFICATE_ID(id),
+            false
+        );
+
+    static get_program_by_training_and_certificate_id = (
+        idTraining: string,
+        idCertif: string
+    ) =>
+        BaseService.getRequest(
+            trainingProgramUrls.GET_PROGRAM_BY_TRAINING_AND_CERTIFICATE_ID(
+                idCertif,
+                idTraining
+            ),
+            false
+        );
 }
 
 export default TrainingService;

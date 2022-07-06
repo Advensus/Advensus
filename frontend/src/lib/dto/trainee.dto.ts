@@ -27,6 +27,7 @@ export interface NewTraineeDto {
     lieu_formation: string;
     montant_formation: string;
     solde: string;
+    certification: string;
 
     // For docs
     doc_categorie: string;
@@ -47,4 +48,5 @@ export interface NewTrainingFolderDto {
     lieu_formation: string;
     montant_formation: string;
     solde: string;
+    certification: string;
 }

@@ -620,7 +620,7 @@ export const FullInformationsTabComponent: React.FC<
                                                                         <AttributeDisplayComponent
                                                                             keyWord="Libellé"
                                                                             valueWord={
-                                                                                program.intitule
+                                                                                program.libelle
                                                                             }
                                                                         />
                                                                         <AttributeDisplayComponent
@@ -949,6 +949,7 @@ export const FullInformationsTabComponent: React.FC<
                 <div className="full_infos_tab_display_form">
                     <TrainingProgramFormComponent
                         certificates={certificates}
+                        trainings={trainings}
                         cancel={() => setShowTrainingProgramForm(false)}
                     />
                 </div>

@@ -9,7 +9,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 from django.contrib.auth.base_user import AbstractBaseUser
 
-from django.utils.translation import gettext_lazy as _ 
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from .company import SocieteFormation, OrganismeFormation
@@ -135,12 +135,13 @@ class souscrir(models.Model):
     end_session = models.DateField(auto_now_add=False)
     test_oral = models.BooleanField(default=False)
     stagiaire = models.ForeignKey(settings.AUTH_USER_MODEL ,related_name='souscrirs',on_delete=models.CASCADE)
+    certification = models.ForeignKey(settings.CERTIFICATE ,related_name='certificate',on_delete=models.CASCADE)
     formation = models.ForeignKey(formation,on_delete=models.CASCADE)
     level_start = models.CharField(max_length=50)
     level_end = models.CharField(max_length=50)
     lieu_formation = models.CharField(max_length=100)
-    montant_formation=models.CharField(max_length=250, null=True)
-    solde = models.CharField(max_length=200, null=True)
+    montant_formation=models.CharField(max_length=250)
+    solde = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(auto_now=True)

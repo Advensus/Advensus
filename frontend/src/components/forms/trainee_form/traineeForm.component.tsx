@@ -14,6 +14,7 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+    ICertificate,
     ISubscription,
     ITraining,
     IUser,
@@ -56,6 +57,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     const [organizations, setOrganizations] = useState<IDropdownOption[]>([]);
     const [selectedOrg, setSelectedOrg] = React.useState<IDropdownOption>();
     const [trainings, setTrainings] = useState<IDropdownOption[]>([]);
+    const [certificates, setCertificates] = useState<IDropdownOption[]>([]);
     const [selectedTraining, setSelectedTraining] =
         React.useState<IDropdownOption>();
     const [rps, setRps] = useState<IDropdownOption[]>([]);
@@ -77,6 +79,8 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         item?: IDropdownOption
     ): void => {
         setSelectedTraining(item);
+        console.log({ item });
+        item && getCertificateByTrainingId(item.key as string);
     };
     const onChangeOrg = (
         event: React.FormEvent<HTMLDivElement>,
@@ -132,6 +136,26 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             })
             .catch((err) => {
                 console.log("error while gettting all trainings:", err);
+            });
+    };
+
+    const getCertificateByTrainingId = (id: string) => {
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log("response getting certif by:", respCertif);
+                const dropCertif = respCertif.map((_) => {
+                    return { key: _.id, text: _.intitule };
+                });
+                setCertificates(dropCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
             });
     };
 
@@ -279,6 +303,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             lieu_formation: "",
             montant_formation: "",
             solde: "",
+            certification: "",
 
             doc_categorie: "",
             appartenir: "",
@@ -415,6 +440,18 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     placeholder="Formtion(s)"
                     options={trainings}
                     label="Formation"
+                />
+                <Dropdown
+                    selectedKey={values.certification}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("certification", item?.key);
+                    }}
+                    placeholder="Certification(s)"
+                    options={certificates}
+                    style={{ margin: "10px 10px" }}
                 />
                 <TextField
                     type="text"

@@ -233,4 +233,5 @@ MEDIA_URL = '/media/'
 
 
 COURSES = "compte.Courses"
+CERTIFICATE = "compte.certificate"
 
