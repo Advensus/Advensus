@@ -72,6 +72,7 @@ export const TrainingFolderFormComponent: React.FC<
         // Handle unique subscription/training-level
         if (trainee.souscrirs && val) {
             console.log("infos du dossier mm mm:", trainee.souscrirs);
+            // On compare la formation choisis avec les dossier en cours qui contiennent ces formations
             if (
                 trainee.souscrirs.find(
                     (_) =>
@@ -79,24 +80,47 @@ export const TrainingFolderFormComponent: React.FC<
                         _.formation.intitule === currentTraining.intitule
                 )
             ) {
+                // On compare la certif choisis et les dossiers en cours qui contiennent ces certifs
                 if (
                     trainee.souscrirs.find(
-                        (_) => _.level_start === val.level_start
+                        (_) =>
+                            currentTraining &&
+                            _.formation.certification.map(
+                                (certif) => certif.id === val.certification
+                            )
                     )
                 ) {
+                    // CE TYPE DE DOSSIER pourrais déjà existé on vérifie les niveaux maintenant
                     if (
                         trainee.souscrirs.find(
-                            (_) => _.level_end === val.level_end
+                            (_) => _.level_start === val.level_start
                         )
                     ) {
-                        // exist training folder
-                        console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
-                    } else {
                         if (
                             trainee.souscrirs.find(
-                                (_) => val.level_start === val.level_end
+                                (_) => _.level_end === val.level_end
                             )
                         ) {
+                            // exist training folder
+                            console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
+                        } else {
+                            if (
+                                trainee.souscrirs.find(
+                                    (_) => val.level_start === val.level_end
+                                )
+                            ) {
+                                // impossible to add
+                                console.log(
+                                    "le level de départ doit être inférieur au level de fin!"
+                                );
+                            } else {
+                                // do add new folder
+                                doAddNewFolder(val);
+                                console.log("AJOUT 3");
+                            }
+                        }
+                    } else {
+                        if (val.level_start === val.level_end) {
                             // impossible to add
                             console.log(
                                 "le level de départ doit être inférieur au level de fin!"
@@ -104,19 +128,50 @@ export const TrainingFolderFormComponent: React.FC<
                         } else {
                             // do add new folder
                             doAddNewFolder(val);
-                            console.log("AJOUT 3");
+                            console.log("AJOUT 1");
                         }
                     }
                 } else {
-                    if (val.level_start === val.level_end) {
-                        // impossible to add
-                        console.log(
-                            "le level de départ doit être inférieur au level de fin!"
-                        );
+                    // Les dossiers sont différents on peut ajouter
+                    if (
+                        trainee.souscrirs.find(
+                            (_) => _.level_start === val.level_start
+                        )
+                    ) {
+                        if (
+                            trainee.souscrirs.find(
+                                (_) => _.level_end === val.level_end
+                            )
+                        ) {
+                            // exist training folder
+                            console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
+                        } else {
+                            if (
+                                trainee.souscrirs.find(
+                                    (_) => val.level_start === val.level_end
+                                )
+                            ) {
+                                // impossible to add
+                                console.log(
+                                    "le level de départ doit être inférieur au level de fin!"
+                                );
+                            } else {
+                                // do add new folder
+                                doAddNewFolder(val);
+                                console.log("AJOUT 3");
+                            }
+                        }
                     } else {
-                        // do add new folder
-                        doAddNewFolder(val);
-                        console.log("AJOUT 1");
+                        if (val.level_start === val.level_end) {
+                            // impossible to add
+                            console.log(
+                                "le level de départ doit être inférieur au level de fin!"
+                            );
+                        } else {
+                            // do add new folder
+                            doAddNewFolder(val);
+                            console.log("AJOUT 1");
+                        }
                     }
                 }
             } else {

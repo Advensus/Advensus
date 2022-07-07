@@ -70,7 +70,7 @@ const createContentArea = (item: IProgram) => (
     >
         <Sticky stickyPosition={StickyPositionType.Both}>
             <div role="heading" aria-level={1} className={classNames.sticky}>
-                <Text variant="large">{item.libelle}</Text>
+                <Text variant="xLarge">{item.libelle}</Text>
             </div>
         </Sticky>
         <div className={classNames.textContent}>{item.description}</div>
@@ -206,11 +206,15 @@ export const TrainingProgramComponent: React.FC<ITrainingProgramProps> = () => {
                                 scrollContainerAriaLabel="Sticky component example"
                                 // styles={scrollablePaneStyles}
                             >
-                                {certifIsProgramm &&
+                                {/* {certifIsProgramm &&
                                 certifId &&
                                 certifId === _.certification.id
                                     ? certifIsProgramm.map(createContentArea)
-                                    : null}
+                                    : null} */}
+                                {certifIsProgramm &&
+                                    _.certification.programmes.map(
+                                        createContentArea
+                                    )}
                             </ScrollablePane>
                         </div>
                     </div>
