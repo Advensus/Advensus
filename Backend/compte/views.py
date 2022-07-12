@@ -40,6 +40,7 @@ import requests
 from reportlab.graphics.shapes import *
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import Frame,Table 
+from django.utils.html import marke_safe
 
 
 def home(request):
