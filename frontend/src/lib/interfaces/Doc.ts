@@ -6,5 +6,5 @@ export interface IDocument {
     appartenir: IUser;
     partager: IUser;
     sign: string | Blob;
-    path: string | Blob;
+    path: string;
 }

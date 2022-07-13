@@ -1,14 +1,11 @@
 .sidenav {
     position: relative;
-    // background-color: rgb(146, 146, 89);
     background: #873977;
-    flex: 0 0 250px;
     height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 19px;
+    display: grid;
+    gap: 1px;
 
     & i {
         color: #f4f3f3;
@@ -21,11 +18,10 @@
     &__route {
         display: flex;
         flex-direction: row;
-        gap: 8px;
+        gap: 1px;
         justify-content: flex-start;
         align-items: center;
-        padding: 8px;
-        padding-right: unset;
+        padding: 0 0 0 5px;
         border-radius: 2px;
         transition: all 300ms ease-in-out;
         &:hover,
@@ -67,4 +63,5 @@
     justify-content: center;
     align-items: center;
     height: 40px;
+    // background-color: red;
 }

@@ -18,7 +18,7 @@
     padding: 0 30px;
 }
 .trainee_docs_box_body {
-    padding: 0 15px;
+    padding: 0 10px;
 }
 
 .trainee_docs_box_body_content {
@@ -26,6 +26,17 @@
     align-items: center;
     justify-content: space-evenly;
     padding: 50px 0;
+}
+
+.trainee_docs_body_items {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: space-between;
+}
+
+.trainee_docs_items_container {
+    // background-color: red;
 }
 
 .trainee_docs_box_body_content_action {

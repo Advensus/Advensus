@@ -1,6 +1,9 @@
-import { Separator, Text } from "@fluentui/react";
+import { ActionButton, Separator, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import { ReactPdfCustomComponent } from "../../../../components";
+import {
+    CustomModalComponent,
+    ReactPdfCustomComponent,
+} from "../../../../components";
 import { IDocument } from "../../../../lib";
 import { prefixer } from "../../../../services/urls";
 import { useAuthStore } from "../../../../stores";
@@ -37,59 +40,53 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                     <Separator />
                     <div className="trainee_docs_box_body_content">
                         {showAdminDocs ? (
-                            <div>
-                                <div>The admin docs</div>
+                            <div className="trainee_docs_body_items">
+                                <Text variant="large">Documents Admin</Text>
                                 {docs.length &&
-                                    docs.map((_) => (
+                                    docs.map((_) =>
                                         // <ReactPdfCustomComponent
                                         //     key={_.id}
                                         //     pdfDoc={_}
                                         // />
-                                        <div key={_.id}>
-                                            <div>{_.doc_categorie}</div>
-                                            <div>{prefixer + _.path}</div>
-                                            <div>{prefixer + _.sign}</div>
-                                            {/* <embed
-                                                src={prefixer + _.path}
-                                                type="application/pdf"
-                                                // width="800"
-                                                // height="500"
-                                            /> */}
-                                            {/* <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik">
-                                                Loading pdf
-                                            </iframe> */}
-                                            <iframe
-                                                src={
-                                                    "https://docs.google.com/gview?url=" +
-                                                    prefixer +
-                                                    _.path
-                                                }
-                                                height="700"
-                                                width="300"
-                                            >
-                                                Loading pdf
-                                            </iframe>
 
-                                            {/* <object
-                                                data={prefixer + _.path}
-                                                type="application/pdf"
+                                        _.doc_categorie === "Admin_doc" ? (
+                                            <div
+                                                key={_.id}
+                                                className="trainee_docs_items_container"
                                             >
-                                                <iframe
-                                                    // src={`https://docs.google.com/viewer?url=${
-                                                    // //     prefixer + _.sign
-                                                    // }&embedded=true`}
-                                                    src={prefixer + _.path}
-                                                ></iframe>
-                                            </object> */}
-                                        </div>
-                                    ))}
-                                <div onClick={() => setShowAdminDocs(false)}>
-                                    Retour
-                                </div>
+                                                <CustomModalComponent
+                                                    currentDoc={_}
+                                                    fileName={_.path.substring(
+                                                        _.path.indexOf("t") + 3
+                                                    )}
+                                                    filePath={
+                                                        prefixer +
+                                                        _.path.substring(
+                                                            _.path.indexOf(
+                                                                "a"
+                                                            ) + 1
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        ) : null
+                                    )}
+                                <ActionButton
+                                    onClick={() => setShowAdminDocs(false)}
+                                >
+                                    <Text
+                                        variant="mediumPlus"
+                                        style={{ fontWeight: "bold" }}
+                                    >
+                                        Retour
+                                    </Text>
+                                </ActionButton>
                             </div>
                         ) : (
                             <div
-                                onClick={() => setShowAdminDocs(true)}
+                                onClick={() => {
+                                    setShowAdminDocs(true);
+                                }}
                                 className="trainee_docs_box_body_content_action"
                             >
                                 <Text
@@ -104,11 +101,42 @@ export const TraineeDocsPage: React.FC<ITraineeDocsPageProps> = () => {
                             </div>
                         )}
                         {showTrainingDocs ? (
-                            <div>
+                            <div className="trainee_docs_body_items">
                                 <div>Training docs</div>
-                                <div onClick={() => setShowTrainingDocs(false)}>
-                                    Retour
-                                </div>
+                                {docs.length &&
+                                    docs.map((_) =>
+                                        _.doc_categorie === "Training_doc" ? (
+                                            <div
+                                                key={_.id}
+                                                className="trainee_docs_items_container"
+                                            >
+                                                <CustomModalComponent
+                                                    currentDoc={_}
+                                                    fileName={_.path.substring(
+                                                        _.path.indexOf("t") + 3
+                                                    )}
+                                                    filePath={
+                                                        prefixer +
+                                                        _.path.substring(
+                                                            _.path.indexOf(
+                                                                "a"
+                                                            ) + 1
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        ) : null
+                                    )}
+                                <ActionButton
+                                    onClick={() => setShowTrainingDocs(false)}
+                                >
+                                    <Text
+                                        variant="mediumPlus"
+                                        style={{ fontWeight: "bold" }}
+                                    >
+                                        Retour
+                                    </Text>
+                                </ActionButton>
                             </div>
                         ) : (
                             <div

@@ -43,3 +43,7 @@ export * from "./company_components/small_company_card/small_company_card.compon
 export * from "./certificate_card/certificate_card.component";
 export * from "./empty_component/empty.component";
 export * from "./react_pdf_custom_component/react_pdf_custome.component";
+
+export * from "./Modal/custom_modal/custom_modal.component";
+
+export * from "./Dialog/sign_in_dialog/sig_in_dialog.component";

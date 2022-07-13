@@ -2,6 +2,8 @@ from ctypes import addressof, c_void_p
 from dataclasses import field
 from email.policy import default
 
+from django.forms import FileField
+
 from .training import formation,certificate,programme
 
 from .company import OrganismeFormation, SocieteFormation
@@ -388,6 +390,7 @@ class cruddocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     partager = FormateurData(read_only=True)
     appartenir = Stagiaredata(read_only=True)
+ 
 
     class Meta:
         model = Document

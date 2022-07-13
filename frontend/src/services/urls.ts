@@ -80,4 +80,5 @@ export const coursesUrls = {
 export const documentsUrls = {
     GENERATE_NEW_DOCUMENT: `${prefixer}/auth/GenerateDocument/`,
     CREATE_NEW_DOCUMENT: `${prefixer}/auth/CreateDocument/`,
+    EDIT_DOCUMENT: (id: string) => `${prefixer}/auth/UpdateDocument/${id}/`,
 };

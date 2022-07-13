@@ -8,8 +8,16 @@ export interface NewDocDto {
 export interface NewDocDtoIn {
     id: string;
     doc_categorie: string;
-    appartenir: IUser;
-    partager: IUser;
+    appartenir: string;
+    partager: string;
     sign: string | Blob;
     path: string | Blob;
+}
+export interface EditDocDtoIn {
+    id: string;
+    // doc_categorie: string;
+    // appartenir: IUser;
+    // partager: IUser;
+    sign: string | Blob;
+    // path: string | Blob;
 }
