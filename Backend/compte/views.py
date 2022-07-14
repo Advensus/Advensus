@@ -692,10 +692,10 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# response = requests.get(settings.MEDIA_URL+paths, stream=True)
 		
 		sauvegarde_contrat = Document(
-			
+			path = paths
 		)
 	
-		sauvegarde_contrat.path.save(paths, ContentFile("test"), save=False)
+		sauvegarde_contrat.save(paths, ContentFile("test"), save=False)
 
 
 	
@@ -783,9 +783,9 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		p.save()
 	
 		sauvegarde_formation = Document(
-			
+			path = paths2
 		)
-		sauvegarde_formation.path.save(paths2,ContentFile("test"),save=False) 
+		sauvegarde_formation.save(paths2,ContentFile("test"),save=False) 
 	 
 	
 		print(sauvegarde_formation.path)
@@ -880,11 +880,11 @@ def detaildocument(request, pk):
 
 
 @csrf_exempt
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def updatedocument(request,pk):
 	donnee =  Document.objects.get(id=pk)
 	
-	if request.method == "PUT":
+	if request.method == "PATCH":
 		document_data = JSONParser().parse(request)
 		serializer = cruddocuments(donnee,data=document_data)
 	
