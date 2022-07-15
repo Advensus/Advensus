@@ -1,8 +1,9 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { ITraining, NewTrainingDtoIn, NewTrainingDtoOut } from "../../../lib";
+import React, { useEffect } from "react";
+import { ITraining, NewTrainingDtoIn } from "../../../lib";
 import TrainingService from "../../../services/training.service";
+import * as Yup from "yup";
 
 export interface ITrainingFormProps {
     default_props?: boolean;
@@ -10,6 +11,10 @@ export interface ITrainingFormProps {
     onCreated: (data: ITraining) => void;
     training?: ITraining;
 }
+
+const validationSchema = Yup.object().shape({
+    intitule: Yup.string().required("Ce champ est requis!"),
+});
 
 export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
     cancel,
@@ -36,62 +41,36 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
             });
     };
 
-    const { values, handleChange, handleSubmit } = useFormik<NewTrainingDtoIn>({
-        initialValues: {
-            edof: "",
-            intitule: "",
-            duration: "",
-            start_session: "",
-            end_session: "",
-        },
-        onSubmit,
-    });
+    const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
+        useFormik<NewTrainingDtoIn>({
+            initialValues: {
+                intitule: "",
+            },
+            onSubmit,
+            validationSchema,
+        });
 
     return (
         <form onSubmit={handleSubmit} className="training_form_container">
             <Text className="training_txt_divide_mov">Formation</Text>
             <hr className="trainer_hr_solid" />
             <div className="training_fields_sect">
-                {/* <TextField
-                    type="text"
-                    value={values.edof}
-                    onChange={handleChange}
-                    placeholder="EDOF"
-                    name="edof"
-                    className="training_input"
-                /> */}
-                <TextField
-                    type="text"
-                    value={values.intitule}
-                    onChange={handleChange}
-                    placeholder="Intitulé"
-                    name="intitule"
-                    className="training_input"
-                />
-                {/* <TextField
-                    type="text"
-                    value={values.duration}
-                    onChange={handleChange}
-                    placeholder="Durée"
-                    name="duration"
-                    className="training_input"
-                /> */}
-                {/* <TextField
-                    type="text"
-                    value={values.start_session}
-                    onChange={handleChange}
-                    placeholder="Début session"
-                    name="start_session"
-                    className="training_input"
-                />
-                <TextField
-                    type="text"
-                    value={values.end_session}
-                    onChange={handleChange}
-                    placeholder="Fin session"
-                    name="end_session"
-                    className="training_input"
-                /> */}
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.intitule}
+                        onChange={handleChange}
+                        placeholder="Intitulé"
+                        name="intitule"
+                        className="training_input"
+                        onBlur={handleBlur}
+                    />
+                    {touched.intitule && errors.intitule ? (
+                        <Text className="errors_message">
+                            {errors.intitule}
+                        </Text>
+                    ) : null}
+                </div>
             </div>
             <div className="training_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />

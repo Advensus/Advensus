@@ -19,7 +19,7 @@ export interface NewUserDto {
     phone_number: string;
     adress: string;
     password: string;
-    horaire?: string;
+    // horaire?: string;
     competence: string[];
     appartenir_societe?: string | number | undefined;
     cv?: string | Blob;
@@ -52,7 +52,7 @@ export interface NewUserDtoOut {
     email: string;
     phone_number: string;
     adress: string;
-    horaire?: string;
+    // horaire?: string;
     competence?: string[];
     cv?: string | Blob;
     organisme?: string;

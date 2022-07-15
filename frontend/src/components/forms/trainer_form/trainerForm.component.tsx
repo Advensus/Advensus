@@ -6,17 +6,14 @@ import {
     Text,
     TextField,
 } from "@fluentui/react";
-import { Field, Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Checkbox } from "@fluentui/react/lib/Checkbox";
 import {
     BASIC_RP_FORM,
     IFormerSchedule,
     ITraining,
     IUser,
     NewUserDto,
-    NewUserDtoIn,
-    SERVICES_FORM,
     SUPER_RP_FORM,
     TEACHEAR_FORM,
 } from "../../../lib";
@@ -24,6 +21,7 @@ import { ICompany } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
 import UserService from "../../../services/user.service";
 import { TrainerTimeTableComponent } from "./trainer_time_table/trainerTimeTable.component";
+import * as Yup from "yup";
 
 export interface ITrainerFormProps {
     default_props?: boolean;
@@ -56,6 +54,37 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         },
         []
     );
+
+    const validationSchema =
+        formToDisplay === TEACHEAR_FORM
+            ? Yup.object().shape({
+                  username: Yup.string().required("Ce champ est requis!"),
+                  first_name: Yup.string().required("Ce champ est requis!"),
+                  email: Yup.string()
+                      .email("Format email invalide!")
+                      .required("Ce champ est requis!"),
+                  phone_number: Yup.string().required("Ce champ est requis!"),
+                  adress: Yup.string().required("Ce champ est requis!"),
+                  password: Yup.string().required("Ce champ est requis!"),
+                  competence: Yup.array().required("Ce champ est requis!"),
+                  appartenir_societe: Yup.string().required(
+                      "Ce champ est requis!"
+                  ),
+                  cv: Yup.string().required("Ce champ est requis!"),
+              })
+            : Yup.object().shape({
+                  username: Yup.string().required("Ce champ est requis!"),
+                  first_name: Yup.string().required("Ce champ est requis!"),
+                  email: Yup.string()
+                      .email("Format email invalide!")
+                      .required("Ce champ est requis!"),
+                  phone_number: Yup.string().required("Ce champ est requis!"),
+                  adress: Yup.string().required("Ce champ est requis!"),
+                  appartenir_societe: Yup.string().required(
+                      "Ce champ est requis!"
+                  ),
+                  password: Yup.string().required("Ce champ est requis!"),
+              });
 
     useEffect(() => {
         console.log({ isChecked });
@@ -114,7 +143,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         formData.append("phone_number", value.phone_number);
         formData.append("adress", value.adress);
         formData.append("password", value.password);
-        formData.append("horaire", `${value.horaire}`);
         for (let i = 0; i < value.competence.length; i++) {
             formData.append("competence", value.competence[0 + i]);
         }
@@ -225,6 +253,9 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         handleSubmit,
         setFieldValue,
         setFieldTouched,
+        handleBlur,
+        errors,
+        touched,
     } = useFormik<NewUserDto>({
         initialValues: {
             username: "",
@@ -233,7 +264,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             phone_number: "",
             adress: "",
             password: "",
-            horaire: "",
             competence: [],
             appartenir_societe: "",
             cv: "",
@@ -258,6 +288,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             // },
         },
         onSubmit,
+        validationSchema,
     });
 
     return (
@@ -293,49 +324,87 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     />
                 </div>
                 <div className="own_trainer_fields">
-                    <TextField
-                        type="text"
-                        placeholder="Fist name"
-                        name="first_name"
-                        value={values.first_name}
-                        onChange={handleChange}
-                    />
+                    <div>
+                        <TextField
+                            type="text"
+                            placeholder="Fist name"
+                            name="first_name"
+                            value={values.first_name}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.first_name && errors.first_name ? (
+                            <Text className="errors_message">
+                                {errors.first_name}
+                            </Text>
+                        ) : null}
+                    </div>
 
-                    <TextField
-                        type="text"
-                        placeholder="Last name"
-                        name="username"
-                        value={values.username}
-                        onChange={handleChange}
-                    />
+                    <div>
+                        <TextField
+                            type="text"
+                            placeholder="Last name"
+                            name="username"
+                            value={values.username}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.username && errors.username ? (
+                            <Text className="errors_message">
+                                {errors.username}
+                            </Text>
+                        ) : null}
+                    </div>
 
-                    <TextField
-                        type="email"
-                        placeholder="email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleChange}
-                    />
+                    <div>
+                        <TextField
+                            type="email"
+                            placeholder="email"
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.email && errors.email ? (
+                            <Text className="errors_message">
+                                {errors.email}
+                            </Text>
+                        ) : null}
+                    </div>
 
-                    <TextField
-                        type="text"
-                        placeholder="Phonenumber"
-                        name="phone_number"
-                        value={values.phone_number}
-                        onChange={handleChange}
-                    />
+                    <div>
+                        <TextField
+                            type="text"
+                            placeholder="Phonenumber"
+                            name="phone_number"
+                            value={values.phone_number}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.phone_number && errors.phone_number ? (
+                            <Text className="errors_message">
+                                {errors.phone_number}
+                            </Text>
+                        ) : null}
+                    </div>
                 </div>
             </div>
             <Text className="trainer_txt_divide_mov">Adress</Text>{" "}
             <hr className="trainer_hr_solid" />
             <div className="addr_trainer">
-                <TextField
-                    type="text"
-                    placeholder="Adresse"
-                    name="adress"
-                    value={values.adress}
-                    onChange={handleChange}
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        placeholder="Adresse"
+                        name="adress"
+                        value={values.adress}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                    {touched.adress && errors.adress ? (
+                        <Text className="errors_message">{errors.adress}</Text>
+                    ) : null}
+                </div>
             </div>
             {/* TRAINER'S SCHEDULER */}
             {formToDisplay === TEACHEAR_FORM && (
@@ -343,14 +412,6 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                     <Text className="trainer_txt_divide_mov">Horraires</Text>{" "}
                     <hr className="trainer_hr_solid" />
                     <div className="trainer_is_scheduler_container">
-                        <TextField
-                            type="text"
-                            id="horaire"
-                            placeholder="Horaire"
-                            name="horaire"
-                            value={values.horaire}
-                            onChange={handleChange}
-                        />
                         <TrainerTimeTableComponent
                             labelChecbox="Lun"
                             fromKeySelected={values.daysOfWeek?.monday.from}
@@ -552,42 +613,70 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
                             placeholder="Competences"
                             multiSelect
                             options={trainingAvailable}
+                            onBlur={handleBlur}
                         />
+                        {touched.competence && errors.competence ? (
+                            <Text className="errors_message">
+                                {errors.competence}
+                            </Text>
+                        ) : null}
                     </>
                 )}
 
-                <Dropdown
-                    selectedKey={values.appartenir_societe}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("appartenir_societe", item?.key);
-                    }}
-                    placeholder="SOCIETÉ(S) DE FORMATION(S)"
-                    options={societies}
-                />
+                <div>
+                    <Dropdown
+                        selectedKey={values.appartenir_societe}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("appartenir_societe", item?.key);
+                        }}
+                        placeholder="SOCIETÉ(S) DE FORMATION(S)"
+                        options={societies}
+                        onBlur={handleBlur}
+                    />
+                    {touched.appartenir_societe && errors.appartenir_societe ? (
+                        <Text className="errors_message">
+                            {errors.appartenir_societe}
+                        </Text>
+                    ) : null}
+                </div>
 
-                <TextField
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    canRevealPassword
-                    revealPasswordAriaLabel="Show password"
-                    name="password"
-                    value={values.password}
-                    onChange={handleChange}
-                />
+                <div>
+                    <TextField
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+                        name="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                    {touched.password && errors.password ? (
+                        <Text className="errors_message">
+                            {errors.password}
+                        </Text>
+                    ) : null}
+                </div>
 
-                <TextField
-                    label="CV"
-                    type="file"
-                    name="cv"
-                    onChange={(event: any) => {
-                        setFieldValue("cv", event.target.files[0]);
-                        setFieldTouched("cv", true);
-                    }}
-                />
+                <div>
+                    <TextField
+                        label="CV"
+                        type="file"
+                        name="cv"
+                        onChange={(event: any) => {
+                            setFieldValue("cv", event.target.files[0]);
+                            setFieldTouched("cv", true);
+                        }}
+                        onBlur={handleBlur}
+                    />
+                    {touched.cv && errors.cv ? (
+                        <Text className="errors_message">{errors.cv}</Text>
+                    ) : null}
+                </div>
             </div>
             <div className="trainer_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />

@@ -91,7 +91,7 @@ class FormateurData(serializers.ModelSerializer):
     appartenir_societe = SocieteData(read_only=True,many=True)
     class Meta:
         model = User
-        fields = ['id','username','first_name','email','phone_number','adress','password','horaire','cv','user_type','competence','appartenir_societe']
+        fields = ['id','username','first_name','email','phone_number','adress','password','cv','user_type','competence','appartenir_societe']
 
 class CoursesData(serializers.ModelSerializer):
     lier = FormationData(read_only=True)
@@ -135,7 +135,7 @@ class FormateurData(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','username','first_name','email','phone_number','adress','password','horaire','cv','user_type','competence','appartenir_societe']
+        fields = ['id','username','first_name','email','phone_number','adress','password','cv','user_type','competence','appartenir_societe']
 #END DATA ENTITY
 class crudformation(serializers.ModelSerializer):
     certification = CertificatData2(read_only=True,many=True)
@@ -340,7 +340,7 @@ class AddFormateur(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','first_name','email','phone_number','adress','password','horaire','cv','id','competence','appartenir_societe','user_type']
+        fields = ['username','first_name','email','phone_number','adress','password','cv','id','competence','appartenir_societe','user_type']
 
     # def validate(self,attrs):
     #     email = attrs.get('email','')
@@ -512,7 +512,7 @@ class cruduser(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id","email","username","first_name","is_active",
-                 "avatar","phone_number","adress","horaire","signature_former","cv",
+                 "avatar","phone_number","adress","signature_former","cv",
                  "user_type","competence","trainee_level","session_token","organisme_formation","societe","appartenir_societe","souscrirs","assister", "superviser",
                  "trainer_related_schedule"
                  ]

@@ -6,16 +6,12 @@ import {
     Text,
     TextField,
 } from "@fluentui/react";
-import { Formik, Field, Form, useFormik } from "formik";
+import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { ORG } from "../../../lib";
-import {
-    NewCompanyDtoIn,
-    NewCompanyDtoOut,
-    NewOrganizationDtoOut,
-} from "../../../lib/dto/company.dto";
-import { ICompany, IOrg } from "../../../lib/interfaces/Company";
+import { NewOrganizationDtoOut } from "../../../lib/dto/company.dto";
+import { IOrg } from "../../../lib/interfaces/Company";
 import CompanyService from "../../../services/company.service";
+import * as Yup from "yup";
 
 export interface ITrainingOrganizationFormProps {
     default_props?: boolean;
@@ -23,6 +19,21 @@ export interface ITrainingOrganizationFormProps {
     cancel?: () => void;
     org?: IOrg;
 }
+
+const validationSchema = Yup.object().shape({
+    company_name: Yup.string().required("Ce champ est requis!"),
+    company_adress: Yup.string().required("Ce champ est requis!"),
+    company_phone_number: Yup.string().required("Ce champ est requis!"),
+    fix_number: Yup.string().required("Ce champ est requis!"),
+    societe_formation: Yup.string().required("Ce champ est requis!"),
+    company_stamp: Yup.string().required("Ce champ est requis!"),
+    company_logo: Yup.string().required("Ce champ est requis!"),
+    password_connexion: Yup.string().required("Ce champ est requis!"),
+    // password_messagerie: Yup.string().required("Ce champ est requis!"),
+    email: Yup.string()
+        .email("Format email invalide!")
+        .required("Ce champ est requis!"),
+});
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: {} };
 
@@ -33,15 +44,8 @@ export const TrainingOrganizationFormComponent: React.FC<
         IDropdownOption[]
     >([]);
 
-    const [selectedSociety, setSelectedSociety] =
-        React.useState<IDropdownOption>();
-
-    const onChangeCompany = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedSociety(item);
-    };
+    // const [selectedSociety, setSelectedSociety] =
+    //     React.useState<IDropdownOption>();
 
     useEffect(() => {
         getSociete();
@@ -71,7 +75,7 @@ export const TrainingOrganizationFormComponent: React.FC<
     };
 
     const onSubmit = (val: NewOrganizationDtoOut) => {
-        val.societe_formation = selectedSociety ? selectedSociety.key : "";
+        // val.societe_formation = selectedSociety ? selectedSociety.key : "";
         console.log({ val });
         const formData = new FormData();
         formData.append("company_name", val.company_name);
@@ -104,15 +108,16 @@ export const TrainingOrganizationFormComponent: React.FC<
         handleSubmit,
         setFieldValue,
         setFieldTouched,
+        handleBlur,
+        errors,
+        touched,
     } = useFormik<NewOrganizationDtoOut>({
         initialValues: {
             company_name: "",
             company_adress: "",
             company_phone_number: "",
             fix_number: "",
-            societe_formation: selectedSociety
-                ? selectedSociety.key
-                : "dfqfqds",
+            societe_formation: "",
             company_stamp: "",
             company_logo: "",
             password_connexion: "",
@@ -120,6 +125,7 @@ export const TrainingOrganizationFormComponent: React.FC<
             email: "",
         },
         onSubmit,
+        validationSchema,
     });
 
     return (
@@ -144,51 +150,105 @@ export const TrainingOrganizationFormComponent: React.FC<
                         />
                     </div>
                     <div className="of_training_org_form_fields">
-                        <Dropdown
-                            selectedKey={
-                                selectedSociety
-                                    ? selectedSociety.key
-                                    : undefined
-                            }
-                            onChange={onChangeCompany}
-                            placeholder="Société(s)"
-                            options={trainingsCompanies}
-                        />
+                        <div>
+                            <Dropdown
+                                selectedKey={values.societe_formation}
+                                onChange={(
+                                    event: React.FormEvent<HTMLDivElement>,
+                                    item?: IDropdownOption
+                                ): void => {
+                                    setFieldValue(
+                                        "societe_formation",
+                                        item?.key
+                                    );
+                                }}
+                                // onChange={onChangeCompany}
+                                placeholder="Société(s)"
+                                options={trainingsCompanies}
+                            />
+                            {touched.societe_formation &&
+                            errors.societe_formation ? (
+                                <Text className="errors_message">
+                                    {errors.societe_formation}
+                                </Text>
+                            ) : null}
+                        </div>
 
-                        <TextField
-                            type="text"
-                            placeholder="Nom O-F"
-                            name="company_name"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <TextField
+                                type="text"
+                                placeholder="Nom O-F"
+                                name="company_name"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.company_name && errors.company_name ? (
+                                <Text className="errors_message">
+                                    {errors.company_name}
+                                </Text>
+                            ) : null}
+                        </div>
 
-                        <TextField
-                            type="text"
-                            name="company_adress"
-                            onChange={handleChange}
-                            placeholder="Adress O-F"
-                        />
+                        <div>
+                            <TextField
+                                type="text"
+                                name="company_adress"
+                                onChange={handleChange}
+                                placeholder="Adress O-F"
+                                onBlur={handleBlur}
+                            />
+                            {touched.company_adress && errors.company_adress ? (
+                                <Text className="errors_message">
+                                    {errors.company_adress}
+                                </Text>
+                            ) : null}
+                        </div>
 
-                        <TextField
-                            type="text"
-                            placeholder="Téléphone O-F"
-                            name="company_phone_number"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <TextField
+                                type="text"
+                                placeholder="Téléphone O-F"
+                                name="company_phone_number"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.company_phone_number &&
+                            errors.company_phone_number ? (
+                                <Text className="errors_message">
+                                    {errors.company_phone_number}
+                                </Text>
+                            ) : null}
+                        </div>
 
-                        <TextField
-                            type="text"
-                            placeholder="Fixe O-F"
-                            name="fix_number"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <TextField
+                                type="text"
+                                placeholder="Fixe O-F"
+                                name="fix_number"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.fix_number && errors.fix_number ? (
+                                <Text className="errors_message">
+                                    {errors.fix_number}
+                                </Text>
+                            ) : null}
+                        </div>
                         <hr />
-                        <TextField
-                            type="email"
-                            placeholder="Email O-F"
-                            name="email"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <TextField
+                                type="email"
+                                placeholder="Email O-F"
+                                name="email"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.email && errors.email ? (
+                                <Text className="errors_message">
+                                    {errors.email}
+                                </Text>
+                            ) : null}
+                        </div>
 
                         {/* <TextField type="text" placeholder="Serveur sortant" />
 
@@ -201,15 +261,25 @@ export const TrainingOrganizationFormComponent: React.FC<
                             revealPasswordAriaLabel="Show password"
                             name="password_messagerie"
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
-                        <TextField
-                            type="password"
-                            placeholder="Mot de passe de connexion"
-                            canRevealPassword
-                            revealPasswordAriaLabel="Show password"
-                            name="password_connexion"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <TextField
+                                type="password"
+                                placeholder="Mot de passe de connexion"
+                                canRevealPassword
+                                revealPasswordAriaLabel="Show password"
+                                name="password_connexion"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.password_connexion &&
+                            errors.password_connexion ? (
+                                <Text className="errors_message">
+                                    {errors.password_connexion}
+                                </Text>
+                            ) : null}
+                        </div>
 
                         <hr />
 
@@ -238,6 +308,7 @@ export const TrainingOrganizationFormComponent: React.FC<
                                     );
                                     setFieldTouched("company_stamp", true);
                                 }}
+                                onBlur={handleBlur}
                             />
                         </div>
                     </div>
