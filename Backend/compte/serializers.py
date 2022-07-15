@@ -372,12 +372,10 @@ class cruddocuments(serializers.ModelSerializer):
 
 class updatedocuments(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    partager = FormateurData(read_only=True)
-    appartenir = Stagiaredata(read_only=True)
     
     class Meta:
         model = Document
-        fields = ['id','path','doc_categorie','appartenir','partager', 'sign']
+        fields = ['id','sign']
 
 
 
