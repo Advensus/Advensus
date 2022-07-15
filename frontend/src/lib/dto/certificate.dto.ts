@@ -12,9 +12,10 @@ export interface NewCertificateDtoIn {
     certificate?: string;
 }
 export interface NewTrainingProgramDtoIn {
-    intitule: string;
+    libelle: string;
     description: string;
     attribue: string;
+    training: string;
 }
 
 export interface NewCertificateDtoOut {

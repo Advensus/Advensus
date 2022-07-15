@@ -12,20 +12,38 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import TrainingService from "../../../services/training.service";
 import {
+    ICertificate,
     ICompany,
     ISubscription,
     ITraining,
     IUser,
     NewTrainingFolderDto,
 } from "../../../lib";
-import CompanyService from "../../../services/company.service";
 import TrainingFolderService from "../../../services/training-folder.service";
+import * as Yup from "yup";
 
 export interface ITrainingFolderFormProps {
     default_props?: boolean;
     trainee: IUser;
     onCreated: (data: ISubscription, user: IUser) => void;
 }
+
+const validationSchema = Yup.object().shape({
+    edof: Yup.string().required("Ce champ est requis!"),
+    training_status: Yup.string().required("Ce champ est requis!"),
+    hour_worked: Yup.string().required("Ce champ est requis!"),
+    duration: Yup.string().required("Ce champ est requis!"),
+    start_session: Yup.string().required("Ce champ est requis!"),
+    end_session: Yup.string().required("Ce champ est requis!"),
+    formation: Yup.string().required("Ce champ est requis!"),
+    stagiaire: Yup.string().required("Ce champ est requis!"),
+    level_start: Yup.string().required("Ce champ est requis!"),
+    level_end: Yup.string().required("Ce champ est requis!"),
+    lieu_formation: Yup.string().required("Ce champ est requis!"),
+    montant_formation: Yup.string().required("Ce champ est requis!"),
+    solde: Yup.string().required("Ce champ est requis!"),
+    certification: Yup.string().required("Ce champ est requis!"),
+});
 
 export const TrainingFolderFormComponent: React.FC<
     ITrainingFolderFormProps
@@ -36,6 +54,7 @@ export const TrainingFolderFormComponent: React.FC<
     );
     const [startDate, setStartDate] = useState<Date | null | undefined>();
     const [trainings, setTrainings] = useState<IDropdownOption[]>([]);
+    const [certificates, setCertificates] = useState<IDropdownOption[]>([]);
     const [allTheTrainings, setAllTheTrainings] = useState<ITraining[]>([]);
 
     useEffect(() => {
@@ -70,6 +89,7 @@ export const TrainingFolderFormComponent: React.FC<
         // Handle unique subscription/training-level
         if (trainee.souscrirs && val) {
             console.log("infos du dossier mm mm:", trainee.souscrirs);
+            // On compare la formation choisis avec les dossier en cours qui contiennent ces formations
             if (
                 trainee.souscrirs.find(
                     (_) =>
@@ -77,24 +97,47 @@ export const TrainingFolderFormComponent: React.FC<
                         _.formation.intitule === currentTraining.intitule
                 )
             ) {
+                // On compare la certif choisis et les dossiers en cours qui contiennent ces certifs
                 if (
                     trainee.souscrirs.find(
-                        (_) => _.level_start === val.level_start
+                        (_) =>
+                            currentTraining &&
+                            _.formation.certification.map(
+                                (certif) => certif.id === val.certification
+                            )
                     )
                 ) {
+                    // CE TYPE DE DOSSIER pourrais déjà existé on vérifie les niveaux maintenant
                     if (
                         trainee.souscrirs.find(
-                            (_) => _.level_end === val.level_end
+                            (_) => _.level_start === val.level_start
                         )
                     ) {
-                        // exist training folder
-                        console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
-                    } else {
                         if (
                             trainee.souscrirs.find(
-                                (_) => val.level_start === val.level_end
+                                (_) => _.level_end === val.level_end
                             )
                         ) {
+                            // exist training folder
+                            console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
+                        } else {
+                            if (
+                                trainee.souscrirs.find(
+                                    (_) => val.level_start === val.level_end
+                                )
+                            ) {
+                                // impossible to add
+                                console.log(
+                                    "le level de départ doit être inférieur au level de fin!"
+                                );
+                            } else {
+                                // do add new folder
+                                doAddNewFolder(val);
+                                console.log("AJOUT 3");
+                            }
+                        }
+                    } else {
+                        if (val.level_start === val.level_end) {
                             // impossible to add
                             console.log(
                                 "le level de départ doit être inférieur au level de fin!"
@@ -102,19 +145,50 @@ export const TrainingFolderFormComponent: React.FC<
                         } else {
                             // do add new folder
                             doAddNewFolder(val);
-                            console.log("AJOUT 3");
+                            console.log("AJOUT 1");
                         }
                     }
                 } else {
-                    if (val.level_start === val.level_end) {
-                        // impossible to add
-                        console.log(
-                            "le level de départ doit être inférieur au level de fin!"
-                        );
+                    // Les dossiers sont différents on peut ajouter
+                    if (
+                        trainee.souscrirs.find(
+                            (_) => _.level_start === val.level_start
+                        )
+                    ) {
+                        if (
+                            trainee.souscrirs.find(
+                                (_) => _.level_end === val.level_end
+                            )
+                        ) {
+                            // exist training folder
+                            console.log("CE TYPE DE DOSSIER EXISTE DEJA!");
+                        } else {
+                            if (
+                                trainee.souscrirs.find(
+                                    (_) => val.level_start === val.level_end
+                                )
+                            ) {
+                                // impossible to add
+                                console.log(
+                                    "le level de départ doit être inférieur au level de fin!"
+                                );
+                            } else {
+                                // do add new folder
+                                doAddNewFolder(val);
+                                console.log("AJOUT 3");
+                            }
+                        }
                     } else {
-                        // do add new folder
-                        doAddNewFolder(val);
-                        console.log("AJOUT 1");
+                        if (val.level_start === val.level_end) {
+                            // impossible to add
+                            console.log(
+                                "le level de départ doit être inférieur au level de fin!"
+                            );
+                        } else {
+                            // do add new folder
+                            doAddNewFolder(val);
+                            console.log("AJOUT 1");
+                        }
                     }
                 }
             } else {
@@ -144,10 +218,13 @@ export const TrainingFolderFormComponent: React.FC<
         handleSubmit,
         setFieldValue,
         setFieldTouched,
+        handleBlur,
+        errors,
+        touched,
     } = useFormik<NewTrainingFolderDto>({
         initialValues: {
             edof: "",
-            training_status: "",
+            training_status: "Default_values",
             hour_worked: "0",
             duration: "",
             start_session: new Date(),
@@ -158,9 +235,11 @@ export const TrainingFolderFormComponent: React.FC<
             level_end: "",
             lieu_formation: "",
             montant_formation: "",
-            solde: "",
+            solde: "Default_values",
+            certification: "",
         },
         onSubmit,
+        validationSchema,
     });
 
     const getAllTraining = async () => {
@@ -185,6 +264,28 @@ export const TrainingFolderFormComponent: React.FC<
             });
     };
 
+    const getCertificateByTrainingId = (id: string) => {
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log("response getting certif by:", respCertif);
+                const dropCertif = respCertif.map((_) => {
+                    return { key: _.id, text: _.intitule };
+                });
+                setCertificates(dropCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+            });
+    };
+
+    console.log({ errors });
+
     return (
         <form
             onSubmit={handleSubmit}
@@ -192,50 +293,106 @@ export const TrainingFolderFormComponent: React.FC<
         >
             <hr className="training_folder_form_hr_solid" />
             <div className="training_folder_fields">
-                <TextField
-                    type="text"
-                    value={values.edof}
-                    onChange={handleChange}
-                    placeholder="EDOF"
-                    name="edof"
-                    label="Edof"
-                />
-                <Dropdown
-                    selectedKey={values.formation}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("formation", item?.key);
-                    }}
-                    placeholder="Formtion(s)"
-                    options={trainings}
-                    label="Formation"
-                />
-                <Dropdown
-                    selectedKey={values.level_start}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("level_start", item?.key);
-                    }}
-                    placeholder="Niveau actuel du stagiaire"
-                    options={CurrentTraineeState}
-                    label="Niveau du stagaire"
-                />
-                <Dropdown
-                    selectedKey={values.level_end}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("level_end", item?.key);
-                    }}
-                    placeholder="Niveau visé par le stagiaire"
-                    options={CurrentTraineeState}
-                    label="Niveau visé par le stagiaire"
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.edof}
+                        onChange={handleChange}
+                        placeholder="EDOF"
+                        name="edof"
+                        label="Edof"
+                        onBlur={handleBlur}
+                    />
+                    {touched.edof && errors.edof ? (
+                        <Text className="errors_message">{errors.edof}</Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.formation}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("formation", item?.key);
+                            setFieldTouched("formation", true);
+                            item &&
+                                getCertificateByTrainingId(item.key as string);
+                        }}
+                        placeholder="Formtion(s)"
+                        options={trainings}
+                        label="Formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.formation && errors.formation ? (
+                        <Text className="errors_message">
+                            {errors.formation}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.certification}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("certification", item?.key);
+                            setFieldTouched("certification", true);
+                        }}
+                        placeholder="Certification(s)"
+                        options={certificates}
+                        style={{ margin: "10px 10px" }}
+                        onBlur={handleBlur}
+                    />
+                    {touched.certification && errors.certification ? (
+                        <Text className="errors_message">
+                            {errors.certification}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.level_start}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("level_start", item?.key);
+                            setFieldTouched("level_start", true);
+                        }}
+                        placeholder="Niveau actuel du stagiaire"
+                        options={CurrentTraineeState}
+                        label="Niveau du stagaire"
+                        onBlur={handleBlur}
+                    />
+                    {touched.level_start && errors.level_start ? (
+                        <Text className="errors_message">
+                            {errors.level_start}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.level_end}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("level_end", item?.key);
+                            setFieldTouched("level_end", true);
+                        }}
+                        placeholder="Niveau visé par le stagiaire"
+                        options={CurrentTraineeState}
+                        label="Niveau visé par le stagiaire"
+                        onBlur={handleBlur}
+                    />
+                    {touched.level_end && errors.level_end ? (
+                        <Text className="errors_message">
+                            {errors.level_end}
+                        </Text>
+                    ) : null}
+                </div>
                 {/* <TextField
                     type="text"
                     value={values.hour_worked}
@@ -244,57 +401,98 @@ export const TrainingFolderFormComponent: React.FC<
                     name="hour_worked"
                     label="Heure(s) réalisée(s)"
                 /> */}
-                <TextField
-                    type="text"
-                    value={values.duration}
-                    onChange={handleChange}
-                    placeholder="Durée de la formation"
-                    name="duration"
-                    label="Durée de la formation"
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.duration}
+                        onChange={handleChange}
+                        placeholder="Durée de la formation"
+                        name="duration"
+                        label="Durée de la formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.duration && errors.duration ? (
+                        <Text className="errors_message">
+                            {errors.duration}
+                        </Text>
+                    ) : null}
+                </div>
 
-                <Dropdown
-                    selectedKey={values.lieu_formation}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("lieu_formation", item?.key);
-                    }}
-                    label="Lieu"
-                    placeholder="Lieu de la formation"
-                    options={LocationTraining}
-                />
+                <div>
+                    <Dropdown
+                        selectedKey={values.lieu_formation}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("lieu_formation", item?.key);
+                            setFieldTouched("lieu_formation", true);
+                        }}
+                        label="Lieu"
+                        placeholder="Lieu de la formation"
+                        options={LocationTraining}
+                        onBlur={handleBlur}
+                    />
+                    {touched.lieu_formation && errors.lieu_formation ? (
+                        <Text className="errors_message">
+                            {errors.lieu_formation}
+                        </Text>
+                    ) : null}
+                </div>
 
-                <TextField
-                    type="text"
-                    value={values.montant_formation}
-                    onChange={handleChange}
-                    placeholder="Montant de la formation"
-                    name="montant_formation"
-                    label="Montant de la formation"
-                />
-                <DatePicker
-                    firstDayOfWeek={firstDayOfWeek}
-                    placeholder="Date de début de session"
-                    ariaLabel="Select a date"
-                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                    strings={defaultDatePickerStrings}
-                    onSelectDate={(s) => setStartDate(s)}
-                    value={startDate ? startDate : undefined}
-                    label="Date de début de session"
-                />
-                <DatePicker
-                    firstDayOfWeek={firstDayOfWeek}
-                    placeholder="Date de fin de session"
-                    ariaLabel="Select a date"
-                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                    strings={defaultDatePickerStrings}
-                    // onChange={handleChange}
-                    onSelectDate={(d) => setEndDate(d)}
-                    value={endDate ? endDate : undefined}
-                    label="Date de fin de session"
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.montant_formation}
+                        onChange={handleChange}
+                        placeholder="Montant de la formation"
+                        name="montant_formation"
+                        label="Montant de la formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.montant_formation && errors.montant_formation ? (
+                        <Text className="errors_message">
+                            {errors.montant_formation}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <DatePicker
+                        firstDayOfWeek={firstDayOfWeek}
+                        placeholder="Date de début de session"
+                        ariaLabel="Select a date"
+                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                        strings={defaultDatePickerStrings}
+                        onSelectDate={(s) => setStartDate(s)}
+                        value={startDate ? startDate : undefined}
+                        label="Date de début de session"
+                        onBlur={handleBlur}
+                    />
+                    {touched.start_session && errors.start_session ? (
+                        <Text className="errors_message">
+                            {errors.start_session}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <DatePicker
+                        firstDayOfWeek={firstDayOfWeek}
+                        placeholder="Date de fin de session"
+                        ariaLabel="Select a date"
+                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                        strings={defaultDatePickerStrings}
+                        // onChange={handleChange}
+                        onSelectDate={(d) => setEndDate(d)}
+                        value={endDate ? endDate : undefined}
+                        label="Date de fin de session"
+                        onBlur={handleBlur}
+                    />
+                    {touched.end_session && errors.end_session ? (
+                        <Text className="errors_message">
+                            {errors.end_session}
+                        </Text>
+                    ) : null}
+                </div>
                 {/* <Dropdown
                     selectedKey={values.training_status}
                     onChange={(

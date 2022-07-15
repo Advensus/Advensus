@@ -43,14 +43,7 @@ export interface NewOrganizationDtoOut {
     fix_number?: string;
     company_stamp: string | Blob;
     company_logo: string | Blob;
-    societe_formation:
-        | IDropdownOption<string>
-        | string
-        | number
-        | string[]
-        | number[]
-        | null
-        | undefined;
+    societe_formation: string;
 }
 export interface TrainingOrganizationDtoIn {
     trainingOrganization: ICompany[];

@@ -1,8 +1,9 @@
-import { Text } from "@fluentui/react";
+import { ActionButton, Text } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useUserRouteHooks } from "../../../hooks";
-import { IRole } from "../../../lib";
+import { IRole, TRAINEE } from "../../../lib";
+import { useAuthStore } from "../../../stores";
 import { CurrentUserDetailsComponent } from "../../users_components/current-user-details/current_user_details.component";
 
 export interface SideNavBaseProps {
@@ -20,6 +21,11 @@ export interface IRoute {
 
 export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
     const menuRoutes = useUserRouteHooks();
+    const { updateToken, user } = useAuthStore();
+    const navigate = useNavigate();
+
+    const [handleEnableNavLink, setHandleEnableNavLink] =
+        useState<boolean>(true);
 
     // Handle media query
     const [isMobile, setIsMobile] = useState<Boolean>(false);
@@ -253,13 +259,30 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
     //         }, 700); // timed to match animation-duration
     //     }
     // };
+    useEffect(() => {
+        if (user.user_type === TRAINEE) {
+            user.appartenir_content_type.map((_) => {
+                _.sign != null
+                    ? setHandleEnableNavLink(false)
+                    : setHandleEnableNavLink(!handleEnableNavLink);
+            });
+        }
+    }, [user]);
+
+    const doLogout = () => {
+        localStorage.clear();
+        updateToken("");
+        navigate("/login");
+    };
+
     return (
         <nav className="sidenav">
             {isMobile ? <CurrentUserDetailsComponent /> : null}
             {menuRoutes.map((navig) => (
                 <NavLink
+                    id="testDisabled"
                     key={navig.path}
-                    to={navig.path}
+                    to={handleEnableNavLink ? navig.path : "#"}
                     state={{ label: `${navig.label}` }}
                     className={({ isActive }) =>
                         [
@@ -273,13 +296,20 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                     <i className={"las " + navig.icon}></i>
                     <Text
                         variant="tiny"
-                        style={{ fontWeight: "bold", color: "#f4f3f3" }}
+                        style={{
+                            fontWeight: "bold",
+                            color: "#f4f3f3",
+                        }}
                     >
                         {navig.label}
                     </Text>
                 </NavLink>
             ))}
-            {/* <div className="sidenav_footer">The nav footer</div> */}
+            <div className="sidenav_footer">
+                <ActionButton onClick={doLogout}>
+                    <Text style={{ fontWeight: "bolder" }}>Déconnexion</Text>
+                </ActionButton>
+            </div>
         </nav>
     );
 };

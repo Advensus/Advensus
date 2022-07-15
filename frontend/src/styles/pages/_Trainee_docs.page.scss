@@ -18,7 +18,7 @@
     padding: 0 30px;
 }
 .trainee_docs_box_body {
-    padding: 0 15px;
+    padding: 0 10px;
 }
 
 .trainee_docs_box_body_content {
@@ -28,6 +28,17 @@
     padding: 50px 0;
 }
 
+.trainee_docs_body_items {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: space-between;
+}
+
+.trainee_docs_items_container {
+    // background-color: red;
+}
+
 .trainee_docs_box_body_content_action {
     background-color: gray;
     height: 13em;
@@ -35,4 +46,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+#Trainee_display_tab_ii {
+    position: relative;
+    background: #fff;
+    transform: scale(0);
+    transition: 1s ease opacity, 0.6s ease transform;
+    padding: 15px 15px 0 15px;
+    color: #000;
+    overflow: auto;
+    width: 60%;
 }

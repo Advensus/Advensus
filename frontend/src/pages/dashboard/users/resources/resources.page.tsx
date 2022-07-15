@@ -134,7 +134,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
         // console.log({ user });
         setResource(user);
         var hint = document.getElementById(
-            "display_tab_ii"
+            "resource_display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
             "users_content_display_resources"
@@ -157,6 +157,7 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                     hint.style.display = "none";
                 }, 700); // timed to match animation-duration
                 first_tab.style.width = "550px";
+                setResource(undefined);
             }
         }
     };
@@ -243,8 +244,10 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                             {!showForm ? (
                                 // LIST TITLE
                                 <Text>Ressources</Text>
+                            ) : // FORM TITLE
+                            resource ? (
+                                <Text> Modifier Ressource</Text>
                             ) : (
-                                // FORM TITLE
                                 <Text> Ajouter Ressource</Text>
                             )}
                             {/* <TooltipHost
@@ -416,17 +419,22 @@ export const ResourcesPage: React.FC<IResourcesPageProps> = () => {
                     ) : (
                         <TrainerFormComponent
                             onCreate={handleOnCreate}
-                            cancel={() => setShowForm(false)}
+                            cancel={() => {
+                                setShowForm(false);
+                                setResource(undefined);
+                            }}
                             formToDisplay={formToDisplay}
                             trainings={trainings}
+                            user={resource}
                         />
                     )}
                 </div>
             </div>
-            <div id="display_tab_ii">
+            <div id="resource_display_tab_ii">
                 <FullInformationsTabComponent
                     user={resource}
                     currentPath={pathLabel}
+                    showTheForm={showAddForm}
                 />
             </div>
         </div>

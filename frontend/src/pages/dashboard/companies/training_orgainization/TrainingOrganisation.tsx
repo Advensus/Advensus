@@ -209,7 +209,7 @@ export const TrainingOrganisationPage: React.FC<
         // console.log({ id });
         setTheOrganization(org);
         var hint = document.getElementById(
-            "display_tab_ii"
+            "training_organisation_display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
             "users_content_display_organization"
@@ -232,6 +232,7 @@ export const TrainingOrganisationPage: React.FC<
                     hint.style.display = "none";
                 }, 700); // timed to match animation-duration
                 first_tab.style.width = "550px";
+                setTheOrganization(undefined);
             }
         }
     };
@@ -256,17 +257,21 @@ export const TrainingOrganisationPage: React.FC<
                             {!showForm ? (
                                 // LIST TITLE
                                 <Text>O-F</Text>
+                            ) : // FORM TITLE
+                            theOrganization ? (
+                                <Text>Modifier O-F</Text>
                             ) : (
-                                // FORM TITLE
                                 <Text>Ajouter O-F</Text>
                             )}
                             <TooltipHost content="Ajouter O-F" id={tooltipId}>
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() =>
-                                        showAddForm(ORGANIZATION_FORM)
-                                    }
+                                    onClick={() => {
+                                        showAddForm(ORGANIZATION_FORM);
+                                        if (theOrganization)
+                                            setTheOrganization(undefined);
+                                    }}
                                 />
                             </TooltipHost>
                         </div>
@@ -351,15 +356,17 @@ export const TrainingOrganisationPage: React.FC<
                         <TrainingOrganizationFormComponent
                             cancel={() => setShowForm(false)}
                             onCreate={handleOnCreate}
+                            org={theOrganization}
                         />
                     )}
                 </div>
             </div>
-            <div id="display_tab_ii">
+            <div id="training_organisation_display_tab_ii">
                 <FullInformationsTabComponent
                     contentId={theOrganization?.id}
                     currentPath={pathLabel}
                     org={theOrganization}
+                    showTheForm={showAddForm}
                 />
             </div>
         </div>

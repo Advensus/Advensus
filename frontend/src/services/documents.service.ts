@@ -18,6 +18,9 @@ class DocumentsService {
     //     BaseService.postRequest(coursesUrls.NEW_COURSES, info, false);
     // static get_all_bookings = () =>
     //     BaseService.getRequest(bookingUrls.GET_ALL_BOOKING, false);
+
+    static edit_document = (id: string, info: unknown) =>
+        BaseService.patchRequest(documentsUrls.EDIT_DOCUMENT(id), info, false);
 }
 
 export default DocumentsService;

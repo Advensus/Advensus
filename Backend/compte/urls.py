@@ -28,6 +28,7 @@ urlpatterns = [
     path('create/certificate/', CreateCertificate.as_view()),
     path('GetCertificationByFor/<str:pk>/',views.getcertificationbyform),
     path('GetProgrammeByCert/<str:pk>/',views.getprogrammebycert),
+    path('GetProgrammeByTainingAndCert/<str:pk1>/<str:pk2>/',views.getprogrammebytrainingandcert),
 
     # CRUD COURSES 
     path('create/courses/', CreateCourses.as_view()),

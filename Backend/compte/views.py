@@ -1,4 +1,5 @@
 
+from functools import partial
 from urllib import response
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
@@ -158,7 +159,6 @@ class RegisterFormateur(generics.GenericAPIView):
 			adress=data['adress'],
 			password=data['password'],
 			cv=data['cv'],
-			horaire=data['horaire'],
 			)
 		new_formateur.save()
 		forma = formation.objects.get(id=data['competence'])
@@ -879,16 +879,19 @@ def detaildocument(request, pk):
 
 
 @csrf_exempt
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def updatedocument(request,pk):
-	donnee =  Document.objects.get(id=pk)
 	
-	if request.method == "PUT":
+	donnee =  Document.objects.filter(id=pk).first()
+
+	if request.method == "PATCH":
 		document_data = JSONParser().parse(request)
-		serializer = cruddocuments(donnee,data=document_data)
+		serializer = cruddocuments(donnee,data=document_data,partial=True)
+		print(document_data)
 	
 		if serializer.is_valid():
 			serializer.save()
+			print(serializer.data)
 			return Response(serializer.data) 
 		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
@@ -1147,6 +1150,16 @@ def getprogrammebycert(request,pk):
 	serializer = serializer_class(donnee,many=True)
 
 	return Response(serializer.data)
+
+@api_view(['GET'])
+def getprogrammebytrainingandcert(request,pk1,pk2):
+	serializer_class = crudprogramme
+	donnee = programme.objects.filter(attribue=pk1,training=pk2)
+
+	serializer = serializer_class(donnee,many=True)
+
+	return Response(serializer.data)
+
 class CreateCertificate(CreateAPIView):
     serializer_class = createcertificate
     queryset = certificate.objects.all()

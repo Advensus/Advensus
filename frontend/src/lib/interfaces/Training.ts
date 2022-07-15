@@ -1,12 +1,17 @@
+import { ICertificate } from "./Certificate";
+import { IUser } from "./User";
+
 export interface ITraining {
     id: string;
     intitule: string;
+    certification: ICertificate[];
 }
 
 export interface IProgram {
     id: string;
-    intitule: string;
+    libelle: string;
     description: string;
+    color: string;
 }
 
 export interface ISubscription {
@@ -23,4 +28,6 @@ export interface ISubscription {
     lieu_formation: string;
     solde: string;
     montant_formation: string;
+    stagiaire: IUser;
+    certification: ICertificate;
 }

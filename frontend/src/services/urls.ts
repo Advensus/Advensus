@@ -40,6 +40,13 @@ export const certificateUrls = {
 };
 export const trainingProgramUrls = {
     NEW_TRAINING_PROGRAMM: `${prefixer}/auth/create/programme/`,
+    GET_PROGRAM_BY_CERTIFICATE_ID: (id: string) =>
+        `${prefixer}/auth/GetProgrammeByCert/${id}`,
+    GET_PROGRAM_BY_TRAINING_AND_CERTIFICATE_ID: (
+        idTraining: string,
+        idCertif: string
+    ) =>
+        `${prefixer}/auth/GetProgrammeByTainingAndCert/${idCertif}/${idTraining}`,
 };
 
 export const trainingFolderUrls = {
@@ -73,4 +80,5 @@ export const coursesUrls = {
 export const documentsUrls = {
     GENERATE_NEW_DOCUMENT: `${prefixer}/auth/GenerateDocument/`,
     CREATE_NEW_DOCUMENT: `${prefixer}/auth/CreateDocument/`,
+    EDIT_DOCUMENT: (id: string) => `${prefixer}/auth/UpdateDocument/${id}/`,
 };

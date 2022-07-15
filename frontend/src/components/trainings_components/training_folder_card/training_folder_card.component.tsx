@@ -73,7 +73,9 @@ export const TrainingFolderCardComponent: React.FC<
             </div>
             <div className="training_folder_card_footer">
                 <Text variant="tiny" style={{ fontWeight: "bold" }}>
-                    {subscriptionDetails.formation.intitule}
+                    {subscriptionDetails.formation.intitule +
+                        " - " +
+                        subscriptionDetails.certification.intitule}
                 </Text>
                 <Separator vertical={true} />
                 <Text variant="tiny" style={{ fontWeight: "bold" }}>

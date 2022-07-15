@@ -7,7 +7,7 @@ import {
 } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { ICertificate } from "../../../lib";
+import { ICertificate, ITraining } from "../../../lib";
 import {
     NewTrainingProgramDtoIn,
     NewTrainingProgramDtoOut,
@@ -17,19 +17,23 @@ import TrainingService from "../../../services/training.service";
 export interface ITrainingProgramFormProps {
     default_props?: boolean;
     certificates?: ICertificate[];
+    trainings?: ITraining[];
     cancel?: () => void;
 }
 
 export const TrainingProgramFormComponent: React.FC<
     ITrainingProgramFormProps
-> = ({ certificates, cancel }) => {
+> = ({ certificates, trainings, cancel }) => {
     const [trainingAvailable, setTrainingAvailable] = useState<
+        IDropdownOption[]
+    >([]);
+    const [trainingIsCertificates, setTrainingIsCertificates] = useState<
         IDropdownOption[]
     >([]);
 
     useEffect(() => {
-        if (certificates) {
-            const dropTraining = certificates.map((_) => {
+        if (trainings) {
+            const dropTraining = trainings.map((_) => {
                 let Civility = {
                     key: _.id,
                     text: _.intitule,
@@ -64,12 +68,33 @@ export const TrainingProgramFormComponent: React.FC<
         setFieldTouched,
     } = useFormik<NewTrainingProgramDtoIn>({
         initialValues: {
-            intitule: "",
+            libelle: "",
             description: "",
             attribue: "",
+            training: "",
         },
         onSubmit,
     });
+
+    const getCertificateByTrainingId = (id: string) => {
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log("response getting certif by:", respCertif);
+                const dropCertif = respCertif.map((_) => {
+                    return { key: _.id, text: _.intitule };
+                });
+                setTrainingIsCertificates(dropCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+            });
+    };
 
     return (
         <form onSubmit={handleSubmit} className="certificate_form_container">
@@ -78,6 +103,20 @@ export const TrainingProgramFormComponent: React.FC<
             </Text>
             <hr className="certif_form_hr_solid" />
             <div className="certif_form_fields_sect">
+                <Dropdown
+                    selectedKey={values.training}
+                    onChange={(
+                        event: React.FormEvent<HTMLDivElement>,
+                        item?: IDropdownOption
+                    ): void => {
+                        setFieldValue("training", item?.key);
+                        setFieldTouched("selected", true);
+                        item && getCertificateByTrainingId(item.key as string);
+                    }}
+                    placeholder="Formation(s)"
+                    label="Formation concernée"
+                    options={trainingAvailable}
+                />
                 <Dropdown
                     selectedKey={values.attribue}
                     onChange={(
@@ -88,14 +127,15 @@ export const TrainingProgramFormComponent: React.FC<
                         setFieldTouched("selected", true);
                     }}
                     placeholder="Certification Concerné"
-                    options={trainingAvailable}
+                    options={trainingIsCertificates}
+                    style={{ margin: "10px" }}
                 />
                 <TextField
                     type="text"
-                    value={values.intitule}
+                    value={values.libelle}
                     onChange={handleChange}
                     placeholder="Intitulé"
-                    name="intitule"
+                    name="libelle"
                     label="Intitulé"
                     className="certif_form_input"
                 />

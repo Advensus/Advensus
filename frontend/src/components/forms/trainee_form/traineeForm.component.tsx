@@ -8,20 +8,16 @@ import {
     mergeStyles,
     IDropdownOption,
     Dropdown,
-    IDropdownStyles,
     IDatePicker,
 } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+    ICertificate,
     ISubscription,
     ITraining,
     IUser,
-    NewDocDto,
     NewDocDtoIn,
-    NewUserDto,
-    NewUserDtoIn,
-    NewUserDtoOut,
     RP,
     SUPER_RP,
     UserDtoIn,
@@ -33,13 +29,43 @@ import DocumentsService from "../../../services/documents.service";
 import TrainingFolderService from "../../../services/training-folder.service";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
-import { CustomDropDownComponent } from "../../custom_dropdown_component/custom_dropdown.component";
+import * as Yup from "yup";
 
 export interface ITraineeFormProps {
     default_props?: boolean;
     cancel: () => void;
     onCreate: (data: IUser) => void;
+    trainee?: IUser;
 }
+
+const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Ce champ est requis!"),
+    first_name: Yup.string().required("Ce champ est requis!"),
+    email: Yup.string()
+        .email("Format email invalide!")
+        .required("Ce champ est requis!"),
+    phone_number: Yup.string().required("Ce champ est requis!"),
+    adress: Yup.string().required("Ce champ est requis!"),
+    password: Yup.string().required("Ce champ est requis!"),
+    organisme_formation: Yup.string().required("Ce champ est requis!"),
+    Rp_Stagiaire: Yup.string().required("Ce champ est requis!"),
+    edof: Yup.string().required("Ce champ est requis!"),
+    training_status: Yup.string().required("Ce champ est requis!"),
+    hour_worked: Yup.string().required("Ce champ est requis!"),
+    duration: Yup.string().required("Ce champ est requis!"),
+    start_session: Yup.string().required("Ce champ est requis!"),
+    end_session: Yup.string().required("Ce champ est requis!"),
+    formation: Yup.string().required("Ce champ est requis!"),
+    stagiaire: Yup.string().required("Ce champ est requis!"),
+    level_start: Yup.string().required("Ce champ est requis!"),
+    level_end: Yup.string().required("Ce champ est requis!"),
+    lieu_formation: Yup.string().required("Ce champ est requis!"),
+    montant_formation: Yup.string().required("Ce champ est requis!"),
+    solde: Yup.string().required("Ce champ est requis!"),
+    certification: Yup.string().required("Ce champ est requis!"),
+    doc_categorie: Yup.string().required("Ce champ est requis!"),
+    appartenir: Yup.string().required("Ce champ est requis!"),
+});
 
 const rootClass = mergeStyles({
     maxWidth: 300,
@@ -49,17 +75,17 @@ const rootClass = mergeStyles({
 export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     cancel,
     onCreate,
+    trainee,
 }) => {
     const [firstDayOfWeek, setFirstDayOfWeek] = React.useState(
         DayOfWeek.Sunday
     );
     const [organizations, setOrganizations] = useState<IDropdownOption[]>([]);
-    const [selectedOrg, setSelectedOrg] = React.useState<IDropdownOption>();
     const [trainings, setTrainings] = useState<IDropdownOption[]>([]);
+    const [certificates, setCertificates] = useState<IDropdownOption[]>([]);
     const [selectedTraining, setSelectedTraining] =
         React.useState<IDropdownOption>();
     const [rps, setRps] = useState<IDropdownOption[]>([]);
-    const [selectedRp, setSelectedRp] = React.useState<IDropdownOption>();
     const [endDate, setEndDate] = useState<Date | null | undefined>();
     const [startDate, setStartDate] = useState<Date | null | undefined>();
 
@@ -70,6 +96,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         getOrganization();
         getAllTraining();
         getAllUser();
+        console.log({ trainee });
     }, []);
 
     const onChangeTraining = (
@@ -77,18 +104,8 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         item?: IDropdownOption
     ): void => {
         setSelectedTraining(item);
-    };
-    const onChangeOrg = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedOrg(item);
-    };
-    const onChangeRp = (
-        event: React.FormEvent<HTMLDivElement>,
-        item?: IDropdownOption
-    ): void => {
-        setSelectedRp(item);
+        console.log({ item });
+        item && getCertificateByTrainingId(item.key as string);
     };
 
     const getOrganization = async () => {
@@ -135,6 +152,26 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             });
     };
 
+    const getCertificateByTrainingId = (id: string) => {
+        TrainingService.get_certificate_by_training_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                return response.json();
+            })
+            .then((respCertif: ICertificate[]) => {
+                console.log("response getting certif by:", respCertif);
+                const dropCertif = respCertif.map((_) => {
+                    return { key: _.id, text: _.intitule };
+                });
+                setCertificates(dropCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting certif by training id:", err);
+            });
+    };
+
     const getAllUser = async () => {
         await UserService.get_all_users()
             .then(async (response) => {
@@ -166,9 +203,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     };
 
     const onSubmit = (value: NewTraineeDto) => {
-        value.formation = selectedTraining?.key;
-        value.organisme_formation = selectedOrg?.key;
-        value.Rp_Stagiaire = selectedRp?.key;
+        // value.formation = selectedTraining?.key;
         // value.end_session = endDate;
         value.end_session = !endDate
             ? " "
@@ -256,6 +291,9 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         handleSubmit,
         setFieldValue,
         setFieldTouched,
+        handleBlur,
+        errors,
+        touched,
     } = useFormik<NewTraineeDto>({
         initialValues: {
             username: "",
@@ -267,24 +305,27 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
             organisme_formation: "",
             Rp_Stagiaire: "",
             edof: "",
-            training_status: "",
+            training_status: "Default_values",
             hour_worked: "0",
             duration: "",
             start_session: new Date(),
             end_session: new Date(),
             formation: "",
-            stagiaire: "",
-            level_start: "Débutant, Intermédiare, Avancée",
+            stagiaire: "Default_values",
+            level_start: "",
             level_end: "",
             lieu_formation: "",
             montant_formation: "",
-            solde: "",
-
-            doc_categorie: "",
-            appartenir: "",
+            solde: "Default_values",
+            certification: "",
+            doc_categorie: "Default_values",
+            appartenir: "Default_values",
         },
         onSubmit,
+        validationSchema,
     });
+
+    console.log({ errors });
 
     return (
         <form onSubmit={handleSubmit} className="trainee_form_container">
@@ -307,81 +348,160 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     />
                 </div>
                 <div className="own_trainee_fields">
-                    <TextField
-                        type="text"
-                        value={values.first_name}
-                        onChange={handleChange}
-                        placeholder="Fist name"
-                        name="first_name"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.username}
-                        onChange={handleChange}
-                        placeholder="last name"
-                        name="username"
-                    />
-                    <TextField
-                        type="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        placeholder="email"
-                        name="email"
-                    />
-                    <TextField
-                        type="text"
-                        value={values.phone_number}
-                        onChange={handleChange}
-                        placeholder="Phonenumber"
-                        name="phone_number"
-                    />
-                    <TextField
-                        type="password"
-                        value={values.password}
-                        onChange={handleChange}
-                        placeholder="Password"
-                        name="password"
-                        canRevealPassword
-                        revealPasswordAriaLabel="Show password"
-                    />
-                    <Dropdown
-                        selectedKey={values.level_start}
-                        onChange={(
-                            event: React.FormEvent<HTMLDivElement>,
-                            item?: IDropdownOption
-                        ): void => {
-                            setFieldValue("level_start", item?.key);
-                        }}
-                        placeholder="Niveau actuel du stagiaire"
-                        options={CurrentTraineeState}
-                    />
-                    <Dropdown
-                        selectedKey={values.level_end}
-                        onChange={(
-                            event: React.FormEvent<HTMLDivElement>,
-                            item?: IDropdownOption
-                        ): void => {
-                            setFieldValue("level_end", item?.key);
-                        }}
-                        placeholder="Niveau visé par le stagiaire"
-                        options={CurrentTraineeState}
-                    />
-                    <Dropdown
-                        selectedKey={selectedOrg ? selectedOrg.key : undefined}
-                        // eslint-disable-next-line react/jsx-no-bind
-                        onChange={onChangeOrg}
-                        placeholder="ORGANISME DE FORMATION(S)"
-                        options={organizations}
-                        // label="Organisme du stagiaire"
-                    />
-                    <Dropdown
-                        selectedKey={selectedRp ? selectedRp.key : undefined}
-                        // eslint-disable-next-line react/jsx-no-bind
-                        onChange={onChangeRp}
-                        placeholder="RESPONSABLE PEDAGOGIQUE"
-                        options={rps}
-                        // label="Rp du stagiaire"
-                    />
+                    <div>
+                        <TextField
+                            type="text"
+                            value={values.first_name}
+                            onChange={handleChange}
+                            placeholder="Fist name"
+                            name="first_name"
+                            onBlur={handleBlur}
+                        />
+                        {touched.first_name && errors.first_name ? (
+                            <Text className="errors_message">
+                                {errors.first_name}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <TextField
+                            type="text"
+                            value={values.username}
+                            onChange={handleChange}
+                            placeholder="last name"
+                            name="username"
+                            onBlur={handleBlur}
+                        />
+                        {touched.username && errors.username ? (
+                            <Text className="errors_message">
+                                {errors.username}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <TextField
+                            type="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            placeholder="email"
+                            name="email"
+                            onBlur={handleBlur}
+                        />
+                        {touched.email && errors.email ? (
+                            <Text className="errors_message">
+                                {errors.email}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <TextField
+                            type="text"
+                            value={values.phone_number}
+                            onChange={handleChange}
+                            placeholder="Phonenumber"
+                            name="phone_number"
+                            onBlur={handleBlur}
+                        />
+                        {touched.phone_number && errors.phone_number ? (
+                            <Text className="errors_message">
+                                {errors.phone_number}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <TextField
+                            type="password"
+                            value={values.password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            name="password"
+                            canRevealPassword
+                            revealPasswordAriaLabel="Show password"
+                            onBlur={handleBlur}
+                        />
+                        {touched.password && errors.password ? (
+                            <Text className="errors_message">
+                                {errors.password}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <Dropdown
+                            selectedKey={values.level_start}
+                            onChange={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue("level_start", item?.key);
+                            }}
+                            placeholder="Niveau actuel du stagiaire"
+                            options={CurrentTraineeState}
+                            onBlur={handleBlur}
+                        />
+                        {touched.level_start && errors.level_start ? (
+                            <Text className="errors_message">
+                                {errors.level_start}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <Dropdown
+                            selectedKey={values.level_end}
+                            onChange={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue("level_end", item?.key);
+                            }}
+                            placeholder="Niveau visé par le stagiaire"
+                            options={CurrentTraineeState}
+                            onBlur={handleBlur}
+                        />
+                        {touched.level_end && errors.level_end ? (
+                            <Text className="errors_message">
+                                {errors.level_end}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <Dropdown
+                            selectedKey={values.organisme_formation}
+                            onChange={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue("organisme_formation", item?.key);
+                            }}
+                            placeholder="ORGANISME DE FORMATION(S)"
+                            options={organizations}
+                            onBlur={handleBlur}
+                        />
+                        {touched.organisme_formation &&
+                        errors.organisme_formation ? (
+                            <Text className="errors_message">
+                                {errors.organisme_formation}
+                            </Text>
+                        ) : null}
+                    </div>
+                    <div>
+                        <Dropdown
+                            selectedKey={values.Rp_Stagiaire}
+                            onChange={(
+                                event: React.FormEvent<HTMLDivElement>,
+                                item?: IDropdownOption
+                            ): void => {
+                                setFieldValue("Rp_Stagiaire", item?.key);
+                            }}
+                            placeholder="RESPONSABLE PEDAGOGIQUE"
+                            options={rps}
+                            onBlur={handleBlur}
+                        />
+                        {touched.Rp_Stagiaire && errors.Rp_Stagiaire ? (
+                            <Text className="errors_message">
+                                {errors.Rp_Stagiaire}
+                            </Text>
+                        ) : null}
+                    </div>
                 </div>
             </div>
             <Text className="trainee_txt_divide_mov">Adress</Text>{" "}
@@ -393,80 +513,163 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     onChange={handleChange}
                     placeholder="Adresse"
                     name="adress"
+                    onBlur={handleBlur}
                 />
+                {touched.adress && errors.adress ? (
+                    <Text className="errors_message">{errors.adress}</Text>
+                ) : null}
             </div>
             <Text className="trainee_txt_divide_mov">Dossier Formation</Text>{" "}
             <hr className="trainee_hr_solid" />
             <div className="oth_trainee">
-                <TextField
-                    type="text"
-                    value={values.edof}
-                    onChange={handleChange}
-                    placeholder="EDOF"
-                    name="edof"
-                    label="Numéro Edof"
-                />
-                <Dropdown
-                    selectedKey={
-                        selectedTraining ? selectedTraining.key : undefined
-                    }
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={onChangeTraining}
-                    placeholder="Formtion(s)"
-                    options={trainings}
-                    label="Formation"
-                />
-                <TextField
-                    type="text"
-                    value={values.duration}
-                    onChange={handleChange}
-                    placeholder="Durée de la formation"
-                    name="duration"
-                    label="Durée de la formation"
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.edof}
+                        onChange={handleChange}
+                        placeholder="EDOF"
+                        name="edof"
+                        label="Numéro Edof"
+                        onBlur={handleBlur}
+                    />
+                    {touched.edof && errors.edof ? (
+                        <Text className="errors_message">{errors.edof}</Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.formation}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        // onChange={onChangeTraining}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("formation", item?.key);
+                            item &&
+                                getCertificateByTrainingId(item.key as string);
+                        }}
+                        placeholder="Formtion(s)"
+                        options={trainings}
+                        label="Formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.formation && errors.formation ? (
+                        <Text className="errors_message">
+                            {errors.formation}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.certification}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("certification", item?.key);
+                        }}
+                        placeholder="Certification(s)"
+                        options={certificates}
+                        style={{ margin: "10px 10px" }}
+                        onBlur={handleBlur}
+                    />
+                    {touched.certification && errors.certification ? (
+                        <Text className="errors_message">
+                            {errors.certification}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.duration}
+                        onChange={handleChange}
+                        placeholder="Durée de la formation"
+                        name="duration"
+                        label="Durée de la formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.duration && errors.duration ? (
+                        <Text className="errors_message">
+                            {errors.duration}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <Dropdown
+                        selectedKey={values.lieu_formation}
+                        onChange={(
+                            event: React.FormEvent<HTMLDivElement>,
+                            item?: IDropdownOption
+                        ): void => {
+                            setFieldValue("lieu_formation", item?.key);
+                        }}
+                        label="Lieu"
+                        placeholder="Lieu de la formation"
+                        options={LocationTraining}
+                        onBlur={handleBlur}
+                    />
+                    {touched.lieu_formation && errors.lieu_formation ? (
+                        <Text className="errors_message">
+                            {errors.lieu_formation}
+                        </Text>
+                    ) : null}
+                </div>
 
-                <Dropdown
-                    selectedKey={values.lieu_formation}
-                    onChange={(
-                        event: React.FormEvent<HTMLDivElement>,
-                        item?: IDropdownOption
-                    ): void => {
-                        setFieldValue("lieu_formation", item?.key);
-                    }}
-                    label="Lieu"
-                    placeholder="Lieu de la formation"
-                    options={LocationTraining}
-                />
-
-                <TextField
-                    type="text"
-                    value={values.montant_formation}
-                    onChange={handleChange}
-                    placeholder="Montant de la formation"
-                    name="montant_formation"
-                    label="Montant de la formation"
-                />
-                <DatePicker
-                    firstDayOfWeek={firstDayOfWeek}
-                    placeholder="Date de début de session"
-                    ariaLabel="Select a date"
-                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                    strings={defaultDatePickerStrings}
-                    onSelectDate={(s) => setStartDate(s)}
-                    value={startDate ? startDate : undefined}
-                    label="Date de début de session"
-                />
-                <DatePicker
-                    firstDayOfWeek={firstDayOfWeek}
-                    placeholder="Date de fin de session"
-                    ariaLabel="Select a date"
-                    // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                    strings={defaultDatePickerStrings}
-                    // onChange={handleChange}
-                    onSelectDate={(d) => setEndDate(d)}
-                    value={endDate ? endDate : undefined}
-                    label="Date de fin de session"
-                />
+                <div>
+                    <TextField
+                        type="text"
+                        value={values.montant_formation}
+                        onChange={handleChange}
+                        placeholder="Montant de la formation"
+                        name="montant_formation"
+                        label="Montant de la formation"
+                        onBlur={handleBlur}
+                    />
+                    {touched.montant_formation && errors.montant_formation ? (
+                        <Text className="errors_message">
+                            {errors.montant_formation}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <DatePicker
+                        firstDayOfWeek={firstDayOfWeek}
+                        placeholder="Date de début de session"
+                        ariaLabel="Select a date"
+                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                        strings={defaultDatePickerStrings}
+                        onSelectDate={(s) => setStartDate(s)}
+                        value={startDate ? startDate : undefined}
+                        label="Date de début de session"
+                        onBlur={handleBlur}
+                    />
+                    {touched.start_session && errors.start_session ? (
+                        <Text className="errors_message">
+                            {errors.start_session}
+                        </Text>
+                    ) : null}
+                </div>
+                <div>
+                    <DatePicker
+                        firstDayOfWeek={firstDayOfWeek}
+                        placeholder="Date de fin de session"
+                        ariaLabel="Select a date"
+                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                        strings={defaultDatePickerStrings}
+                        // onChange={handleChange}
+                        onSelectDate={(d) => setEndDate(d)}
+                        value={endDate ? endDate : undefined}
+                        label="Date de fin de session"
+                        onBlur={handleBlur}
+                    />
+                    {touched.end_session && errors.end_session ? (
+                        <Text className="errors_message">
+                            {errors.end_session}
+                        </Text>
+                    ) : null}
+                </div>
                 <Dropdown
                     // selectedKey={selectedRp ? selectedRp.key : undefined}
                     // eslint-disable-next-line react/jsx-no-bind

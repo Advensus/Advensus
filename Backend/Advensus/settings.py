@@ -131,8 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "compte.User"
 
 
-# X_FRAME_OPTIONS = 'ALLOWALL'
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = 'ALLOWALL'
+# X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_ALL_ORIGINS = False
@@ -233,4 +233,5 @@ MEDIA_URL = '/media/'
 
 
 COURSES = "compte.Courses"
+CERTIFICATE = "compte.certificate"
 
