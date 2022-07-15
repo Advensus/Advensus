@@ -20,6 +20,11 @@ from django.contrib.auth.hashers import make_password
 
 
 # DATA ENTITY
+class AdminData(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields =  ['username','first_name','email','phone_number','adress','password','id','societe']
+
 
 
 class Programmes(serializers.ModelSerializer):
@@ -271,10 +276,10 @@ class AddSrp(serializers.ModelSerializer):
     #     return User.objects.create_user4(**validate_data)
 
 class AddSociete(serializers.ModelSerializer):
-
+    societe_admin = AdminData(read_only=True)
     class Meta:
         model = SocieteFormation
-        fields = ['id','company_name','company_adress','company_phone_number','fix_number', 'company_stamp','company_logo']
+        fields = ['id','company_name','company_adress','company_phone_number','fix_number', 'company_stamp','company_logo','societe_admin']
 
     # def create(self,validate_data):
     #     return User.objects.create_user3(**validate_data)

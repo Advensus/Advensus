@@ -164,7 +164,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
         // console.log({ usr });
         setTrainee(usr);
         var hint = document.getElementById(
-            "display_tab_ii"
+            "Trainee_display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
             "users_content_display_trainees"
@@ -187,6 +187,7 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                     hint.style.display = "none";
                 }, 700); // timed to match animation-duration
                 first_tab.style.width = "550px";
+                setTrainee(undefined);
             }
         }
     };
@@ -272,8 +273,10 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                             {!showForm ? (
                                 // LIST TITLE
                                 <Text>Stagiaires</Text>
+                            ) : // FORM TITLE
+                            trainee ? (
+                                <Text> Modifier Stagiaire</Text>
                             ) : (
-                                // FORM TITLE
                                 <Text> Ajouter Stagiaire</Text>
                             )}
                             <TooltipHost
@@ -283,7 +286,10 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() => showAddForm(TRAINEE_FORM)}
+                                    onClick={() => {
+                                        showAddForm(TRAINEE_FORM);
+                                        setTrainee(undefined);
+                                    }}
                                 />
                             </TooltipHost>
                         </div>
@@ -373,14 +379,16 @@ export const TraineesPage: React.FC<ITraineesPageProps> = () => {
                         <TraineeFormComponent
                             onCreate={handleOnCreate}
                             cancel={() => setShowForm(false)}
+                            trainee={trainee}
                         />
                     )}
                 </div>
             </div>
-            <div id="display_tab_ii">
+            <div id="Trainee_display_tab_ii">
                 <FullInformationsTabComponent
                     user={trainee}
                     currentPath={pathLabel}
+                    showTheForm={showAddForm}
                 />
             </div>
         </div>

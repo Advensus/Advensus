@@ -180,7 +180,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # souscription = models.ManyToManyField(formation,related_name="souscrir_training")
     # appartenir_organisme = models.ForeignKey(OrganismeFormation,on_delete=models.CASCADE,related_name='org_stagiare_appt_type')
     competence = models.ManyToManyField(formation,related_name='dispenser_content_type', null=True)
-    societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin_type',null=True)
+    societe = models.OneToOneField(SocieteFormation,on_delete=models.CASCADE,related_name='societe_admin',null=True)
     is_autorise = models.BooleanField(default=False)
 
     Rp_Stagiaire = models.ManyToManyField('self')

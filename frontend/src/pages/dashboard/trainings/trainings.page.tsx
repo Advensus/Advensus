@@ -159,7 +159,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
         // console.log({ traing });
         setTrainingToDisplay(traing);
         var hint = document.getElementById(
-            "display_tab_ii"
+            "trainings_display_tab_ii"
         ) as HTMLInputElement;
         var first_tab = document.getElementById(
             "users_content_display_trainings"
@@ -182,6 +182,7 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                     hint.style.display = "none";
                 }, 700); // timed to match animation-duration
                 first_tab.style.width = "550px";
+                setTrainingToDisplay(undefined);
             }
         }
     };
@@ -211,8 +212,10 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                                 // LIST TITLE
 
                                 <Text>Formations</Text>
+                            ) : // FORM TITLE
+                            trainingToDisplay ? (
+                                <Text> Modifier Formation</Text>
                             ) : (
-                                // FORM TITLE
                                 <Text> Ajouter Formation</Text>
                             )}
                             <TooltipHost
@@ -223,7 +226,10 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() => showAddForm(SERVICES_FORM)}
+                                    onClick={() => {
+                                        showAddForm(SERVICES_FORM);
+                                        setTrainingToDisplay(undefined);
+                                    }}
                                 />
                             </TooltipHost>
                         </div>
@@ -304,17 +310,22 @@ export const TrainingsPage: React.FC<ITrainingsPageProps> = () => {
                         </div>
                     ) : (
                         <TrainingFormComponent
-                            cancel={() => setShowForm(false)}
+                            cancel={() => {
+                                setShowForm(false);
+                                setTrainingToDisplay(undefined);
+                            }}
                             onCreated={handleOnCreate}
+                            training={trainingToDisplay}
                         />
                     )}
                 </div>
             </div>
-            <div id="display_tab_ii">
+            <div id="trainings_display_tab_ii">
                 <FullInformationsTabComponent
                     training={trainingToDisplay}
                     trainings={trainings}
                     currentPath={pathLabel}
+                    showTheForm={showAddForm}
                 />
             </div>
         </div>

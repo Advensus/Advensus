@@ -31,6 +31,7 @@ export interface ITrainerFormProps {
     onCreate: (data: IUser) => void;
     formToDisplay?: string;
     trainings: ITraining[];
+    user?: IUser;
 }
 
 export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
@@ -38,6 +39,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
     onCreate,
     formToDisplay,
     trainings,
+    user,
 }) => {
     const [trainingAvailable, setTrainingAvailable] = useState<
         IDropdownOption[]
@@ -71,6 +73,7 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
             setTrainingAvailable(dropTraining);
         }
         getOrganization();
+        console.log({ user });
     }, [formToDisplay]);
 
     const getOrganization = async () => {

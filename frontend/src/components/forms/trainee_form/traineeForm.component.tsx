@@ -40,6 +40,7 @@ export interface ITraineeFormProps {
     default_props?: boolean;
     cancel: () => void;
     onCreate: (data: IUser) => void;
+    trainee?: IUser;
 }
 
 const rootClass = mergeStyles({
@@ -50,6 +51,7 @@ const rootClass = mergeStyles({
 export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
     cancel,
     onCreate,
+    trainee,
 }) => {
     const [firstDayOfWeek, setFirstDayOfWeek] = React.useState(
         DayOfWeek.Sunday
@@ -72,6 +74,7 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         getOrganization();
         getAllTraining();
         getAllUser();
+        console.log({ trainee });
     }, []);
 
     const onChangeTraining = (

@@ -181,6 +181,9 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                     hint.style.display = "none";
                 }, 700); // timed to match animation-duration
                 first_tab.style.width = "550px";
+                console.log("Vide la variable company!!");
+                // Ici on vide la variable company
+                setTheCompany(undefined);
             }
         }
     };
@@ -204,8 +207,10 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                             {!showForm ? (
                                 // LIST TITLE
                                 <Text>Société de Formation</Text>
+                            ) : // FORM TITLE
+                            theCompany ? (
+                                <Text>Modifier Société</Text>
                             ) : (
-                                // FORM TITLE
                                 <Text>Ajouter Société</Text>
                             )}
                             <TooltipHost
@@ -215,7 +220,11 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                                 <IconButton
                                     iconProps={addIcon}
                                     ariaLabel="add"
-                                    onClick={() => showAddForm(COMPANY_FORM)}
+                                    onClick={() => {
+                                        showAddForm(COMPANY_FORM);
+                                        if (theCompany)
+                                            setTheCompany(undefined);
+                                    }}
                                 />
                             </TooltipHost>
                         </div>
@@ -291,7 +300,10 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                             </div>
                         </div>
                     ) : (
-                        <CompanyFormComponent onCreate={handleOnCreate} />
+                        <CompanyFormComponent
+                            company={theCompany}
+                            onCreate={handleOnCreate}
+                        />
                     )}
                 </div>
             </div>
@@ -300,6 +312,7 @@ export const TrainingCompanyPage: React.FC<ITrainingCompanyPageProps> = () => {
                     contentId={theCompany?.id}
                     currentPath={pathLabel}
                     company={theCompany}
+                    showTheForm={showAddForm}
                 />
             </div>
         </div>

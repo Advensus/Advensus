@@ -1,6 +1,6 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITraining, NewTrainingDtoIn, NewTrainingDtoOut } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 
@@ -8,12 +8,18 @@ export interface ITrainingFormProps {
     default_props?: boolean;
     cancel?: () => void;
     onCreated: (data: ITraining) => void;
+    training?: ITraining;
 }
 
 export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
     cancel,
     onCreated,
+    training,
 }) => {
+    useEffect(() => {
+        console.log({ training });
+    }, []);
+
     const onSubmit = (val: NewTrainingDtoIn) => {
         console.log({ val });
         TrainingService.new_training(val)

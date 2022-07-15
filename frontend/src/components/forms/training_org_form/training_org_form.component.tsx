@@ -21,13 +21,14 @@ export interface ITrainingOrganizationFormProps {
     default_props?: boolean;
     onCreate: (data: IOrg) => void;
     cancel?: () => void;
+    org?: IOrg;
 }
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: {} };
 
 export const TrainingOrganizationFormComponent: React.FC<
     ITrainingOrganizationFormProps
-> = ({ cancel, onCreate }) => {
+> = ({ cancel, onCreate, org }) => {
     const [trainingsCompanies, setTrainingsCompanies] = useState<
         IDropdownOption[]
     >([]);
@@ -44,6 +45,7 @@ export const TrainingOrganizationFormComponent: React.FC<
 
     useEffect(() => {
         getSociete();
+        console.log({ org });
     }, []);
 
     const getSociete = async () => {

@@ -1,7 +1,7 @@
 import { DefaultButton, Text, TextField } from "@fluentui/react";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { NewUserDto } from "../../../lib";
+import { ICompany, NewUserDto } from "../../../lib";
 import {
     NewCompanyDtoIn,
     NewCompanyDtoOut,
@@ -14,14 +14,19 @@ export interface ICompanyFormProps {
     default_props?: boolean;
     onCreate: (data: NewCompanyDtoIn) => void;
     cancel?: () => void;
+    company?: ICompany;
 }
 
 export const CompanyFormComponent: React.FC<ICompanyFormProps> = ({
     cancel,
     onCreate,
+    company,
 }) => {
     const [companyId, setCompanyId] = useState<string>("");
     // useEffect(() => {}, [companyId]);
+    useEffect(() => {
+        console.log({ company });
+    }, [company]);
 
     const onSubmit = (val: NewCompanyDtoOut) => {
         // console.log({ val });

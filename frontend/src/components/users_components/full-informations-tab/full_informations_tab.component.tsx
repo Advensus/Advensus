@@ -22,15 +22,25 @@ import {
     EmptyComponent,
 } from "../..";
 import {
+    BASIC_RP_FORM,
+    COMPANY_FORM,
     ICourses,
     ITraining,
     IUser,
+    ORGANIZATION_FORM,
     PATH_LABEL_COMPANY,
     PATH_LABEL_CUSTOMER,
     PATH_LABEL_ORGANIZATION,
     PATH_LABEL_RESOURCES,
     PATH_LABEL_SERVICES,
+    RP,
+    SERVICES_FORM,
+    SUPER_RP,
+    SUPER_RP_FORM,
+    TEACHEAR,
+    TEACHEAR_FORM,
     TRAINEE,
+    TRAINEE_FORM,
 } from "../../../lib";
 import TrainingService from "../../../services/training.service";
 import UserService from "../../../services/user.service";
@@ -58,6 +68,7 @@ export interface IFullInformationsTabProps {
     currentPath: string;
     company?: ICompany;
     org?: IOrg;
+    showTheForm?: (displayForm: string) => void;
 }
 
 const planIcon: IIconProps = { iconName: "PlanView" };
@@ -65,7 +76,16 @@ const addIcon: IIconProps = { iconName: "Add" };
 
 export const FullInformationsTabComponent: React.FC<
     IFullInformationsTabProps
-> = ({ contentId, currentPath, company, trainings, user, org, training }) => {
+> = ({
+    contentId,
+    currentPath,
+    company,
+    trainings,
+    user,
+    org,
+    training,
+    showTheForm,
+}) => {
     const navigate = useNavigate();
 
     const [content, setContent] = useState<IUser>();
@@ -107,6 +127,7 @@ export const FullInformationsTabComponent: React.FC<
                 ? setUserIsBooking(user.assister)
                 : setUserIsBooking(user.superviser);
         }
+        console.log({ user });
     }, [user]);
 
     useEffect(() => {
@@ -314,6 +335,112 @@ export const FullInformationsTabComponent: React.FC<
             : setShowTrainingProgramForm(!showTrainingProgramForm);
     };
 
+    const toggleFullInfosTab = () => {
+        // For COMPANY
+        if (document.getElementById("training_company_display_tab_ii")) {
+            showTheForm && showTheForm(COMPANY_FORM);
+            var hint_class_compant = document.getElementById(
+                "training_company_display_tab_ii"
+            ) as HTMLInputElement;
+            var first_tab_company = document.getElementById(
+                "training_company_content_display_company"
+            ) as HTMLInputElement;
+
+            toggleTabs(hint_class_compant, first_tab_company);
+        }
+
+        // For ORGANIZATION
+        if (document.getElementById("training_organisation_display_tab_ii")) {
+            showTheForm && showTheForm(ORGANIZATION_FORM);
+            var hint_class_org = document.getElementById(
+                "training_organisation_display_tab_ii"
+            ) as HTMLInputElement;
+            var first_tab_org = document.getElementById(
+                "users_content_display_organization"
+            ) as HTMLInputElement;
+
+            toggleTabs(hint_class_org, first_tab_org);
+        }
+
+        // FOR TRAINEE
+        if (document.getElementById("Trainee_display_tab_ii")) {
+            showTheForm && showTheForm(TRAINEE_FORM);
+            var hint_class_trainee = document.getElementById(
+                "Trainee_display_tab_ii"
+            ) as HTMLInputElement;
+            var first_tab_trainee = document.getElementById(
+                "users_content_display_trainees"
+            ) as HTMLInputElement;
+
+            toggleTabs(hint_class_trainee, first_tab_trainee);
+        }
+
+        // FOR RESOURCE
+        if (document.getElementById("resource_display_tab_ii")) {
+            var hint_class_resource = document.getElementById(
+                "resource_display_tab_ii"
+            ) as HTMLInputElement;
+            var first_tab_resource = document.getElementById(
+                "users_content_display_resources"
+            ) as HTMLInputElement;
+
+            toggleTabs(hint_class_resource, first_tab_resource);
+
+            if (user && user.user_type === RP) {
+                showTheForm && showTheForm(BASIC_RP_FORM);
+            } else if (user && user.user_type === SUPER_RP) {
+                showTheForm && showTheForm(SUPER_RP_FORM);
+            } else if (user && user.user_type === TEACHEAR) {
+                showTheForm && showTheForm(TEACHEAR_FORM);
+            } else {
+                console.log("Non attribué!!");
+            }
+        }
+
+        // FOR TRAINING
+        if (document.getElementById("trainings_display_tab_ii")) {
+            showTheForm && showTheForm(SERVICES_FORM);
+
+            var hint_class_trainings = document.getElementById(
+                "trainings_display_tab_ii"
+            ) as HTMLInputElement;
+            var first_tab_trainings = document.getElementById(
+                "users_content_display_trainings"
+            ) as HTMLInputElement;
+
+            toggleTabs(hint_class_trainings, first_tab_trainings);
+        }
+    };
+
+    const toggleTabs = (
+        primaryClass: HTMLInputElement,
+        secondClass: HTMLInputElement
+    ) => {
+        primaryClass.className =
+            primaryClass.className !== "show" ? "show" : "hide";
+        if (primaryClass) {
+            if (primaryClass.className === "show") {
+                primaryClass.style.display = "block";
+                window.setTimeout(() => {
+                    if (primaryClass != null) {
+                        primaryClass.style.opacity = "1";
+                        primaryClass.style.transform = "scale(1)";
+                    }
+                }, 0);
+                secondClass.style.width = "150px";
+            }
+            if (primaryClass.className === "hide") {
+                primaryClass.style.opacity = "0";
+                primaryClass.style.transform = "scale(0)";
+                window.setTimeout(function () {
+                    if (primaryClass != null)
+                        primaryClass.style.display = "none";
+                }, 700); // timed to match animation-duration
+                secondClass.style.width = "550px";
+            }
+        }
+    };
+
     return (
         <div className="full_infos_tab_container">
             <div className="full_infos_tab_header">
@@ -381,6 +508,18 @@ export const FullInformationsTabComponent: React.FC<
                             {org?.company_name}
                         </Text>
                     )}
+                    <div>
+                        <IconButton
+                            menuIconProps={{ iconName: "Delete" }}
+                            title="Supprimer"
+                            // onClick={toggleFullInfosTab}
+                        />
+                        <IconButton
+                            menuIconProps={{ iconName: "EditSolid12" }}
+                            title="Modifier"
+                            onClick={() => toggleFullInfosTab()}
+                        />
+                    </div>
                 </div>
                 <hr className="full_infos_tab_hr_dashed" />
             </div>
