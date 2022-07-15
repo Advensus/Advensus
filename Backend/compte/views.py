@@ -310,7 +310,7 @@ class login_org(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-# @permission_classes([IsAuthenticated,autorisation])	
+@permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	# org = OrganismeFormation.objects.all()
