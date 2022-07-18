@@ -884,8 +884,8 @@ def detaildocument(request, pk):
 def updatedocument(request,pk):
 
 	if request.method == "PATCH":
-		document_data = JSONParser().parse(request)
-		serializer = updatedocuments(donnee,data=document_data)
+		donnee = Document.object.get(id=pk)
+		serializer = updatedocuments(donnee,data=request.data,partial=True)
 
 		if serializer.is_valid():
 			serializer.save()
