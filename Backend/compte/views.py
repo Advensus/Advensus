@@ -5,7 +5,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import updatedocuments,CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
+from .serializers import createnewscheduleserialize,updatedocuments,CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -884,11 +884,13 @@ def detaildocument(request, pk):
 def updatedocument(request,pk):
 
 	if request.method == "PATCH":
+		donnee = Document.objects.get(id=pk)
 		document_data = JSONParser().parse(request)
 		serializer = updatedocuments(donnee,data=document_data)
-
+		print(serializer)
 		if serializer.is_valid():
 			serializer.save()
+			
 			print(serializer.data)
 			return Response(serializer.data) 
 		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
