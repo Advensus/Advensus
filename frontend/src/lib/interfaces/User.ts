@@ -1,6 +1,7 @@
-import { ICompany } from "./Company";
+import { ICompany, IOrg } from "./Company";
 import { ICourses } from "./Courses";
 import { IDocument } from "./Doc";
+import { IFormerSchedule } from "./FormerSchedule";
 import { ISubscription, ITraining } from "./Training";
 
 export interface IUser {
@@ -20,7 +21,7 @@ export interface IUser {
     cv?: File;
     competence?: ITraining[];
     trainee_level?: string;
-    organisme?: string;
+    organisme?: IOrg;
     societe?: ICompany;
     appartenir_societe?: ICompany[];
     organisme_formation?: ICompany[];
@@ -30,4 +31,5 @@ export interface IUser {
     souscrirs?: ISubscription[];
     assister: ICourses[];
     superviser: ICourses[];
+    trainer_related_schedule: IFormerSchedule;
 }

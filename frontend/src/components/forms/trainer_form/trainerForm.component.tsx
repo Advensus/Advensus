@@ -258,17 +258,22 @@ export const TrainerFormComponent: React.FC<ITrainerFormProps> = ({
         touched,
     } = useFormik<NewUserDto>({
         initialValues: {
-            username: "",
-            first_name: "",
-            email: "",
-            phone_number: "",
-            adress: "",
+            username: user ? user.username : "",
+            first_name: user ? user.first_name : "",
+            email: user ? user.email : "",
+            phone_number: user ? user.phone_number : "",
+            adress: user ? user.adress : "",
             password: "",
-            competence: [],
-            appartenir_societe: "",
-            cv: "",
+            competence: user
+                ? (user.competence?.map((_) => _.intitule) as string[])
+                : [],
+            appartenir_societe: user ? user.societe?.company_name : "",
+            cv: user ? user.cv : "",
             daysOfWeek: {
-                monday: { from: "", until: "" },
+                monday: {
+                    from: "",
+                    until: "",
+                },
                 tuesday: { from: "", until: "" },
                 wednesday: { from: "", until: "" },
                 thursday: { from: "", until: "" },

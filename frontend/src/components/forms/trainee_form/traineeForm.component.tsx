@@ -296,13 +296,13 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
         touched,
     } = useFormik<NewTraineeDto>({
         initialValues: {
-            username: "",
-            first_name: "",
-            email: "",
-            phone_number: "",
-            adress: "",
+            username: trainee ? trainee.username : "",
+            first_name: trainee ? trainee.first_name : "",
+            email: trainee ? trainee.email : "",
+            phone_number: trainee ? trainee.phone_number : "",
+            adress: trainee ? trainee.adress : "",
             password: "",
-            organisme_formation: "",
+            organisme_formation: trainee ? trainee.organisme?.company_name : "",
             Rp_Stagiaire: "",
             edof: "",
             training_status: "Default_values",
@@ -519,166 +519,177 @@ export const TraineeFormComponent: React.FC<ITraineeFormProps> = ({
                     <Text className="errors_message">{errors.adress}</Text>
                 ) : null}
             </div>
-            <Text className="trainee_txt_divide_mov">Dossier Formation</Text>{" "}
-            <hr className="trainee_hr_solid" />
-            <div className="oth_trainee">
-                <div>
-                    <TextField
-                        type="text"
-                        value={values.edof}
-                        onChange={handleChange}
-                        placeholder="EDOF"
-                        name="edof"
-                        label="Numéro Edof"
-                        onBlur={handleBlur}
-                    />
-                    {touched.edof && errors.edof ? (
-                        <Text className="errors_message">{errors.edof}</Text>
-                    ) : null}
-                </div>
-                <div>
-                    <Dropdown
-                        selectedKey={values.formation}
-                        // eslint-disable-next-line react/jsx-no-bind
-                        // onChange={onChangeTraining}
-                        onChange={(
-                            event: React.FormEvent<HTMLDivElement>,
-                            item?: IDropdownOption
-                        ): void => {
-                            setFieldValue("formation", item?.key);
-                            item &&
-                                getCertificateByTrainingId(item.key as string);
-                        }}
-                        placeholder="Formtion(s)"
-                        options={trainings}
-                        label="Formation"
-                        onBlur={handleBlur}
-                    />
-                    {touched.formation && errors.formation ? (
-                        <Text className="errors_message">
-                            {errors.formation}
-                        </Text>
-                    ) : null}
-                </div>
-                <div>
-                    <Dropdown
-                        selectedKey={values.certification}
-                        onChange={(
-                            event: React.FormEvent<HTMLDivElement>,
-                            item?: IDropdownOption
-                        ): void => {
-                            setFieldValue("certification", item?.key);
-                        }}
-                        placeholder="Certification(s)"
-                        options={certificates}
-                        style={{ margin: "10px 10px" }}
-                        onBlur={handleBlur}
-                    />
-                    {touched.certification && errors.certification ? (
-                        <Text className="errors_message">
-                            {errors.certification}
-                        </Text>
-                    ) : null}
-                </div>
-                <div>
-                    <TextField
-                        type="text"
-                        value={values.duration}
-                        onChange={handleChange}
-                        placeholder="Durée de la formation"
-                        name="duration"
-                        label="Durée de la formation"
-                        onBlur={handleBlur}
-                    />
-                    {touched.duration && errors.duration ? (
-                        <Text className="errors_message">
-                            {errors.duration}
-                        </Text>
-                    ) : null}
-                </div>
-                <div>
-                    <Dropdown
-                        selectedKey={values.lieu_formation}
-                        onChange={(
-                            event: React.FormEvent<HTMLDivElement>,
-                            item?: IDropdownOption
-                        ): void => {
-                            setFieldValue("lieu_formation", item?.key);
-                        }}
-                        label="Lieu"
-                        placeholder="Lieu de la formation"
-                        options={LocationTraining}
-                        onBlur={handleBlur}
-                    />
-                    {touched.lieu_formation && errors.lieu_formation ? (
-                        <Text className="errors_message">
-                            {errors.lieu_formation}
-                        </Text>
-                    ) : null}
-                </div>
+            {!trainee && (
+                <>
+                    <Text className="trainee_txt_divide_mov">
+                        Dossier Formation
+                    </Text>{" "}
+                    <hr className="trainee_hr_solid" />
+                    <div className="oth_trainee">
+                        <div>
+                            <TextField
+                                type="text"
+                                value={values.edof}
+                                onChange={handleChange}
+                                placeholder="EDOF"
+                                name="edof"
+                                label="Numéro Edof"
+                                onBlur={handleBlur}
+                            />
+                            {touched.edof && errors.edof ? (
+                                <Text className="errors_message">
+                                    {errors.edof}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <Dropdown
+                                selectedKey={values.formation}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                // onChange={onChangeTraining}
+                                onChange={(
+                                    event: React.FormEvent<HTMLDivElement>,
+                                    item?: IDropdownOption
+                                ): void => {
+                                    setFieldValue("formation", item?.key);
+                                    item &&
+                                        getCertificateByTrainingId(
+                                            item.key as string
+                                        );
+                                }}
+                                placeholder="Formtion(s)"
+                                options={trainings}
+                                label="Formation"
+                                onBlur={handleBlur}
+                            />
+                            {touched.formation && errors.formation ? (
+                                <Text className="errors_message">
+                                    {errors.formation}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <Dropdown
+                                selectedKey={values.certification}
+                                onChange={(
+                                    event: React.FormEvent<HTMLDivElement>,
+                                    item?: IDropdownOption
+                                ): void => {
+                                    setFieldValue("certification", item?.key);
+                                }}
+                                placeholder="Certification(s)"
+                                options={certificates}
+                                style={{ margin: "10px 10px" }}
+                                onBlur={handleBlur}
+                            />
+                            {touched.certification && errors.certification ? (
+                                <Text className="errors_message">
+                                    {errors.certification}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <TextField
+                                type="text"
+                                value={values.duration}
+                                onChange={handleChange}
+                                placeholder="Durée de la formation"
+                                name="duration"
+                                label="Durée de la formation"
+                                onBlur={handleBlur}
+                            />
+                            {touched.duration && errors.duration ? (
+                                <Text className="errors_message">
+                                    {errors.duration}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <Dropdown
+                                selectedKey={values.lieu_formation}
+                                onChange={(
+                                    event: React.FormEvent<HTMLDivElement>,
+                                    item?: IDropdownOption
+                                ): void => {
+                                    setFieldValue("lieu_formation", item?.key);
+                                }}
+                                label="Lieu"
+                                placeholder="Lieu de la formation"
+                                options={LocationTraining}
+                                onBlur={handleBlur}
+                            />
+                            {touched.lieu_formation && errors.lieu_formation ? (
+                                <Text className="errors_message">
+                                    {errors.lieu_formation}
+                                </Text>
+                            ) : null}
+                        </div>
 
-                <div>
-                    <TextField
-                        type="text"
-                        value={values.montant_formation}
-                        onChange={handleChange}
-                        placeholder="Montant de la formation"
-                        name="montant_formation"
-                        label="Montant de la formation"
-                        onBlur={handleBlur}
-                    />
-                    {touched.montant_formation && errors.montant_formation ? (
-                        <Text className="errors_message">
-                            {errors.montant_formation}
-                        </Text>
-                    ) : null}
-                </div>
-                <div>
-                    <DatePicker
-                        firstDayOfWeek={firstDayOfWeek}
-                        placeholder="Date de début de session"
-                        ariaLabel="Select a date"
-                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                        strings={defaultDatePickerStrings}
-                        onSelectDate={(s) => setStartDate(s)}
-                        value={startDate ? startDate : undefined}
-                        label="Date de début de session"
-                        onBlur={handleBlur}
-                    />
-                    {touched.start_session && errors.start_session ? (
-                        <Text className="errors_message">
-                            {errors.start_session}
-                        </Text>
-                    ) : null}
-                </div>
-                <div>
-                    <DatePicker
-                        firstDayOfWeek={firstDayOfWeek}
-                        placeholder="Date de fin de session"
-                        ariaLabel="Select a date"
-                        // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                        strings={defaultDatePickerStrings}
-                        // onChange={handleChange}
-                        onSelectDate={(d) => setEndDate(d)}
-                        value={endDate ? endDate : undefined}
-                        label="Date de fin de session"
-                        onBlur={handleBlur}
-                    />
-                    {touched.end_session && errors.end_session ? (
-                        <Text className="errors_message">
-                            {errors.end_session}
-                        </Text>
-                    ) : null}
-                </div>
-                <Dropdown
-                    // selectedKey={selectedRp ? selectedRp.key : undefined}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    // onChange={onChangeRp}
-                    placeholder="SOURCE"
-                    options={OF}
-                    label="Provenence du stagiaire"
-                />
-            </div>
+                        <div>
+                            <TextField
+                                type="text"
+                                value={values.montant_formation}
+                                onChange={handleChange}
+                                placeholder="Montant de la formation"
+                                name="montant_formation"
+                                label="Montant de la formation"
+                                onBlur={handleBlur}
+                            />
+                            {touched.montant_formation &&
+                            errors.montant_formation ? (
+                                <Text className="errors_message">
+                                    {errors.montant_formation}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <DatePicker
+                                firstDayOfWeek={firstDayOfWeek}
+                                placeholder="Date de début de session"
+                                ariaLabel="Select a date"
+                                // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                                strings={defaultDatePickerStrings}
+                                onSelectDate={(s) => setStartDate(s)}
+                                value={startDate ? startDate : undefined}
+                                label="Date de début de session"
+                                onBlur={handleBlur}
+                            />
+                            {touched.start_session && errors.start_session ? (
+                                <Text className="errors_message">
+                                    {errors.start_session}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <div>
+                            <DatePicker
+                                firstDayOfWeek={firstDayOfWeek}
+                                placeholder="Date de fin de session"
+                                ariaLabel="Select a date"
+                                // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                                strings={defaultDatePickerStrings}
+                                // onChange={handleChange}
+                                onSelectDate={(d) => setEndDate(d)}
+                                value={endDate ? endDate : undefined}
+                                label="Date de fin de session"
+                                onBlur={handleBlur}
+                            />
+                            {touched.end_session && errors.end_session ? (
+                                <Text className="errors_message">
+                                    {errors.end_session}
+                                </Text>
+                            ) : null}
+                        </div>
+                        <Dropdown
+                            // selectedKey={selectedRp ? selectedRp.key : undefined}
+                            // eslint-disable-next-line react/jsx-no-bind
+                            // onChange={onChangeRp}
+                            placeholder="SOURCE"
+                            options={OF}
+                            label="Provenence du stagiaire"
+                        />
+                    </div>
+                </>
+            )}
             <div className="trainee_form_btns">
                 <DefaultButton text="Annuler" onClick={cancel} />
                 <DefaultButton

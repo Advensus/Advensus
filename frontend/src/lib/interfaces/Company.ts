@@ -1,3 +1,5 @@
+import { IUser } from "./User";
+
 export interface ICompany {
     id: string;
     company_name: string;
@@ -6,6 +8,7 @@ export interface ICompany {
     fix_number: string;
     company_stamp: string;
     company_logo: string;
+    societe_admin?: IUser;
 }
 
 export interface IOrg {
@@ -17,4 +20,5 @@ export interface IOrg {
     fix_number: string;
     company_stamp: string;
     company_logo: string;
+    email: string;
 }

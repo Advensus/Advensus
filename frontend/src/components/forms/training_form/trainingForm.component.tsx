@@ -44,7 +44,7 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
     const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
         useFormik<NewTrainingDtoIn>({
             initialValues: {
-                intitule: "",
+                intitule: training ? training.intitule : "",
             },
             onSubmit,
             validationSchema,
@@ -76,7 +76,7 @@ export const TrainingFormComponent: React.FC<ITrainingFormProps> = ({
                 <DefaultButton text="Annuler" onClick={cancel} />
                 <DefaultButton
                     style={{ marginLeft: "10px" }}
-                    text="Sauvegarder"
+                    text={training ? "Modifier" : "Sauvegarder"}
                     type="submit"
                 />
             </div>
