@@ -401,6 +401,13 @@ class cruddocuments(serializers.ModelSerializer):
         model = Document
         fields = ['id','path','doc_categorie','appartenir','partager', 'sign']
 
+class updatedocuments(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    
+    class Meta:
+        model = Document
+        fields = ['id','sign']
+
 
 
 

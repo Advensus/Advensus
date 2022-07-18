@@ -190,7 +190,7 @@ REST_FRAMEWORK = {
    
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
 }
 SWAGGER_SETTINGS ={
@@ -227,6 +227,7 @@ EMAIL_USE_TLS: True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

@@ -17,4 +17,3 @@ class autorisation(permissions.BasePermission):
        
 
 
- 

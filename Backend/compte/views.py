@@ -5,7 +5,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .company import  OrganismeFormation,SocieteFormation
 from rest_framework import generics,status,views,permissions
-from .serializers import CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation,createnewscheduleserialize
+from .serializers import updatedocuments,CreateGenerate,createdocuments,CreatCourses,createreservation,createprogramme,crudsouscrir,createcertificate,crudcertificate,crudprogramme,CreateOrganisme,loginorg, AddStagiaire,AddSouscrir,AddFormateur,AddSociete,AddRp,AddSrp,EmailVerificationSerializer,AddAdmin,loginuser,cruduser,crudformation,cruddocuments,LogoutUse,CrudOrganisme,CrudCourses,crudreservation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -41,7 +41,8 @@ import requests
 from reportlab.graphics.shapes import *
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import Frame,Table 
-
+from django.utils.html import mark_safe
+from django.utils.html import format_html
 
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
@@ -137,9 +138,8 @@ class AddSouscrir(generics.GenericAPIView):
 		settings.EMAIL_HOST_PASSWORD = user_org.password_messagerie
 		f = formation.objects.get(id=data["formation"])
 		# rp_peda = User.objects.get(id=data["Rp_Stagiaire"])
-		email_body = u'<img src="{{user_org.company_logo.url}}">'+ "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
+		email_body = format_html(mark_safe(f'<img src="{user_org.company_logo.url}"width="150" height="150" />'))+ "\n\n"+"Bonjour " +user.username+ " "+ user.first_name +",\n\n" +"Tout d’abord nous tenons à vous remercier de la confiance que vous nous accordez en choisissant notre organisme pour suivre votre formation :\n\n"+str(f)+ " " +"d'une durée de"+ " " +duration+ " "+ "heure(s)"+ "\n\n"+"Vous allez être très prochainement contacté.e par votre responsable pédagogique," + rp_stagiaire.username + " "+  "pour :" +"\n\n"+"-Préparer au mieux votre parcours de formation en déterminant votre profil et identifiant vos attentes et besoins,\n\n"+"- Vous expliquer le déroulement de votre formation \n\n"+"- Convenir d’une date de rendez-vous avec votre formateur \n\n"+ "Votre responsable pédagogique est votre principal interlocuteur, n’hésitez pas à le joindre au"+ " " + rp_stagiaire.phone_number +" "+ " "  +"pour toute question liée à votre formation." +"\n\n"+"Bonne journée et à bientôt !\n\n"+"L’équipe"+ " "+ user_org.company_name + "\n\n"+"Veuillez utiliser ce lien pour activer votre compte"+"\n\n"+absurl
 
-			
 		data = {'email_body': email_body,'from_email':settings.EMAIL_HOST_USER ,'to_email': user.email,'email_subject': 'verifier votre adress email'+current_site}
 		Util.send_email(data)
 		return Response(user_data,
@@ -310,7 +310,7 @@ class login_org(generics.GenericAPIView):
 
 @api_view(['GET'])
 @csrf_exempt
-# @permission_classes([IsAuthenticated,autorisation])	
+@permission_classes([IsAuthenticated,autorisation])	
 def viewalluser(request):
 	serializer_class = cruduser
 	# org = OrganismeFormation.objects.all()
@@ -435,7 +435,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# url = settings.MEDIA_ROOT+'doc_generate'
 		#document_contrat
 
-		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_contrat"+".pdf"
+		paths = "media/doc_generate/"+user.username.replace(" ", "")+"_"+souscris_formation.formation.intitule+"_contrat"+".pdf"
 
 		my_canvas = canvas.Canvas(paths, pagesize=letter)
 		my_canvas.setLineWidth(.3)
@@ -692,10 +692,10 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# response = requests.get(settings.MEDIA_URL+paths, stream=True)
 		
 		sauvegarde_contrat = Document(
-			path=paths
+			
 		)
 	
-		sauvegarde_contrat.path.save("doc_generate/"+user.username.replace(" ", "")+"_contrat"+".pdf", ContentFile("test"), save=False)
+		sauvegarde_contrat.path.save(paths, ContentFile("test"), save=False)
 
 
 	
@@ -718,7 +718,7 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 		# 	print(d.sign.url)
 
 		#fiche information
-		paths2 = "media/doc_generate/"+user.username.replace(" ", "")+"_formation"+".pdf"
+		paths2 = "media/doc_generate/"+user.username.replace(" ", "")+"_"+souscris_formation.formation.intitule+"_formation"+".pdf"
 		p = canvas.Canvas(paths2,pagesize=letter)
 
     
@@ -781,10 +781,11 @@ class CreateDocumentsStagiaire(generics.GenericAPIView):
 
 		p.showPage()
 		p.save()
+	
 		sauvegarde_formation = Document(
-			path=paths2
+			
 		)
-		sauvegarde_formation.path.save("doc_generate/"+user.username.replace(" ", "")+"_formation"+".pdf",ContentFile("test"),save=False) 
+		sauvegarde_formation.path.save(paths2,ContentFile("test"),save=False) 
 	 
 	
 		print(sauvegarde_formation.path)
@@ -881,14 +882,11 @@ def detaildocument(request, pk):
 @csrf_exempt
 @api_view(['PATCH'])
 def updatedocument(request,pk):
-	
-	donnee =  Document.objects.filter(id=pk).first()
 
 	if request.method == "PATCH":
 		document_data = JSONParser().parse(request)
-		serializer = cruddocuments(donnee,data=document_data,partial=True)
-		print(document_data)
-	
+		serializer = updatedocuments(donnee,data=document_data)
+
 		if serializer.is_valid():
 			serializer.save()
 			print(serializer.data)
