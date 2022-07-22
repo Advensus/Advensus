@@ -49,20 +49,6 @@ export const BookingCardComponent: React.FC<IBookingCardProps> = ({
                         {BookingInfos.reservation &&
                             BookingInfos.reservation.title}
                     </Text>
-                    <div className="booking_card_container_hide">
-                        <IconButton
-                            menuIconProps={{ iconName: "Cancel" }}
-                            title="Annuler"
-                        />
-                        <IconButton
-                            menuIconProps={{ iconName: "Edit" }}
-                            title="Editer"
-                        />
-                        <IconButton
-                            menuIconProps={{ iconName: "ChangeEntitlements" }}
-                            title="Reporter"
-                        />
-                    </div>
                 </div>
                 <div className="booking_card_duration">
                     {/* BOOKING STARTER DAY */}

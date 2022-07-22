@@ -31,9 +31,11 @@ export const TrainingCardComponent: React.FC<ITrainingCardProps> = ({
                 {/* <Icon iconName="HourGlass" styles={trainingCardIconStyles} /> */}
             </div>
             <div className="training_card_details">
-                <Text variant="tiny">- Certif 1</Text>
-                <Text variant="tiny">- Certif 2</Text>
-                <Text variant="tiny">- Certif 3</Text>
+                {trainingDetails.certification.map((_) => (
+                    <Text key={_.id} variant="tiny">
+                        - {_.intitule}
+                    </Text>
+                ))}
                 <Text variant="tiny">...</Text>
             </div>
         </Link>

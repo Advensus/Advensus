@@ -29,7 +29,7 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
         if (user.user_type === TRAINEE) {
             user.appartenir_content_type.map((_) => {
                 if (_.doc_categorie === "contrat_sign")
-                    _.sign !== ""
+                    _.sign != ""
                         ? setHandleShowDocsToSign(false)
                         : setHandleShowDocsToSign(true);
             });

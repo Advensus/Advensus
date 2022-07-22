@@ -25,6 +25,7 @@ import {
     BASIC_RP_FORM,
     COMPANY_FORM,
     ICourses,
+    IProgram,
     ITraining,
     IUser,
     ORGANIZATION_FORM,
@@ -102,6 +103,7 @@ export const FullInformationsTabComponent: React.FC<
     const [selectedBooking, setSelectedBooking] =
         React.useState<IDropdownOption>();
     const [certificates, setCertificates] = useState<ICertificate[]>([]);
+    const [program, setProgram] = useState<IProgram[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState<string>("");
     const [filteredCertif, setFilteredCertif] = useState<ICertificate[]>([]);
@@ -306,6 +308,7 @@ export const FullInformationsTabComponent: React.FC<
             })
             .then((respCertif: ICertificate[]) => {
                 console.log("response in get certif:", respCertif);
+                respCertif.map((_) => getProgrammByCertifId(_.id));
                 setCertificates(respCertif);
                 setLoading(false);
 
@@ -316,6 +319,25 @@ export const FullInformationsTabComponent: React.FC<
             })
             .catch((err) => {
                 console.log("error while getting certif by training id:", err);
+                setLoading(false);
+            });
+    };
+
+    const getProgrammByCertifId = (id: string) => {
+        TrainingService.get_program_by_certificate_id(id)
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                }
+                setLoading(false);
+                return response.json();
+            })
+            .then((respCertif: IProgram[]) => {
+                console.log("response in get programm:", respCertif);
+                setProgram(respCertif);
+            })
+            .catch((err) => {
+                console.log("error while getting programme by certif:", err);
                 setLoading(false);
             });
     };
@@ -702,80 +724,78 @@ export const FullInformationsTabComponent: React.FC<
                                                     key={_.id}
                                                     certificate={_}
                                                 />
-                                                <Panel
-                                                    isLightDismiss
-                                                    isOpen={isOpen}
-                                                    onDismiss={dismissPanel}
-                                                    closeButtonAriaLabel="Close"
-                                                    headerText={
-                                                        "Certification" +
-                                                        " " +
-                                                        _.intitule
-                                                    }
-                                                >
-                                                    <br />
-                                                    <AttributeDisplayComponent
-                                                        keyWord="Code"
-                                                        valueWord={_.code}
-                                                    />
-                                                    <AttributeDisplayComponent
-                                                        keyWord="Objectifs"
-                                                        valueWord={_.objectif}
-                                                    />
-                                                    <AttributeDisplayComponent
-                                                        keyWord="Compétences à tester"
-                                                        valueWord={
-                                                            _.competence_atteste
+                                                <div>
+                                                    <Panel
+                                                        isLightDismiss
+                                                        isOpen={isOpen}
+                                                        onDismiss={dismissPanel}
+                                                        closeButtonAriaLabel="Close"
+                                                        headerText={
+                                                            "Certification" +
+                                                            " " +
+                                                            _.intitule
                                                         }
-                                                    />
-                                                    <AttributeDisplayComponent
-                                                        keyWord="Modalités d'évaluation"
-                                                        valueWord={
-                                                            _.modalite_evaluation
-                                                        }
-                                                    />
-                                                    <br />
-                                                    <Text
-                                                        variant="large"
-                                                        style={{
-                                                            fontWeight:
-                                                                "bolder",
-                                                            marginLeft: "20px",
-                                                        }}
                                                     >
-                                                        Programme
-                                                    </Text>
-                                                    <hr className="certif_hr_solid" />
-                                                    {/* <br /> */}
-                                                    {_.programmes.length > 0 ? (
-                                                        <div>
-                                                            {_.programmes.map(
-                                                                (program) => (
-                                                                    <div
-                                                                        key={
-                                                                            program.id
+                                                        <br />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Code"
+                                                            valueWord={_.code}
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Objectifs"
+                                                            valueWord={
+                                                                _.objectif
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Compétences à tester"
+                                                            valueWord={
+                                                                _.competence_atteste
+                                                            }
+                                                        />
+                                                        <AttributeDisplayComponent
+                                                            keyWord="Modalités d'évaluation"
+                                                            valueWord={
+                                                                _.modalite_evaluation
+                                                            }
+                                                        />
+                                                        <br />
+                                                        <Text
+                                                            variant="large"
+                                                            style={{
+                                                                fontWeight:
+                                                                    "bolder",
+                                                                marginLeft:
+                                                                    "20px",
+                                                            }}
+                                                        >
+                                                            Programme
+                                                        </Text>
+                                                        <hr className="certif_hr_solid" />
+                                                        {/* <br /> */}
+                                                        {program.length > 0 ? (
+                                                            program.map((_) => (
+                                                                <div>
+                                                                    <AttributeDisplayComponent
+                                                                        keyWord="Titre"
+                                                                        valueWord={
+                                                                            _.libelle
                                                                         }
-                                                                    >
-                                                                        <AttributeDisplayComponent
-                                                                            keyWord="Libellé"
-                                                                            valueWord={
-                                                                                program.libelle
-                                                                            }
-                                                                        />
-                                                                        <AttributeDisplayComponent
-                                                                            keyWord="Description"
-                                                                            valueWord={
-                                                                                program.description
-                                                                            }
-                                                                        />
-                                                                    </div>
-                                                                )
-                                                            )}
-                                                        </div>
-                                                    ) : (
-                                                        <EmptyComponent messageText="Pas encore de programme pour cette Certification" />
-                                                    )}
-                                                </Panel>
+                                                                    />
+                                                                    <AttributeDisplayComponent
+                                                                        keyWord="Description"
+                                                                        valueWord={
+                                                                            _.description
+                                                                        }
+                                                                    />
+                                                                    <br />
+                                                                </div>
+                                                            ))
+                                                        ) : (
+                                                            <EmptyComponent messageText="Pas encore de programme pour cette Certification" />
+                                                        )}
+                                                    </Panel>
+                                                </div>
                                             </div>
                                         ))
                                     ) : (
@@ -880,7 +900,7 @@ export const FullInformationsTabComponent: React.FC<
                                                             headerText="Détails de la Réservation"
                                                         >
                                                             <br />
-                                                            <>
+                                                            <div>
                                                                 <AttributeDisplayComponent
                                                                     keyWord="Réservation ID"
                                                                     valueWord={
@@ -941,7 +961,35 @@ export const FullInformationsTabComponent: React.FC<
                                                                             .description
                                                                     }
                                                                 />
-                                                            </>
+                                                            </div>
+                                                            <div className="booking_card_container_hide">
+                                                                <IconButton
+                                                                    menuIconProps={{
+                                                                        iconName:
+                                                                            "Cancel",
+                                                                    }}
+                                                                    title="Annuler"
+                                                                    onClick={() =>
+                                                                        console.log(
+                                                                            "annuler is clicked"
+                                                                        )
+                                                                    }
+                                                                />
+                                                                <IconButton
+                                                                    menuIconProps={{
+                                                                        iconName:
+                                                                            "Edit",
+                                                                    }}
+                                                                    title="Editer"
+                                                                />
+                                                                <IconButton
+                                                                    menuIconProps={{
+                                                                        iconName:
+                                                                            "ChangeEntitlements",
+                                                                    }}
+                                                                    title="Reporter"
+                                                                />
+                                                            </div>
                                                         </Panel>
                                                     </div>
                                                 </div>
@@ -1041,35 +1089,49 @@ export const FullInformationsTabComponent: React.FC<
                                         <LoadingComponent />
                                     ) : filteredCompanyOrg.length ? (
                                         filteredCompanyOrg.map((_) => (
-                                            <SmallCompanyCardComponent
-                                                openPanel={openPanel}
-                                                org={_}
-                                                key={_.id}
-                                            />
+                                            <div key={_.id}>
+                                                <SmallCompanyCardComponent
+                                                    openPanel={openPanel}
+                                                    org={_}
+                                                    key={_.id}
+                                                />
+                                                <div>
+                                                    <br />
+                                                    <Panel
+                                                        isLightDismiss
+                                                        isOpen={isOpen}
+                                                        onDismiss={dismissPanel}
+                                                        closeButtonAriaLabel="Close"
+                                                        headerText={
+                                                            _.company_name
+                                                        }
+                                                    >
+                                                        <br />
+                                                        <div>
+                                                            <AttributeDisplayComponent
+                                                                keyWord="Organisme ID"
+                                                                valueWord={_.id}
+                                                            />
+                                                            <AttributeDisplayComponent
+                                                                keyWord="Adresse"
+                                                                valueWord={
+                                                                    _.company_adress
+                                                                }
+                                                            />
+                                                            <AttributeDisplayComponent
+                                                                keyWord="Téléphone"
+                                                                valueWord={
+                                                                    _.company_phone_number
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </Panel>
+                                                </div>
+                                            </div>
                                         ))
                                     ) : (
                                         <EmptyComponent messageText="Aucun O-F trouvée" />
                                     )}
-                                </div>
-                                <div>
-                                    <br />
-                                    <br />
-                                    <Panel
-                                        isLightDismiss
-                                        isOpen={isOpen}
-                                        onDismiss={dismissPanel}
-                                        closeButtonAriaLabel="Close"
-                                        headerText={company?.company_name}
-                                    >
-                                        <p>
-                                            'This panel uses "light dismiss"
-                                            behavior: it can be closed by
-                                            clicking or tapping ' + 'the area
-                                            outside the panel (or using the
-                                            close button as usual).';
-                                        </p>
-                                        <div>{company?.company_adress}</div>
-                                    </Panel>
                                 </div>
                             </PivotItem>
                         )}
