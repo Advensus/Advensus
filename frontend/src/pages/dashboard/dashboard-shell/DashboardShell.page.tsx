@@ -18,11 +18,12 @@ export interface IDashboardShellPageProps {
 
 export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
     const accessRoutes = useUserRouteHooks();
-    const { user } = useAuthStore();
+    const { user, updateCurrentUser } = useAuthStore();
 
     const [handleShowDocsToSign, setHandleShowDocsToSign] =
         useState<boolean>(false);
     const [docs, setDocs] = useState<IDocument[]>([]);
+    const [isRefresh, setIsRefresh] = useState<boolean>(false);
 
     useEffect(() => {
         if (user.user_type === TRAINEE) {
@@ -34,18 +35,18 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
             });
             setDocs(user.appartenir_content_type);
         }
-    }, [user]);
+    }, [user, isRefresh]);
 
-    useEffect(() => {
-        console.log({ handleShowDocsToSign });
-    }, [handleShowDocsToSign]);
+    const updateCurrentPage = () => {
+        setIsRefresh(true);
+    };
 
     return (
         <main className="dashboard_shell_container">
             <HeaderDashboardComponent />
             <div className="dashboard_shell_content">
                 <div id="sidenav_panel" aria-disabled={true}>
-                    <SideNavComponent />
+                    <SideNavComponent isRefresh={isRefresh} />
                 </div>
                 <section id="section">
                     <Routes>
@@ -83,6 +84,7 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
                                                     _.path.indexOf("a") + 1
                                                 )
                                             }
+                                            refreshPage={updateCurrentPage}
                                         />
                                     ))}
                             </div>

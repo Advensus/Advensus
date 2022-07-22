@@ -25,12 +25,14 @@ export interface ICustomModalProps {
     fileName: string;
     filePath: string;
     currentDoc: IDocument;
+    refreshPage?: () => void;
 }
 
 export const CustomModalComponent: React.FC<ICustomModalProps> = ({
     fileName,
     filePath,
     currentDoc,
+    refreshPage,
 }) => {
     const [isModalOpen, { setTrue: showModal, setFalse: hideModal }] =
         useBoolean(false);
@@ -76,6 +78,8 @@ export const CustomModalComponent: React.FC<ICustomModalProps> = ({
                             <SignInDialogComponent
                                 actionTitle="Signer"
                                 currentDoc={currentDoc}
+                                closeModal={hideModal}
+                                refreshPage={refreshPage}
                             />
                         </Text>
                         {/* </ActionButton> */}

@@ -8,11 +8,14 @@ import SigInComponent from "./sig";
 import DocumentsService from "../../../services/documents.service";
 import { IDocument, EditDocDtoIn } from "../../../lib";
 import { useAuthStore } from "../../../stores";
+import { useNavigate } from "react-router-dom";
 
 export interface ISignInDialogProps {
     default_props?: boolean;
     actionTitle: string;
     currentDoc: IDocument;
+    closeModal: () => void;
+    refreshPage?: () => void;
 }
 
 const dragOptions = {
@@ -25,7 +28,10 @@ const modalPropsStyles = { main: { maxWidth: 450 } };
 export const SignInDialogComponent: React.FC<ISignInDialogProps> = ({
     actionTitle,
     currentDoc,
+    closeModal,
+    refreshPage,
 }) => {
+    const navigate = useNavigate();
     const { user, updateCurrentUser } = useAuthStore();
     const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
     const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
@@ -59,6 +65,9 @@ export const SignInDialogComponent: React.FC<ISignInDialogProps> = ({
                     }
                 });
                 updateCurrentUser(user);
+                toggleHideDialog();
+                closeModal();
+                refreshPage && refreshPage();
 
                 return editedDoc;
             })

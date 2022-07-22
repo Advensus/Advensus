@@ -8,6 +8,7 @@ import { CurrentUserDetailsComponent } from "../../users_components/current-user
 
 export interface SideNavBaseProps {
     default_props?: boolean;
+    isRefresh: boolean;
 }
 
 export interface IRoute {
@@ -19,7 +20,7 @@ export interface IRoute {
     roles: IRole[];
 }
 
-export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
+export const SideNavComponent: React.FC<SideNavBaseProps> = ({ isRefresh }) => {
     const menuRoutes = useUserRouteHooks();
     const { updateToken, user } = useAuthStore();
     const navigate = useNavigate();
@@ -268,7 +269,7 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
                         : setHandleEnableNavLink(true);
             });
         }
-    }, [user]);
+    }, [user, isRefresh]);
 
     const doLogout = () => {
         localStorage.clear();
