@@ -262,9 +262,10 @@ export const SideNavComponent: React.FC<SideNavBaseProps> = () => {
     useEffect(() => {
         if (user.user_type === TRAINEE) {
             user.appartenir_content_type.map((_) => {
-                _.sign != null
-                    ? setHandleEnableNavLink(false)
-                    : setHandleEnableNavLink(!handleEnableNavLink);
+                if (_.doc_categorie === "contrat_sign")
+                    _.sign === ""
+                        ? setHandleEnableNavLink(false)
+                        : setHandleEnableNavLink(true);
             });
         }
     }, [user]);

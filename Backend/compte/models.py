@@ -62,7 +62,7 @@ class reservation(models.Model):
 class Document(models.Model):
     id= models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     path = models.FileField()
-    sign = models.FileField(upload_to="signing/", null=True)
+    sign = models.CharField(max_length=25500, null=True)
     doc_categorie = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

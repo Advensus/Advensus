@@ -27,13 +27,18 @@ export const DashboardShellPage: React.FC<IDashboardShellPageProps> = () => {
     useEffect(() => {
         if (user.user_type === TRAINEE) {
             user.appartenir_content_type.map((_) => {
-                _.sign != null
-                    ? setHandleShowDocsToSign(false)
-                    : setHandleShowDocsToSign(true);
+                if (_.doc_categorie === "contrat_sign")
+                    _.sign !== ""
+                        ? setHandleShowDocsToSign(false)
+                        : setHandleShowDocsToSign(true);
             });
             setDocs(user.appartenir_content_type);
         }
     }, [user]);
+
+    useEffect(() => {
+        console.log({ handleShowDocsToSign });
+    }, [handleShowDocsToSign]);
 
     return (
         <main className="dashboard_shell_container">

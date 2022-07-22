@@ -44,6 +44,8 @@ from reportlab.platypus import Frame,Table
 from django.utils.html import mark_safe
 from django.utils.html import format_html
 
+import base64
+
 def home(request):
 	return HttpResponse("<h1>Advensus projet</h1>")
 
@@ -882,17 +884,28 @@ def detaildocument(request, pk):
 @csrf_exempt
 @api_view(['PATCH'])
 def updatedocument(request,pk):
+	data = request.data
+	donnee = Document.objects.get(id=pk)
+	print("data",data)
+	format, imgstr = data['sign'].split(';base64,') 
+	ext = format.split('/')[-1] 
+	print('image', imgstr)
+	print('format', format)
 
-	if request.method == "PATCH":
-		donnee = Document.object.get(id=pk)
-		serializer = updatedocuments(donnee,data=request.data,partial=True)
+	finalData = ContentFile(base64.b64decode(imgstr), name='temp.' + ext) 
 
-		if serializer.is_valid():
-			serializer.save()
+	print('le data finale', finalData)
+		
+	
+	serializer = updatedocuments(donnee,data=request.data,partial=True)
+	# print(serializer)
+
+	if serializer.is_valid():
+		serializer.save()
 			
-			print(serializer.data)
-			return Response(serializer.data) 
-		return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+		print('serializer', serializer.data)
+		return Response(serializer.data) 
+	return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['DELETE'])
 @csrf_exempt
